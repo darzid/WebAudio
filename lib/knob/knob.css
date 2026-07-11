@@ -1,0 +1,109 @@
+.knob {
+  width: auto;
+  text-align: center;
+  justify-items: center;
+  align-items: center;
+  touch-action: none;
+  margin: 0pt;
+  padding: 0pt;
+
+  svg {
+    width: 4em;
+    height: 4em;
+  }
+
+  .title {
+    margin: 0pt;
+
+    word-wrap: break-word;
+    text-wrap: wrap;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: clip;
+  }
+
+  .gauge {
+    stroke: rgba(0, 0, 0, 0.4);
+    stroke-width: 0.05em;
+  }
+
+  .dial {
+    stroke: rgba(0, 0, 0, 0.7);
+    stroke-width: 0.1em;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .dial-stroke {
+    stroke: rgba(0, 0, 0, 0.4);
+    stroke-width: 0.2em;
+    fill: none;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .dial-shadow {
+    stroke: rgba(0, 0, 0, 0.1);
+    stroke-width: 0.4em;
+    fill: none;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .position-line {
+    stroke: rgba(200, 200, 200, 0.6);
+    stroke-width: 0.1em;
+    transform-origin: center;
+  }
+
+  .tick-line {
+    stroke: rgba(100, 100, 100, 0.5);
+    stroke-width: 0.3em;
+    transform-origin: center;
+  }
+
+  .value-label {
+    vertical-align: middle;
+    text-anchor: middle;
+    fill: rgba(255, 255, 255, 0.9);
+    stroke-width: 0.3em;
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+  }
+
+  input {
+    display: none;
+  }
+}
+
+.wobble-config-mode {
+  animation: zoomIn 100ms ease-in-out forwards;
+  background-color: rgba(150, 150, 150, 0.2);
+  
+  .dial {
+    stroke: rgba(100, 100, 100, 0.7);
+    stroke-width: 0.5em;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+}
+
+.wobble-zoom-out {
+  animation: zoomOut 100ms ease-in-out forwards;
+}
+
+@keyframes zoomIn {
+  to {
+    transform: scale(4);
+  }
+}
+
+@keyframes zoomOut {
+  to {
+    transform: scale(1);
+  }
+}
