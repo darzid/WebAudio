@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Synth Playground</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+          href="https://fonts.googleapis.com/css2?family=Anta&family=Orbitron:wght@400..900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="stylesheet" href="lib/knob/knob.css">
+    <script src="lib/knob/knob.js"></script>
+
+    <script src="lib/element-handler-registry/element-handler-registry.js"></script>
+
+    <script src="lib/template-expander/template-expander.js"></script>
+
+    <script src="lib/ui-modes/element-ui-mode.js"></script>
+
+    <script src="control-autoupdater.js"></script>
+    <script src="devices/notes.js"></script>
+    <script src="lib/web-audio/midi-clock.js"></script>
+    <script src="lib/web-audio/recorder.js"></script>
+    <script src="lib/web-audio/convolution-generator.js"></script>
+    <script src="lib/web-audio/waveshaper-curve-generator.js"></script>
+    <script src="lib/web-audio/sampler.js"></script>
+    <script src="devices/fm-kick.js"></script>
+
+    <script src="devices/device-base.js"></script>
+    <script src="devices/sequencer-base.js"></script>
+    <script src="devices/brute-sequencer.js"></script>
+    <script src="devices/brute-sequencer-step.js"></script>
+    <script src="devices/drum-sequencer.js"></script>
+    <script src="devices/drum-sequencer-step.js"></script>
+
+    <script src="devices/modules/device-module.js"></script>
+    <script src="devices/modules/compressor.js"></script>
+    <script src="devices/modules/reverb.js"></script>
+    <script src="devices/modules/delay.js"></script>
+    <script src="devices/modules/filter.js"></script>
+    <script src="devices/effector.js"></script>
+    <script src="devices/synth.js"></script>
+    <script src="devices/drum-synth.js"></script>
+    <script src="devices/track.js"></script>
+    <script src="devices/preset-browser.js"></script>
+    <script src="devices/audio-app.js"></script>
+
+    <script src="websynth.js"></script>
+
+    <script src="lib/web-audio/level-meter.js"></script>
+    <script src="lib/web-audio/vu-meter.js"></script>
+    <svg>
+      <defs>
+        <radialGradient id="ParameterGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.6">
+          <stop class="stop1" offset="0%" stop-color="rgba(245,215,140,1.0)"></stop>
+          <stop class="stop2" offset="30%" stop-color="rgba(215,175,90,1.0)"></stop>
+          <stop class="stop3" offset="50%" stop-color="rgba(175,130,55,1.0)"></stop>
+          <stop class="stop4" offset="100%" stop-color="rgba(120,85,35,1.0)"></stop>
+        </radialGradient>
+        <radialGradient id="OptionGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.6">
+          <stop class="stop1" offset="0%" stop-color="rgba(205,165,120,1.0)"></stop>
+          <stop class="stop2" offset="30%" stop-color="rgba(170,125,80,1.0)"></stop>
+          <stop class="stop3" offset="50%" stop-color="rgba(130,90,55,1.0)"></stop>
+          <stop class="stop4" offset="100%" stop-color="rgba(90,60,35,1.0)"></stop>
+        </radialGradient>
+        <radialGradient id="CyanGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.6">
+          <stop class="stop1" offset="0%" stop-color="rgba(225,195,150,0.5)"></stop>
+          <stop class="stop2" offset="30%" stop-color="rgba(195,155,100,0.5)"></stop>
+          <stop class="stop3" offset="50%" stop-color="rgba(155,115,70,0.5)"></stop>
+          <stop class="stop4" offset="100%" stop-color="rgba(110,75,45,0.5)"></stop>
+        </radialGradient>
+        <radialGradient id="YellowGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.6">
+          <stop class="stop1" offset="0%" stop-color="rgba(195,140,90,0.5)"></stop>
+          <stop class="stop2" offset="40%" stop-color="rgba(160,105,60,0.5)"></stop>
+          <stop class="stop3" offset="50%" stop-color="rgba(120,75,40,0.5)"></stop>
+          <stop class="stop4" offset="60%" stop-color="rgba(80,48,24,0.5)"></stop>
+        </radialGradient>
+        <radialGradient id="BrownGradientOld" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.6">
+          <stop class="stop1" offset="0%" stop-color="rgba(125,125,125,0.5)"></stop>
+          <stop class="stop2" offset="40%" stop-color="rgba(100,100,100,0.5)"></stop>
+          <stop class="stop3" offset="50%" stop-color="rgba(75,75,75,0.5)"></stop>
+          <stop class="stop4" offset="60%" stop-color="rgba(50,50,50,0.5)"></stop>
+        </radialGradient>
+        <radialGradient id="BrownGradient" cx="0.5" cy="0.5" r="0.6" fx="0.5" fy="0.5">
+          <stop class="stop1" offset="0%" stop-color="rgba(150,120,80,0.35)"></stop>
+          <stop class="stop2" offset="20%" stop-color="rgba(150,120,80,0.35)"></stop>
+          <stop class="stop3" offset="50%" stop-color="rgba(125,98,62,0.35)"></stop>
+          <stop class="stop4" offset="50%" stop-color="rgba(100,76,46,0.35)"></stop>
+          <stop class="stop5" offset="60%" stop-color="rgba(75,55,32,0.35)"></stop>
+        </radialGradient>
+        <radialGradient id="DarkGreenGradient" cx="0.5" cy="0.5" r="0.6" fx="0.5" fy="0.5">
+          <stop class="stop1" offset="0%" stop-color="rgba(170,150,100,0.35)"></stop>
+          <stop class="stop2" offset="20%" stop-color="rgba(170,150,100,0.35)"></stop>
+          <stop class="stop3" offset="50%" stop-color="rgba(140,120,75,0.35)"></stop>
+          <stop class="stop4" offset="50%" stop-color="rgba(110,92,55,0.35)"></stop>
+          <stop class="stop5" offset="60%" stop-color="rgba(80,65,38,0.35)"></stop>
+        </radialGradient>
+        <radialGradient id="GreenGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.6">
+          <stop class="stop1" offset="0%" stop-color="rgba(225,195,150,0.5)"></stop>
+          <stop class="stop2" offset="30%" stop-color="rgba(195,155,100,0.5)"></stop>
+          <stop class="stop3" offset="50%" stop-color="rgba(155,115,70,0.5)"></stop>
+          <stop class="stop4" offset="100%" stop-color="rgba(110,75,45,0.5)"></stop>
+        </radialGradient>
+        <radialGradient id="RedGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.6">
+          <stop class="stop1" offset="0%" stop-color="rgba(195,110,75,0.5)"></stop>
+          <stop class="stop2" offset="30%" stop-color="rgba(165,80,48,0.5)"></stop>
+          <stop class="stop3" offset="50%" stop-color="rgba(130,55,28,0.5)"></stop>
+          <stop class="stop4" offset="100%" stop-color="rgba(95,35,15,0.5)"></stop>
+        </radialGradient>
+      </defs>
+      <style>
+
+      </style>
+    </svg>
+  </head>
+
+  <body>
+    <span id="datalists">
+      <datalist id="step-lengths">
+        <option value="0">1/32</option>
+        <option value="1">1/16t</option>
+        <option value="2">1/16</option>
+        <option value="3">1/8t</option>
+        <option value="4">1/8</option>
+        <option value="5">1/4t</option>
+        <option value="6">1/4</option>
+      </datalist>
+
+      <datalist id="notes">
+        <option value="0">C0</option>
+        <option value="1">C#0</option>
+        <option value="2">D0</option>
+        <option value="3">D#0</option>
+        <option value="4">E0</option>
+        <option value="5">F0</option>
+        <option value="6">F#0</option>
+        <option value="7">G0</option>
+        <option value="8">G#0</option>
+        <option value="9">A0</option>
+        <option value="10">A#0</option>
+        <option value="11">B0</option>
+        <option value="12">C1</option>
+        <option value="13">C#1</option>
+        <option value="14">D1</option>
+        <option value="15">D#1</option>
+        <option value="16">E1</option>
+        <option value="17">F1</option>
+        <option value="18">F#1</option>
+        <option value="19">G1</option>
+        <option value="20">G#1</option>
+        <option value="21">A1</option>
+        <option value="22">A#1</option>
+        <option value="23">B1</option>
+        <option value="24">C2</option>
+        <option value="25">C#2</option>
+        <option value="26">D2</option>
+        <option value="27">D#2</option>
+        <option value="28">E2</option>
+        <option value="29">F2</option>
+        <option value="30">F#2</option>
+        <option value="31">G2</option>
+        <option value="32">G#2</option>
+        <option value="33">A2</option>
+        <option value="34">A#2</option>
+        <option value="35">B2</option>
+        <option value="36">C3</option>
+        <option value="37">C#3</option>
+        <option value="38">D3</option>
+        <option value="39">D#3</option>
+        <option value="40">E3</option>
+        <option value="41">F3</option>
+        <option value="42">F#3</option>
+        <option value="43">G3</option>
+        <option value="44">G#3</option>
+        <option value="45">A3</option>
+        <option value="46">A#3</option>
+        <option value="47">B3</option>
+        <option value="48">C4</option>
+        <option value="49">C#4</option>
+        <option value="50">D4</option>
+        <option value="51">D#4</option>
+        <option value="52">E4</option>
+        <option value="53">F4</option>
+        <option value="54">F#4</option>
+        <option value="55">G4</option>
+        <option value="56">G#4</option>
+        <option value="57">A4</option>
+        <option value="58">A#4</option>
+        <option value="59">B4</option>
+        <option value="60">C5</option>
+      </datalist>
+
+      <datalist id="clipnote-lengths">
+        <option value="0">1/32</option>
+        <option value="1">1/32t</option>
+        <option value="2">1/16</option>
+        <option value="3">1/16t</option>
+        <option value="4">1/8t</option>
+        <option value="5">1/8</option>
+      </datalist>
+
+      <datalist id="oscillator-types">
+        <option value="0">sine</option>
+        <option value="1">square</option>
+        <option value="2">triangle</option>
+        <option value="3">sawtooth</option>
+      </datalist>
+
+      <datalist id="filter-cutoffs">
+        <option value="1000">1 kHz</option>
+        <option value="6500">6.5</option>
+        <option value="12000">12 kHz</option>
+      </datalist>
+
+      <datalist id="filter-resonances">
+        <option value="-750">min</option>
+        <option value="0">0</option>
+        <option value="750">max</option>
+      </datalist>
+
+      <datalist id="filter-types">
+        <option value="0">lowpass</option>
+        <option value="1">highpass</option>
+        <option value="2">bandpass</option>
+        <option value="3">lowshelf</option>
+        <option value="4">highshelf</option>
+        <option value="5">notch</option>
+        <option value="6">peaking</option>
+        <option value="7">allpass</option>
+      </datalist>
+
+      <datalist id="group-colors">
+        <option value="1">rgba(255, 10, 10, 0.1)</option>
+        <option value="2">rgba(10, 255, 10, 0.1)</option>
+      </datalist>
+    </span>
+
+    <span id="templates">
+      <template id="knob-template">
+        <div class="knob">
+          <h5 class="title">Knob</h5>
+          <svg class="knob-container" tabindex="-1">
+            <circle class="gauge" cx="50%" cy="50%" r="45%"></circle>
+            <line class="tick-line" x1="50%" y1="10%" x2="50%" y2="4%" transform="rotate(-135)"></line>
+            <line class="tick-line" x1="50%" y1="10%" x2="50%" y2="4%"></line>
+            <line class="tick-line" x1="50%" y1="10%" x2="50%" y2="4%" transform="rotate(135)"></line>
+
+            <circle class="dial" cx="50%" cy="50%" r="37%"></circle>
+            <circle class="dial-stroke" cx="50%" cy="51%" r="30%"></circle>
+            <circle class="dial-shadow" cx="50%" cy="51%" r="34%"></circle>
+            <line class="position-line" x1="50%" y1="20%" x2="50%" y2="10%"></line>
+            <text class="value-label" x="50%" y="52%" dy="5%">0</text>
+          </svg>
+          <span id="Content"></span>
+        </div>
+      </template>
+
+      <template id="enabled-template">
+        <span>
+          <button class="Enabled" onclick="toggleEnabled();">&nbsp;<span id="Content"></span>&nbsp;&nbsp;&nbsp;</button>
+        </span>
+      </template>
+
+      <template id="expand-collapse-template">
+        <span class="Expand">🔻</span>
+        <span class="Collapse">🔺️</span>
+      </template>
+
+      <template id="toggle-title-template-h2">
+        <h2>
+          <input class="Enabled" type="checkbox" name="Enabled" data-template="enabled-template" checked="true">
+          <span onclick="toggleNextSiblingVisibility(window.event.srcElement.parentElement)" class="title">Title</span>
+          <span class="Expand">🔻</span>
+          <span class="Collapse">🔺️</span>
+        </h2>
+      </template>
+
+      <template id="toggle-tracktitle-template">
+        <h3>
+          <input class="Enabled" type="checkbox" name="Enabled" data-template="enabled-template" checked="true">
+          <span onclick="toggleNextSiblingVisibility(window.event.srcElement.parentElement)" class="title collapser">Title</span>
+          <span class="Expand">🔻</span>
+          <span class="Collapse">🔺️</span>
+        </h3>
+      </template>
+
+      <template id="toggle-title-template-h3">
+        <h3>
+          <input class="Enabled" type="checkbox" name="Enabled" data-template="enabled-template" checked="true">
+          <span onclick="toggleNextSiblingVisibility(window.event.srcElement.parentElement)" class="title collapser">Title</span>
+          <span class="Expand">🔻</span>
+          <span class="Collapse">🔺️</span>
+        </h3>
+      </template>
+
+      <template id="toggle-sectiontitle-template">
+        <h4>
+          <input class="Enabled" type="checkbox" name="Enabled" data-template="enabled-template" checked="true">
+          <span onclick="toggleNextSiblingVisibility(window.event.srcElement.parentElement)" class="title collapser">Title</span>
+          <span class="Expand">🔻</span>
+          <span class="Collapse">🔺️</span>
+        </h4>
+      </template>
+
+      <template id="preset-listitem-template">
+        <span>
+          <span id="Content"></span><label></label>
+        </span>
+      </template>
+
+      <template id="step-onoff-template">
+        <div>
+          <button class="play-step"
+                  onclick="window.event.srcElement.parentElement.querySelector('input').checked=!window.event.srcElement.parentElement.querySelector('input').checked">
+            <span id="Content"></span>
+          </button>
+        </div>
+      </template>
+
+      <template id="step-template" data-class="Step">
+        <div style="flex-direction: column" class="Step">
+          <h4 class="StepTitle title">Step</h4>
+          <input name="Note" class="red wobble-mode-disabled" type="range" min="0" value="12" list="notes" data-template="knob-template">
+          <input name="Velocity" class="red" type="range" min="0" max="127" value="63" data-template="knob-template">
+          <input name="Gate" class="red" type="range" min="0" max="127" value="63" data-template="knob-template">
+          <input name="Pressure" class="red" type="range" min="0" max="127" value="0" data-template="knob-template">
+          <input type="checkbox" name="OnOff" class="play-step" data-template="step-onoff-template">
+        </div>
+      </template>
+
+      <template id="sequencer-options-template" class="Container">
+        <div class="Container" style="flex-direction: column">
+          <h3 class="SectionTitle">Options</h3>
+          <div class="Options" style="flex-direction: column">
+            <input name="StepLength" class="wobble-mode-disabled" title="Signature" data-template="knob-template" type="range" min="0" value="2" list="step-lengths">
+            <input name="LoopLength" class="wobble-mode-disabled" title="Steps" data-template="knob-template" type="range" min="1" max="16" value="8">
+          </div>
+        </div>
+      </template>
+
+      <template id="sequencer-template" data-class="BruteSequencer MidiDevice Device">
+        <div class="Container" style="flex-direction: column">
+          <span title="Sequencer" class="DeviceTitle" data-template="toggle-title-template-h3"></span>
+
+          <div style="display: flex; flex-direction: row">
+            <span data-template="sequencer-options-template"></span>
+
+            <div class="Container" style="flex-direction: column">
+              <h3 class="SectionTitle">Steps</h3>
+              <div class="Steps" style="flex-direction: row">
+                <div name="Step1" data-template="step-template" data-is-on="true"></div>
+                <div name="Step2" data-template="step-template"></div>
+                <div name="Step3" data-template="step-template"></div>
+                <div name="Step4" data-template="step-template"></div>
+
+                <div name="Step5" data-template="step-template"></div>
+                <div name="Step6" data-template="step-template"></div>
+                <div name="Step7" data-template="step-template"></div>
+                <div name="Step8" data-template="step-template"></div>
+
+                <div name="Step9" data-template="step-template"></div>
+                <div name="Step10" data-template="step-template"></div>
+                <div name="Step11" data-template="step-template"></div>
+                <div name="Step12" data-template="step-template"></div>
+
+                <div name="Step13" data-template="step-template"></div>
+                <div name="Step14" data-template="step-template"></div>
+                <div name="Step15" data-template="step-template"></div>
+                <div name="Step16" data-template="step-template"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+
+
+      <template id="drum-step-template" data-class="DrumStep">
+        <div style="flex-direction: column" class="DrumVoiceStep">
+          <h4 class="StepTitle title">Step</h4>
+          <div class="CH">
+            <h5>CH</h5>
+            <input name="Note" class="locked-knob" type="range" list="notes" value="12" data-template="knob-template">
+            <input name="Velocity" class="locked-knob yellow" type="range" min="0" max="127" value="127" data-template="knob-template">
+            <input name="Gate" class="locked-knob" type="range" min="0" max="127" value="100" data-template="knob-template">
+            <input name="Pressure" class="locked-knob" type="range" min="0" max="127" value="0" data-template="knob-template">
+            <input type="checkbox" name="OnOff" class="play-step" data-template="step-onoff-template">
+          </div>
+          <div class="OH">
+            <h5>OH</h5>
+            <input name="Note" class="locked-knob" type="range" list="notes" value="14" data-template="knob-template">
+            <input name="Velocity" class="locked-knob yellow" type="range" min="0" max="127" value="127" data-template="knob-template">
+            <input name="Gate" class="locked-knob" type="range" min="0" max="127" value="100" data-template="knob-template">
+            <input name="Pressure" class="locked-knob" type="range" min="0" max="127" value="0" data-template="knob-template">
+            <input type="checkbox" name="OnOff" class="play-step" data-template="step-onoff-template">
+          </div>
+          <div class="SD">
+            <h5>SD</h5>
+            <input name="Note" class="locked-knob" type="range" list="notes" value="16" data-template="knob-template">
+            <input name="Velocity" class="locked-knob yellow" type="range" min="0" max="127" value="127" data-template="knob-template">
+            <input name="Gate" class="locked-knob" type="range" min="0" max="127" value="100" data-template="knob-template">
+            <input name="Pressure" class="locked-knob" type="range" min="0" max="127" value="0" data-template="knob-template">
+            <input type="checkbox" name="OnOff" class="play-step" data-template="step-onoff-template">
+          </div>
+          <div class="BD">
+            <h5>BD</h5>
+            <input name="Note" class="locked-knob" type="range" list="notes" value="0" data-template="knob-template">
+            <input name="Velocity" class="locked-knob yellow" type="range" min="0" max="127" value="127" data-template="knob-template">
+            <input name="Gate" class="locked-knob" type="range" min="0" max="127" value="100" data-template="knob-template">
+            <input name="Pressure" class="locked-knob" type="range" min="0" max="127" value="0" data-template="knob-template">
+            <input type="checkbox" name="OnOff" class="play-step" data-template="step-onoff-template">
+          </div>
+        </div>
+      </template>
+
+      <template id="drum-sequencer-template" data-class="DrumSequencer MidiDevice Device">
+        <div class="Container" style="flex-direction: column">
+          <span title="Sequencer" class="DeviceTitle" data-template="toggle-title-template-h3"></span>
+
+          <div style="display: flex; flex-direction: row">
+            <span data-template="sequencer-options-template"></span>
+
+            <div class="Container" style="flex-direction: column">
+              <h3 class="SectionTitle">Steps</h3>
+              <div class="DrumSteps Steps" style="flex-direction: row">
+                <div name="Step1" data-template="drum-step-template" data-is-on="true"></div>
+                <div name="Step2" data-template="drum-step-template"></div>
+                <div name="Step3" data-template="drum-step-template"></div>
+                <div name="Step4" data-template="drum-step-template"></div>
+
+                <div name="Step5" data-template="drum-step-template"></div>
+                <div name="Step6" data-template="drum-step-template"></div>
+                <div name="Step7" data-template="drum-step-template"></div>
+                <div name="Step8" data-template="drum-step-template"></div>
+
+                <div name="Step9" data-template="drum-step-template"></div>
+                <div name="Step10" data-template="drum-step-template"></div>
+                <div name="Step11" data-template="drum-step-template"></div>
+                <div name="Step12" data-template="drum-step-template"></div>
+
+                <div name="Step13" data-template="drum-step-template"></div>
+                <div name="Step14" data-template="drum-step-template"></div>
+                <div name="Step15" data-template="drum-step-template"></div>
+                <div name="Step16" data-template="drum-step-template"></div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </template>
+
+      <template id="synth-osc-template">
+        <div style="display:flex;flex-direction: row;">
+          <input name="Type" class="darkgreen wobble-mode-disabled" title="Type" data-template="knob-template" type="range" min="0" value="3" list="oscillator-types">
+          <input name="Octave" class="darkgreen wobble-mode-disabled" title="Octave" data-template="knob-template" type="range" min="-2" max="2" value="0">
+          <input name="Detune" class="darkgreen" title="Detune" data-template="knob-template" type="range" min="-100" max="100" value="0">
+          <input name="Volume" class="darkgreen wobble-mode-disabled" title="Volume" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+        </div>
+      </template>
+
+      <template id="synth-filter-template">
+        <div style="display:flex;flex-direction: row;">
+          <input name="Type" class="darkgreen wobble-mode-disabled" title="Type" data-template="knob-template" type="range" list="filter-types" value="0">
+          <input name="Frequency" class="darkgreen" title="Freq" data-template="knob-template" type="range" value="600" min="50" max="8000" step="0.1">
+          <input name="Q" class="darkgreen" title="Q" data-template="knob-template" type="range" min="0.1" value="2" max="15" step="0.5">
+          <input name="Gain" class="darkgreen" title="Gain" data-template="knob-template" type="range" min="-40" max="40" value="0">
+        </div>
+      </template>
+
+      <template id="synth-ampenv-template">
+        <div name="AmpParameters" style="display:flex;flex-direction: row;">
+          <input name="Attack" class="darkgreen" title="Attack" data-template="knob-template" type="range" value="0" min="0" max="1" step="0.001">
+          <input name="Decay" class="darkgreen" title="Decay" data-template="knob-template" type="range" value="0.1" min="0" max="1" step="0.001">
+          <input name="Sustain" class="darkgreen" title="Sust." data-template="knob-template" type="range" value="0.5" min="0" max="1" step="0.001">
+          <input name="Release" class="darkgreen" title="Rel." data-template="knob-template" type="range" value="0.1" min="0" max="1" step="0.001">
+          <input name="Volume" class="darkgreen" title="Volume" data-template="knob-template" type="range" value="0.5" min="0" max="1" step="0.001">
+        </div>
+      </template>
+
+      <template id="synth-template" data-class="Synth AudioDevice Device">
+        <div class="Container" style="flex-direction: column">
+          <span title="Synth" class="SynthTitle DeviceTitle TrackDeviceTitle" data-template="toggle-title-template-h3"></span>
+          <div class="items" style="display: flex; flex-direction: row">
+
+            <div class="Parameters" style="display:flex;flex-direction: row;">
+
+              <div class="ParameterGroup Osc1">
+                <span title="Vco1" class="ParameterGroupTitle" data-template="toggle-sectiontitle-template"></span>
+                <div data-template="synth-osc-template"></div>
+              </div>
+
+              <div class="ParameterGroup Osc2">
+                <span title="Vco2" class="ParameterGroupTitle" data-template="toggle-sectiontitle-template"></span>
+                <div data-template="synth-osc-template"></div>
+              </div>
+
+              <div class="ParameterGroup Filter1">
+                <span title="Filter1" class="ParameterGroupTitle" data-template="toggle-sectiontitle-template"></span>
+                <div data-template="synth-filter-template"></div>
+              </div>
+
+              <div class="ParameterGroup Filter2">
+                <span title="Filter2" class="ParameterGroupTitle" data-template="toggle-sectiontitle-template"></span>
+                <div data-template="synth-filter-template"></div>
+              </div>
+
+              <div class="ParameterGroup AmpEnv">
+                <span title="Amp" class="ParameterGroupTitle" data-template="toggle-sectiontitle-template"></span>
+                <div data-template="synth-ampenv-template"></div>
+              </div>
+            </div>
+
+            <canvas name="device-output-meter" class="device-meter device-output-meter meter" data-val="100">No canvas</canvas>
+          </div>
+        </div>
+
+      </template>
+
+      <template id="drum-synth-template" data-class="DrumSynth AudioDevice Device">
+        <div class="Container" style="flex-direction: column">
+          <span title="DrumSynth" class="DrumSynthTitle DeviceTitle" data-template="toggle-title-template-h3"></span>
+          <div class="items" style="flex-direction: row">
+
+            <div class="Parameters" style="display:flex;flex-direction: row;">
+
+              <div class="ParameterGroup ClosedHihat">
+                <span title="ClosedHihat" class="ParameterGroupTitle" data-template="toggle-sectiontitle-template"></span>
+                <div style="display:flex;flex-direction: row;">
+                  <input name="Decay" class="red wobble-mode-disabled" title="Decay" data-template="knob-template" type="range" min="0.01" max="0.3" value="0.05" step="0.005">
+                  <input name="Tone" class="red wobble-mode-disabled" title="Tone" data-template="knob-template" type="range" min="2000" max="10000" value="3750" step="50">
+                  <input name="Q" class="red wobble-mode-disabled" title="Q" data-template="knob-template" type="range" min="0.5" max="15" value="3" step="0.5">
+                  <input name="Volume" class="red wobble-mode-disabled" title="Volume" data-template="knob-template" type="range" min="0" max="1" value="0.6" step="0.01">
+                </div>
+              </div>
+
+              <div class="ParameterGroup OpenHihat">
+                <span title="OpenHihat" class="ParameterGroupTitle" data-template="toggle-sectiontitle-template"></span>
+                <div style="display:flex;flex-direction: row;">
+                  <input name="Decay" class="red wobble-mode-disabled" title="Decay" data-template="knob-template" type="range" min="0.05" max="0.6" value="0.4" step="0.01">
+                  <input name="Tone" class="red wobble-mode-disabled" title="Tone" data-template="knob-template" type="range" min="2000" max="10000" value="4000" step="50">
+                  <input name="Q" class="red wobble-mode-disabled" title="Q" data-template="knob-template" type="range" min="0.5" max="15" value="5.5" step="0.5">
+                  <input name="Volume" class="red wobble-mode-disabled" title="Volume" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                </div>
+              </div>
+
+              <div class="ParameterGroup Snare">
+                <span title="Snare" class="ParameterGroupTitle" data-template="toggle-sectiontitle-template"></span>
+                <div style="display:flex;flex-direction: row;">
+                  <input name="Decay" class="red" title="Decay" data-template="knob-template" type="range" min="0.05" max="0.5" value="0.4" step="0.01">
+                  <input name="Tone" class="red" title="Tone" data-template="knob-template" type="range" min="50" max="300" value="50" step="1">
+                  <input name="Volume" class="red" title="Volume" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                </div>
+              </div>
+
+              <div class="ParameterGroup Kick">
+                <span title="Kick" class="ParameterGroupTitle" data-template="toggle-sectiontitle-template"></span>
+                <div style="display:flex;flex-direction: row;">
+                  <input name="Decay" class="red" title="Decay" data-template="knob-template" type="range" min="0.1" max="1" value="1" step="0.01">
+                  <input name="Tone" class="red" title="Tone" data-template="knob-template" type="range" min="30" max="300" value="300" step="1">
+                  <input name="Click" class="red" title="Click" data-template="knob-template" type="range" min="0" max="1" value="0.2" step="0.01">
+                  <input name="Drive" class="red" title="Drive" data-template="knob-template" type="range" min="0" max="10" value="5" step="0.01">
+                  <input name="Volume" class="red" title="Volume" data-template="knob-template" type="range" min="0" max="1" value="1" step="0.01">
+                </div>
+              </div>
+
+            </div>
+
+            <canvas name="device-output-meter" class="device-meter device-output-meter meter" data-val="100">No canvas</canvas>
+          </div>
+        </div>
+      </template>
+
+      <template id="effector-template" data-class="Effector AudioEffectDevice AudioDevice Device">
+        <div class="Container" class="AudioEffectDevice" style="flex-direction: column">
+          <span title="Effector" class="DeviceTitle" data-template="toggle-title-template-h3"></span>
+          <div class="items" style="flex-direction: row">
+            <canvas name="device-input-meter" class="device-meter device-input-meter meter" data-val="100">No canvas</canvas>
+            <div class="Parameters" style="display:flex;flex-direction: row;">
+
+              <div class="ParameterGroup Delay">
+
+                <span title="Delay" class="ParameterGroupTitle ModuleTitle" data-template="toggle-sectiontitle-template"></span>
+                <div name="DelayParameters" style="display:flex;flex-direction: row;">
+                  <canvas name="input-meter" class="module-meter meter" data-val="100">No canvas</canvas>
+                  <input name="Drive" class="brown" title="Drive" data-template="knob-template" class="cyan" type="range" min="0" max="100" value="0.0"
+                         step="1">
+
+                  <input name="StepsLeft" class="brown" title="Steps L" data-template="knob-template" type="range"
+                         min="1" max="8" value="3">
+                  <input name="TimeLeft" class="brown" title="Time L" data-template="knob-template" type="range"
+                         min="0" max="1000" value="321" step="1">
+
+                  <input name="StepsRight" class="brown" title="Steps R" data-template="knob-template" type="range"
+                         min="1" max="8" value="5">
+                  <input name="TimeRight" class="brown" title="Time R" data-template="knob-template" class="cyan"
+                         type="range" min="0" max="1000" value="536" step="1">
+
+                  <input name="Feedback" class="brown" title="Feedbk" data-template="knob-template" class="cyan"
+                         type="range" min="0" max="1" value="0.0" step="0.01">
+
+                  <input name="DryWet" class="brown" title="DryWet" data-template="knob-template" class="cyan"
+                         type="range" min="0" max="1" value="0" step="0.01">
+                  <canvas name="output-meter" class="module-meter meter" data-val="100">No canvas</canvas>
+                </div>
+
+              </div>
+
+              <div class="ParameterGroup Reverb">
+                <span title="Reverb" class="ParameterGroupTitle ModuleTitle" data-template="toggle-sectiontitle-template"></span>
+                <div name="ReverbParameters" style="display:flex;flex-direction: row;">
+                  <canvas name="input-meter" class="module-meter meter" data-val="100">No canvas</canvas>
+                  <input name="Size" class="brown" title="Size" data-template="knob-template" type="range" min="0" max="5" value="0.5" step="0.1">
+                  <input name="Decay" class="brown" title="Decay" data-template="knob-template" type="range" min="0" max="5" value="0.5" step="0.1">
+                  <input name="DryWet" class="brown" title="DryWet" data-template="knob-template" type="range" min="0" max="1" value="0" step="0.01">
+                  <canvas name="output-meter" class="module-meter meter" data-val="100">No canvas</canvas>
+                </div>
+              </div>
+
+              <div class="ParameterGroup Compressor">
+                <span title="Compressor" class="ParameterGroupTitle ModuleTitle" data-template="toggle-sectiontitle-template"></span>
+                <div name="CompressorParameters" style="display:flex;flex-direction: row;">
+                  <canvas name="input-meter" class="module-meter meter" data-val="100">No canvas</canvas>
+                  <input name="Threshold" class="brown" title="Thresh" data-template="knob-template" type="range" min="-100" max="0" value="-100" step="1">
+                  <input name="Knee" class="brown" title="Knee" data-template="knob-template" type="range" min="0" max="40" value="40" step="1">
+                  <input name="Ratio" class="brown" title="Ratio" data-template="knob-template" type="range" min="1" max="20" value="20" step="0.1">
+                  <input name="Attack" class="brown" title="Att" data-template="knob-template" type="range" min="0.003" max="1" value="0.003" step="0.001">
+                  <input name="Release" class="brown" title="Rel" data-template="knob-template" type="range" min="0" max="1" value="0.25" step="0.05">
+                  <canvas name="reduction-meter" class="module-meter meter" data-val="100">No canvas</canvas>
+                  <input name="Makeup" class="brown" title="Makeup" data-template="knob-template" type="range" min="0" max="10" value="0" step="0.5">
+                  <canvas name="output-meter" class="module-meter meter" data-val="100">No canvas</canvas>
+                </div>
+              </div>
+            </div>
+            <canvas name="device-output-meter" class="device-meter device-output-meter meter" data-val="100">No canvas</canvas>
+          </div>
+        </div>
+
+      </template>
+
+      <template id="synth-track-devices-template">
+        <div class="TrackContent">
+          <div class="TrackDevices">
+            <span data-template="sequencer-template"></span>
+            <span data-template="synth-template"></span>
+            <span data-template="effector-template"></span>
+          </div>
+          <div class="TrackMeterContainer"><canvas name="TrackMeter" class="track-meter meter" data-val="0">No canvas</canvas></div>
+        </div>
+      </template>
+
+      <template id="drum-track-devices-template">
+        <div class="TrackContent">
+          <div class="TrackDevices">
+            <span data-template="drum-sequencer-template"></span>
+            <span data-template="drum-synth-template"></span>
+            <span data-template="effector-template"></span>
+          </div>
+          <div class="TrackMeterContainer"><canvas name="TrackMeter" class="track-meter meter" data-val="0">No canvas</canvas></div>
+        </div>
+      </template>
+
+      <template id="app-template">
+        <div class="AudioApp" id="AudioApp">
+          <input name="Tempo" type="number" value="140" style="display:none">
+
+          <h3 class="AppTitle">AudioApp</h3>
+
+          <div class="app-buttons">
+            <span class="left-buttons">
+              <button class="play icon-button" onclick="audioApp.play()"><img src="img/Play_icon.png"></button>
+              <button class="rec icon-button" onclick="audioApp.record()"><img src="img/rec_icon.png"></button>
+              <button class="stop icon-button" onclick="audioApp.stop()"><img src="img/stop_icon.png"></button>
+
+              <button class="load icon-button" onclick="audioApp.browser.show()"><img src="img/open_icon.png"></button>
+              <button class="save icon-button" onclick="audioApp.browser.savePreset()"><img src="img/save_icon.png"></button>
+              
+              <div class="bpm-buttons">
+                <button class="lower-bpm bpm icon-button" title="Lower BPM" onclick="audioApp.lowerBpm()"><img src="img/down_icon.png"></button>
+                <div class="bpm-text"></div>
+                <button class="higher-bpm bpm icon-button" title="Higher BPM" onclick="audioApp.higherBpm()"><img src="img/up_icon.png"></button>
+              </div>
+            </span>
+
+            <div class="zoom-buttons right">
+              <button class="zoom-out icon-button" title="Zoom out" onclick="zoomOut()"><img src="img/ZoomOut_icon.png"></button>
+              <button class="zoom-in icon-button" title="Zoom in" onclick="zoomIn()"><img src="img/ZoomIn_icon.png"></button>
+            </div>
+
+          </div>
+
+          <div class="Tracks">
+
+            <div id="track1" class="Track">
+              <span class="TrackTitle" title="🎶 Synth Track 1" data-template="toggle-tracktitle-template"></span>
+              <span data-template="synth-track-devices-template"></span>
+            </div>
+
+            <div id="track2" class="Track">
+              <span class="TrackTitle" title="🎶 Synth Track 2" data-template="toggle-tracktitle-template"></span>
+              <span data-template="synth-track-devices-template"></span>
+            </div>
+
+            <div id="track3" class="Track">
+              <span class="TrackTitle" title="🎶 Synth Track 3" data-template="toggle-tracktitle-template"></span>
+              <span data-template="synth-track-devices-template"></span>
+            </div>
+
+            <div id="track4" class="Track" list="group-colors">
+              <span class="TrackTitle" title="🥁 Drum track 1" data-template="toggle-tracktitle-template"></span>
+              <span data-template="drum-track-devices-template"></span>
+            </div>
+
+            <div id="track5" class="Track" list="group-colors">
+              <span class="TrackTitle" title="🥁 Drum track 2" data-template="toggle-tracktitle-template"></span>
+              <span data-template="drum-track-devices-template"></span>
+            </div>
+          </div>
+        </div>
+      </template>
+
+    </span>
+
+    <div class="root">
+      <div data-template="app-template"></div>
+
+      <div id="PresetBrowser" class="DialogWindow">
+        <h3>Preset browser</h3>
+        <div class="PresetsList">
+
+        </div>
+        <div class="browser-buttons">
+          <button class="left" onclick="audioApp.browser.export()">Export</button>
+          <button class="left" onclick="audioApp.browser.import()">Import</button>
+          <button class="right" onclick="audioApp.browser.select()">Load</button>
+          <button class="right" onclick="audioApp.browser.hide()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      initialize();
+      let zoomLevel = 100;
+
+      function zoomIn() {
+        if (zoomLevel == 200)
+          return;
+        zoomLevel = zoomLevel + 25;
+
+        document.querySelector(".Tracks").style.zoom = zoomLevel + "%";
+        consoleLog("ZoomIn " + zoomLevel)
+      }
+
+      function zoomOut() {
+        if (zoomLevel == 50)
+          return;
+        zoomLevel = zoomLevel - 25;
+        document.querySelector(".Tracks").style.zoom = zoomLevel + "%";
+        //document.body.style.fontSize = newFontSize;
+      }
+    </script>
+  </body>
+
+</html>
