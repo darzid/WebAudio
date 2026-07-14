@@ -42,9 +42,9 @@ A vanilla-JS Web Audio synth workstation: an HTML-template-driven UI where DOM e
 
 17. FIXED - **`addSynthTrack` is half-dead** — [audio-app.js:61](devices/audio-app.js:61) uses `innerHTML +=` on the Tracks container, which destroys and re-creates every existing track's DOM (orphaning all registered handlers' element references), and the call to re-process handlers is commented out, so the new track never becomes functional anyway.
 
-18. **Invalid HTML in `<head>`** — index.html places an `<svg>` block (line 58) and all the app markup inside/after the head without a `<body>` open tag; browsers repair it, but it's fragile. Templates also use self-closing `<div ... />`, which HTML parsers ignore, occasionally producing surprise nesting.
+18. FIXED - **Invalid HTML in `<head>`** — index.html places an `<svg>` block (line 58) and all the app markup inside/after the head without a `<body>` open tag; browsers repair it, but it's fragile. Templates also use self-closing `<div ... />`, which HTML parsers ignore, occasionally producing surprise nesting.
 
-19. **`getParentElementWithClassName`** ([control-autoupdater.js:44](control-autoupdater.js:44)) walks `parentElement` with no null check — crashes with a null dereference if the class is never found.
+19. FIXED - **`getParentElementWithClassName`** ([control-autoupdater.js:44](control-autoupdater.js:44)) walks `parentElement` with no null check — crashes with a null dereference if the class is never found.
 
 ## Suggested priorities
 
