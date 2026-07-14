@@ -46,7 +46,7 @@ class DrumSynth extends AudioDevice {
   get track() { return this.getParentElementHandler("Track"); }
 
   setupAudioGraph(audioContext) {
-    super.setupAudioGraph(audioContext, audioContext.createGain());
+    super.setupAudioGraph(audioContext);
   }
 
   playNote(eventInfo) {
@@ -75,7 +75,6 @@ class DrumSynth extends AudioDevice {
     let toneFreq = this.getFloatPropertyValue(`${voiceName}Tone`);
     let q = this.getFloatPropertyValue(`${voiceName}Q`);
     let volume = this.getFloatPropertyValue(`${voiceName}Volume`) * velocityGain;
-
 
     let chokeGain = null;
     
@@ -112,7 +111,7 @@ class DrumSynth extends AudioDevice {
     let env = this._context.createGain();
     env.gain.value = 0;
     highpass2.connect(env);
-    env.connect(this._node);
+    env.connect(this.wetOutput);
 
     let hihatCount = HIHAT_FREQS.length;
     HIHAT_FREQS.forEach(freq => {
@@ -142,7 +141,6 @@ class DrumSynth extends AudioDevice {
     env.gain.exponentialRampToValueAtTime(0.0001, startTime + decay);
 
     if (isOpen) this._openHihatGain = env;
-    
   }
 
   playSnare(startTime, velocityGain) {
@@ -159,7 +157,7 @@ class DrumSynth extends AudioDevice {
     let bodyEnv = this._context.createGain();
     bodyEnv.gain.setValueAtTime(volume * 0.7, startTime);
     bodyEnv.gain.exponentialRampToValueAtTime(0.001, startTime + decay * 0.6);
-    bodyOsc.connect(bodyEnv).connect(this._node);
+    bodyOsc.connect(bodyEnv).connect(this.wetOutput);
     
     bodyOsc.onended = () => {
       bodyOsc.disconnect();
@@ -179,7 +177,7 @@ class DrumSynth extends AudioDevice {
     let buzzEnv = this._context.createGain();
     buzzEnv.gain.setValueAtTime(volume * 0.8, startTime);
     buzzEnv.gain.exponentialRampToValueAtTime(0.0001, startTime + decay);
-    buzzFilter.connect(buzzEnv).connect(this._node);
+    buzzFilter.connect(buzzEnv).connect(this.wetOutput);
 
     let snareCount = SNARE_BUZZ_RATIOS.length;
     
@@ -232,7 +230,7 @@ class DrumSynth extends AudioDevice {
 
     bodyOsc.connect(drive);
     drive.connect(bodyEnv);
-    bodyEnv.connect(this._node);
+    bodyEnv.connect(this.wetOutput);
 
     bodyOsc.onended = () => {
       bodyOsc.disconnect();
@@ -258,7 +256,7 @@ class DrumSynth extends AudioDevice {
       clickEnv.gain.setValueAtTime(volume * clickLevel, startTime);
       clickEnv.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.012);
 
-      clickOsc.connect(clickEnv).connect(this._node);
+      clickOsc.connect(clickEnv).connect(this.wetOutput);
       
       clickOsc.onended = () => {
         clickOsc.disconnect();

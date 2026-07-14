@@ -44,7 +44,7 @@ class SequencerBase extends MidiDevice {
   changeLoopLength(value) {
     if (this.playingStep) {
       if (value > this.steps.indexOf(this.playingStep))
-        this.setPlayingStep(0);
+        this.setPlayingStep(0, 0);
     }
     for (let stepIndex = 0; stepIndex < this.steps.length; stepIndex++) {
       this.steps[stepIndex].element.style.display = (stepIndex < value) ? "flex" : "none";

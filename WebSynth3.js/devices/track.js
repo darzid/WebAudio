@@ -16,8 +16,8 @@ class Track extends AudioDevice {
   get id() { return this.element.id; }
   get audioApp() { return this.getParentElementHandler("AudioApp"); }
 
-  get volume() { return this._node.gain.value; }
-  set volume(value) { this._node.gain.value = value; }
+  get volume() { return this.output.gain.value; }
+  set volume(value) { this.output.gain.value = value; }
 
   get bruteSequencer() { return this.findChildElementHandler("BruteSequencer"); }
   get drumSequencer() { return this.findChildElementHandler("DrumSequencer"); }
@@ -44,11 +44,11 @@ class Track extends AudioDevice {
     //consoleLog("Track.setupAudioGraph");
 
     if (this._context) {
-      this._node.disconnect();
+      this.wetOutput.disconnect();
       this.audioDevices.forEach(device => device.output.disconnect());
     }
 
-    super.setupAudioGraph(audioContext, new GainNode(audioContext, { gain: 0.5 }));
+    super.setupAudioGraph(audioContext);
 
     this.sequencer.setupAudioGraph(audioContext);
 
@@ -60,21 +60,15 @@ class Track extends AudioDevice {
       this.audioDevices[deviceIndex].output.connect(this.audioDevices[deviceIndex + 1].input);
     }
     if (this.audioDevices.length > 0)
-      this.audioDevices[this.audioDevices.length - 1].output.connect(this._outputNode);
+      this.audioDevices[this.audioDevices.length - 1].output.connect(this.wetOutput);
 
     let outputMeter = this.element.querySelector("canvas[name='TrackMeter']");
     if (outputMeter) {
       let analyser = levelMeterManager.register(audioContext, this.output, outputMeter);
-      analyser.connect(this.audioApp.input);
+      analyser.connect(this.audioApp.output);
     } else {
       this.output.connect(this.audioApp.input);
     }
-
-    // this._outputAnalyser = audioContext.createAnalyser();
-    // this._outputAnalyser.fftSize = 256;
-    // this._outputPcmData = new Float32Array(this._outputAnalyser.fftSize);
-    // this.output.connect(this._outputAnalyser);
-    // controlAutoUpdater.addAutoUpdateMeter(this, "currentOutputLevel", meter);
   }
 
   startSequencer(time) {

@@ -41,7 +41,8 @@ class CompressorModule extends DeviceModule {
   return this._compressor.reduction;
  }
  
- setupAudioGraph(audioContext, inputNode, outputNode) {
+ setupAudioGraph(audioContext, inputNode) {
+ 	super.setupAudioGraph(audioContext, inputNode);
   let compressor = audioContext.createDynamicsCompressor();
   let makeupGain = audioContext.createGain();
   compressor.connect(makeupGain);
@@ -52,10 +53,10 @@ class CompressorModule extends DeviceModule {
   this.connectFloatPropertyToAudioParam(compressor.release, "Release");
   this.connectFloatPropertyToAudioParam(makeupGain.gain, "Makeup");
   
-  
+  this.input.connect(compressor);
+  compressor.connect(this.wetOutput);
   controlAutoUpdater.addAutoUpdateMeter(this, "Reduction", this.element.querySelector("canvas[name='reduction-meter']"));
   
   this._compressor = compressor;
-  super.setupAudioGraph(audioContext, inputNode, outputNode, compressor, makeupGain);
  }
 }

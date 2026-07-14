@@ -38,7 +38,10 @@ class Filter extends DeviceModule {
     }
   }
 
-  setupAudioGraph(audioContext, inputNode, outputNode, startTime, duration, pressure, connectedNodes) {
+  setupAudioGraph(audioContext, inputNode, startTime, duration, pressure, connectedNodes) {
+  	consoleLog("Filter.setupAudioGraph start");
+  	super.setupAudioGraph(audioContext, inputNode);
+  	
     let filterRampDuration = duration * ((pressure / 127));
     let filter = audioContext.createBiquadFilter();
     filter.type = this.filterType;
@@ -48,13 +51,13 @@ class Filter extends DeviceModule {
     filter.frequency.linearRampToValueAtTime(10, startTime);
     filter.frequency.linearRampToValueAtTime(this.getFloatPropertyValue("Frequency"), startTime + filterRampDuration);
 
-    this.getPropertyInputElement("Type").oninput = () => {
+    this.getPropertyInputElement("Type").addEventListener("input", () => {
       filter.type = this.filterType;
       this.updateControlVisibility();
-    };
-    this.getPropertyInputElement("Frequency").oninput = () => filter.frequency.linearRampToValueAtTime(this.getFloatPropertyValue("Frequency"), startTime + filterRampDuration);
-    this.getPropertyInputElement("Q").oninput = () => filter.Q.value = this.getFloatPropertyValue("Q");
-    this.getPropertyInputElement("Gain").oninput = () => filter.gain.value = this.getFloatPropertyValue("Gain");
+    });
+    this.getPropertyInputElement("Frequency").addEventListener("input", () => filter.frequency.linearRampToValueAtTime(this.getFloatPropertyValue("Frequency"), startTime + filterRampDuration));
+    this.getPropertyInputElement("Q").addEventListener("input", () => filter.Q.value = this.getFloatPropertyValue("Q"));
+    this.getPropertyInputElement("Gain").addEventListener("input", () => filter.gain.value = this.getFloatPropertyValue("Gain"));
     /* let fmRate = this.getFloatPropertyValue("FmRate");
      let fmAmount = 1 - this.getFloatPropertyValue("FmAmount");
      if (fmRate > 0 && fmAmount > 0) {
@@ -68,7 +71,8 @@ class Filter extends DeviceModule {
       this.getPropertyInputElement("FmAmount").oninput = () => fmLfoGain.gain.value = this.getFloatPropertyValue("FmAmount");
      }*/
     connectedNodes.push(filter);
-
-    super.setupAudioGraph(audioContext, inputNode, outputNode, filter);
+    
+    this.input.connect(filter);
+    filter.connect(this.wetOutput);
   }
 }

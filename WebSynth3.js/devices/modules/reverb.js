@@ -13,14 +13,17 @@ class ReverbModule extends DeviceModule  {
     this.registerInputProperty(this._dryWetProperty);
   }
   
-  setupAudioGraph(audioContext, inputNode, outputNode) {
+  setupAudioGraph(audioContext, inputNode) {
+  	super.setupAudioGraph(audioContext, inputNode);
+  	
     let convolver = audioContext.createConvolver();
     this.updateBuffer(audioContext, convolver);
     
     this.getPropertyInputElement(this._sizeProperty).oninput = () => this.updateBuffer(audioContext, convolver);
     this.getPropertyInputElement(this._decaytimeProperty).oninput = () => this.updateBuffer(audioContext, convolver);
     
-    super.setupAudioGraph(audioContext, inputNode, outputNode, convolver);
+    this.input.connect(convolver);
+    convolver.connect(this.wetOutput);
   }
   
   updateBuffer(audioContext, convolver) {

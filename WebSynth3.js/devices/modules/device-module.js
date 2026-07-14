@@ -8,8 +8,72 @@ class DeviceModule {
     this.element = this.device.element.querySelector("." + moduleClass);
 
     this.registerInputProperty(this._enabledProperty);
+    
+    this._context = null;
+    this._inputNode = null;
+    this._dryOutputNode = null;
+    this._wetOutputNode = null;
+    this._outputNode = null;
   }
 
+	get input() { return this._inputNode; }
+  get dryOutput() { return this._dryOutputNode; }
+  get wetOutput() { return this._wetOutputNode; }
+  get output() { return this._outputNode; }
+  
+  setupAudioGraph(audioContext, input) {
+  	this._context = audioContext;
+  	
+    let hasDryWet = this.hasInputProperty(this._dryWetProperty);
+    if (hasDryWet) {
+      this.registerInputProperty(this._dryWetProperty);
+    }
+
+    this._inputNode = input;
+    this._dryOutputNode = new GainNode(audioContext, { gain: 1.0, channelCount: 2 });
+    this._wetOutputNode = new GainNode(audioContext, { gain: 1.0, channelCount: 2 });
+    this._outputNode = new GainNode(audioContext, { gain: 1.0, channelCount: 2 });
+    
+    if (hasDryWet) {
+      this.connectFloatPropertyToAudioParam(this.dryOutput.gain, this._dryWetProperty, (value) => 1 - value);
+      this.connectFloatPropertyToAudioParam(this.wetOutput.gain, this._dryWetProperty);
+    }
+    else {
+      this.dryOutput.gain.value = 0;
+      this.wetOutput.gain.value = 1;
+    }
+    
+    let enableDisableFunction = () => {
+      if (this.getBoolPropertyValue(this._enabledProperty)) {
+        this.wetOutput.connect(this.output);
+        if (!hasDryWet) {
+          this.dryOutput.gain.value = 0;
+        }
+      }
+      else {
+        this.wetOutput.disconnect();
+        if (!hasDryWet) {
+          this.dryOutput.gain.value = 1;
+        }
+      }
+    }
+    
+    let enabledElement = this.getPropertyInputElement(this._enabledProperty);
+    enabledElement.onchange = () => enableDisableFunction();
+    
+    this.input.connect(this.dryOutput);
+    this.dryOutput.connect(this.output);
+    enableDisableFunction();
+
+    let inputMeter = this.element.querySelector("canvas[name='input-meter']");
+    if (inputMeter)
+      levelMeterManager.register(audioContext, this.input, inputMeter);
+
+    let outputMeter = this.element.querySelector("canvas[name='output-meter']");
+    if (outputMeter)
+      levelMeterManager.register(audioContext, this.output, outputMeter);
+  }
+  
   registerPropertyInputElement(name, elementPath) {
     let propertyName = this.moduleClass + name;
     elementPath = "." + this.moduleClass + " " + elementPath;
@@ -30,7 +94,6 @@ class DeviceModule {
     return this.device.hasPropertyInputElement(`.${this.moduleClass} ${elementPath}`);
   }
 
-
   getPropertyInputElement(elementName) {
     return this.device.getPropertyInputElement(this.moduleClass + elementName);
   }
@@ -38,53 +101,19 @@ class DeviceModule {
   getFloatPropertyValue(name) {
     return this.device.getFloatPropertyValue(this.moduleClass + name);
   }
-
   setFloatPropertyValue(name, value) {
     this.device.setFloatPropertyValue(this.moduleClass + name, value);
   }
 
+	getBoolPropertyValue(name) {
+    return this.device.getBoolPropertyValue(this.moduleClass + name);
+  }
+  
   connectFloatPropertyToAudioParam(audioParam, name, propertyConverter = null) {
     this.device.connectFloatPropertyToAudioParam(audioParam, this.moduleClass + name, propertyConverter);
   }
 
   connectBoolPropertyToAudioParam(audioParam, name, propertyConverter = null) {
     this.device.connectBoolPropertyToAudioParam(audioParam, this.moduleClass + name, propertyConverter);
-  }
-
-  setupAudioGraph(audioContext, inputNode, outputNode, processingNode, processingEndNode = null) {
-    let hasDryWet = this.hasInputProperty(this._dryWetProperty);
-    if (hasDryWet) {
-      this.registerInputProperty(this._dryWetProperty);
-    }
-
-    if (!processingEndNode) processingEndNode = processingNode;
-
-    let dryOutputGain = audioContext.createGain();
-    this.connectBoolPropertyToAudioParam(dryOutputGain.gain, this._enabledProperty);
-
-    let wetOutputGain = audioContext.createGain();
-    this.connectBoolPropertyToAudioParam(wetOutputGain.gain, this._enabledProperty);
-
-    if (hasDryWet) {
-      this.connectFloatPropertyToAudioParam(dryOutputGain.gain, this._dryWetProperty, (value) => 1 - value);
-      this.connectFloatPropertyToAudioParam(wetOutputGain.gain, this._dryWetProperty);
-    } else {
-      dryOutputGain.gain.value = 0;
-      wetOutputGain.gain.value = 1;
-    }
-
-    inputNode.connect(dryOutputGain);
-    dryOutputGain.connect(outputNode);
-    inputNode.connect(processingNode);
-    processingEndNode.connect(wetOutputGain);
-    wetOutputGain.connect(outputNode);
-
-    let inputMeter = this.element.querySelector("canvas[name='input-meter']");
-    if (inputMeter)
-      levelMeterManager.register(audioContext, inputNode, inputMeter);
-
-    let outputMeter = this.element.querySelector("canvas[name='output-meter']");
-    if (outputMeter)
-      levelMeterManager.register(audioContext, outputNode, outputMeter);
   }
 }

@@ -43,86 +43,71 @@ class AudioDevice extends Device {
     super(element, elementClass, handlerRegistry, deviceName, deviceType);
     consoleLog("AudioDevice constructor");
     this._context = null;
-    this._node = null;
+    this._inputNode = null;
+    this._dryOutputNode = null;
+    this._wetOutputNode = null;
     this._outputNode = null;
-    this._output = null;
 
     this.registerPropertyInputElement("DeviceEnabled", ".DeviceTitle input[name='Enabled']");
   }
 
-
-  setupAudioGraph(audioContext, audioNode) {
-
-    this._context = audioContext;
-    this._node = audioNode;
-    this._outputNode = audioContext.createGain();
-    this._outputNode.channelCount = 2;
-    this._outputNode.channelCountMode = "max";
-
-    this._output = audioContext.createGain();
-
-    this._node.connect(this._outputNode);
-    //let outputDryGain = audioContext.createGain();
-    let outputGain = audioContext.createGain();
-    //this._outputNode.connect(outputDryGain);
-    this._outputNode.connect(outputGain);
-    //outputDryGain.connect(this._output);
-    outputGain.connect(this._output);
-    this.connectBoolPropertyToAudioParam(outputGain.gain, "DeviceEnabled", boolToInt);
-
-    let outputMeter = this.element.querySelector("canvas[name='device-output-meter']");
-    if (outputMeter) {
-      levelMeterManager.register(audioContext, this.output, outputMeter);
-      consoleLog("Added outputmeter for " + this.name);
-    }
-  }
-
   get id() { return this.element.id; }
-  get output() { return this._output; }
-}
-
-class AudioEffectDevice extends AudioDevice {
-  constructor(element, elementClass, handlerRegistry, deviceName, deviceType) {
-    super(element, elementClass, handlerRegistry, deviceName, deviceType);
-    this._inputNode = null;
-  }
-
   get input() { return this._inputNode; }
-
-  setupAudioGraph(audioContext, audioNode) {
-    super.setupAudioGraph(audioContext, audioNode);
-
+  get dryOutput() { return this._dryOutputNode; }
+  get wetOutput() { return this._wetOutputNode; }
+  get output() { return this._outputNode; }
+  
+  setupAudioGraph(audioContext) {
+    this._context = audioContext;
+    
     let hasDryWet = this.hasInputProperty(this._dryWetProperty);
 
-    this._inputNode = audioContext.createGain({ channelCount: 2, channelCountMode: "max" });
-    this._inputNode.connect(audioNode);
-    
-    //this._node.disconnect(this._outputNode);
+    this._inputNode = new GainNode(audioContext, { gain: 1.0, channelCount: 2 });
+    this._dryOutputNode = new GainNode(audioContext, { gain: 1.0, channelCount: 2 });
+    this._wetOutputNode = new GainNode(audioContext, { gain: 1.0, channelCount: 2 });
+    this._outputNode = new GainNode(audioContext, { gain: 1.0, channelCount: 2 });
     
     if (hasDryWet) {
-      let outputDryGain = audioContext.createGain();
-      this._outputNode.connect(outputDryGain);
-      outputDryGain.connect(this._output);
-      this.connectBoolPropertyToAudioParam(outputDryGain.gain, "DeviceEnabled", inverseBoolToInt);
+      this.connectFloatPropertyToAudioParam(this.dryOutput.gain, this._dryWetProperty, (value) => 1 - value);
+      this.connectFloatPropertyToAudioParam(this.wetOutput.gain, this._dryWetProperty);
     }
-
-    let outputWetGain = audioContext.createGain();
-    outputWetGain.gain.value = 1;
-    this._outputNode.connect(outputWetGain);
-    outputWetGain.connect(this._output);
-    this.connectBoolPropertyToAudioParam(outputWetGain.gain, "DeviceEnabled", inverseBoolToInt);
-
-    let outputGain = audioContext.createGain();
-    //this._outputNode.connect(outputDryGain);
-    this._outputNode.connect(outputGain);
-    //outputDryGain.connect(this._output);
-    outputGain.connect(this._output);
-    this.connectBoolPropertyToAudioParam(outputGain.gain, "DeviceEnabled", boolToInt);
+    else {
+      this.dryOutput.gain.value = 0;
+      this.wetOutput.gain.value = 1;
+    }
+    
+    let enableDisableFunction = () => {
+      if (this.getBoolPropertyValue("DeviceEnabled")) {
+        this.wetOutput.connect(this.output);
+        if (!hasDryWet) {
+          this.dryOutput.gain.value = 0;
+        }
+      }
+      else {
+        this.wetOutput.disconnect(this.output);
+        if (!hasDryWet) {
+          this.dryOutput.gain.value = 1;
+        }
+      }
+    }
+    
+    let enabledElement = this.getChildInputElement("DeviceEnabled");
+    enabledElement.onchange = () => enableDisableFunction();
+    
+    this.input.connect(this.dryOutput);
+    this.dryOutput.connect(this.output);
+    enableDisableFunction();
     
     let inputMeter = this.element.querySelector("canvas[name='device-input-meter']");
     if (inputMeter) {
       levelMeterManager.register(audioContext, this.input, inputMeter);
       consoleLog("Added inputmeter for " + this.name);
+    }
+    
+    let outputMeter = this.element.querySelector("canvas[name='device-output-meter']");
+    if (outputMeter) {
+      levelMeterManager.register(audioContext, this.output, outputMeter);
+      consoleLog("Added outputmeter for " + this.name);
     }
   }
 }

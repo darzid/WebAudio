@@ -1,4 +1,4 @@
-class AudioApp extends AudioEffectDevice {
+class AudioApp extends AudioDevice {
   _rec;
   mediaRecorder;
   chunks;
@@ -31,10 +31,6 @@ class AudioApp extends AudioEffectDevice {
     this.log = "";
     this.logStart = 0;
     this.chunks = [];
-    
-    
-    
-    //this.addSynthTrack();
   }
 
   get BPM() { return MidiClock.tempo; }
@@ -47,7 +43,7 @@ class AudioApp extends AudioEffectDevice {
 
   get tracks() { return this.findChildElementHandlers("Track"); }
 
-  get isPlaying() { this.hasState("is-playing"); }
+  get isPlaying() { return this.hasState("is-playing"); }
   set isPlaying(value) { this.setState("is-playing", value); }
 
   get rendering() { return this._rendering; }
@@ -58,7 +54,10 @@ class AudioApp extends AudioEffectDevice {
     return this.isPlaying && this.stopTime && this.stopTime <= this._context.currentTime;
   }
 
-  addSynthTrack() {
+  get volume() { return this.output.gain.value; }
+  set volume(value) { this.output.gain.value = value; }
+  
+  /*addSynthTrack() {
     let trackId = "track" + (this.tracks.length + 1);
     let trackHtml = `
     <div id="${trackId}" class="Track">
@@ -71,16 +70,16 @@ class AudioApp extends AudioEffectDevice {
     consoleLog(trackElement)
     applyTemplates();
     //elementHandlerRegistry.processAll();
-  }
+  }*/
   
   setupAudioGraph(audioContext) {
-    //  consoleLog("audioApp.setupAudioGraph");
     if (this._context) {
-      this._outputNode.disconnect();
+      this.output.disconnect();
     }
-    super.setupAudioGraph(audioContext, audioContext.createGain());
+    super.setupAudioGraph(audioContext);
 
     this.tracks.forEach(track => track.setupAudioGraph(audioContext));
+    
     let compressor = new DynamicsCompressorNode(audioContext);
     compressor.threshold.value = -100;
     compressor.knee.value = 40;
@@ -104,7 +103,7 @@ class AudioApp extends AudioEffectDevice {
   record() {
     this._recording = true;
     this.chunks = [];
-    let recordingstream = audioContext.createMediaStreamDestination();
+    let recordingstream = this._context.createMediaStreamDestination();
     this.mediaRecorder = new MediaRecorder(recordingstream.stream);
     this.output.connect(recordingstream);
     
@@ -116,11 +115,9 @@ class AudioApp extends AudioEffectDevice {
         
         const a = document.createElement('a');
         a.href = audioURL;
-        a.download = 'Recording.wav';
+        a.download = 'Recording.ogg';
         a.innerText = "download";
         a.click();
-        
-       // document.querySelector(".app-buttons").appendChild(a);
       }
     
     this.mediaRecorder.start();
@@ -140,7 +137,6 @@ class AudioApp extends AudioEffectDevice {
     
     if (this._recording) {
       this.mediaRecorder.stop();
-      this.output.disconnect(this.mediaRecorder);
       
       consoleLog(this.mediaRecorder.state);
       consoleLog("recorder stopped");
@@ -164,7 +160,4 @@ class AudioApp extends AudioEffectDevice {
     document.querySelector(".bpm-text").innerHTML = MidiClock.tempo + " BPM";
     document.querySelector(".bpm-text").title = MidiClock.tempo + " BPM";
   }
-
 }
-
-

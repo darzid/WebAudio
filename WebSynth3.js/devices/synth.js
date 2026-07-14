@@ -1,6 +1,4 @@
 class Synth extends AudioDevice {
-  
-  
   fm1Lfo;
   fm1LfoGain;
   fm2Lfo;
@@ -47,8 +45,8 @@ class Synth extends AudioDevice {
  get osc2Type() { return this.getPropertyInputElement("Osc2Type").dataset.optionValue; }
  
  setupAudioGraph(audioContext) {
-   super.setupAudioGraph(audioContext, audioContext.createGain({ channelCount: 2, channelCountMode: "max" }));
-   
+   super.setupAudioGraph(audioContext);
+  
    /* FM 
    this.fm1Lfo = this._context.createOscillator({frequency: this.getFloatPropertyValue("Osc1FmRate")});
    this.fm1LfoGain = this._context.createGain({gain: this.getFloatPropertyValue("Osc1FmAmount")});
@@ -82,7 +80,7 @@ class Synth extends AudioDevice {
   connectedNodes.push(osc1gain);
   connectedNodes.push(osc2gain);
   
-  let ampEnvGain = this._context.createGain();
+  let ampEnvGain = new GainNode(this._context, { gain: 1.0, channelCount: 2 });
   
   this.connectBoolPropertyToAudioParam(ampEnvGain.gain, "Enabled");
   
@@ -98,8 +96,8 @@ class Synth extends AudioDevice {
    oscillator1.type = this.osc1Type;
    
    this._updateDetune(oscillator1, "Osc1");
-   this.getPropertyInputElement("Osc1Octave").oninput = () => this._updateDetune(oscillator1, "Osc1");
-   this.getPropertyInputElement("Osc1Detune").oninput = () => this._updateDetune(oscillator1, "Osc1");
+   this.getPropertyInputElement("Osc1Octave").addEventListener("input", () => this._updateDetune(oscillator1, "Osc1"));
+   this.getPropertyInputElement("Osc1Detune").addEventListener("input", () => this._updateDetune(oscillator1, "Osc1"));
    
    /*
    let fm1Rate = this.getFloatPropertyValue("Osc1FmRate");
@@ -138,8 +136,8 @@ class Synth extends AudioDevice {
    oscillator2.type = this.osc2Type;
    
    this._updateDetune(oscillator2, "Osc2");
-   this.getPropertyInputElement("Osc2Octave").oninput = () => this._updateDetune(oscillator2, "Osc2");
-   this.getPropertyInputElement("Osc2Detune").oninput = () => this._updateDetune(oscillator2, "Osc2");
+   this.getPropertyInputElement("Osc2Octave").addEventListener("input", () => this._updateDetune(oscillator2, "Osc2"));
+   this.getPropertyInputElement("Osc2Detune").addEventListener("input", () => this._updateDetune(oscillator2, "Osc2"));
    
    this.connectFloatPropertyToAudioParam(osc2gain.gain, "Osc2Volume");
    oscillator2.connect(osc2gain);
@@ -158,8 +156,11 @@ class Synth extends AudioDevice {
    this.audioApp.logAudioEvent(releaseEndTime, this.track.id, "Synth", "Stop oscillator2");
   }
   
-  this._filter1Module.setupAudioGraph(this._context, oscsGain, ampEnvGain, startTime, duration, eventInfo.detail.pressure, connectedNodes);
-  this._filter2Module.setupAudioGraph(this._context, oscsGain, ampEnvGain, startTime, duration, eventInfo.detail.pressure, connectedNodes);
+  this._filter1Module.setupAudioGraph(this._context, oscsGain, startTime, duration, eventInfo.detail.pressure, connectedNodes);
+  this._filter2Module.setupAudioGraph(this._context, oscsGain, startTime, duration, eventInfo.detail.pressure, connectedNodes);
+  
+  this._filter1Module.output.connect(ampEnvGain);
+  this._filter2Module.output.connect(ampEnvGain);
   
   if (this.getBoolPropertyValue("AmpEnvEnabled")){
    if (this.getFloatPropertyValue("Attack") > 0) {
@@ -175,7 +176,7 @@ class Synth extends AudioDevice {
     ampEnvGain.gain.linearRampToValueAtTime(0, releaseEndTime);
    }
   }
-  ampEnvGain.connect(this.output);
+  ampEnvGain.connect(this.wetOutput);
   connectedNodes.push(ampEnvGain);
  }
  

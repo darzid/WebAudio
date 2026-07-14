@@ -29,7 +29,9 @@ class DelayModule extends DeviceModule {
    consoleLog("updatedDelayTimes", this.getFloatPropertyValue("TimeLeft"), this.getFloatPropertyValue("TimeRight"));
  }
  
- setupAudioGraph(audioContext, inputNode, outputNode) {
+ setupAudioGraph(audioContext, inputNode) {
+ 	super.setupAudioGraph(audioContext, inputNode);
+ 	
   let moduleClass = this._moduleClass;
   
   let drive = audioContext.createWaveShaper();
@@ -38,7 +40,7 @@ class DelayModule extends DeviceModule {
    () => drive.curve = WaveshaperCurveGenerator.makeDriveCurve(this.getFloatPropertyValue("Drive") * 5);
   
   let driveGain = new GainNode(audioContext, { gain: 1 });
-  drive.connect(driveGain);
+  
   
   let delayFeedbackNode = new GainNode(audioContext, { channelCount: 2 });
   this.connectFloatPropertyToAudioParam(delayFeedbackNode.gain, "Feedback");
@@ -50,13 +52,14 @@ class DelayModule extends DeviceModule {
   let delayRightNode = new DelayNode(audioContext, { maxDelayTime: 5 });
   this.connectFloatPropertyToAudioParam(delayRightNode.delayTime, "TimeRight", (value) => value / 1000);
   
+  let mergerNode = audioContext.createChannelMerger(2);
+  
+  this.input.connect(drive);
+  drive.connect(driveGain);
   driveGain.connect(delayLeftNode);
   driveGain.connect(delayRightNode);
-  
-  let mergerNode = audioContext.createChannelMerger(2);
   delayLeftNode.connect(mergerNode, 0, 0);
   delayRightNode.connect(mergerNode, 0, 1);
-  
-  super.setupAudioGraph(audioContext, inputNode, outputNode, drive, mergerNode);
+  mergerNode.connect(this.wetOutput);
  }
 }
