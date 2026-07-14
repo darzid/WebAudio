@@ -2,6 +2,7 @@ class AudioApp extends AudioDevice {
   _rec;
   mediaRecorder;
   chunks;
+  _useLimiter = false;
   constructor(element, elementClass, handlerRegistry) {
     super(element, elementClass, handlerRegistry, "AudioApp", "MasterOut");
     this._initialized = false;
@@ -80,15 +81,20 @@ class AudioApp extends AudioDevice {
 
     this.tracks.forEach(track => track.setupAudioGraph(audioContext));
     
-    let compressor = new DynamicsCompressorNode(audioContext);
-    compressor.threshold.value = -100;
-    compressor.knee.value = 40;
-    compressor.ratio.value = 20;
-    compressor.attack.value = 0.003;
-    compressor.release.value = 0.25;
-
-    this.output.connect(compressor);
-    compressor.connect(audioContext.destination);
+    if (this._useLimiter) {
+      let compressor = new DynamicsCompressorNode(audioContext);
+      compressor.threshold.value = -100;
+      compressor.knee.value = 40;
+      compressor.ratio.value = 20;
+      compressor.attack.value = 0.003;
+      compressor.release.value = 0.25;
+  
+      this.output.connect(compressor);
+      compressor.connect(audioContext.destination);
+    }
+    else {
+      this.output.connect(audioContext.destination);
+    }
   }
 
   logMidiEvent(time, track, step, note) {

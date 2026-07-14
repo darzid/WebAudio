@@ -43,10 +43,10 @@ class Track extends AudioDevice {
   setupAudioGraph(audioContext) {
     //consoleLog("Track.setupAudioGraph");
 
-    if (this._context) {
+   /* if (this._context) {
       this.wetOutput.disconnect();
       this.audioDevices.forEach(device => device.output.disconnect());
-    }
+    }*/
 
     super.setupAudioGraph(audioContext);
 
@@ -62,12 +62,14 @@ class Track extends AudioDevice {
     if (this.audioDevices.length > 0)
       this.audioDevices[this.audioDevices.length - 1].output.connect(this.wetOutput);
 
+    this.output.connect(this.audioApp.wetOutput);
+    
     let outputMeter = this.element.querySelector("canvas[name='TrackMeter']");
     if (outputMeter) {
       let analyser = levelMeterManager.register(audioContext, this.output, outputMeter);
-      analyser.connect(this.audioApp.output);
+     // analyser.connect(this.audioApp.wetOutput);
     } else {
-      this.output.connect(this.audioApp.input);
+     // this.output.connect(this.audioApp.wetOutput);
     }
   }
 

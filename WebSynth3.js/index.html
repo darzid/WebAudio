@@ -49,6 +49,10 @@
 
     <script src="../lib/web-audio/level-meter.js"></script>
     <script src="../lib/web-audio/vu-meter.js"></script>
+
+  </head>
+
+  <body>
     <svg>
       <defs>
         <radialGradient id="ParameterGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.6">
@@ -108,13 +112,7 @@
           <stop class="stop4" offset="100%" stop-color="rgba(95,35,15,0.5)"></stop>
         </radialGradient>
       </defs>
-      <style>
-
-      </style>
     </svg>
-  </head>
-
-  <body>
     <span id="datalists">
       <datalist id="step-lengths">
         <option value="0">1/32</option>
@@ -691,27 +689,27 @@
           <div class="Tracks">
 
             <div id="track1" class="Track">
-              <span class="TrackTitle" title="🎶 Synth Track 1" data-template="toggle-tracktitle-template"></span>
+              <span class="TrackTitle DeviceTitle" title="🎶 Synth Track 1" data-template="toggle-tracktitle-template"></span>
               <span data-template="synth-track-devices-template"></span>
             </div>
 
             <div id="track2" class="Track">
-              <span class="TrackTitle" title="🎶 Synth Track 2" data-template="toggle-tracktitle-template"></span>
+              <span class="TrackTitle DeviceTitle" title="🎶 Synth Track 2" data-template="toggle-tracktitle-template"></span>
               <span data-template="synth-track-devices-template"></span>
             </div>
 
             <div id="track3" class="Track">
-              <span class="TrackTitle" title="🎶 Synth Track 3" data-template="toggle-tracktitle-template"></span>
+              <span class="TrackTitle DeviceTitle" title="🎶 Synth Track 3" data-template="toggle-tracktitle-template"></span>
               <span data-template="synth-track-devices-template"></span>
             </div>
 
             <div id="track4" class="Track" list="group-colors">
-              <span class="TrackTitle" title="🥁 Drum track 1" data-template="toggle-tracktitle-template"></span>
+              <span class="TrackTitle DeviceTitle" title="🥁 Drum track 1" data-template="toggle-tracktitle-template"></span>
               <span data-template="drum-track-devices-template"></span>
             </div>
 
             <div id="track5" class="Track" list="group-colors">
-              <span class="TrackTitle" title="🥁 Drum track 2" data-template="toggle-tracktitle-template"></span>
+              <span class="TrackTitle DeviceTitle" title="🥁 Drum track 2" data-template="toggle-tracktitle-template"></span>
               <span data-template="drum-track-devices-template"></span>
             </div>
           </div>

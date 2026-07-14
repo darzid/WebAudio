@@ -77,6 +77,7 @@ class AudioDevice extends Device {
     }
     
     let enableDisableFunction = () => {
+      console.log("enable disable " + this.id)
       if (this.getBoolPropertyValue("DeviceEnabled")) {
         this.wetOutput.connect(this.output);
         if (!hasDryWet) {

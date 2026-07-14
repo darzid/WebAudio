@@ -40,7 +40,7 @@ A vanilla-JS Web Audio synth workstation: an HTML-template-driven UI where DOM e
 
 16. **Preset browser edge cases** — `savePreset()` ([preset-browser.js:64](devices/preset-browser.js:64)) doesn't handle the user cancelling the prompt (saves a preset literally named `"null"`); `select()` throws if no radio is checked; `load()` has no try/catch around `JSON.parse` of localStorage (one corrupt save bricks the browser dialog); and `import()` is an empty stub with a live button wired to it.
 
-17. **`addSynthTrack` is half-dead** — [audio-app.js:61](devices/audio-app.js:61) uses `innerHTML +=` on the Tracks container, which destroys and re-creates every existing track's DOM (orphaning all registered handlers' element references), and the call to re-process handlers is commented out, so the new track never becomes functional anyway.
+17. FIXED - **`addSynthTrack` is half-dead** — [audio-app.js:61](devices/audio-app.js:61) uses `innerHTML +=` on the Tracks container, which destroys and re-creates every existing track's DOM (orphaning all registered handlers' element references), and the call to re-process handlers is commented out, so the new track never becomes functional anyway.
 
 18. **Invalid HTML in `<head>`** — index.html places an `<svg>` block (line 58) and all the app markup inside/after the head without a `<body>` open tag; browsers repair it, but it's fragile. Templates also use self-closing `<div ... />`, which HTML parsers ignore, occasionally producing surprise nesting.
 
