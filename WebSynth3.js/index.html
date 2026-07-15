@@ -642,7 +642,7 @@
             <span data-template="synth-template"></span>
             <span data-template="effector-template"></span>
           </div>
-          <div class="TrackMeterContainer"><canvas name="TrackMeter" class="track-meter meter" data-val="0">No canvas</canvas></div>
+          <div class="TrackMeterContainer"><canvas name="track-output-meter" class="track-meter meter" data-val="0">No canvas</canvas></div>
         </div>
       </template>
 
@@ -653,7 +653,7 @@
             <span data-template="drum-synth-template"></span>
             <span data-template="effector-template"></span>
           </div>
-          <div class="TrackMeterContainer"><canvas name="TrackMeter" class="track-meter meter" data-val="0">No canvas</canvas></div>
+          <div class="TrackMeterContainer"><canvas name="track-output-meter" class="track-meter meter" data-val="0">No canvas</canvas></div>
         </div>
       </template>
 
@@ -662,7 +662,8 @@
           <input name="Tempo" type="number" value="140" style="display:none">
 
           <h3 class="AppTitle">AudioApp</h3>
-
+          <span class="monitor"></span>
+          
           <div class="app-buttons">
             <span class="left-buttons">
               <button class="play icon-button" onclick="audioApp.play()"><img src="img/Play_icon.png"></button>

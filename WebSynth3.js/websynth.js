@@ -10,9 +10,9 @@ function consoleLog(message, args) {
 }
 
 function consoleError(message, args) {
-  if (logging) {
+  //if (logging) {
     console.error(message, args);
-  }
+ // }
 }
 
 function consoleWarn(message, args) {
@@ -123,91 +123,32 @@ function setupAudioGraph() {
 
   audioApp = elementHandlerRegistry.handlers.find(handler => handler.elementClass == "AudioApp");
   audioApp.setupAudioGraph(audioContext);
-  //setupPanner(audioContext);
+  monitorAudioContext(audioContext);
 }
 
+const showStatistics = true;
+var underrunEvents = 0;
+var underrunIncreaseTime = null;
 
-
-
-function setupPanner(audioCtx){
-
-// set up listener and panner position information
-const WIDTH = window.innerWidth;
-const HEIGHT = window.innerHeight;
-
-const xPos = Math.floor(WIDTH / 2);
-const yPos = Math.floor(HEIGHT / 2);
-const zPos = 295;
-
-// define other variables
-
-const panner = audioCtx.createPanner();
-panner.panningModel = "HRTF";
-panner.distanceModel = "inverse";
-panner.refDistance = 1;
-panner.maxDistance = 10000;
-panner.rolloffFactor = 1;
-panner.coneInnerAngle = 360;
-panner.coneOuterAngle = 0;
-panner.coneOuterGain = 0;
-
-if (panner.orientationX) {
-  panner.orientationX.setValueAtTime(1, audioCtx.currentTime);
-  panner.orientationY.setValueAtTime(0, audioCtx.currentTime);
-  panner.orientationZ.setValueAtTime(0, audioCtx.currentTime);
-} else {
-  panner.setOrientation(1, 0, 0);
-}
-
-const listener = audioCtx.listener;
-
-if (listener.forwardX) {
-  listener.forwardX.setValueAtTime(0, audioCtx.currentTime);
-  listener.forwardY.setValueAtTime(0, audioCtx.currentTime);
-  listener.forwardZ.setValueAtTime(-1, audioCtx.currentTime);
-  listener.upX.setValueAtTime(0, audioCtx.currentTime);
-  listener.upY.setValueAtTime(1, audioCtx.currentTime);
-  listener.upZ.setValueAtTime(0, audioCtx.currentTime);
-} else {
-  listener.setOrientation(0, 0, -1, 0, 1, 0);
-}
-
-let source;
-
-//const play = document.querySelector(".play");
-//const stop = document.querySelector(".stop");
-
-//const boomBox = document.querySelector(".boom-box");
-
-const listenerData = document.querySelector(".listener-data");
-const pannerData = document.querySelector(".panner-data");
-
-leftBound = -xPos + 50;
-rightBound = xPos - 50;
-
-xIterator = WIDTH / 150;
-
-// listener will always be in the same place for this demo
-
-if (listener.positionX) {
-  listener.positionX.setValueAtTime(xPos, audioCtx.currentTime);
-  listener.positionY.setValueAtTime(yPos, audioCtx.currentTime);
-  listener.positionZ.setValueAtTime(300, audioCtx.currentTime);
-} else {
-  listener.setPosition(xPos, yPos, 300);
-}
-
-//listenerData.textContent = `Listener data: X ${xPos} Y ${yPos} Z 300`;
-
-// panner will move as the boombox graphic moves around on the screen
-function positionPanner() {
-  if (panner.positionX) {
-    panner.positionX.setValueAtTime(xPos, audioCtx.currentTime);
-    panner.positionY.setValueAtTime(yPos, audioCtx.currentTime);
-    panner.positionZ.setValueAtTime(zPos, audioCtx.currentTime);
+function monitorAudioContext(audioContext) {
+  if (showStatistics == false)
+    return;
+  
+  let monitor = document.querySelector(".monitor");
+  if (audioContext.playbackStats.underrunEvents > underrunEvents)
+  {
+    underrunEvents = audioContext.playbackStats.underrunEvents;
+    underrunIncreaseTime = audioContext.currentTime;
+    monitor.style.color = "red";
   } else {
-    panner.setPosition(xPos, yPos, zPos);
+    if (underrunIncreaseTime && audioContext.currentTime - underrunIncreaseTime > 10) {
+      monitor.style.color = "black";
+      underrunIncreaseTime = null;
+    }
   }
-  //pannerData.textContent = `Panner data: X ${xPos} Y ${yPos} Z ${zPos}`;
+  let results = `BL=${audioContext.baseLatency},OL=${audioContext.outputLatency},AL=${audioContext.playbackStats.averageLatency},ML=${audioContext.playbackStats.maximumLatency},URD=${audioContext.playbackStats.underrunDuration},URE=${audioContext.playbackStats.underrunEvents}`;
+  monitor.innerHTML = results;
+  window.setTimeout(() => monitorAudioContext(audioContext), 1000);
 }
-}
+
+

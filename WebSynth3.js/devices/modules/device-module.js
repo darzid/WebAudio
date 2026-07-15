@@ -66,12 +66,12 @@ class DeviceModule {
     enableDisableFunction();
 
     let inputMeter = this.element.querySelector("canvas[name='input-meter']");
-    if (inputMeter)
-      levelMeterManager.register(audioContext, this.input, inputMeter);
+   // if (inputMeter)
+   //   levelMeterManager.register(audioContext, this.input, inputMeter);
 
     let outputMeter = this.element.querySelector("canvas[name='output-meter']");
-    if (outputMeter)
-      levelMeterManager.register(audioContext, this.output, outputMeter);
+   // if (outputMeter)
+   //   levelMeterManager.register(audioContext, this.output, outputMeter);
   }
   
   registerPropertyInputElement(name, elementPath) {
