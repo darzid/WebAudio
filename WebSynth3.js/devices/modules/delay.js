@@ -16,6 +16,8 @@ class DelayModule extends DeviceModule {
   super.getPropertyInputElement("StepsRight").oninput = () => this.updateDelayTimes();
   this.updateDelayTimes();
   
+  this.setBoolPropertyValue("Enabled", false);
+  
   document.addEventListener("TempoChanged", (eventInfo) => {
    this.updateDelayTimes();
   });

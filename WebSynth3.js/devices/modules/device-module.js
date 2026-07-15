@@ -108,6 +108,9 @@ class DeviceModule {
 	getBoolPropertyValue(name) {
     return this.device.getBoolPropertyValue(this.moduleClass + name);
   }
+  setBoolPropertyValue(name, value) {
+    this.device.setBoolPropertyValue(this.moduleClass + name, value);
+  }
   
   connectFloatPropertyToAudioParam(audioParam, name, propertyConverter = null) {
     this.device.connectFloatPropertyToAudioParam(audioParam, this.moduleClass + name, propertyConverter);

@@ -40,7 +40,7 @@ class AudioApp extends AudioDevice {
   get stepInterval() { return this.beatInterval / 4; }
   get microStepInterval() { return this.measureInterval / 128; }
 
-  get renderTime() { return 0.025; }
+  get renderTime() { return 0.05; }
 
   get tracks() { return this.findChildElementHandlers("Track"); }
 

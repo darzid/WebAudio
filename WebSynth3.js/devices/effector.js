@@ -22,6 +22,8 @@ class Effector extends AudioDevice {
     this.reverb.setupAudioGraph(audioContext, this.delay.output);
     this.compressor.setupAudioGraph(audioContext, this.reverb.output);
     this.compressor.output.connect(this.wetOutput);
+    
+    
   }
 }
 

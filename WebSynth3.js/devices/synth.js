@@ -3,6 +3,7 @@ class Synth extends AudioDevice {
   fm1LfoGain;
   fm2Lfo;
   fm2LfoGain;
+  _bypassFilters = true;
  constructor(element, elementClass, handlerRegistry) {
   super(element, elementClass, handlerRegistry, "Synth", "Instrument");
   
@@ -21,8 +22,11 @@ class Synth extends AudioDevice {
   this.registerPropertyInputElement("Osc2Detune", ".Osc2 input[name='Detune']");
   this.registerPropertyInputElement("Osc2Volume", ".Osc2 input[name='Volume']");
   
-  this._filter1Module = new Filter(this, "Filter1");
-  this._filter2Module = new Filter(this, "Filter2");
+  if (!this._bypassFilters) {
+   this._filter1Module = new Filter(this, "Filter1");
+   this._filter2Module = new Filter(this, "Filter2");
+  }
+  
   
   this.registerPropertyInputElement("AmpEnvEnabled", ".AmpEnv input[name='Enabled']");
   this.registerPropertyInputElement("Attack", ".AmpEnv input[name='Attack']");
@@ -156,12 +160,16 @@ class Synth extends AudioDevice {
    this.audioApp.logAudioEvent(releaseEndTime, this.track.id, "Synth", "Stop oscillator2");
   }
   
-  this._filter1Module.setupAudioGraph(this._context, oscsGain, startTime, duration, eventInfo.detail.pressure, connectedNodes);
-  this._filter2Module.setupAudioGraph(this._context, oscsGain, startTime, duration, eventInfo.detail.pressure, connectedNodes);
-  
-  this._filter1Module.output.connect(ampEnvGain);
-  this._filter2Module.output.connect(ampEnvGain);
-  
+  if (!this._bypassFilters) {
+   this._filter1Module.setupAudioGraph(this._context, oscsGain, startTime, duration, eventInfo.detail.pressure, connectedNodes);
+   this._filter2Module.setupAudioGraph(this._context, oscsGain, startTime, duration, eventInfo.detail.pressure, connectedNodes);
+   
+   this._filter1Module.output.connect(ampEnvGain);
+   this._filter2Module.output.connect(ampEnvGain);
+  }
+  else
+    oscsGain.connect(ampEnvGain);
+    
   if (this.getBoolPropertyValue("AmpEnvEnabled")){
    if (this.getFloatPropertyValue("Attack") > 0) {
     ampEnvGain.gain.setValueAtTime(0, eventInfo.detail.time);

@@ -10,31 +10,10 @@ class CompressorModule extends DeviceModule {
   super.registerInputProperty("Makeup");
   
   this._compressor = null;
-/*  this._inputAnalyser = null;
-  this._inputPcmData = null;
-  this._outputAnalyser = null;
-  this._outputPcmData = null;*/
- }
- /*
- get inputLevel() {
-  if (!this._inputAnalyser) return 0;
-  this._inputAnalyser.getFloatTimeDomainData(this._inputPcmData);
-  let sumSquares = 0.0;
-  for (const amplitude of this._inputPcmData) { sumSquares += amplitude * amplitude; }
-  let value = Math.sqrt(sumSquares / this._inputPcmData.length) * 100;
-  return value;
   
+  this.setBoolPropertyValue("Enabled", false);
  }
-  
-  get outputLevel() {
-   if (!this._outputAnalyser) return 0;
-   this._outputAnalyser.getFloatTimeDomainData(this._outputPcmData);
-   let sumSquares = 0.0;
-   for (const amplitude of this._outputPcmData) { sumSquares += amplitude * amplitude; }
-   let value = Math.sqrt(sumSquares / this._outputPcmData.length) * 100;
-   return value;
-  }
-  */
+ 
  get Reduction() {
   if (!this._compressor) return 0;
   
@@ -43,6 +22,7 @@ class CompressorModule extends DeviceModule {
  
  setupAudioGraph(audioContext, inputNode) {
  	super.setupAudioGraph(audioContext, inputNode);
+ 	
   let compressor = audioContext.createDynamicsCompressor();
   let makeupGain = audioContext.createGain();
   compressor.connect(makeupGain);

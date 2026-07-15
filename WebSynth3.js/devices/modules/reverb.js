@@ -11,6 +11,8 @@ class ReverbModule extends DeviceModule  {
     this.registerInputProperty(this._sizeProperty);
     this.registerInputProperty(this._decaytimeProperty);
     this.registerInputProperty(this._dryWetProperty);
+    
+    this.setBoolPropertyValue("Enabled", false);
   }
   
   setupAudioGraph(audioContext, inputNode) {

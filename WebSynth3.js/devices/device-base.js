@@ -101,13 +101,13 @@ class AudioDevice extends Device {
     
     let inputMeter = this.element.querySelector("canvas[name='device-input-meter']");
     if (inputMeter) {
-      levelMeterManager.register(audioContext, this.input, inputMeter);
+     // levelMeterManager.register(audioContext, this.input, inputMeter);
       consoleLog("Added inputmeter for " + this.name);
     }
     
     let outputMeter = this.element.querySelector("canvas[name='device-output-meter']");
     if (outputMeter) {
-      levelMeterManager.register(audioContext, this.output, outputMeter);
+     // levelMeterManager.register(audioContext, this.output, outputMeter);
       consoleLog("Added outputmeter for " + this.name);
     }
   }
