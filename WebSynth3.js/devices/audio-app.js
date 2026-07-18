@@ -3,6 +3,14 @@ class AudioApp extends AudioDevice {
   mediaRecorder;
   chunks;
   _useLimiter = false;
+  
+  _lookahead = 25.0;        // How frequently to call scheduling function 
+                             //(in milliseconds)
+  _scheduleAheadTime = 0.1; // How far ahead to schedule audio (sec)
+                             // This is calculated from lookahead, and overlaps 
+                             // with next interval (in case the timer is late)
+  _timerWorker = null;      // The Web Worker used to fire timer messages
+
   constructor(element, elementClass, handlerRegistry) {
     super(element, elementClass, handlerRegistry, "AudioApp", "MasterOut");
     this._initialized = false;
@@ -11,7 +19,7 @@ class AudioApp extends AudioDevice {
     this.registerPropertyInputElement("Tempo", "input[name='Tempo']");
     this.getChildInputElement("Tempo").oninput = () => { 
       MidiClock.tempo = this.getFloatPropertyValue("Tempo");
-      this.updateBpmText();
+      this._updateBpmText();
     };
 
     this.stopTime = null;
@@ -26,12 +34,13 @@ class AudioApp extends AudioDevice {
     if (MidiClock.stepInterval != this.stepInterval) {
       throw "Seconds per step mismatch";
     }
-    this.updateBpmText();
+    this._updateBpmText();
     this.registerChildElementHandler("Tracks", "Track");
 
     this.log = "";
     this.logStart = 0;
     this.chunks = [];
+    this.init();
   }
 
   get BPM() { return MidiClock.tempo; }
@@ -58,6 +67,7 @@ class AudioApp extends AudioDevice {
   get volume() { return this.output.gain.value; }
   set volume(value) { this.output.gain.value = value; }
   
+  get scheduleAheadTime() { return this._scheduleAheadTime; }
   /*addSynthTrack() {
     let trackId = "track" + (this.tracks.length + 1);
     let trackHtml = `
@@ -72,6 +82,20 @@ class AudioApp extends AudioDevice {
     applyTemplates();
     //elementHandlerRegistry.processAll();
   }*/
+  
+  init() {
+    this._timerWorker = new Worker("../../lib/web-audio/timer-worker.js");
+
+    this._timerWorker.onmessage = (e) => {
+      if (e.data == "tick") {
+        //console.log("tick!");
+        this._scheduler();
+      }
+      else
+        console.log("message: " + e.data);
+    };
+    this._timerWorker.postMessage({"interval":this._lookahead});
+  }
   
   setupAudioGraph(audioContext) {
     if (this._context) {
@@ -131,14 +155,22 @@ class AudioApp extends AudioDevice {
   }
   
   play() {
-    this.tracks.forEach(track => track.startSequencer(this._context.currentTime + (10 * this.renderTime)));
+    if (this.isPlaying)
+      return;
     this.isPlaying = true;
+    
+    this.tracks.forEach(track => track.sequencer.start(this._context.currentTime));
+    this._timerWorker.postMessage("start");
+    
+    //this.tracks.forEach(track => track.startSequencer(this._context.currentTime + (10 * this.renderTime)));
+    //this.isPlaying = true;
   }
   
   stop() {
     let time = this._context.currentTime;
     this.isPlaying = false;
-    this.tracks.forEach(track => track.stopSequencer(time));
+    this._timerWorker.postMessage("stop");
+    this.tracks.forEach(track => track.sequencer.stop());
     consoleLog(this.log.split("\n").sort().join("\n"));
     
     if (this._recording) {
@@ -150,20 +182,67 @@ class AudioApp extends AudioDevice {
     }
   }
   
+  increaseScheduleAheadTime() {
+    this._scheduleAheadTime += 0.05;
+  }
+  
   lowerBpm() {
     MidiClock.tempo--;
     this.setFloatPropertyValue("Tempo", MidiClock.tempo);
-    this.updateBpmText();
+    this._updateBpmText();
   }
 
   higherBpm() {
     MidiClock.tempo++;
     this.setFloatPropertyValue("Tempo", MidiClock.tempo);
-    this.updateBpmText();
+    this._updateBpmText();
   }
 
-  updateBpmText() {
+  _updateBpmText() {
     document.querySelector(".bpm-text").innerHTML = MidiClock.tempo + " BPM";
     document.querySelector(".bpm-text").title = MidiClock.tempo + " BPM";
   }
+  
+  _scheduler() {
+    this.tracks.forEach(track => {
+      while (track.sequencer.nextStepTime <= this._context.currentTime + this._scheduleAheadTime) {
+        track.sequencer.scheduleNextStep();
+      }
+    });
+  }
+  
+ /* _scheduleNote( beatNumber, time ) {
+    // push the note on the queue, even if we're not playing.
+    notesInQueue.push( { note: beatNumber, time: time } );
+
+    if ( (noteResolution==1) && (beatNumber%2))
+        return; // we're not playing non-8th 16th notes
+    if ( (noteResolution==2) && (beatNumber%4))
+        return; // we're not playing non-quarter 8th notes
+
+    // create an oscillator
+    var osc = audioContext.createOscillator();
+    osc.connect( audioContext.destination );
+    if (beatNumber % 16 === 0)    // beat 0 == high pitch
+        osc.frequency.value = 880.0;
+    else if (beatNumber % 4 === 0 )    // quarter notes = medium pitch
+        osc.frequency.value = 440.0;
+    else                        // other 16th notes = low pitch
+        osc.frequency.value = 220.0;
+
+    osc.start( time );
+    osc.stop( time + noteLength );
+  }
+  
+  _nextNote() {
+    // Advance current note and time by a 16th note...
+    var secondsPerBeat = 60.0 / this.BPM;   // Notice this picks up the CURRENT 
+                                            // tempo value to calculate beat length.
+    this._nextNoteTime += 0.25 * secondsPerBeat;    // Add beat length to last beat time
+
+    current16thNote++;    // Advance the beat number, wrap to zero
+    if (current16thNote == 16) {
+        current16thNote = 0;
+    }
+  }*/
 }

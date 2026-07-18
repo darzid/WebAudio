@@ -3,7 +3,7 @@ class Synth extends AudioDevice {
   fm1LfoGain;
   fm2Lfo;
   fm2LfoGain;
-  _bypassFilters = true;
+  _bypassFilters = false;
  constructor(element, elementClass, handlerRegistry) {
   super(element, elementClass, handlerRegistry, "Synth", "Instrument");
   

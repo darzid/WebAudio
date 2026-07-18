@@ -1,4 +1,8 @@
 class SequencerBase extends MidiDevice {
+  _stepLength = 0;
+  _nextStep = 0;
+  _nextStepTime = 0;
+  
   constructor(element, elementClass, handlerRegistry, deviceName, deviceType, stepCssClass) {
     super(element, elementClass, handlerRegistry, deviceName, deviceType);
     consoleLog("Create SequencerBase for element", element);
@@ -16,11 +20,30 @@ class SequencerBase extends MidiDevice {
     this._playStepCallsSinceSequenceStart = null;
     this._context = null;
     
+    let loopLengthChanged = () => {
+      let loopLength = this.getFloatPropertyValue("LoopLength");
+      if (this.playingStep) {
+        if (loopLength > this.steps.indexOf(this.playingStep))
+          this.setPlayingStep(0, 0);
+      }
+      for (let stepIndex = 0; stepIndex < this.steps.length; stepIndex++) {
+        this.steps[stepIndex].element.style.display = (stepIndex < loopLength) ? "flex" : "none";
+      }
+    };
     let loopLengthElement = this.getPropertyInputElement("LoopLength");
     loopLengthElement.oninput = () => {
-      this.changeLoopLength(this.getFloatPropertyValue("LoopLength"));
+      loopLengthChanged();
     }
-    this.changeLoopLength(this.getFloatPropertyValue("LoopLength"));
+    loopLengthChanged();
+    
+    /*let stepLengthChanged = () => { 
+      this._stepLength = MidiClock.convertTimeSignatureToStepDuration(this.stepLengthText) 
+    };
+    let stepLengthElement = this.getPropertyInputElement("StepLength");
+    stepLengthElement.oninput = () => {
+      stepLengthChanged();
+    }
+    stepLengthChanged();*/
   }
 
   get audioApp() { return this.getParentElementHandler("AudioApp"); }
@@ -36,11 +59,44 @@ class SequencerBase extends MidiDevice {
   get stepInterval() { return MidiClock.stepInterval; }
   get measureInterval() { return MidiClock.measureInterval; }
 
+  
+  get loopLength() { return this.getFloatPropertyValue("LoopLength"); }
+  get stepLength() { return MidiClock.convertTimeSignatureToStepDuration(this.stepLengthText); }
+  
+  get nextStepTime() { return this._nextStepTime; }
+
   setupAudioGraph(audioContext) {
     this._context = audioContext;
     this.steps.forEach(step => step.setupAudioGraph(audioContext));
   }
 
+  // New start method
+  start(time) {
+    this._nextStep = 0;
+    this._nextStepTime = time;
+  }
+  
+  // New scheduler method
+  scheduleNextStep() {
+    if (this.playingStep)
+      this.playingStep.isPlaying = false;
+      
+    this.steps[this._nextStep].play(this._nextStepTime, this._nextStep);
+    
+    this._nextStepTime += this.stepLength;
+    this._nextStep++;
+    if (this._nextStep == this.loopLength)
+      this._nextStep = 0;
+  }
+
+  // New stop method
+  stop() {
+    if (this.playingStep)
+      this.playingStep.isPlaying = false;
+    this._isPlaying = false;
+  }
+  
+  /*
   changeLoopLength(value) {
     if (this.playingStep) {
       if (value > this.steps.indexOf(this.playingStep))
@@ -50,20 +106,14 @@ class SequencerBase extends MidiDevice {
       this.steps[stepIndex].element.style.display = (stepIndex < value) ? "flex" : "none";
     }
   }
-
-  restart(time) {
+  */
+  
+  restart_old(time) {
     this.setPlayingStep(time, -1);
     this._isPlaying = true;
   }
-
-  setPlayingStep(time, value) {
-    if (this.playingStep)
-      this.playingStep.isPlaying = false;
-    if (value > -1)
-      this.steps[value].play(time, value);
-  }
-
-  renderSequence(startTime, endTime) {
+  
+  renderSequence_old(startTime, endTime) {
     let time = startTime;
 
     let timeSignature = this.stepLengthText;
@@ -83,7 +133,7 @@ class SequencerBase extends MidiDevice {
     }
   }
 
-  playStep(time) {
+  playStep_old(time) {
     if (isNaN(time)) {
       throw `Time "${time}" is not a number`
     }
@@ -127,7 +177,7 @@ class SequencerBase extends MidiDevice {
     }
   }
 
-  nextStep(time) {
+  nextStep_old(time) {
     if (!this._isPlaying)
       return false;
       
@@ -136,8 +186,15 @@ class SequencerBase extends MidiDevice {
     this.setPlayingStep(time, newStep);
     return newStep > -1;
   }
+  
+  setPlayingStep_old(time, value) {
+    if (this.playingStep)
+      this.playingStep.isPlaying = false;
+    if (value > -1)
+      this.steps[value].play(time, value);
+  }
 
-  stop(time) {
+  stop_old(time) {
     this._isPlaying = false;
     this.setPlayingStep(time, -1);
   }

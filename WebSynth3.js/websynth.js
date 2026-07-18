@@ -140,6 +140,7 @@ function monitorAudioContext(audioContext) {
     underrunEvents = audioContext.playbackStats.underrunEvents;
     underrunIncreaseTime = audioContext.currentTime;
     monitor.style.color = "red";
+    //audioApp.increaseScheduleAheadTime();
   } else {
     if (underrunIncreaseTime && audioContext.currentTime - underrunIncreaseTime > 10) {
       monitor.style.color = "black";
@@ -147,6 +148,7 @@ function monitorAudioContext(audioContext) {
     }
   }
   let results = `BL=${audioContext.baseLatency},OL=${audioContext.outputLatency},AL=${audioContext.playbackStats.averageLatency},ML=${audioContext.playbackStats.maximumLatency},URD=${audioContext.playbackStats.underrunDuration},URE=${audioContext.playbackStats.underrunEvents}`;
+  //`,SAT=${audioApp.scheduleAheadTime}`;
   monitor.innerHTML = results;
   window.setTimeout(() => monitorAudioContext(audioContext), 1000);
 }
