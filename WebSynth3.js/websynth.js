@@ -123,34 +123,5 @@ function setupAudioGraph() {
 
   audioApp = elementHandlerRegistry.handlers.find(handler => handler.elementClass == "AudioApp");
   audioApp.setupAudioGraph(audioContext);
-  monitorAudioContext(audioContext);
 }
-
-const showStatistics = true;
-var underrunEvents = 0;
-var underrunIncreaseTime = null;
-
-function monitorAudioContext(audioContext) {
-  if (showStatistics == false)
-    return;
-  
-  let monitor = document.querySelector(".monitor");
-  if (audioContext.playbackStats.underrunEvents > underrunEvents)
-  {
-    underrunEvents = audioContext.playbackStats.underrunEvents;
-    underrunIncreaseTime = audioContext.currentTime;
-    monitor.style.color = "red";
-    //audioApp.increaseScheduleAheadTime();
-  } else {
-    if (underrunIncreaseTime && audioContext.currentTime - underrunIncreaseTime > 10) {
-      monitor.style.color = "black";
-      underrunIncreaseTime = null;
-    }
-  }
-  let results = `BL=${audioContext.baseLatency},OL=${audioContext.outputLatency},AL=${audioContext.playbackStats.averageLatency},ML=${audioContext.playbackStats.maximumLatency},URD=${audioContext.playbackStats.underrunDuration},URE=${audioContext.playbackStats.underrunEvents}`;
-  //`,SAT=${audioApp.scheduleAheadTime}`;
-  monitor.innerHTML = results;
-  window.setTimeout(() => monitorAudioContext(audioContext), 1000);
-}
-
 

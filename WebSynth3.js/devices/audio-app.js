@@ -11,6 +11,11 @@ class AudioApp extends AudioDevice {
                              // with next interval (in case the timer is late)
   _timerWorker = null;      // The Web Worker used to fire timer messages
 
+  _showStatistics = true;
+  _underrunEvents = 0;
+  _underrunIncreaseTime = null;
+  _monitor;
+
   constructor(element, elementClass, handlerRegistry) {
     super(element, elementClass, handlerRegistry, "AudioApp", "MasterOut");
     this._initialized = false;
@@ -84,6 +89,7 @@ class AudioApp extends AudioDevice {
   }*/
   
   init() {
+    this._monitor = document.querySelector(".monitor");
     this._timerWorker = new Worker("../../lib/web-audio/timer-worker.js");
 
     this._timerWorker.onmessage = (e) => {
@@ -209,40 +215,27 @@ class AudioApp extends AudioDevice {
         track.sequencer.scheduleNextStep();
       }
     });
+    this.monitorAudioContext();
   }
   
- /* _scheduleNote( beatNumber, time ) {
-    // push the note on the queue, even if we're not playing.
-    notesInQueue.push( { note: beatNumber, time: time } );
-
-    if ( (noteResolution==1) && (beatNumber%2))
-        return; // we're not playing non-8th 16th notes
-    if ( (noteResolution==2) && (beatNumber%4))
-        return; // we're not playing non-quarter 8th notes
-
-    // create an oscillator
-    var osc = audioContext.createOscillator();
-    osc.connect( audioContext.destination );
-    if (beatNumber % 16 === 0)    // beat 0 == high pitch
-        osc.frequency.value = 880.0;
-    else if (beatNumber % 4 === 0 )    // quarter notes = medium pitch
-        osc.frequency.value = 440.0;
-    else                        // other 16th notes = low pitch
-        osc.frequency.value = 220.0;
-
-    osc.start( time );
-    osc.stop( time + noteLength );
-  }
-  
-  _nextNote() {
-    // Advance current note and time by a 16th note...
-    var secondsPerBeat = 60.0 / this.BPM;   // Notice this picks up the CURRENT 
-                                            // tempo value to calculate beat length.
-    this._nextNoteTime += 0.25 * secondsPerBeat;    // Add beat length to last beat time
-
-    current16thNote++;    // Advance the beat number, wrap to zero
-    if (current16thNote == 16) {
-        current16thNote = 0;
+  monitorAudioContext() {
+    if (this.showStatistics == false)
+      return;
+    
+    let audioContext = this._context;
+    
+    if (audioContext.playbackStats.underrunEvents > this._underrunEvents)
+    {
+      this._underrunEvents = audioContext.playbackStats.underrunEvents;
+      this._underrunIncreaseTime = audioContext.currentTime;
+      this._monitor.style.color = "red";
+    } else {
+      if (this._underrunIncreaseTime && audioContext.currentTime - this._underrunIncreaseTime > 10) {
+        this._monitor.style.color = "black";
+        this._underrunIncreaseTime = null;
+      }
     }
-  }*/
+    let results = `BL=${audioContext.baseLatency},OL=${audioContext.outputLatency},AL=${audioContext.playbackStats.averageLatency},ML=${audioContext.playbackStats.maximumLatency},URD=${audioContext.playbackStats.underrunDuration},URE=${audioContext.playbackStats.underrunEvents}`;
+    this._monitor.innerHTML = results;
+  }
 }
