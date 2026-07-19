@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -28,44 +29,124 @@
       <div id="transport-bar">
         <button id="start-button">▶️</button>
         <button id="stop-button">⏹️</button>
+        <button id="sampleA" disabled>A</button>
+        <button id="sampleB" disabled>B</button>
+        <button id="sampleC" disabled>C</button>
       </div>
     </div>
 
     <script src="config.js"></script>
     <script>
+
       document.querySelector("#start-button")?.addEventListener("click", async () => {
         await Tone.start();
         console.log("audio is ready");
-      
-        const synth = new Tone.Synth().toDestination();
-        
+
+        // COMBINED ATTACK + RELEASE
+        //const synth = new Tone.Synth().toDestination();
         //synth.triggerAttackRelease("C4", "8n");
-        
+
+
+
+        // SEPARATE ATTACK + RELEASE
         //const now = Tone.now();
+        //const synth = new Tone.Synth().toDestination();
         //synth.triggerAttack("C4", now);
         //synth.triggerRelease(now + 1);
-        
+
+
+
+        // MULTIPLE NOTES
         /*const now = Tone.now();
+        //const synth = new Tone.Synth().toDestination();
         synth.triggerAttackRelease("C4", "8n", now);
         synth.triggerAttackRelease("E4", "8n", now + 0.5);
         synth.triggerAttackRelease("G4", "8n", now + 1);*/
-        
+
+
+
+        // TRANSPORT BAR
         // create two monophonic synths
-        const synthA = new Tone.FMSynth().toDestination();
-        const synthB = new Tone.AMSynth().toDestination();
+        // const synthA = new Tone.FMSynth().toDestination();
+        // const synthB = new Tone.AMSynth().toDestination();
+        // //play a note every quarter-note
+        // const loopA = new Tone.Loop((time) => {
+        //   synthA.triggerAttackRelease("C2", "8n", time);
+        // }, "4n").start(0);
+        // //play another note every off quarter-note, by starting it "8n"
+        // const loopB = new Tone.Loop((time) => {
+        //   synthB.triggerAttackRelease("C4", "8n", time);
+        // }, "4n").start("8n");
+        // // all loops start when the Transport is started
+        // Tone.getTransport().start();
+        // // ramp up to 800 bpm over 10 seconds
+        // Tone.getTransport().bpm.rampTo(800, 10);
+
+
+
+        // METAL SYNTH
+        // Create a MetalSynth and connect it to the master output
+        // const metal = new Tone.MetalSynth({
+        //   frequency: 200,       // Base pitch
+        //   envelope: {
+        //     attack: 0.001,
+        //     decay: 1.4,
+        //     release: 0.2
+        //   },
+        //   harmonicity: 5.1,     // Controls inharmonicity
+        //   modulationIndex: 32,  // Amount of modulation
+        //   resonance: 4000,      // Filter resonance
+        //   octaves: 1.5          // Spread of partials
+        // }).toDestination();
+
+        //metal.triggerAttackRelease("C2", "16n"); // short metallic hit
+
+
+
+        // FM Kick Synth
+        // const kickSynth = new Tone.MembraneSynth().toMaster();
+        // kickSynth.triggerAttackRelease("C2", "8n");
+
+
+        // // SAMPLER
+        // let sampleAButton = document.querySelector("#sampleA");
+        // let sampleBButton = document.querySelector("#sampleB");
+        // let sampleCButton = document.querySelector("#sampleC");
+
+        // sampleAButton.addEventListener("click", () => sampler.triggerAttackRelease(["A1"], 0.5));
+        // sampleBButton.addEventListener("click", () => sampler.triggerAttackRelease(["A2"], 0.5));
+        // sampleCButton.addEventListener("click", () => sampler.triggerAttackRelease(["C1", "E1", "G1", "B1"], 0.5));
+
+        // const sampler = new Tone.Sampler({
+        //   urls: {
+        //     A1: "A1.mp3",
+        //     A2: "A2.mp3",
+        //   },
+        //   baseUrl: "https://tonejs.github.io/audio/casio/",
+        //   onload: () => {
+        //     sampleAButton.disabled = false;
+        //     sampleBButton.disabled = false;
+        //     sampleCButton.disabled = false;
+        //   }
+        // }).toDestination();
+
+
+        // FM SYNTH
+        const synth = new Tone.FMSynth().toDestination();
+
         //play a note every quarter-note
         const loopA = new Tone.Loop((time) => {
-        	synthA.triggerAttackRelease("C2", "8n", time);
+          synth.triggerAttackRelease("C2", "8n", time);
         }, "4n").start(0);
-        //play another note every off quarter-note, by starting it "8n"
-        const loopB = new Tone.Loop((time) => {
-        	synthB.triggerAttackRelease("C4", "8n", time);
-        }, "4n").start("8n");
+
         // all loops start when the Transport is started
         Tone.getTransport().start();
+
         // ramp up to 800 bpm over 10 seconds
-        Tone.getTransport().bpm.rampTo(800, 10);
+        Tone.getTransport().stop(10);
+
       });
     </script>
   </body>
+
 </html>
