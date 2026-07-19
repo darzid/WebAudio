@@ -12,6 +12,8 @@ class DrumSynth extends AudioDevice {
     super(element, elementClass, handlerRegistry, "DrumSynth", "Instrument");
     consoleLog("Create DrumSynth for element", element);
 
+    
+    
     ["ClosedHihat", "OpenHihat", "Snare"].forEach(voice => {
       this.registerPropertyInputElement(`${voice}Enabled`, `.${voice} input[name='Enabled']`);
       this.registerPropertyInputElement(`${voice}Decay`, `.${voice} input[name='Decay']`);
@@ -34,6 +36,7 @@ class DrumSynth extends AudioDevice {
     // to match entries in the #notes datalist used by the step's Note knob.
     this._noteVoiceMap = { "C0": "Kick", "C1": "ClosedHihat", "D1": "OpenHihat", "E1": "Snare" };
 
+    this._kickModule = new KickModule(this);
     this._openHihatGain = null;
     toggleNextSiblingVisibility(element.querySelector(".DeviceTitle"));
 
@@ -47,22 +50,24 @@ class DrumSynth extends AudioDevice {
 
   setupAudioGraph(audioContext) {
     super.setupAudioGraph(audioContext);
+    this._kickModule.setupAudioGraph(audioContext, this.input);
+    this._kickModule.output.connect(this.wetOutput);
   }
 
   playNote(eventInfo) {
-    if (!this.getBoolPropertyValue("DeviceEnabled")) return;
+    if (!this.getPropertyValue("DeviceEnabled")) return;
 
     let voice = this._noteVoiceMap[eventInfo.detail.note];
     if (!voice) return;
 
-    if (!this.getBoolPropertyValue(voice + "Enabled"))
+    if (!this.getPropertyValue(voice + "Enabled"))
       return;
       
     let startTime = eventInfo.detail.time;
     let velocityGain = eventInfo.detail.velocity / 127;
 
     if (voice == "Kick") {
-      this.playKick(startTime, velocityGain);
+      this._kickModule.play(startTime, velocityGain);
     } else if (voice == "Snare") {
       this.playSnare(startTime, velocityGain);
     } else {
@@ -71,10 +76,10 @@ class DrumSynth extends AudioDevice {
   }
 
   playHihat(startTime, velocityGain, voiceName, isOpen) {
-    let decay = this.getFloatPropertyValue(`${voiceName}Decay`);
-    let toneFreq = this.getFloatPropertyValue(`${voiceName}Tone`);
-    let q = this.getFloatPropertyValue(`${voiceName}Q`);
-    let volume = this.getFloatPropertyValue(`${voiceName}Volume`) * velocityGain;
+    let decay = this.getPropertyValue(`${voiceName}Decay`);
+    let toneFreq = this.getPropertyValue(`${voiceName}Tone`);
+    let q = this.getPropertyValue(`${voiceName}Q`);
+    let volume = this.getPropertyValue(`${voiceName}Volume`) * velocityGain;
 
     let chokeGain = null;
     
@@ -144,9 +149,9 @@ class DrumSynth extends AudioDevice {
   }
 
   playSnare(startTime, velocityGain) {
-    let decay = this.getFloatPropertyValue("SnareDecay");
-    let toneFreq = this.getFloatPropertyValue("SnareTone");
-    let volume = this.getFloatPropertyValue("SnareVolume") * velocityGain;
+    let decay = this.getPropertyValue("SnareDecay");
+    let toneFreq = this.getPropertyValue("SnareTone");
+    let volume = this.getPropertyValue("SnareVolume") * velocityGain;
 
     // Body: short pitched thump, like a tuned drum shell.
     let bodyOsc = this._context.createOscillator();
@@ -205,13 +210,13 @@ class DrumSynth extends AudioDevice {
       osc.stop(startTime + decay + 0.1);
     });
   }
-
+/*
   playKick(startTime, velocityGain) {
-    let startFreq = this.getFloatPropertyValue("KickTone");
-    let decay = this.getFloatPropertyValue("KickDecay");
-    let clickLevel = this.getFloatPropertyValue("KickClick");
-    let driveAmount = this.getFloatPropertyValue("KickDrive");
-    let volume = this.getFloatPropertyValue("KickVolume") * velocityGain;
+    let startFreq = this.getPropertyValue("KickTone");
+    let decay = this.getPropertyValue("KickDecay");
+    let clickLevel = this.getPropertyValue("KickClick");
+    let driveAmount = this.getPropertyValue("KickDrive");
+    let volume = this.getPropertyValue("KickVolume") * velocityGain;
 
     // Body: sine oscillator dropping pitch fast, like a real kick shell.
     let endFreq = Math.max(startFreq * 0.18, 30);
@@ -269,4 +274,5 @@ class DrumSynth extends AudioDevice {
       clickOsc.stop(startTime + 0.02);
     }
   } 
+  */
 }

@@ -30,7 +30,7 @@ class DrumSequencerStep extends ElementHandler {
   play(time, stepIndex) {
     this.isPlaying = true;
     
-    if (this.sequencer.getBoolPropertyValue("Enabled")) {
+    if (this.sequencer.getPropertyValue("Enabled")) {
       this.voices.forEach(voice => {
           if (voice.isOn) {
             this.audioApp.logMidiEvent(time, this.track.id, stepIndex, voice.noteText);
@@ -61,8 +61,8 @@ class DrumVoice {
   }
   
   get noteText() { return this.step.getPropertyInputElement(this.name + "Note").dataset.optionValue; }
-  get note() { return this.step.getFloatPropertyValue(this.name + "Note"); }
-  get velocity() { return this.step.getFloatPropertyValue(this.name + "Velocity"); }
-  get gate() { return this.step.getFloatPropertyValue(this.name + "Gate"); }
-  get isOn() { return this.step.getBoolPropertyValue(this.name + "OnOff"); }
+  get note() { return this.step.getPropertyValue(this.name + "Note"); }
+  get velocity() { return this.step.getPropertyValue(this.name + "Velocity"); }
+  get gate() { return this.step.getPropertyValue(this.name + "Gate"); }
+  get isOn() { return this.step.getPropertyValue(this.name + "OnOff"); }
 }

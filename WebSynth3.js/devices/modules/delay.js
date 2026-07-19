@@ -12,11 +12,12 @@ class DelayModule extends DeviceModule {
   super.registerInputProperty("Drive");
   super.registerInputProperty("DryWet");
 
-  super.getPropertyInputElement("StepsLeft").oninput = () => this.updateDelayTimes();
-  super.getPropertyInputElement("StepsRight").oninput = () => this.updateDelayTimes();
+  this.subscribeToPropertyChange("StepsLeft", () => this.updateDelayTimes());
+  this.subscribeToPropertyChange("StepsRight", () => this.updateDelayTimes());
+  
   this.updateDelayTimes();
   
-  this.setBoolPropertyValue("Enabled", false);
+  this.setPropertyValue("Enabled", false);
   
   document.addEventListener("TempoChanged", (eventInfo) => {
    this.updateDelayTimes();
@@ -26,9 +27,9 @@ class DelayModule extends DeviceModule {
  get stepInterval() { return MidiClock.stepInterval; }
  
  updateDelayTimes() {
-  this.setFloatPropertyValue("TimeLeft", this.getFloatPropertyValue("StepsLeft") * this.stepInterval);
-  this.setFloatPropertyValue("TimeRight", this.getFloatPropertyValue("StepsRight") * this.stepInterval);
-   consoleLog("updatedDelayTimes", this.getFloatPropertyValue("TimeLeft"), this.getFloatPropertyValue("TimeRight"));
+  this.setPropertyValue("TimeLeft", this.getPropertyValue("StepsLeft") * this.stepInterval);
+  this.setPropertyValue("TimeRight", this.getPropertyValue("StepsRight") * this.stepInterval);
+  consoleLog("updatedDelayTimes", this.getPropertyValue("TimeLeft"), this.getPropertyValue("TimeRight"));
  }
  
  setupAudioGraph(audioContext, inputNode) {
@@ -37,12 +38,10 @@ class DelayModule extends DeviceModule {
   let moduleClass = this._moduleClass;
   
   let drive = audioContext.createWaveShaper();
-  drive.curve = WaveshaperCurveGenerator.makeDriveCurve(this.getFloatPropertyValue("Drive") * 5);
-  this.getPropertyInputElement("Drive").oninput =
-   () => drive.curve = WaveshaperCurveGenerator.makeDriveCurve(this.getFloatPropertyValue("Drive") * 5);
+  drive.curve = WaveshaperCurveGenerator.makeDriveCurve(this.getPropertyValue("Drive") * 5);
+  this.subscribeToPropertyChange("Drive", () => drive.curve = WaveshaperCurveGenerator.makeDriveCurve(this.getPropertyValue("Drive") * 5));
   
   let driveGain = new GainNode(audioContext, { gain: 1 });
-  
   
   let delayFeedbackNode = new GainNode(audioContext, { channelCount: 2 });
   this.connectFloatPropertyToAudioParam(delayFeedbackNode.gain, "Feedback");

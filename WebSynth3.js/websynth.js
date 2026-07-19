@@ -59,8 +59,11 @@ function toggleEnabled() {
   let checkbox = window.event.srcElement.querySelector("input[name='Enabled']");
   checkbox.checked = !checkbox.checked;
   var evnt = checkbox["onchange"];
-  if (evnt)
+  if (evnt) {
     evnt.call(checkbox);
+    console.log("Fire checkbox changed")
+  }
+    
 }
 
 function applyInputLists() {
@@ -125,3 +128,10 @@ function setupAudioGraph() {
   audioApp.setupAudioGraph(audioContext);
 }
 
+function stepOnOffClick(srcElement) {
+  let checkbox = srcElement.parentElement.querySelector('input');
+  checkbox.checked=!checkbox.checked;
+  var evnt = checkbox["onchange"];
+  if (evnt)
+    evnt.call(checkbox);
+}

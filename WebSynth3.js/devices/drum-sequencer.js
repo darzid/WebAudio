@@ -5,7 +5,7 @@ class DrumSequencer extends SequencerBase {
     
     toggleNextSiblingVisibility(element.querySelector(".DeviceTitle"));
     
-    this.setFloatPropertyValue("LoopLength", 4)
+    this.setPropertyValue("LoopLength", 4)
   }
 }
 

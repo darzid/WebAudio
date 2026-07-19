@@ -11,7 +11,7 @@ class CompressorModule extends DeviceModule {
   
   this._compressor = null;
   
-  this.setBoolPropertyValue("Enabled", false);
+  this.setPropertyValue("Enabled", false);
  }
  
  get Reduction() {

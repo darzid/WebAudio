@@ -1,10 +1,6 @@
 class Track extends AudioDevice {
-  _outputAnalyser;
-  _outputPcmData;
-
   constructor(element, elementClass, handlerRegistry) {
     super(element, elementClass, handlerRegistry, "Track", "AudioChannel");
-    //  consoleLog("Create Track for element", element);
 
     this.registerChildElementHandler("BruteSequencer", "BruteSequencer");
     this.registerChildElementHandler("DrumSequencer", "DrumSequencer");
@@ -32,21 +28,8 @@ class Track extends AudioDevice {
   }
   get audioDevices() { return this.findChildElementHandlers("AudioDevice"); }
 
-/*  get currentOutputLevel() {
-    this._outputAnalyser.getFloatTimeDomainData(this._outputPcmData);
-    let sumSquares = 0.0;
-    for (const amplitude of this._outputPcmData) { sumSquares += amplitude * amplitude; }
-    let value = Math.sqrt(sumSquares / this._outputPcmData.length) * 100;
-    return value;
-  }*/
-
   setupAudioGraph(audioContext) {
-    //consoleLog("Track.setupAudioGraph");
-
-   /* if (this._context) {
-      this.wetOutput.disconnect();
-      this.audioDevices.forEach(device => device.output.disconnect());
-    }*/
+    consoleLog("Track.setupAudioGraph");
 
     super.setupAudioGraph(audioContext);
 
@@ -63,20 +46,5 @@ class Track extends AudioDevice {
       this.audioDevices[this.audioDevices.length - 1].output.connect(this.wetOutput);
 
     this.output.connect(this.audioApp.wetOutput);
-  }
-
-  startSequencer(time) {
-    if (isNaN(time)) {
-      throw `Track.startSequencer: Time "${time}" is not a number`
-    }
-
-    this._isPlaying = true;
-    this.sequencer.restart(time);
-    this.sequencer.playStep(time);
-  }
-
-  stopSequencer(time) {
-    this._isPlaying = false;
-    this.sequencer.stop(time);
   }
 }

@@ -19,13 +19,13 @@ class AudioApp extends AudioDevice {
   constructor(element, elementClass, handlerRegistry) {
     super(element, elementClass, handlerRegistry, "AudioApp", "MasterOut");
     this._initialized = false;
-    consoleLog("AudioApp constructor");
+    console.log("AudioApp constructor");
 
     this.registerPropertyInputElement("Tempo", "input[name='Tempo']");
-    this.getChildInputElement("Tempo").oninput = () => { 
-      MidiClock.tempo = this.getFloatPropertyValue("Tempo");
+    this.subscribeToPropertyChange("Tempo", () => {
+      MidiClock.tempo = this.getPropertyValue("Tempo");
       this._updateBpmText();
-    };
+    });
 
     this.stopTime = null;
     this._renderBuffer = null;
@@ -35,9 +35,9 @@ class AudioApp extends AudioDevice {
     this._offlineContext = null;
     this.browser = new PresetBrowser(this);
 
-    MidiClock.initialize(this.getFloatPropertyValue("Tempo"));
+    MidiClock.initialize(this.getPropertyValue("Tempo"));
     if (MidiClock.stepInterval != this.stepInterval) {
-      throw "Seconds per step mismatch";
+      throw `Seconds per step mismatch, tempo: ${this.getPropertyValue("Tempo")}, clock: ${MidiClock.stepInterval}, this: ${this.stepInterval}`;
     }
     this._updateBpmText();
     this.registerChildElementHandler("Tracks", "Track");
@@ -128,7 +128,7 @@ class AudioApp extends AudioDevice {
   }
 
   logMidiEvent(time, track, step, note) {
-   // this.log += `\r\n${time - this.logStart}\t${track}\tStep ${step}\tPlay note ${note}`;
+   this.log += `\r\n${time - this.logStart}\t${track}\tStep ${step}\tPlay note ${note}`;
   }
 
   logAudioEvent(time, track, device, message) {

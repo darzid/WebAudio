@@ -35,9 +35,12 @@
 
     <script src="devices/modules/device-module.js"></script>
     <script src="devices/modules/compressor.js"></script>
+    <script src="devices/modules/distortion.js"></script>
     <script src="devices/modules/reverb.js"></script>
     <script src="devices/modules/delay.js"></script>
     <script src="devices/modules/filter.js"></script>
+    <script src="devices/modules/kick.js"></script>
+    
     <script src="devices/effector.js"></script>
     <script src="devices/synth.js"></script>
     <script src="devices/drum-synth.js"></script>
@@ -294,7 +297,8 @@
       <template id="toggle-sectiontitle-template">
         <h4>
           <input class="Enabled" type="checkbox" name="Enabled" data-template="enabled-template" checked="true">
-          <span onclick="toggleNextSiblingVisibility(window.event.srcElement.parentElement)" class="title collapser">Title</span>
+          <span class="title">Title</span>
+          <!--<span onclick="toggleNextSiblingVisibility(window.event.srcElement.parentElement)" class="title collapser">Title</span>-->
           <span class="Expand">🔻</span>
           <span class="Collapse">🔺️</span>
         </h4>
@@ -309,7 +313,7 @@
       <template id="step-onoff-template">
         <div>
           <button class="play-step"
-                  onclick="window.event.srcElement.parentElement.querySelector('input').checked=!window.event.srcElement.parentElement.querySelector('input').checked">
+                  onclick="stepOnOffClick(window.event.srcElement)">
             <span id="Content"></span>
           </button>
         </div>
@@ -527,7 +531,8 @@
                   <input name="Decay" class="red wobble-mode-disabled" title="Decay" data-template="knob-template" type="range" min="0.01" max="0.3" value="0.05" step="0.005">
                   <input name="Tone" class="red wobble-mode-disabled" title="Tone" data-template="knob-template" type="range" min="2000" max="10000" value="3750" step="50">
                   <input name="Q" class="red wobble-mode-disabled" title="Q" data-template="knob-template" type="range" min="0.5" max="15" value="3" step="0.5">
-                  <input name="Volume" class="red wobble-mode-disabled" title="Volume" data-template="knob-template" type="range" min="0" max="1" value="0.6" step="0.01">
+                  <input name="Volume" class="red wobble-mode-disabled" title="Volume" data-template="knob-template" type="range" min="0" max="10" value="1" step="0.1">
+                  <canvas name="output-meter" class="module-meter meter" data-val="100">No canvas</canvas>
                 </div>
               </div>
 
@@ -537,7 +542,8 @@
                   <input name="Decay" class="red wobble-mode-disabled" title="Decay" data-template="knob-template" type="range" min="0.05" max="0.6" value="0.4" step="0.01">
                   <input name="Tone" class="red wobble-mode-disabled" title="Tone" data-template="knob-template" type="range" min="2000" max="10000" value="4000" step="50">
                   <input name="Q" class="red wobble-mode-disabled" title="Q" data-template="knob-template" type="range" min="0.5" max="15" value="5.5" step="0.5">
-                  <input name="Volume" class="red wobble-mode-disabled" title="Volume" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="Volume" class="red wobble-mode-disabled" title="Volume" data-template="knob-template" type="range" min="0" max="10" value="1" step="0.1">
+                  <canvas name="output-meter" class="module-meter meter" data-val="100">No canvas</canvas>
                 </div>
               </div>
 
@@ -546,18 +552,20 @@
                 <div style="display:flex;flex-direction: row;">
                   <input name="Decay" class="red" title="Decay" data-template="knob-template" type="range" min="0.05" max="0.5" value="0.4" step="0.01">
                   <input name="Tone" class="red" title="Tone" data-template="knob-template" type="range" min="50" max="300" value="50" step="1">
-                  <input name="Volume" class="red" title="Volume" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="Volume" class="red" title="Volume" data-template="knob-template" type="range" min="0" max="10" value="1" step="0.1">
+                  <canvas name="output-meter" class="module-meter meter" data-val="100">No canvas</canvas>
                 </div>
               </div>
 
               <div class="ParameterGroup Kick">
-                <span title="Kick" class="ParameterGroupTitle" data-template="toggle-sectiontitle-template"></span>
+                <span title="Kick" class="ParameterGroupTitle ModuleTitle" data-template="toggle-sectiontitle-template"></span>
                 <div style="display:flex;flex-direction: row;">
                   <input name="Decay" class="red" title="Decay" data-template="knob-template" type="range" min="0.1" max="1" value="1" step="0.01">
                   <input name="Tone" class="red" title="Tone" data-template="knob-template" type="range" min="30" max="300" value="300" step="1">
                   <input name="Click" class="red" title="Click" data-template="knob-template" type="range" min="0" max="1" value="0.2" step="0.01">
                   <input name="Drive" class="red" title="Drive" data-template="knob-template" type="range" min="0" max="10" value="5" step="0.01">
-                  <input name="Volume" class="red" title="Volume" data-template="knob-template" type="range" min="0" max="1" value="1" step="0.01">
+                  <input name="Volume" class="red" title="Volume" data-template="knob-template" type="range" min="0" max="10" value="1" step="0.1">
+                  <canvas name="output-meter" class="module-meter meter" data-val="100">No canvas</canvas>
                 </div>
               </div>
 
@@ -575,8 +583,19 @@
             <canvas name="device-input-meter" class="device-meter device-input-meter meter" data-val="100">No canvas</canvas>
             <div class="Parameters" style="display:flex;flex-direction: row;">
 
+              <div class="ParameterGroup Distortion">
+                <span title="Distortion" class="ParameterGroupTitle ModuleTitle" data-template="toggle-sectiontitle-template"></span>
+                <div name="DistortionParameters" style="display:flex;flex-direction: row;">
+                  <canvas name="input-meter" class="module-meter meter" data-val="100">No canvas</canvas>
+                  <input name="Pre" class="brown" title="Pre" data-template="knob-template" type="range" min="0" max="5" value="1" step="0.1">
+                  <input name="Amount" class="brown" title="Amount" data-template="knob-template" type="range" min="0" max="100" value="10" step="1">
+                  <input name="Post" class="brown" title="Post" data-template="knob-template" type="range" min="0" max="5" value="1" step="0.1">
+                  <input name="DryWet" class="brown" title="DryWet" data-template="knob-template" type="range" min="0" max="1" value="0" step="0.01">
+                  <canvas name="output-meter" class="module-meter meter" data-val="100">No canvas</canvas>
+                </div>
+              </div>
+              
               <div class="ParameterGroup Delay">
-
                 <span title="Delay" class="ParameterGroupTitle ModuleTitle" data-template="toggle-sectiontitle-template"></span>
                 <div name="DelayParameters" style="display:flex;flex-direction: row;">
                   <canvas name="input-meter" class="module-meter meter" data-val="100">No canvas</canvas>

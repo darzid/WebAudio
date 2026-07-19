@@ -27,11 +27,11 @@ class BruteSequencerStep extends ElementHandler {
   
   get noteText() { return this.getPropertyInputElement("Note").dataset.optionValue; }
 
-  get note() { return this.getFloatPropertyValue("Note"); }
-  get velocity() { return this.getFloatPropertyValue("Velocity"); }
-  get gate() { return this.getFloatPropertyValue("Gate"); }
-  get pressure() { return this.getFloatPropertyValue("Pressure"); }
-  get isOn() { return this.getBoolPropertyValue("OnOff"); }
+  get note() { return this.getPropertyValue("Note"); }
+  get velocity() { return this.getPropertyValue("Velocity"); }
+  get gate() { return this.getPropertyValue("Gate"); }
+  get pressure() { return this.getPropertyValue("Pressure"); }
+  get isOn() { return this.getPropertyValue("OnOff"); }
 
   get isPlaying() { return this.hasState("is-playing"); }
   set isPlaying(value) { this.setState("is-playing", value); }
@@ -43,10 +43,9 @@ class BruteSequencerStep extends ElementHandler {
   play(time, stepIndex) {
     this.isPlaying = true;
     
-    if (this.isOn && this.sequencer.getBoolPropertyValue("Enabled")) {
-        this.audioApp.logMidiEvent(time, this.track.id, stepIndex, this.noteText);
-        document.dispatchEvent(
-          new CustomEvent("PlayNote", { detail: { 
+    if (this.isOn && this.sequencer.getPropertyValue("Enabled")) {
+      this.audioApp.logMidiEvent(time, this.track.id, stepIndex, this.noteText);
+      document.dispatchEvent(new CustomEvent("PlayNote", { detail: { 
             time: time, 
             track: this.track.id, 
             note: this.noteText, 
@@ -54,7 +53,10 @@ class BruteSequencerStep extends ElementHandler {
             velocity: this.velocity, 
             pressure: this.pressure, 
             stepDuration: this.stepInterval } }));
-      }
+    }
+    else {
+      console.log(`${this.track.id}: NOT playing step ${stepIndex}`, this.isOn);
+    }
   }
 }
 

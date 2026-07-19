@@ -1,4 +1,5 @@
 class SequencerBase extends MidiDevice {
+  _steps;
   _stepLength = null;
   _nextStep = 0;
   _nextStepTime = 0;
@@ -17,7 +18,9 @@ class SequencerBase extends MidiDevice {
     this._context = null;
     
     let loopLengthChanged = () => {
-      let loopLength = this.getFloatPropertyValue("LoopLength");
+      
+      let loopLength = this.getPropertyValue("LoopLength");
+      consoleLog("LoopLength changed to " + loopLength);
       if (this.playingStep) {
         if (loopLength > this.steps.indexOf(this.playingStep))
           this._nextStep = 0;
@@ -26,21 +29,18 @@ class SequencerBase extends MidiDevice {
         this.steps[stepIndex].element.style.display = (stepIndex < loopLength) ? "flex" : "none";
       }
     };
-    let loopLengthElement = this.getPropertyInputElement("LoopLength");
-    loopLengthElement.oninput = () => {
-      loopLengthChanged();
-    }
+    this.subscribeToPropertyChange("LoopLength", () => loopLengthChanged());
     loopLengthChanged();
     
+    this.subscribeToPropertyChange("StepLength", () => this._stepLength = MidiClock.convertTimeSignatureToStepDuration(this.stepLengthText));
     this._stepLengthElement = this.getPropertyInputElement("StepLength");
-    this._stepLengthElement.oninput = () => {
-      this._stepLength = MidiClock.convertTimeSignatureToStepDuration(this.stepLengthText);
-    }
   }
 
-  get audioApp() { return this.getParentElementHandler("AudioApp"); }
-  get track() { return this.getParentElementHandler("Track"); }
-  get steps() { return this.findChildElementHandlers(this._stepCssClass); }
+  get steps() { 
+    if (! this._steps) 
+      this._steps = this.findChildElementHandlers(this._stepCssClass); 
+    return this._steps;
+  }
 
   get stepLengthText() { return this._stepLengthElement.dataset.optionValue; }
 
@@ -51,8 +51,7 @@ class SequencerBase extends MidiDevice {
   get stepInterval() { return MidiClock.stepInterval; }
   get measureInterval() { return MidiClock.measureInterval; }
 
-  
-  get loopLength() { return this.getFloatPropertyValue("LoopLength"); }
+  get loopLength() { return this.getPropertyValue("LoopLength"); }
   get stepLength() { 
     if (! this._stepLength) {
       this._stepLength = MidiClock.convertTimeSignatureToStepDuration(this.stepLengthText);

@@ -1,6 +1,7 @@
 class DeviceModule {
   _enabledProperty = "Enabled";
   _dryWetProperty = "DryWet";
+  _propertyValues = {};
 
   constructor(device, moduleClass) {
     this.device = device;
@@ -44,7 +45,7 @@ class DeviceModule {
     }
     
     let enableDisableFunction = () => {
-      if (this.getBoolPropertyValue(this._enabledProperty)) {
+      if (this.getPropertyValue(this._enabledProperty)) {
         this.wetOutput.connect(this.output);
         if (!hasDryWet) {
           this.dryOutput.gain.value = 0;
@@ -59,19 +60,19 @@ class DeviceModule {
     }
     
     let enabledElement = this.getPropertyInputElement(this._enabledProperty);
-    enabledElement.onchange = () => enableDisableFunction();
+    enabledElement.addEventListener("change", enableDisableFunction());
     
     this.input.connect(this.dryOutput);
     this.dryOutput.connect(this.output);
     enableDisableFunction();
 
     let inputMeter = this.element.querySelector("canvas[name='input-meter']");
-   // if (inputMeter)
-   //   levelMeterManager.register(audioContext, this.input, inputMeter);
+    if (inputMeter)
+      levelMeterManager.register(audioContext, this.input, inputMeter);
 
     let outputMeter = this.element.querySelector("canvas[name='output-meter']");
-   // if (outputMeter)
-   //   levelMeterManager.register(audioContext, this.output, outputMeter);
+    if (outputMeter)
+      levelMeterManager.register(audioContext, this.output, outputMeter);
   }
   
   registerPropertyInputElement(name, elementPath) {
@@ -98,20 +99,51 @@ class DeviceModule {
     return this.device.getPropertyInputElement(this.moduleClass + elementName);
   }
 
-  getFloatPropertyValue(name) {
-    return this.device.getFloatPropertyValue(this.moduleClass + name);
+  getPropertyValue(propertyName) {
+    return this.device.getPropertyValue(this.moduleClass + propertyName);
   }
+  setPropertyValue(propertyName, value) {
+    this.device.setPropertyValue(this.moduleClass + propertyName, value);
+  }
+  
+  subscribeToPropertyChange(propertyName, callback) {
+    //onsole.log("DeviceModule.subscribeToPropertyChanged " + this.moduleClass + propertyName);
+    document.addEventListener("PropertyChanged", (eventInfo) => {
+     if (eventInfo.detail.element == this.device.element && eventInfo.detail.propertyName == this.moduleClass + propertyName) {
+       //console.log("DeviceModule.PropertyChanged " + this.moduleClass + propertyName);
+       callback(eventInfo.detail);
+     }
+    });
+   }
+   
+ /*
+  getFloatPropertyValue(name) {
+    
+    
+   let propertyName = this.moduleClass + name;
+    if (! this._propertyValues[propertyName]) {
+      let inputElement = this.getPropertyInputElement(propertyName);
+      if (inputElement) {
+        inputElement.addEventListener("input", () => this._propertyValues[propertyName] = parseFloat(inputElement.value));
+        this._propertyValues[propertyName] = parseFloat(inputElement.value);
+      }
+      else {
+        return this.device.getPropertyValue(propertyName);
+      }
+    }
+    return this._propertyValues[propertyName];
+}
   setFloatPropertyValue(name, value) {
     this.device.setFloatPropertyValue(this.moduleClass + name, value);
   }
-
+/*
 	getBoolPropertyValue(name) {
-    return this.device.getBoolPropertyValue(this.moduleClass + name);
+    return this.device.getPropertyValue(this.moduleClass + name);
   }
   setBoolPropertyValue(name, value) {
     this.device.setBoolPropertyValue(this.moduleClass + name, value);
   }
-  
+  */
   connectFloatPropertyToAudioParam(audioParam, name, propertyConverter = null) {
     this.device.connectFloatPropertyToAudioParam(audioParam, this.moduleClass + name, propertyConverter);
   }

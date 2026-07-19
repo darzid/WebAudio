@@ -8,25 +8,29 @@ class Device extends ElementHandler {
 
 
   connectFloatPropertyToAudioParam(audioParam, propertyName, propertyConverter = null) {
-    let inputElement = this.getPropertyInputElement(propertyName);
+    
+  //  let inputElement = this.getPropertyInputElement(propertyName);
     let paramUpdater = () => {
-      audioParam.value = propertyConverter ? propertyConverter(this.getFloatPropertyValue(propertyName)) : this.getFloatPropertyValue(propertyName);
+      audioParam.value = propertyConverter ? propertyConverter(this.getPropertyValue(propertyName)) : this.getPropertyValue(propertyName);
       //consoleLog(`FloatProperty ${propertyName} updated AudioParam to ${audioParam.value}`, audioParam);
     }
-    inputElement.oninput = () => paramUpdater();
+    this.subscribeToPropertyChange(propertyName, () => paramUpdater());
+    
+    //inputElement.oninput = () => paramUpdater();
     paramUpdater();
   }
 
   connectBoolPropertyToAudioParam(audioParam, propertyName, propertyConverter = null) {
-    let inputElement = this.getPropertyInputElement(propertyName);
+   /* let inputElement = this.getPropertyInputElement(propertyName);
     if (!inputElement) {
       throw "Cannot find input element for " + this.elementClass + "." + + propertyName;
-    }
+    }*/
     let paramUpdater = () => {
-      audioParam.value = propertyConverter ? propertyConverter(this.getBoolPropertyValue(propertyName)) : this.getBoolPropertyValue(propertyName);
+      audioParam.value = propertyConverter ? propertyConverter(this.getPropertyValue(propertyName)) : this.getPropertyValue(propertyName);
       //consoleLog(`BoolProperty ${propertyName} updated AudioParam to ${audioParam.value}`, audioParam);
     }
-    inputElement.onchange = () => paramUpdater();
+    this.subscribeToPropertyChange(propertyName, () => paramUpdater());
+    //inputElement.onchange = () => paramUpdater();
     paramUpdater();
   }
 }
@@ -76,24 +80,27 @@ class AudioDevice extends Device {
       this.wetOutput.gain.value = 1;
     }
     
+  
     let enableDisableFunction = () => {
-      console.log("enable disable " + this.id)
-      if (this.getBoolPropertyValue("DeviceEnabled")) {
+      
+      if (this.getPropertyValue("DeviceEnabled")) {
+        console.log("Enable " + this.id)
         this.wetOutput.connect(this.output);
         if (!hasDryWet) {
           this.dryOutput.gain.value = 0;
         }
       }
       else {
+        console.log("Disable " + this.id)
         this.wetOutput.disconnect(this.output);
         if (!hasDryWet) {
           this.dryOutput.gain.value = 1;
         }
       }
     }
-    
+   // this.subscribeToPropertyChange("DeviceEnabled", (e) => enableDisableFunction(e));
     let enabledElement = this.getChildInputElement("DeviceEnabled");
-    enabledElement.onchange = () => enableDisableFunction();
+    //enabledElement.onclick = () => enableDisableFunction();
     
     this.input.connect(this.dryOutput);
     this.dryOutput.connect(this.output);

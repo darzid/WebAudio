@@ -38,6 +38,7 @@ class Synth extends AudioDevice {
   toggleNextSiblingVisibility(element.querySelector(".DeviceTitle"));
   
   document.addEventListener("PlayNote", (eventInfo) => { 
+   console.log("Synth play note")
     if (eventInfo.detail.track == this.track.id) this.playNote(eventInfo); 
   });
  }
@@ -52,21 +53,21 @@ class Synth extends AudioDevice {
    super.setupAudioGraph(audioContext);
   
    /* FM 
-   this.fm1Lfo = this._context.createOscillator({frequency: this.getFloatPropertyValue("Osc1FmRate")});
-   this.fm1LfoGain = this._context.createGain({gain: this.getFloatPropertyValue("Osc1FmAmount")});
+   this.fm1Lfo = this._context.createOscillator({frequency: this.getPropertyValue("Osc1FmRate")});
+   this.fm1LfoGain = this._context.createGain({gain: this.getPropertyValue("Osc1FmAmount")});
    this.fm1Lfo.connect(this.fm1LfoGain.gain);
    
-   this.fm2Lfo = this._context.createOscillator({frequency: this.getFloatPropertyValue("Osc2FmRate")});
-   this.fm2LfoGain = this._context.createGain({gain: this.getFloatPropertyValue("Osc2FmAmount")});
+   this.fm2Lfo = this._context.createOscillator({frequency: this.getPropertyValue("Osc2FmRate")});
+   this.fm2LfoGain = this._context.createGain({gain: this.getPropertyValue("Osc2FmAmount")});
    this.fm2Lfo.connect(this.fm2LfoGain.gain);
    */
  }
   
  playNote(eventInfo) {
-  if (!this.getBoolPropertyValue("Enabled"))
+  if (!this.getPropertyValue("Enabled"))
     return;
       
-  //consoleLog("PlayNote", eventInfo);
+  consoleLog("PlayNote", eventInfo);
   
   let startTime = eventInfo.detail.time;
   let duration = (eventInfo.detail.stepDuration / 500) * (eventInfo.detail.gate / 127);
@@ -88,34 +89,21 @@ class Synth extends AudioDevice {
   
   this.connectBoolPropertyToAudioParam(ampEnvGain.gain, "Enabled");
   
-  let holdVolume = this.getFloatPropertyValue("Volume") * (eventInfo.detail.velocity / 127);
-  let attackEndTime = eventInfo.detail.time + this.getFloatPropertyValue("Attack");
-  let decayEndTime = attackEndTime + this.getFloatPropertyValue("Decay");
+  let holdVolume = this.getPropertyValue("Volume") * (eventInfo.detail.velocity / 127);
+  let attackEndTime = eventInfo.detail.time + this.getPropertyValue("Attack");
+  let decayEndTime = attackEndTime + this.getPropertyValue("Decay");
   let gateEndTime = startTime + duration;
-  let releaseEndTime = gateEndTime + this.getFloatPropertyValue("Release");
+  let releaseEndTime = gateEndTime + this.getPropertyValue("Release");
   
-  if (this.getBoolPropertyValue("Osc1Enabled")) {
+  if (this.getPropertyValue("Osc1Enabled")) {
    let oscillator1 = this._context.createOscillator();
    oscillator1.frequency.value = frequency;
    oscillator1.type = this.osc1Type;
    
    this._updateDetune(oscillator1, "Osc1");
-   this.getPropertyInputElement("Osc1Octave").addEventListener("input", () => this._updateDetune(oscillator1, "Osc1"));
-   this.getPropertyInputElement("Osc1Detune").addEventListener("input", () => this._updateDetune(oscillator1, "Osc1"));
+   this.subscribeToPropertyChange("Osc1Octave", () => this._updateDetune(oscillator1, "Osc1"));
+   this.subscribeToPropertyChange("Osc1Detune", () => this._updateDetune(oscillator1, "Osc1"));
    
-   /*
-   let fm1Rate = this.getFloatPropertyValue("Osc1FmRate");
-   let fm1Amount = this.getFloatPropertyValue("Osc1FmAmount");
-    if (fm1Amount > 0) {
-     this.fm1LfoGain.connect(oscillator1.frequency);
-     connectedNodes.push(this.fm1LfoGain);
-     
-     this.fm1Lfo.start();
-    
-     this.getPropertyInputElement("Osc1FmRate").oninput = () => fm1Lfo.frequency.value = this.getFloatPropertyValue("Osc1FmRate");
-     this.getPropertyInputElement("Osc1FmAmount").oninput = () => fm1LfoGain.gain.value = this.getFloatPropertyValue("Osc1FmAmount");
-    }
-    */
    this.connectFloatPropertyToAudioParam(osc1gain.gain, "Osc1Volume");
    
    oscillator1.connect(osc1gain);
@@ -134,14 +122,14 @@ class Synth extends AudioDevice {
    this.audioApp.logAudioEvent(releaseEndTime, this.track.id, "Synth", "Stop oscillator1");
   }
   
-  if (this.getBoolPropertyValue("Osc2Enabled")) {
+  if (this.getPropertyValue("Osc2Enabled")) {
    let oscillator2 = this._context.createOscillator();
    oscillator2.frequency.value = frequency;
    oscillator2.type = this.osc2Type;
    
    this._updateDetune(oscillator2, "Osc2");
-   this.getPropertyInputElement("Osc2Octave").addEventListener("input", () => this._updateDetune(oscillator2, "Osc2"));
-   this.getPropertyInputElement("Osc2Detune").addEventListener("input", () => this._updateDetune(oscillator2, "Osc2"));
+   this.subscribeToPropertyChange("Osc2Octave", () => this._updateDetune(oscillator2, "Osc2"));
+   this.getPropertyInputElement("Osc2Detune", () => this._updateDetune(oscillator2, "Osc2"));
    
    this.connectFloatPropertyToAudioParam(osc2gain.gain, "Osc2Volume");
    oscillator2.connect(osc2gain);
@@ -170,17 +158,17 @@ class Synth extends AudioDevice {
   else
     oscsGain.connect(ampEnvGain);
     
-  if (this.getBoolPropertyValue("AmpEnvEnabled")){
-   if (this.getFloatPropertyValue("Attack") > 0) {
+  if (this.getPropertyValue("AmpEnvEnabled")){
+   if (this.getPropertyValue("Attack") > 0) {
     ampEnvGain.gain.setValueAtTime(0, eventInfo.detail.time);
     ampEnvGain.gain.linearRampToValueAtTime(holdVolume, attackEndTime);
    }
    else
     ampEnvGain.gain.value = holdVolume;
    
-   ampEnvGain.gain.linearRampToValueAtTime(this.getFloatPropertyValue("Sustain") * holdVolume, decayEndTime);
+   ampEnvGain.gain.linearRampToValueAtTime(this.getPropertyValue("Sustain") * holdVolume, decayEndTime);
    if (this.release) {
-    ampEnvGain.gain.linearRampToValueAtTime(this.getFloatPropertyValue("Sustain") * holdVolume, gateEndTime);
+    ampEnvGain.gain.linearRampToValueAtTime(this.getPropertyValue("Sustain") * holdVolume, gateEndTime);
     ampEnvGain.gain.linearRampToValueAtTime(0, releaseEndTime);
    }
   }
@@ -189,6 +177,6 @@ class Synth extends AudioDevice {
  }
  
  _updateDetune(oscillator, oscillatorId) {
-  oscillator.detune.value = (this.getFloatPropertyValue(oscillatorId + "Octave") * 1200) + this.getFloatPropertyValue(oscillatorId + "Detune");
+  oscillator.detune.value = (this.getPropertyValue(oscillatorId + "Octave") * 1200) + this.getPropertyValue(oscillatorId + "Detune");
  }
 }

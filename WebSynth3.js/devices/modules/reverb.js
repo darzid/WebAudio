@@ -12,7 +12,7 @@ class ReverbModule extends DeviceModule  {
     this.registerInputProperty(this._decaytimeProperty);
     this.registerInputProperty(this._dryWetProperty);
     
-    this.setBoolPropertyValue("Enabled", false);
+    this.setPropertyValue("Enabled", false);
   }
   
   setupAudioGraph(audioContext, inputNode) {
@@ -21,15 +21,17 @@ class ReverbModule extends DeviceModule  {
     let convolver = audioContext.createConvolver();
     this.updateBuffer(audioContext, convolver);
     
-    this.getPropertyInputElement(this._sizeProperty).oninput = () => this.updateBuffer(audioContext, convolver);
-    this.getPropertyInputElement(this._decaytimeProperty).oninput = () => this.updateBuffer(audioContext, convolver);
+    this.subscribeToPropertyChange("Size", (e) => this.updateBuffer(audioContext, convolver));
+    this.subscribeToPropertyChange("Decay", (e) => this.updateBuffer(audioContext, convolver));
+  //  this.getPropertyInputElement(this._sizeProperty).oninput = () => this.updateBuffer(audioContext, convolver);
+    //this.getPropertyInputElement(this._decaytimeProperty).oninput = () => this.updateBuffer(audioContext, convolver);
     
     this.input.connect(convolver);
     convolver.connect(this.wetOutput);
   }
   
   updateBuffer(audioContext, convolver) {
-    convolver.buffer = this.createImpulseResponse(audioContext, this.getFloatPropertyValue(this._sizeProperty), this.getFloatPropertyValue(this._decaytimeProperty));
+    convolver.buffer = this.createImpulseResponse(audioContext, this.getPropertyValue(this._sizeProperty), this.getPropertyValue(this._decaytimeProperty));
   }
   
   createImpulseResponse(audioContext, reverbSize, reverbDecayTime) {

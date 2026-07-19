@@ -35,7 +35,7 @@ class PresetBrowser {
     this.audioApp.setPreset(this.presets[selectedPreset]);
 
     // this.audioApp.setFloatPropertyValue("Tempo",this.presets[selectedPreset].Tempo);
-    // MidiClock.tempo = this.audioApp.getFloatPropertyValue("Tempo");
+    // MidiClock.tempo = this.audioApp.getPropertyValue("Tempo");
     // this.audioApp.updateBpmText();
 
     document.querySelector(".AppTitle").innerText = selectedPreset;
