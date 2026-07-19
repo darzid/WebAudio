@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=2">
+
+    <title>ToneJsTest</title>
+
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+
+    <script src="//unpkg.com/systemjs@0.19.47/dist/system.js"></script>
+    <script src="http://unpkg.com/tone"></script>
+  </head>
+
+  <body>
+    <div id="app-container">
+      <div id="header-bar">
+        <h1>ToneJsTest</h1>
+      </div>
+      <div id="transport-bar">
+        <button id="start-button">▶️</button>
+       <!-- <button id="stop-button">⏹️</button>-->
+      </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+      document.querySelector("#start-button")?.addEventListener("click", async () => {
+        await Tone.start();
+        console.log("audio is ready");
+      
+        const synth = new Tone.Synth().toDestination();
+        
+        //synth.triggerAttackRelease("C4", "8n");
+        
+        //const now = Tone.now();
+        //synth.triggerAttack("C4", now);
+        //synth.triggerRelease(now + 1);
+        
+        const now = Tone.now();
+        synth.triggerAttackRelease("C4", "8n", now);
+        synth.triggerAttackRelease("E4", "8n", now + 0.5);
+        synth.triggerAttackRelease("G4", "8n", now + 1);
+      });
+    </script>
+  </body>
+</html>
