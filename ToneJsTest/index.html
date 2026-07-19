@@ -27,7 +27,7 @@
       </div>
       <div id="transport-bar">
         <button id="start-button">▶️</button>
-       <!-- <button id="stop-button">⏹️</button>-->
+        <button id="stop-button">⏹️</button>
       </div>
     </div>
 
@@ -45,10 +45,26 @@
         //synth.triggerAttack("C4", now);
         //synth.triggerRelease(now + 1);
         
-        const now = Tone.now();
+        /*const now = Tone.now();
         synth.triggerAttackRelease("C4", "8n", now);
         synth.triggerAttackRelease("E4", "8n", now + 0.5);
-        synth.triggerAttackRelease("G4", "8n", now + 1);
+        synth.triggerAttackRelease("G4", "8n", now + 1);*/
+        
+        // create two monophonic synths
+        const synthA = new Tone.FMSynth().toDestination();
+        const synthB = new Tone.AMSynth().toDestination();
+        //play a note every quarter-note
+        const loopA = new Tone.Loop((time) => {
+        	synthA.triggerAttackRelease("C2", "8n", time);
+        }, "4n").start(0);
+        //play another note every off quarter-note, by starting it "8n"
+        const loopB = new Tone.Loop((time) => {
+        	synthB.triggerAttackRelease("C4", "8n", time);
+        }, "4n").start("8n");
+        // all loops start when the Transport is started
+        Tone.getTransport().start();
+        // ramp up to 800 bpm over 10 seconds
+        Tone.getTransport().bpm.rampTo(800, 10);
       });
     </script>
   </body>
