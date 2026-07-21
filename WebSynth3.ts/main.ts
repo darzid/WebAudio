@@ -1,14 +1,41 @@
 import { ElementHandlerRegistry } from "./lib-ts/element-handler-registry/element-handler-registry";
 import { Logger } from "./lib-ts/logger";
-// import { Device } from "./devices/base-devices/device";
-// import { Synth } from "./devices/synth";
-// import { Track } from "./devices/track";
-// import { AudioApp } from "./devices/audio-app";
+import { Device } from "./devices/base-devices/device";
+import { BruteSequencer } from "./devices/brute-sequencer";
+import { BruteSequencerStep } from "./devices/brute-sequencer-step";
+import { DrumSequencer } from "./devices/drum-sequencer";
+import { DrumSequencerStep } from "./devices/drum-sequencer-step";
+import { Synth } from "./devices/synth";
+import { Track } from "./devices/track";
+import { AudioApp } from "./devices/audio-app";
 import { applyTemplates } from "./lib-ts/template-expander/template-expander";
 
 Logger.log('TypeScript works!');
 
 var audioApp = null;
+
+export class DeviceFactory implements IDeviceFactory {
+  create(typeName: string, element: HTMLElement, cssClass: string): Device {
+    switch (typeName) {
+       case "AudioApp":
+         return new AudioApp(element, cssClass);
+        case "BruteSequencer":
+          return new BruteSequencer(element, cssClass);
+        case "BruteSequencerStep":
+          return new BruteSequencerStep(element, cssClass);
+        case "DrumSequencer":
+          return new DrumSequencer(element, cssClass);
+        case "DrumSequencerStep":
+          return new DrumSequencerStep(element, cssClass);
+       case "Synth": 
+         return new Synth(element, cssClass);
+       case "Track":
+         return new Track(element, cssClass);
+        default:
+          throw "Unknown type " + typeName;
+     }
+  }
+}
 
 export function initialize() {
   renderTemplates();
@@ -16,18 +43,19 @@ export function initialize() {
   audioAppElement.style.opacity = "0.5";
 
   createElementHandlerRegistry();
-  // let deviceFactory = new DeviceFactory();
-  // ElementHandlerRegistry.processAll(deviceFactory);
+  let deviceFactory : IDeviceFactory= new DeviceFactory();
+  ElementHandlerRegistry.processAll(deviceFactory);
 
-  // audioApp = ElementHandlerRegistry.handlers.find(handler => handler.elementClass == "AudioApp");
-
+  audioApp = ElementHandlerRegistry.handlers.find(handler => handler.elementClass == "AudioApp");
+  audioApp.setupAudioGraph();
   // setupAudioGraph();
   setupKnobs();
   Logger.log("Initialised");
   Logger.log("Ready");
   audioAppElement.style.opacity = "1.0";
 
-  //  document.querySelectorAll(".collapser").forEach(div => toggleNextSiblingVisibility(div));
+  document.querySelectorAll(".collapser").forEach(span => span.addEventListener("click", () => toggleNextSiblingVisibility(span.parentElement!)));
+  document.querySelectorAll("button.Enabled").forEach(span => span.addEventListener("click", () => toggleEnabled()));
 }
 
 function renderTemplates() {
@@ -107,21 +135,23 @@ export function toggleNextSiblingVisibility(element: HTMLElement) {
   }
 }
 
+export function toggleEnabled() {
+  Logger.log("ToggleEnabled")
+  let checkbox = window.event.srcElement.querySelector("input[name='Enabled']");
+  checkbox.checked = !checkbox.checked;
+  var evnt = checkbox["onchange"];
+  if (evnt) {
+    evnt.call(checkbox);
+    console.log("Fire checkbox changed")
+  }
+}
+
 initialize();
 Logger.log('Initialized');
 
-// export class DeviceFactory implements IDeviceFactory {
-//   create(typeName: string, element: HTMLElement, cssClass: string): Device {
-//     switch (typeName) {
-//       case "AudioApp":
-//         return new AudioApp(element, cssClass);
-//       case "Synth": 
-//         return new Synth(element, cssClass);
-//       case "Track":
-//         return new Track(element, cssClass);
-//     }
+
 //     let constructorString = `new ${typeName}(element, cssClass)`;
 //     let instance = eval(constructorString);
 //     return instance;
 //   }
-// }
+//}

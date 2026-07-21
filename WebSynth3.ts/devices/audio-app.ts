@@ -83,12 +83,13 @@ export class AudioApp extends AudioDevice {
   set volume(value) { this.output!.volume.value = value; }
 
   setupAudioGraph() {
+    
     // if (this._context) {
     //   this.output!.disconnect();
     // }
-    // super.setupAudioGraph(audioContext);
+    super.setupAudioGraph();
 
-    // this.tracks.forEach(track => track.setupAudioGraph(audioContext));
+    this.tracks.forEach(track => track.setupAudioGraph());
 
     if (this._useLimiter) {
       // let compressor = new Tone.Compressor(-30, 10);
@@ -100,7 +101,10 @@ export class AudioApp extends AudioDevice {
       // compressor.toDestination();
     }
     else {
-      this.output!.toDestination();
+      if (!this.output) {
+        Logger.warn("No output om audioapp")
+      }
+      this.output!.output.toDestination();
     }
   }
 

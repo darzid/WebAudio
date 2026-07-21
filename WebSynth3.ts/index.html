@@ -224,7 +224,7 @@
 
       <template id="enabled-template">
         <span>
-          <button class="Enabled" onclick="toggleEnabled();">&nbsp;<span id="Content"></span>&nbsp;&nbsp;&nbsp;</button>
+          <button class="Enabled">&nbsp;<span id="Content"></span>&nbsp;&nbsp;&nbsp;</button>
         </span>
       </template>
 
@@ -236,7 +236,7 @@
       <template id="toggle-title-template-h2">
         <h2>
           <input class="Enabled" type="checkbox" name="Enabled" data-template="enabled-template" checked="true">
-          <span onclick="toggleNextSiblingVisibility(window.event.srcElement.parentElement)" class="title">Title</span>
+          <span class="title collapser">Title</span>
           <span class="Expand">🔻</span>
           <span class="Collapse">🔺️</span>
         </h2>
@@ -245,7 +245,7 @@
       <template id="toggle-tracktitle-template">
         <h3>
           <input class="Enabled" type="checkbox" name="Enabled" data-template="enabled-template" checked="true">
-          <span onclick="toggleNextSiblingVisibility(window.event.srcElement.parentElement)" class="title collapser">Title</span>
+          <span class="title collapser">Title</span>
           <span class="Expand">🔻</span>
           <span class="Collapse">🔺️</span>
         </h3>
@@ -254,7 +254,7 @@
       <template id="toggle-title-template-h3">
         <h3>
           <input class="Enabled" type="checkbox" name="Enabled" data-template="enabled-template" checked="true">
-          <span onclick="toggleNextSiblingVisibility(window.event.srcElement.parentElement)" class="title collapser">Title</span>
+          <span class="title collapser">Title</span>
           <span class="Expand">🔻</span>
           <span class="Collapse">🔺️</span>
         </h3>
@@ -651,7 +651,7 @@
 
           <div class="app-buttons">
             <span class="left-buttons">
-              <!-- <button id="play-button" class="play icon-button"><img src="img/Play_icon.png"></button> -->
+              <button id="play-button" class="play icon-button"><img src="img/Play_icon.png"></button>
               <button class="rec icon-button" onclick="audioApp.record()"><img src="img/rec_icon.png"></button>
               <button class="stop icon-button" onclick="audioApp.stop()"><img src="img/stop_icon.png"></button>
 
@@ -706,8 +706,6 @@
     </span>
 
     <div class="root">
-      <button id="play-button" class="play icon-button" style="width: auto"><img src="img/Play_icon.png" width="50" height="50"></button>
-
       <div data-template="app-template"></div>
 
       <div id="PresetBrowser" class="DialogWindow">

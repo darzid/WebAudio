@@ -1,7 +1,7 @@
 import { Logger } from "../../lib-ts/logger";
 import { Device } from "./device";
 import { LevelMeterManager } from "../../level-meter";
-import * as Tone from "../../node_modules/tone/build/esm/index";
+//import * as Tone from "../../node_modules/tone/build/esm/index";
 
 // export class AudioDeviceNew extends Channel {
 //   private _elementHandler: ElementHandler;
