@@ -1,0 +1,997 @@
+:root {
+  --bg: #ece4d3;
+  --app-bg: rgba(238, 230, 214, 0.9);
+  --track-bg: rgba(255, 251, 243, 0.85);
+  --track-border: rgba(120, 95, 60, 0.25);
+  --track-title-bg: rgba(120, 95, 60, 0.12);
+  --device-bg: rgba(120, 95, 60, 0.06);
+  --device-title-bg: rgba(120, 95, 60, 0.15);
+  --section-title-bg: rgba(120, 95, 60, 0.08);
+  --param-group-border: rgba(120, 95, 60, 0.22);
+  --step-bg: rgba(120, 95, 60, 0.05);
+  --step-border: rgba(120, 95, 60, 0.25);
+  --step-active-bg: rgba(180, 60, 40, 0.9);
+  --step-active-shadow: rgba(180, 60, 40, 0.4);
+  --step-on-bg: rgba(175, 130, 60, 0.4);
+  --btn-bg: rgba(120, 95, 60, 0.1);
+  --btn-color: rgba(75, 55, 35, 0.95);
+  --btn-border: rgba(120, 95, 60, 0.35);
+  --track-btn-enabled-bg: rgba(190, 140, 50, 0.85);
+  --track-btn-enabled-shadow: rgba(190, 140, 50, 0.8);
+  --device-btn-enabled-bg: rgba(190, 80, 50, 0.85);
+  --device-btn-enabled-shadow: rgba(190, 80, 50, 0.8);
+  --text-color: #3a2e1e;
+  --radius-track: 6px;
+  --radius-btn: 4px;
+  --radius-device: 0.4em;
+  --shadow: 0 2px 8px rgba(90, 70, 40, 0.18);
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0em;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0em;
+  background-color: var(--bg);
+
+  color: var(--text-color);
+  vertical-align: top;
+  text-align: center;
+}
+
+body,
+button,
+input,
+text {
+  font-size: 1vmax;
+  text-shadow: none;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+
+div.knob {
+  circle.dial {
+    fill: url("#NoteGradient");
+  }
+}
+
+div.velocity {
+  .dial {
+    fill: url("#VelocityGradient");
+  }
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0em;
+  vertical-align: top;
+  position: absolute;
+  top: 0em;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin: 0em;
+    text-transform: uppercase;
+  }
+
+  button {
+    background-color: var(--btn-bg);
+    border: 0.15em solid var(--btn-border);
+    border-radius: var(--radius-btn);
+  }
+
+  .title {
+    word-wrap: break-word;
+    text-wrap: wrap;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+  }
+
+  .List {
+    display: flex;
+    margin: 0.1vmin;
+  }
+
+  .MidiDevices {
+    justify-content: left;
+  }
+
+  .Container .Options {
+    margin: 0pt;
+  }
+
+  .AudioApp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: auto;
+
+    padding: 0vmin 0.1vmin 1vmin 0.1vmin;
+    margin-bottom: 0vmin;
+    background: var(--app-bg);
+    box-shadow: var(--shadow);
+
+    .AppTitle {
+      /* display: inline-flex; */
+      margin-top: 1.4vmin;
+      font-size: 2vmin;
+      /* text-align: left;
+      justify-content: left;
+      align-items: start; */
+    }
+
+    .AppTitleText {
+      float: right;
+      display: inline;
+      font-size: 2.5vmin;
+      font-weight: bold;
+
+      vertical-align: middle;
+      margin-top: 1.3vmin;
+      padding-right: 0.2vmin;
+    }
+
+    .app-buttons {
+      display: block;
+      justify-items: center;
+      
+      margin-left:   0vmax;
+      margin-right:  0vmax;
+      margin-bottom: 0vmax;
+      margin-top:    0.2vmax;
+      
+      padding-top:    0vmax;
+      padding-bottom: 0.5vmax;
+      padding-left:   0.2vmax;
+      padding-right:  0.2vmax;
+      
+      width: auto;
+      
+      background: rgba(0, 0, 0, 0.1);
+      
+      border-top:    0.1vmax solid rgba(0,0,0,0.4);
+      border-bottom: 0.1vmax solid rgba(0,0,0,0.4);
+
+      button {
+        margin:     0.1vmin;
+        margin-top: 1vmin;
+        
+        padding:    0.5vmin;
+        
+        text-align: center;
+        justify-content: center;
+        
+        background: var(--btn-bg);
+        color: var(--btn-color);
+        text-shadow: none;
+      }
+
+      button.icon-button {
+        img {
+          width:  4vmax;
+          height: 4vmax;
+        }
+      }
+
+      .left-buttons {
+        float: left;
+        justify-content: start;
+      }
+
+      .right-buttons {
+        float: right;
+        justify-content: end;
+      }
+
+      button.load {
+        margin-left: 1vmax;
+      }
+
+      button.stop {
+        display: none;
+      }
+
+      .bpm-buttons {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: 1vmax;
+        margin-right: 1vmax;
+        margin-top: 0pt;
+        padding-top: 0vmax;
+
+        .bpm-text {
+          display: inline-block;
+          font-size: 2.0vmin;
+          padding-left: 2pt;
+          padding-right: 2pt;
+          font-weight: bold;
+        }
+
+        button img {
+          vertical-align: middle;
+          width:  4vmax;
+          height: 4vmax;
+        }
+      }
+
+      .zoom-buttons {
+        float: right;
+        display: block;
+        margin-left: 5pt;
+        margin-right: 0pt;
+      }
+    }
+
+    svg {
+      width: 5em;
+      height: 5em;
+    }
+
+    .Expand,
+    .Collapse {
+      margin: 0pt;
+    }
+
+    .Expand {
+      display: none;
+    }
+
+    .Collapse {
+      display: inline;
+    }
+
+    .collapsed {
+      color: var(--btn-color);
+
+      .Expand {
+        display: inline;
+      }
+
+      .Collapse {
+        display: none;
+      }
+    }
+
+    .Tracks {
+      flex-direction: column;
+      margin: 0.2vmin 0vmin 0.0vmin 0vmin;
+      padding-top: 0vmin;
+
+      /*
+      background-color: rgba(150, 150, 150, 0.1);
+      border-radius: 0.5em;
+      border: 0.1em solid rgba(0, 0, 0, 0.5);
+      box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.4);
+      */
+      .Track {
+        border: 0.1vmin solid var(--track-border);
+        border-radius: var(--radius-track);
+
+        background: var(--track-bg);
+        box-shadow: var(--shadow);
+
+        margin: 1vmin;
+        padding: 0em;
+
+
+        .Device {
+
+          h3,
+          h4 {
+            background-color: var(--device-title-bg);
+            border-radius: 0.2em;
+          }
+
+          .DeviceTitle {
+            background-color: var(--device-title-bg);
+            border-radius: 0.2em;
+            text-align: center;
+            margin-right: 0pt;
+
+            padding: 0.8vmin;
+          }
+
+          .SectionTitle {
+            background-color: var(--section-title-bg);
+            border-radius: 0.2em;
+            text-align: center;
+            margin-left: 0pt;
+            padding: 1.4vmin;
+          }
+
+          margin: 0.1em;
+          margin-left: 0.3em;
+          width: auto;
+          display: flex;
+          flex-direction: row;
+          background-color: var(--device-bg);
+          border-radius: var(--radius-device);
+          border: 0.1em solid var(--param-group-border);
+
+          h3 {
+            width: auto;
+            display: flex;
+
+            .title {
+              padding-left: 2pt;
+              padding-right: 2pt;
+            }
+
+          }
+
+          h5 {
+            padding-left: 2em;
+            padding-right: 2em;
+          }
+
+          .items {
+            display: flex;
+            flex-direction: row;
+            justify-content: left;
+          }
+
+          .Parameters {
+            display: flex;
+            flex-direction: row;
+            vertical-align: bottom;
+            flex-wrap: wrap;
+            justify-content: left;
+            margin: 0em;
+
+            h5 {
+              padding: 0em;
+            }
+
+            svg {
+              width: 4em;
+              height: 4em;
+            }
+          }
+
+          .ParameterGroup {
+            margin: 0.2em 0.2em 0em 0.2em;
+            margin: 0.8vmin;
+            border-radius: var(--radius-device);
+            border: 0.1em solid var(--param-group-border);
+
+            h4 {
+              border-radius: 0.1em 0.1em 0em 0em;
+              margin-bottom: 1vmin;
+              padding: 1vmin;
+              border-bottom: 0.05em solid rgba(120, 95, 60, 0.4);
+
+            }
+
+            .knob {
+              margin: 0em 0em 0em 0em;
+            }
+          }
+        }
+
+        .AudioDevices {
+          display: flex;
+          flex-direction: row;
+          vertical-align: bottom;
+          flex-wrap: wrap;
+          text-align: center;
+          align-items: center;
+
+          .knob {
+            fill: url("#NoteGradient");
+          }
+        }
+
+        .BruteSequencer,
+        .DrumSequencer {
+          display: flex;
+          justify-content: center;
+          width: auto;
+          flex-direction: row;
+
+
+          .Options {
+            padding: 0.2em;
+
+
+            display: flex;
+            flex-direction: column;
+            margin: 0em;
+            justify-content: center;
+
+            h3 {
+              margin: 0pt;
+            }
+
+            .knob {
+              fill: url("#OptionGradient");
+
+              .title {
+                margin: 2pt;
+                padding: 2pt;
+              }
+            }
+          }
+
+          .Steps {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding: 0.0em;
+            align-items: center;
+            margin: 0pt;
+          }
+        }
+      }
+    }
+  }
+
+  .AudioApp.is-playing {
+
+    button.play,
+    button.rec {
+      display: none;
+    }
+
+    button.stop {
+      display: inline;
+    }
+  }
+}
+
+div.knob:has(input) {
+
+  .gauge,
+  .dial {
+    fill: url("#CyanGradient");
+  }
+}
+
+div.knob:has(input.cyan) {
+
+  .gauge,
+  .dial {
+    fill: url("#CyanGradient");
+  }
+}
+
+div.knob:has(input.yellow) {
+
+  .gauge,
+  .dial {
+    fill: url("#YellowGradient");
+  }
+}
+
+div.knob:has(input.brown) {
+
+  .gauge,
+  .dial {
+    fill: url("#BrownGradient");
+  }
+}
+
+div.knob:has(input.darkgreen) {
+
+  .gauge,
+  .dial {
+    fill: url("#DarkGreenGradient");
+  }
+}
+
+div.knob:has(input.green) {
+
+  .gauge,
+  .dial {
+    fill: url("#GreenGradient");
+  }
+}
+
+div.knob:has(input.red) {
+
+  .gauge,
+  .dial {
+    fill: url("#RedGradient");
+  }
+}
+
+.Container {
+  background-color: var(--device-bg);
+  border-radius: 0.1em;
+  border: 0.1em solid var(--param-group-border);
+  margin: 0.5vmin;
+  display: flex;
+  flex-direction: row;
+
+
+}
+
+.AudioDevices {
+  justify-content: left;
+
+  .Parameters {
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+
+
+  }
+}
+
+
+input.Enabled,
+input.play-step {
+  display: none;
+}
+
+h4 {
+  .title {
+    padding-left: 0pt;
+    padding-right: 0pt;
+  }
+
+  button.Enabled {
+    border-radius: 2pt;
+    float: left;
+    display: flex;
+    vertical-align: top;
+    padding: 0pt;
+
+
+    border-radius: 2pt;
+    margin: 0.0vmin 2% 0.0vmin 0.5%;
+    border: 10pt solid red;
+  }
+}
+
+button.Enabled:has(input:checked) {
+  background: var(--track-btn-enabled-bg);
+  box-shadow: 0.0em 0.0em 0.5em var(--track-btn-enabled-shadow);
+}
+
+.Device button.Enabled:has(input:checked) {
+  background: var(--device-btn-enabled-bg);
+  box-shadow: 0.0em 0.0em 0.5em var(--device-btn-enabled-shadow);
+}
+
+.Enabled {
+  float: right;
+  right: 0pt;
+  display: flex;
+}
+
+.TrackTitle {
+  background-color: var(--track-title-bg);
+  border-radius: 1vmin 1vmin 0vmin 0vmin;
+  text-align: left;
+  padding: 1vmin;
+  padding-right: 0.5vmin;
+  font-size: 1.8vmax;
+}
+
+.TrackTitle,
+.DeviceTitle,
+.SectionTitle {
+  font-size: 1.5vmax;
+}
+
+.DeviceTitle button.Enabled,
+.TrackTitle button.Enabled {
+  margin: 0.0vmin 2% 0.0vmin 0%;
+  margin-right: 0.5em;
+
+  border-radius: 2pt;
+  border: 0pt solid red;
+
+  float: left;
+  text-align: left;
+  vertical-align: top;
+}
+
+.TrackTitle button.Enabled {
+  width:  2vmax;
+  height: 2vmax;
+}
+
+.DeviceTitle button.Enabled {
+  width:  1.8vmax;
+  height: 1.8vmax;
+}
+
+.ParameterGroup {
+  font-size: 1.5vmax;
+  box-shadow: 0.1em 0.1em 0.1em rgba(90, 70, 40, 0.2);
+}
+
+.ParameterGroupTitle,
+.ModuleTitle {
+  text-align: left;
+  display: flex;
+  border-bottom: 0.01vmin solid rgba(120, 95, 60, 0.4);
+
+  .title {
+    font-size: 1.5vmax;
+    text-align: left;
+    padding-left: 1vmin;
+    vertical-align: top;
+    padding-top: 0pt;
+    margin-left: 4pt;
+    margin-top: 0pt;
+  }
+}
+
+.dial {
+  box-shadow: 0.15em 0.15em 0.4em rgba(90, 70, 40, 0.3);
+}
+
+.ParameterGroup button.Enabled {
+  width:  1.8vmax;
+  height: 1.8vmax;
+
+  border-radius: 0.2vmax;
+  border: 0pt solid blue;
+  
+  float: left;
+  vertical-align: top;
+  
+  margin: 0vmax;
+}
+
+button.Enabled {
+  float: left;
+
+  vertical-align: top;
+  
+  width:  3vmin;
+  height: 100%;
+  
+  display: flex;
+  
+  border-radius: 2pt;
+  border: 0pt solid green;
+  
+  margin: 0.0vmin 2% 0.0vmin 0.5%;
+}
+
+.Synth .ParameterGroup {
+  background-color: rgba(150, 115, 65, 0.08);
+  background-image: linear-gradient(to bottom,
+      rgba(255, 251, 243, 0.5),
+      rgba(200, 175, 130, 0.8));
+}
+
+.Effector .ParameterGroup {
+  margin: 5vmin;
+  background-color: rgba(160, 100, 60, 0.08);
+  background-image: linear-gradient(to bottom,
+      rgba(255, 251, 243, 0.5),
+      rgba(200, 165, 130, 0.8));
+}
+
+.DrumSynth .ParameterGroup {
+  margin: 5vmin;
+  background-color: rgba(140, 140, 80, 0.08);
+  background-image: linear-gradient(to bottom,
+      rgba(243, 251, 255, 0.5),
+      rgba(200, 165, 130, 0.8));
+}
+
+.StepTitle {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: rgba(120, 95, 60, 0.12);
+  border: 0.0vmin solid rgba(0, 0, 0, 0.0);
+}
+
+#PresetBrowser {
+  background: rgba(250, 245, 235, 0.97);
+  display: none;
+  box-shadow: var(--shadow);
+  border: 0.2vmin solid var(--track-border);
+  position: absolute;
+  width: 80vw;
+  left: 10vw;
+  height: 50vh;
+  top: 25vh;
+
+  h3 {
+    border: 0.2vmin solid var(--track-border);
+    background: var(--track-title-bg);
+  }
+
+  .PresetsList {
+    margin: 0pt;
+    padding-left: 0vmin;
+    list-style-type: circle;
+    height: 90%;
+    overflow-y: auto;
+  }
+
+  .PresetListItem {
+    text-align: left;
+    font-size: 3vmin;
+    padding-bottom: 1vmin;
+    margin-left: 0vmin;
+    padding-left: 0vmin;
+
+    input {
+      opacity: 0.0;
+      width: 1vmin;
+    }
+  }
+
+  .PresetListItem:has(input:checked) {
+    background-color: var(--step-on-bg);
+  }
+
+  .browser-buttons {
+    height: 7vh;
+    bottom: 5pt;
+    background: var(--track-title-bg);
+    padding: 0.5vh;
+    vertical-align: middle;
+
+    button {
+      width: 6em;
+      font-size: 2.5vmin;
+      margin-left: 0.5vmin;
+      margin-right: 0.5vmin;
+
+    }
+
+
+    .left {
+      float: left;
+    }
+
+    .right {
+      float: right;
+    }
+
+  }
+}
+
+button.play-step:has(input:checked) {
+  background-color: var(--step-on-bg);
+}
+
+
+div.knob:has(input.locked-knob) {
+  display: none;
+}
+
+.DrumVoiceRow {
+  align-items: center;
+}
+
+.VoiceLabel {
+  min-width: 3em;
+  font-weight: bold;
+}
+
+.DrumSteps .DrumStep:nth-child(4n + 1) {
+  border-left: 0.2vmin solid rgba(0, 0, 0, 0.5);
+}
+
+.Step,
+.DrumStep {
+  background-color: var(--step-bg);
+  background-image: linear-gradient(to right,
+      rgba(200, 175, 130, 0.25),
+      rgba(255, 251, 243, 0.5),
+      rgba(200, 175, 130, 0.25));
+
+  border: 0.1em solid var(--step-border);
+  border-radius: 0.5vmin 0.5vmin 0vmin 0vmin;
+
+  margin-bottom: 0.3em;
+  margin-left: 0.2em;
+  margin-right: 0.2em;
+
+  padding: 0em;
+  padding-left: 0em;
+  padding-right: 0em;
+
+  width: auto;
+  height: auto;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  touch-action: none;
+  justify-items: center;
+  align-items: center;
+  text-align: center;
+
+  button {
+    margin: 0.0em;
+    width: 3em;
+    height: 3em;
+  }
+
+  button[data-sample-id] {
+    background-color: var(--step-on-bg);
+  }
+
+  button.pad-pressed[data-sample-id] {
+    background-color: var(--btn-enabled-bg);
+  }
+
+  button.play-step:active {
+    background-color: var(--step-active-bg);
+  }
+}
+
+.Step.is-playing button.play-step,
+.DrumStep.is-playing button.play-step {
+  background-color: var(--step-active-bg);
+  box-shadow: 0pt 0pt 3pt var(--step-active-shadow);
+}
+
+.Step.is-playing button.play-step:has(input:checked),
+.DrumStep.is-playing button.play-step:has(input:checked) {
+  background-color: var(--step-active-bg);
+  box-shadow: 0pt 0pt 3pt var(--step-active-shadow);
+}
+
+.knob {
+  padding: 0pt;
+  margin: 0pt;
+  padding-left: -1em;
+}
+
+.DrumStep.is-playing .title,
+.Step.is-playing .StepTitle {
+  color: red;
+
+}
+
+.small-meter {
+  margin-left: 0.01em;
+  margin-right: 0.5em;
+  margin-top: 0.0em;
+  margin-bottom: 0.0em;
+  padding: 0pt;
+  width: 1.5em;
+  height: 1.4em;
+  display: inline;
+  float: left;
+
+}
+
+.TrackContent {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-items: stretch;
+  margin: 0pt;
+}
+
+.TrackDevices {
+  margin: 1vmin;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-items: stretch;
+}
+
+.TrackMeterContainer {
+  margin: 0.1em;
+  margin-bottom: 0.5em;
+  padding: 0pt;
+  padding-right: 1em;
+  width: auto;
+}
+
+.small-meter {
+  margin-left: 0.01em;
+  margin-right: 0.5em;
+  margin-top: 0.0em;
+  margin-bottom: 0.0em;
+
+  padding: 0pt;
+
+  width: 1.5em;
+  height: 1.4em;
+
+  display: inline;
+  float: left;
+}
+
+.medium-meter {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-right: 1em;
+  margin-left: 1em;
+
+  padding: 0pt;
+
+  background: rgba(0, 0, 0, 0.2);
+
+  border: 0.2em solid rgba(190, 140, 50, 0.5);
+  border-radius: 0.3em;
+
+  width: 0.8vw;
+  height: auto;
+
+  display: block;
+  opacity: 0.7;
+}
+
+.module-meter {
+  margin-top: 0.01em;
+  margin-bottom: 0.2em;
+  margin-right: 0.2em;
+  margin-left: 0.15em;
+
+  padding: 0pt;
+
+  background: rgba(0, 0, 0, 0.2);
+
+  border: 0.2em solid rgba(190, 140, 50, 0.5);
+  border-radius: 0.3em;
+
+  width: 0.8vw;
+  height: auto;
+
+  display: block;
+  opacity: 0.7;
+}
+
+.device-meter {
+  margin-top: 1em;
+  margin-bottom: 1em;
+
+  padding: 0pt;
+
+  background: rgba(0, 0, 0, 0.5);
+
+  border: 0.2em solid rgba(190, 140, 50, 0.5);
+  border-radius: 0.3em;
+
+  width: 0.8vw;
+  height: auto;
+
+  display: block;
+  opacity: 0.7;
+}
+
+.device-input-meter {
+  margin-left: 0.5em;
+}
+
+.device-output-meter {
+  margin-right: 0.5em;
+}
+
+.track-meter {
+  margin: 0em;
+  margin-top: 1vmin;
+
+  padding: 0pt;
+
+  border: 0.2em solid rgba(190, 140, 50, 0.85);
+  border-radius: 0.5em;
+
+  width: 2vw;
+  height: 90%;
+
+  display: block;
+  opacity: 0.7;
+}
+
+.Device .items {
+  background-image: linear-gradient(to bottom,
+      rgba(80, 60, 40, 0.2),
+      rgba(180, 160, 120, 0.1),
+      rgba(80, 60, 40, 0.2));
+}

@@ -29,7 +29,9 @@ function initialize() {
   createElementHandlerRegistry();
   createElementHandlers();
 
-  setupAudioGraph();
+  audioApp = elementHandlerRegistry.handlers.find(handler => handler.elementClass == "AudioApp");
+
+  // setupAudioGraph();
   setupKnobs();
   consoleLog("Initialised");
   consoleLog("Ready");
@@ -118,15 +120,15 @@ function createElementHandlers() {
   elementHandlerRegistry.processAll();
 }
 
-function setupAudioGraph() {
-  const audioContext = new AudioContext();
-  audioContext.onprocessorerror = (e) => alert("WebAudio error: " + e)
-  audioContext.destination.channelCount = 2;
-  audioContext.destination.channelCountMode = "max";
+// function setupAudioGraph() {
+//   const audioContext = new AudioContext();
+//   audioContext.onprocessorerror = (e) => alert("WebAudio error: " + e)
+//   audioContext.destination.channelCount = 2;
+//   audioContext.destination.channelCountMode = "max";
 
-  audioApp = elementHandlerRegistry.handlers.find(handler => handler.elementClass == "AudioApp");
-  audioApp.setupAudioGraph(audioContext);
-}
+//   audioApp = elementHandlerRegistry.handlers.find(handler => handler.elementClass == "AudioApp");
+//   audioApp.setupAudioGraph(audioContext);
+// }
 
 function stepOnOffClick(srcElement) {
   let checkbox = srcElement.parentElement.querySelector('input');
