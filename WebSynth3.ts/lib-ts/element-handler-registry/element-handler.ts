@@ -1,29 +1,27 @@
+import { ElementHandlerRegistry } from "../../lib-ts/element-handler-registry/element-handler-registry";
 import { Logger } from "../logger";
-import { ElementHandlerRegistry } from "./element-handler-registry";
 
 export class ElementHandler {
-  setupAudioGraph(audioContext: BaseAudioContext): void {
+  logAudioEvent(startTime: any, id: any, arg2: string, arg3: string) {
     throw new Error("Method not implemented.");
   }
   _propertyValues: { [key: string]: number | boolean } = {};
   element: HTMLElement;
   elementClass: string;
-  handlerRegistry: ElementHandlerRegistry;
   childElements: { [key: string]: HTMLInputElement };
   childHandlers: { [key: string]: string };
-  sequencer: any;
+  id: any;
 
-  constructor(element: HTMLElement, elementClass: string, handlerRegistry: ElementHandlerRegistry) {
+  constructor(element: HTMLElement, elementClass: string) {
     this.element = element;
     this.elementClass = elementClass;
-    this.handlerRegistry = handlerRegistry;
     this.childElements = {};
     this.childHandlers = {};
   }
 
-  getParentElementHandler(cssClass: string): ElementHandler {
+  getParentElementHandler<T extends ElementHandler>(cssClass: string): T {
     let parentElement: HTMLElement | null = this.element.closest("." + cssClass);
-    return this.handlerRegistry.findElementHandler(parentElement!)!;
+    return ElementHandlerRegistry.findElementHandler(parentElement!)! as T;
   }
 
   findChildElementHandlers(cssClass: string): ElementHandler[] {
@@ -31,14 +29,14 @@ export class ElementHandler {
     let childNodeList = this.element.querySelectorAll("." + cssClass);
     // cast elements to HTMLElement and convert NodeList to Array
     let childElements: HTMLElement[] = Array.from(childNodeList).map(e => e as HTMLElement);
-    const handlers = this.handlerRegistry.findElementHandlers(childElements) || [];
+    const handlers = ElementHandlerRegistry.findElementHandlers(childElements) || [];
     return handlers.filter((handler): handler is ElementHandler => handler != null);
   }
 
   findChildElementHandler(cssClass: string) {
     let childElement = this.element.querySelector("." + cssClass) as HTMLElement | null;
     //Logger.log("findChildElementHandlers", childElements)
-    return this.handlerRegistry.findElementHandler(childElement as HTMLElement);
+    return ElementHandlerRegistry.findElementHandler(childElement as HTMLElement);
   }
 
   hasPropertyInputElement(elementPath: string) {
@@ -103,11 +101,8 @@ export class ElementHandler {
     });
   }
 
-  getPropertyValue(propertyName: string) {
-    if (propertyName == "OnOff") {
-      console.log("getPropertyValue OnOff", this._propertyValues)
-    }
-    return this._propertyValues[propertyName];
+  getPropertyValue<T extends string | boolean | number>(propertyName: string): T {
+    return this._propertyValues[propertyName] as T;
   }
 
   setPropertyValue(propertyName: string, value: number | boolean) {
@@ -240,7 +235,7 @@ export class ElementHandler {
     presetNames.forEach(name => {
       let inputElement = this.childElements[name];
       if (inputElement) {
-        //Logger.log("setPreset:" + name, inputElement)
+        //Logger.log("setPreset:" + nameinputElement)
         if (inputElement.nodeName == "INPUT") {
           if (inputElement.type == "range" || inputElement.type == "number")
             inputElement.value = parseFloat(preset[name]).toString();
