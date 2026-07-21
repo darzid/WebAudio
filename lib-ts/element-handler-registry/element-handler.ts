@@ -235,7 +235,7 @@ export class ElementHandler {
     return preset;
   }
 
-  setPreset(preset: {[key: string]: string}| {}) {
+  setPreset(preset: {[key: string]: any}) {
     let presetNames = Object.keys(preset);
     presetNames.forEach(name => {
       let inputElement = this.childElements[name];
@@ -275,4 +275,9 @@ export class ElementHandler {
       }
       ));
   }
+}
+
+export class Preset {
+  name: string = "";
+  values: {[key: string]: any} = {};
 }
