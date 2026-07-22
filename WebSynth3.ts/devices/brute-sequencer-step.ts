@@ -60,7 +60,7 @@ export class BruteSequencerStep extends Device {
             stepDuration: this.stepInterval } }));
     }
     else {
-      console.log(`${this.track.id}: NOT playing step ${stepIndex}`, this.isOn);
+    //  console.log(`${this.track.id}: NOT playing step ${stepIndex}`, this.isOn);
     }
   }
 }

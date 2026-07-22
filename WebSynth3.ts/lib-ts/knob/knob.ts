@@ -162,7 +162,7 @@ export function setupKnob(knob: HTMLDivElement) {
     return;
   }
   
-  Logger.log("Knob...")
+  //Logger.log("Knob...")
 
   let knobSvg = knob.querySelector("svg");
   let knobValueLabel = knob.querySelector(".value-label");
@@ -174,7 +174,7 @@ export function setupKnob(knob: HTMLDivElement) {
     return;
   }
 
-  Logger.log("Setup knob " + knobInput.name, knob);
+ // Logger.log("Setup knob " + knobInput.name, knob);
   
   let knobMin = knobInput.min ? parseFloat(knobInput.getAttribute("min")) : 0;
   let knobMax = knobInput.max ? parseFloat(knobInput.max) : 100;
@@ -224,7 +224,7 @@ export function setupKnob(knob: HTMLDivElement) {
   let newAngle = 0;
   let angle = 0;
 
-  Logger.log("Knob settings done", knob);
+  //Logger.log("Knob settings done", knob);
   
 function setKnobValue(value, angle) {
     if (knobInput.value === value)
@@ -296,7 +296,7 @@ function setKnobValue(value, angle) {
   knob.onpointerup = () => pointerUpHandler();
   knob.onpointerleave = () => pointerLeaveHandler();
 
-  Logger.log("Knob events done", knob);
+  //Logger.log("Knob events done", knob);
   
   knobInput.onchange = () => {
     setKnobValue(parseFloat(knobInput.value));
@@ -414,7 +414,7 @@ function setKnobValue(value, angle) {
   let _longTouchEvent;
   let _longTouchPosition;
 
-  Logger.log("Long touch confife", knob);
+//  Logger.log("Long touch confife", knob);
   
   function startLongTouchTimer(e) {
     _longTouchEvent = e;

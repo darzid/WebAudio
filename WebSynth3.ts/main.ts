@@ -6,6 +6,7 @@ import { BruteSequencerStep } from "./devices/brute-sequencer-step";
 import { DrumSequencer } from "./devices/drum-sequencer";
 import { DrumSequencerStep } from "./devices/drum-sequencer-step";
 import { Synth } from "./devices/synth";
+import { DuoSynth } from "./devices/duo-synth";
 import { Track } from "./devices/track";
 import { AudioApp } from "./devices/audio-app";
 import { applyTemplates } from "./lib-ts/template-expander/template-expander";
@@ -29,6 +30,8 @@ export class DeviceFactory implements IDeviceFactory {
           return new DrumSequencerStep(element, cssClass);
        case "Synth": 
          return new Synth(element, cssClass);
+        case "DuoSynth":
+          return new DuoSynth(element, cssClass);
        case "Track":
          return new Track(element, cssClass);
         default:
@@ -94,6 +97,7 @@ function createElementHandlerRegistry() {
 
   // ElementHandlerRegistry.registerHandler("Effector", Effector);
   ElementHandlerRegistry.registerHandler("Synth", "Synth");
+  ElementHandlerRegistry.registerHandler("DuoSynth", "DuoSynth");
   // ElementHandlerRegistry.registerHandler("DrumSynth", DrumSynth);
   ElementHandlerRegistry.registerHandler("Step", "BruteSequencerStep");
   ElementHandlerRegistry.registerHandler("BruteSequencer", "BruteSequencer");

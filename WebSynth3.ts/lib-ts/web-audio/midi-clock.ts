@@ -54,7 +54,11 @@ export class MidiClock {
     if (triplet) {
       stepsPerBeat = parseFloat(stepsPerBeatString.replace('t', '')) * 1.5;
     }
+    else {
+      stepsPerBeat = parseFloat(stepsPerBeatString);
+    }
     let stepsPerMeasure = stepsPerBeat * beatsPerMeasure;
+  //  Logger.log("Midiclock.")
     return stepsPerMeasure;
   }
 
@@ -66,7 +70,7 @@ export class MidiClock {
       timeSignature = "1/16";
 
     let stepsPerMeasure = MidiClock.getStepsPerMeasure(timeSignature);
-    Logger.log("Midiclock.convert " + stepsPerMeasure, timeSignature)
+   // Logger.log("Midiclock.convert " + stepsPerMeasure, timeSignature)
     return MidiClock.secondsPerMeasure / stepsPerMeasure;
   }
 }

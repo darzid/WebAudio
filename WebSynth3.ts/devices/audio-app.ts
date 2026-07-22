@@ -218,7 +218,7 @@ export class AudioApp extends AudioDevice {
          track.sequencer.scheduleNextStep();
          steps++;
       }
-      Logger.log("Scheduled steps " + steps, Tone.now());
+     // Logger.log("Scheduled steps " + steps, Tone.now());
     });
     this.monitorAudioContext();
   }

@@ -12,7 +12,9 @@ export class Device extends ElementHandler {
     this.name = deviceName;
     this.type = deviceType;
   }
-
+  
+  get id() { return this.element.id; }
+  
   connectFloatPropertyToDecibelsParam(audioParam: Tone.Param<"decibels">, propertyName: string, propertyConverter: ((value: any) => number) | null = null) {
     //  let inputElement = this.getPropertyInputElement(propertyName);
     let paramUpdater = () => {

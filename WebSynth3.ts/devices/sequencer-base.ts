@@ -77,20 +77,20 @@ export class SequencerBase extends MidiDevice {
     let steps = this.findChildElementHandlers("Step"); 
     let playingStep = steps.find(step => step.isPlaying); 
     if (playingStep) {
-      this.playingStep.isPlaying = false
-      Logger.log("prev step")
+      this.playingStep.isPlaying = false;
+    //  Logger.log("prev step")
     }
-    else
-      Logger.log("no prev step")
+   // else
+ //     Logger.log("no prev step")
     
     
     let nextStep = steps[this._nextStep];
-    Logger.log("schedule next step", steps, nextStep, this._nextStepTime, MidiClock.tempo, this.stepLengthText)
+    //Logger.log("schedule next step", steps, nextStep, this._nextStepTime, MidiClock.tempo, this.stepLengthText)
     nextStep.play(this._nextStepTime, this._nextStep);
     
     let stepLength : number = MidiClock.convertTimeSignatureToStepDuration(this.stepLengthText) as number;
     this._nextStepTime = this._nextStepTime + stepLength;
-    Logger.log("schedule next step time", this._nextStepTime, stepLength)
+   // Logger.log("schedule next step time", this._nextStepTime, stepLength)
     this._nextStep++;
     if (this._nextStep == this.loopLength)
       this._nextStep = 0;
