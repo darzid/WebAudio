@@ -11,6 +11,7 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./lib-ts/knob/knob.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -270,6 +271,12 @@
         </h4>
       </template>
 
+      <template id="sectiontitle-template">
+        <h5 class="section">
+          <span class="title">Title</span>
+        </h5>
+      </template>
+      
       <template id="preset-listitem-template">
         <span>
           <span id="Content"></span><label></label>
@@ -279,7 +286,7 @@
       <template id="step-onoff-template">
         <div>
           <button class="play-step"
-                  onclick="stepOnOffClick(window.event.srcElement)">
+                  >
             <span id="Content"></span>
           </button>
         </div>
@@ -445,6 +452,91 @@
         </div>
       </template>
 
+      <template id="duo-synth-template" data-class="Tone DuoSynth AudioDevice Device">
+        <div class="Container" style="flex-direction: column">
+          <span title="DuoSynth" class="SynthTitle DeviceTitle TrackDeviceTitle" data-template="toggle-title-template-h3"></span>
+          <div class="items" style="display: flex; flex-direction: row">
+
+            <div class="Parameters" style="display:flex;flex-direction: row;">
+
+              <div class="ParameterGroup Tone">
+                <span title="Tone" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
+                <div style="display:flex;flex-direction: row;">
+                  <input name="Harmonicity" class="darkgreen wobble-mode-disabled" title="Harm." data-template="knob-template" type="range" min="1" max="20" step="0.1" value="20">
+                  <input name="Detune" class="darkgreen" title="Detune" data-template="knob-template" type="range" min="-100" max="100" value="0">
+                  <input name="Portamento" class="darkgreen wobble-mode-disabled" title="Portam." data-template="knob-template" type="range" min="0" max="0.5" step="0.01" value="0">
+                </div>
+              </div>
+              
+              <div class="ParameterGroup Vibrato">
+                <span title="Vibrato" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
+                <div style="display:flex;flex-direction: row;">
+                  <input name="VibratoAmount" class="darkgreen wobble-mode-disabled" title="Amount" data-template="knob-template" type="range" min="-2" max="2" value="0">
+                  <input name="VibratoRate" class="darkgreen wobble-mode-disabled" title="Rate" data-template="knob-template" type="range" min="-2" max="2" value="0">
+                </div>
+              </div>
+
+              <div class="ParameterGroup VCO1">
+                <span title="Vco1" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
+                <div style="display:flex;flex-direction: row;">
+                  <input name="Type" class="darkgreen wobble-mode-disabled" title="Type" data-template="knob-template" type="range" min="0" value="3" list="oscillator-types">
+                  <input name="Detune" class="darkgreen" title="Detune" data-template="knob-template" type="range" min="-100" max="100" value="0">
+                   <input name="Portamento" class="darkgreen wobble-mode-disabled" title="Portam." data-template="knob-template" type="range" min="0" max="0.5" step="0.01" value="0">
+                </div>
+              </div>
+              
+              <div class="ParameterGroup VCO1Filter">
+                <span title="Vco1 Filter" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
+                <div style="display:flex;flex-direction: row;">
+                  <input name="FilterFreq" class="darkgreen wobble-mode-disabled" title="Freq" data-template="knob-template" type="range" min="0.1" max="1000" value="0.5" step="0.01">
+                  <input name="FilterQ" class="darkgreen wobble-mode-disabled" title="Q" data-template="knob-template" type="range" min="0" max="5" value="0.5" step="0.01">
+                  <input name="FilterGain" class="darkgreen wobble-mode-disabled" title="Gain" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="FilterEnvAttack" class="darkgreen wobble-mode-disabled" title="Attack" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="FilterEnvDecay" class="darkgreen wobble-mode-disabled" title="Decay" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="FilterEnvSust" class="darkgreen wobble-mode-disabled" title="Sust." data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="FilterEnvRelease" class="darkgreen wobble-mode-disabled" title="Rel." data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                </div>
+              </div>
+              
+              <div class="ParameterGroup VCO2">
+                <span title="Vco2" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
+                <div style="display:flex;flex-direction: row;">
+                  <input name="Type" class="darkgreen wobble-mode-disabled" title="Type" data-template="knob-template" type="range" min="0" value="3" list="oscillator-types">
+                  <input name="Detune" class="darkgreen" title="Detune" data-template="knob-template" type="range" min="-100" max="100" value="0">
+                  <input name="Portamento" class="darkgreen wobble-mode-disabled" title="Portam" data-template="knob-template" type="range" min="0" max="0.5" step="0.01" value="0">            
+                </div>
+              </div>
+              
+              <div class="ParameterGroup VCO2Filter">
+                <span title="Vco2 Filter" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
+                <div style="display:flex;flex-direction: row;">
+                  <input name="FilterFreq" class="darkgreen wobble-mode-disabled" title="Freq" data-template="knob-template" type="range" min="0.1" max="1000" value="0.5" step="0.01">
+                  <input name="FilterQ" class="darkgreen wobble-mode-disabled" title="Q" data-template="knob-template" type="range" min="0" max="5" value="0.5" step="0.01">
+                  <input name="FilterGain" class="darkgreen wobble-mode-disabled" title="Gain" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="FilterEnvAttack" class="darkgreen wobble-mode-disabled" title="Attack" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="FilterEnvDecay" class="darkgreen wobble-mode-disabled" title="Decay" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="FilterEnvSust" class="darkgreen wobble-mode-disabled" title="Sust." data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="FilterEnvRelease" class="darkgreen wobble-mode-disabled" title="Rel." data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                </div>
+              </div>
+              
+            <!--  <div class="ParameterGroup Filter">
+                <span title="Filter" class="ParameterGroupTitle" data-template="toggle-sectiontitle-template"></span>
+                <div data-template="synth-filter-template"></div>
+              </div>-->
+
+              <div class="ParameterGroup AmpEnv">
+                <span title="Amp" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
+                <div data-template="synth-ampenv-template"></div>
+              </div>
+            </div>
+
+            <canvas name="device-output-meter" class="device-meter device-output-meter meter" data-val="100">No canvas</canvas>
+          </div>
+        </div>
+
+      </template>
+      
       <template id="synth-template" data-class="Synth AudioDevice Device">
         <div class="Container" style="flex-direction: column">
           <span title="Synth" class="SynthTitle DeviceTitle TrackDeviceTitle" data-template="toggle-title-template-h3"></span>
@@ -620,6 +712,17 @@
 
       </template>
 
+      <template id="duo-synth-track-devices-template">
+        <div class="TrackContent">
+          <div class="TrackDevices">
+            <span data-template="sequencer-template"></span>
+            <span data-template="duo-synth-template"></span>
+            <span data-template="effector-template"></span>
+          </div>
+          <div class="TrackMeterContainer"><canvas name="track-output-meter" class="track-meter meter" data-val="0">No canvas</canvas></div>
+        </div>
+      </template>
+      
       <template id="synth-track-devices-template">
         <div class="TrackContent">
           <div class="TrackDevices">
@@ -652,8 +755,8 @@
           <div class="app-buttons">
             <span class="left-buttons">
               <button id="play-button" class="play icon-button"><img src="img/Play_icon.png"></button>
-              <button class="rec icon-button" onclick="audioApp.record()"><img src="img/rec_icon.png"></button>
-              <button class="stop icon-button" onclick="audioApp.stop()"><img src="img/stop_icon.png"></button>
+              <button id="rec-button" class="rec icon-button"><img src="img/rec_icon.png"></button>
+              <button id="stop-button" class="stop icon-button"><img src="img/stop_icon.png"></button>
 
               <button class="load icon-button" onclick="audioApp.browser.show()"><img src="img/open_icon.png"></button>
               <button class="save icon-button" onclick="audioApp.browser.savePreset()"><img src="img/save_icon.png"></button>
@@ -676,9 +779,9 @@
 
             <div id="track1" class="Track">
               <span class="TrackTitle DeviceTitle" title="🎶 Synth Track 1" data-template="toggle-tracktitle-template"></span>
-              <span data-template="synth-track-devices-template"></span>
+              <span data-template="duo-synth-track-devices-template"></span>
             </div>
-
+<!--
             <div id="track2" class="Track">
               <span class="TrackTitle DeviceTitle" title="🎶 Synth Track 2" data-template="toggle-tracktitle-template"></span>
               <span data-template="synth-track-devices-template"></span>
@@ -698,7 +801,7 @@
               <span class="TrackTitle DeviceTitle" title="🥁 Drum track 2" data-template="toggle-tracktitle-template"></span>
               <span data-template="drum-track-devices-template"></span>
             </div>
-
+-->
           </div>
         </div>
       </template>

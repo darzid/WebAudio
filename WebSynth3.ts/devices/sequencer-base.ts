@@ -4,9 +4,9 @@ import { MidiDevice } from "./base-devices/midi-device";
 
 export class SequencerBase extends MidiDevice {
   _stepLength: number = 0;
-  _nextStep = 0;
-  _nextStepTime = 0;
-  _stepLengthElement;
+  _nextStep : number = 0;
+  _nextStepTime: number = 0;
+  _stepLengthElement: HTMLInputElement;
   private _stepCssClass: string;
   private _isPlaying: boolean;
   private _steps: any[] = [];
@@ -21,37 +21,37 @@ export class SequencerBase extends MidiDevice {
     this._stepCssClass = stepCssClass;
 
     this._isPlaying = false;
+    let steps = this.findChildElementHandlers("Step"); 
     
     let loopLengthChanged = () => {
       
       let loopLength: number = this.getPropertyValue("LoopLength");
       Logger.log("LoopLength changed to " + loopLength);
       if (this.playingStep) {
-        if (loopLength > this.steps.indexOf(this.playingStep))
+        if (loopLength > steps.indexOf(this.playingStep))
           this._nextStep = 0;
       }
-      for (let stepIndex = 0; stepIndex < this.steps.length; stepIndex++) {
-        this.steps[stepIndex].element.style.display = (stepIndex < loopLength) ? "flex" : "none";
+      for (let stepIndex = 0; stepIndex < steps.length; stepIndex++) {
+        steps[stepIndex].element.style.display = (stepIndex < loopLength) ? "flex" : "none";
       }
     };
     this.subscribeToPropertyChange("LoopLength", () => loopLengthChanged());
     loopLengthChanged();
     
     this.subscribeToPropertyChange("StepLength", () => this._stepLength = MidiClock.convertTimeSignatureToStepDuration(this.stepLengthText));
-    this._stepLengthElement = this.getPropertyInputElement("StepLength");
-  }
-
-  get steps() { 
-    if (! this._steps) 
-      this._steps = this.findChildElementHandlers(this._stepCssClass); 
-    return this._steps;
+    this._stepLengthElement = this.getPropertyInputElement("StepLength") as HTMLInputElement;
   }
 
   get stepLengthText() { return this._stepLengthElement.dataset.optionValue!; }
 
-  get playingStep() { return this.steps.find(step => step.isPlaying); }
+  get playingStep() { 
+    let steps = this.findChildElementHandlers("Step"); 
+    return steps.find(step => step.isPlaying); 
+  }
 
-  get currentStepIndex() { return this.playingStep != undefined ? this.steps.indexOf(this.playingStep) : -1; }
+  get currentStepIndex() { 
+    let steps = this.findChildElementHandlers("Step"); 
+    return this.playingStep != undefined ? steps.indexOf(this.playingStep) : -1; }
 
   get stepInterval() { return MidiClock.stepInterval; }
   get measureInterval() { return MidiClock.measureInterval; }
@@ -74,12 +74,23 @@ export class SequencerBase extends MidiDevice {
   
   // New scheduler method
   scheduleNextStep() {
-    if (this.playingStep)
-      this.playingStep.isPlaying = false;
-      
-    this.steps[this._nextStep].play(this._nextStepTime, this._nextStep);
+    let steps = this.findChildElementHandlers("Step"); 
+    let playingStep = steps.find(step => step.isPlaying); 
+    if (playingStep) {
+      this.playingStep.isPlaying = false
+      Logger.log("prev step")
+    }
+    else
+      Logger.log("no prev step")
     
-    this._nextStepTime += this.stepLength;
+    
+    let nextStep = steps[this._nextStep];
+    Logger.log("schedule next step", steps, nextStep, this._nextStepTime, MidiClock.tempo, this.stepLengthText)
+    nextStep.play(this._nextStepTime, this._nextStep);
+    
+    let stepLength : number = MidiClock.convertTimeSignatureToStepDuration(this.stepLengthText) as number;
+    this._nextStepTime = this._nextStepTime + stepLength;
+    Logger.log("schedule next step time", this._nextStepTime, stepLength)
     this._nextStep++;
     if (this._nextStep == this.loopLength)
       this._nextStep = 0;

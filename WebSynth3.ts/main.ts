@@ -9,7 +9,7 @@ import { Synth } from "./devices/synth";
 import { Track } from "./devices/track";
 import { AudioApp } from "./devices/audio-app";
 import { applyTemplates } from "./lib-ts/template-expander/template-expander";
-
+import { setupKnob } from "./lib-ts/knob/knob"
 Logger.log('TypeScript works!');
 
 var audioApp = null;
@@ -56,6 +56,11 @@ export function initialize() {
 
   document.querySelectorAll(".collapser").forEach(span => span.addEventListener("click", () => toggleNextSiblingVisibility(span.parentElement!)));
   document.querySelectorAll("button.Enabled").forEach(span => span.addEventListener("click", () => toggleEnabled()));
+  document.querySelector("#play-button").addEventListener("click", async () => await audioApp.play());
+  document.querySelector("#rec-button").addEventListener("click", async () => await audioApp.record());
+  document.querySelector("#stop-button").addEventListener("click", async () => await audioApp.stop());
+  
+  document.querySelectorAll("button.play-step").forEach(button => button.addEventListener("click", () => stepOnOffClick(button)));
 }
 
 function renderTemplates() {
@@ -78,8 +83,9 @@ function applyInputLists() {
 }
 
 function setupKnobs() {
-  let knobs = document.querySelectorAll(".knob");
-  // knobs.forEach(knob => setupKnob(knob));
+  Logger.log("Setting up knobs");
+  let knobs: NodeListOf<HTMLDivElement> = document.querySelectorAll("div.knob");
+  knobs.forEach(knob => setupKnob(knob));
   Logger.log("knobs setup done")
 }
 

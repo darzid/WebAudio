@@ -1,3 +1,5 @@
+import { Logger } from "../logger";
+
 export class MidiClock {
   static _tempo: number;
   static _isRunning = false;
@@ -12,7 +14,7 @@ export class MidiClock {
   }
 
   static get secondsPerStep() { return this.secondsPerBeat / 4; }
-  static get secondsPerBeat() { return 60.0 / this._tempo; }
+  static get secondsPerBeat() { return 60.0 / this.tempo; }
   static get secondsPerMeasure() { return this.secondsPerBeat * 4; }
 
   static get stepInterval() { return this.secondsPerStep * 1000; }
@@ -39,7 +41,7 @@ export class MidiClock {
     return beatTimings;
   }
   
-  static getStepsPerMeasure(timeSignature: string) {
+  static getStepsPerMeasure(timeSignature: string): number {
     if (timeSignature == "-") {
       return 0;
     }
@@ -64,6 +66,7 @@ export class MidiClock {
       timeSignature = "1/16";
 
     let stepsPerMeasure = MidiClock.getStepsPerMeasure(timeSignature);
+    Logger.log("Midiclock.convert " + stepsPerMeasure, timeSignature)
     return MidiClock.secondsPerMeasure / stepsPerMeasure;
   }
 }

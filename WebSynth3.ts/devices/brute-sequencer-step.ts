@@ -4,8 +4,9 @@ import { MidiClock } from "./../lib-ts/web-audio/midi-clock";
 import { AudioApp } from "./audio-app";
 import { BruteSequencer } from "./brute-sequencer";
 import { Track } from "./track";
+import { Device } from "./base-devices/device";
 
-export class BruteSequencerStep extends ElementHandler {
+export class BruteSequencerStep extends Device {
   constructor(element: HTMLElement, elementClass: string) {
     super(element, elementClass);
     

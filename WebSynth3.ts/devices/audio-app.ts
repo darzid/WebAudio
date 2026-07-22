@@ -126,11 +126,12 @@ export class AudioApp extends AudioDevice {
       return;
     this.isPlaying = true;
 
-    // this.tracks.forEach(track => track.sequencer.start(Tone.now()));
+    this.tracks.forEach(track => track.sequencer.start(Tone.now() + this._scheduleAheadTime));
     this._timerWorker!.postMessage("start");
 
     //this.tracks.forEach(track => track.startSequencer(Tone.now() + (10 * this.renderTime)));
     //this.isPlaying = true;
+    Logger.log("Started")
   }
 
   async record() {
@@ -158,10 +159,11 @@ export class AudioApp extends AudioDevice {
   }
 
   async stop() {
+    Logger.log("Stopping")
     // let time = Tone.now();
     this.isPlaying = false;
     this._timerWorker!.postMessage("stop");
-    this.tracks.forEach(track => track.sequencer.stop());
+    //this.tracks.forEach(track => track.sequencer.stop());
     Logger.log(this._log.split("\n").sort().join("\n"));
 
     if (this._recording) {
@@ -171,6 +173,7 @@ export class AudioApp extends AudioDevice {
       Logger.log("recorder stopped");
       this._recording = false;
     }
+    Logger.log("stopped");
   }
 
   lowerBpm() {
@@ -192,7 +195,7 @@ export class AudioApp extends AudioDevice {
 
   private async init() {
     Logger.log("AudioApp.init(): Starting Tone")
-    // await Tone.start();
+    await Tone.start();
 
     this._monitor = document.querySelector(".monitor");
     this._timerWorker = new Worker("../../lib/web-audio/timer-worker.js");
@@ -210,9 +213,12 @@ export class AudioApp extends AudioDevice {
 
   private scheduler() {
     this.tracks.forEach(track => {
-      // while (track.sequencer.nextStepTime <= Tone.now() + this._scheduleAheadTime) {
-      //   track.sequencer.scheduleNextStep();
-      // }
+      let steps = 0;
+      while (track.sequencer.nextStepTime <= Tone.now()  + this._scheduleAheadTime) {
+         track.sequencer.scheduleNextStep();
+         steps++;
+      }
+      Logger.log("Scheduled steps " + steps, Tone.now());
     });
     this.monitorAudioContext();
   }

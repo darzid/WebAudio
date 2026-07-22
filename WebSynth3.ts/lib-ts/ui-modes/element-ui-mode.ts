@@ -1,4 +1,4 @@
-import { Logger } from "../../../lib-ts/logger";
+import { Logger } from "../logger";
 
 export class ElementUIMode {
   _activationEventHandler: (e: any) => void;

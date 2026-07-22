@@ -285,11 +285,19 @@ div.velocity {
         .Device {
 
           h3,
-          h4 {
+          h4, h5.section {
             background-color: var(--device-title-bg);
             border-radius: 0.2em;
           }
 
+          h5.section {
+            color: rgb(128,90,90);
+          }
+          
+          h5 {
+            font-size: smaller;
+          }
+          
           .DeviceTitle {
             background-color: var(--device-title-bg);
             border-radius: 0.2em;
