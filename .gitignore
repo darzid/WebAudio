@@ -427,3 +427,5 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+/dist/*
+./WebSynth3.ts/node_modules/*
