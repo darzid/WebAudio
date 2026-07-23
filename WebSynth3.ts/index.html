@@ -462,72 +462,62 @@
               <div class="ParameterGroup Tone">
                 <span title="Tone" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
                 <div style="display:flex;flex-direction: row;">
-                  <input name="Harmonicity" class="darkgreen wobble-mode-disabled" title="Harm." data-template="knob-template" type="range" min="1" max="20" step="0.1" value="20">
-                  <input name="Detune" class="darkgreen" title="Detune" data-template="knob-template" type="range" min="-100" max="100" value="0">
-                  <input name="Portamento" class="darkgreen wobble-mode-disabled" title="Portam." data-template="knob-template" type="range" min="0" max="0.5" step="0.01" value="0">
+                  <input name="harmonicity" class="darkgreen wobble-mode-disabled" title="Harm." data-template="knob-template" type="range" min="1" max="20" step="0.1" value="0">
+                  <input name="detune" class="darkgreen" title="Detune" data-template="knob-template" type="range" min="-1200" max="1200" value="0">
+                  <input name="portamento" class="darkgreen wobble-mode-disabled" title="Portam." data-template="knob-template" type="range" min="0" max="1" step="0.01" value="1">
                 </div>
               </div>
               
               <div class="ParameterGroup Vibrato">
                 <span title="Vibrato" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
                 <div style="display:flex;flex-direction: row;">
-                  <input name="VibratoAmount" class="darkgreen wobble-mode-disabled" title="Amount" data-template="knob-template" type="range" min="-2" max="2" value="0">
-                  <input name="VibratoRate" class="darkgreen wobble-mode-disabled" title="Rate" data-template="knob-template" type="range" min="-2" max="2" value="0">
+                  <input name="vibratoAmount" class="darkgreen wobble-mode-disabled" title="Amount" data-template="knob-template" type="range" min="0" max="1" step="0.01" value="1">
+                  <input name="vibratoRate" class="darkgreen wobble-mode-disabled" title="Rate" data-template="knob-template" type="range" min="0" max="200" value="100">
                 </div>
               </div>
 
-              <div class="ParameterGroup VCO1">
+              <div name="voice0" class="ParameterGroup voice0">
                 <span title="Vco1" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
                 <div style="display:flex;flex-direction: row;">
-                  <input name="Type" class="darkgreen wobble-mode-disabled" title="Type" data-template="knob-template" type="range" min="0" value="3" list="oscillator-types">
-                  <input name="Detune" class="darkgreen" title="Detune" data-template="knob-template" type="range" min="-100" max="100" value="0">
-                   <input name="Portamento" class="darkgreen wobble-mode-disabled" title="Portam." data-template="knob-template" type="range" min="0" max="0.5" step="0.01" value="0">
+                  <input name="voice0_type" class="darkgreen wobble-mode-disabled" title="Type" data-template="knob-template" type="range" min="0" value="3" list="oscillator-types">
+                  <input name="voice0_detune" class="darkgreen" title="Detune" data-template="knob-template" type="range" min="-100" max="100" value="0">
+                  <input name="voice0_portamento" class="darkgreen wobble-mode-disabled" title="Portam." data-template="knob-template" type="range" min="0" max="1" step="0.01" value="10">
                 </div>
               </div>
               
-              <div class="ParameterGroup VCO1Filter">
+              <div name="voice0_filter" class="ParameterGroup voice0Filter">
                 <span title="Vco1 Filter" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
                 <div style="display:flex;flex-direction: row;">
-                  <input name="FilterFreq" class="darkgreen wobble-mode-disabled" title="Freq" data-template="knob-template" type="range" min="0.1" max="1000" value="0.5" step="0.01">
-                  <input name="FilterQ" class="darkgreen wobble-mode-disabled" title="Q" data-template="knob-template" type="range" min="0" max="5" value="0.5" step="0.01">
-                  <input name="FilterGain" class="darkgreen wobble-mode-disabled" title="Gain" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
-                  <input name="FilterEnvAttack" class="darkgreen wobble-mode-disabled" title="Attack" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
-                  <input name="FilterEnvDecay" class="darkgreen wobble-mode-disabled" title="Decay" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
-                  <input name="FilterEnvSust" class="darkgreen wobble-mode-disabled" title="Sust." data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
-                  <input name="FilterEnvRelease" class="darkgreen wobble-mode-disabled" title="Rel." data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="voice0_filter_frequency" class="darkgreen wobble-mode-disabled" title="Freq" data-template="knob-template" type="range" min="0.1" max="1000" value="0.5" step="0.01">
+                  <input name="voice0_filter_Q" class="darkgreen wobble-mode-disabled" title="Q" data-template="knob-template" type="range" min="0" max="5" value="0.5" step="0.01">
+                  <input name="voice0_filter_gain" class="darkgreen wobble-mode-disabled" title="Gain" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="voice0_filterEnvelope_attack" class="darkgreen wobble-mode-disabled" title="Attack" data-template="knob-template" type="range" min="0" max="2" value="0.5" step="0.01">
+                  <input name="voice0_filterEnvelope_decay" class="darkgreen wobble-mode-disabled" title="Decay" data-template="knob-template" type="range" min="0" max="2" value="1" step="0.01">
+                  <input name="voice0_filterEnvelope_sustain" class="darkgreen wobble-mode-disabled" title="Sust." data-template="knob-template" type="range" min="0" max="2" value="0.5" step="0.01">
+                  <input name="voice0_filterEnvelope_release" class="darkgreen wobble-mode-disabled" title="Rel." data-template="knob-template" type="range" min="0" max="2" value="0.1" step="0.01">
                 </div>
               </div>
               
-              <div class="ParameterGroup VCO2">
+              <div name="voice1" class="ParameterGroup voice1">
                 <span title="Vco2" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
                 <div style="display:flex;flex-direction: row;">
-                  <input name="Type" class="darkgreen wobble-mode-disabled" title="Type" data-template="knob-template" type="range" min="0" value="3" list="oscillator-types">
-                  <input name="Detune" class="darkgreen" title="Detune" data-template="knob-template" type="range" min="-100" max="100" value="0">
-                  <input name="Portamento" class="darkgreen wobble-mode-disabled" title="Portam" data-template="knob-template" type="range" min="0" max="0.5" step="0.01" value="0">            
+                  <input name="voice1_type" class="darkgreen wobble-mode-disabled" title="Type" data-template="knob-template" type="range" min="0" value="3" list="oscillator-types">
+                  <input name="voice1_detune" class="darkgreen" title="Detune" data-template="knob-template" type="range" min="-100" max="100" value="0">
+                  <input name="voice1_portamento" class="darkgreen wobble-mode-disabled" title="Portam" data-template="knob-template" type="range" min="0" max="0.5" step="0.01" value="0">            
                 </div>
               </div>
               
-              <div class="ParameterGroup VCO2Filter">
+              <div name="voice1_filter" class="ParameterGroup voice1Filter">
                 <span title="Vco2 Filter" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
                 <div style="display:flex;flex-direction: row;">
-                  <input name="FilterFreq" class="darkgreen wobble-mode-disabled" title="Freq" data-template="knob-template" type="range" min="0.1" max="1000" value="0.5" step="0.01">
-                  <input name="FilterQ" class="darkgreen wobble-mode-disabled" title="Q" data-template="knob-template" type="range" min="0" max="5" value="0.5" step="0.01">
-                  <input name="FilterGain" class="darkgreen wobble-mode-disabled" title="Gain" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
-                  <input name="FilterEnvAttack" class="darkgreen wobble-mode-disabled" title="Attack" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
-                  <input name="FilterEnvDecay" class="darkgreen wobble-mode-disabled" title="Decay" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
-                  <input name="FilterEnvSust" class="darkgreen wobble-mode-disabled" title="Sust." data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
-                  <input name="FilterEnvRelease" class="darkgreen wobble-mode-disabled" title="Rel." data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="voice1_filter_frequency" class="darkgreen wobble-mode-disabled" title="Freq" data-template="knob-template" type="range" min="0.1" max="1000" value="0.5" step="0.01">
+                  <input name="voice1_filter_Q" class="darkgreen wobble-mode-disabled" title="Q" data-template="knob-template" type="range" min="0" max="5" value="0.5" step="0.01">
+                  <input name="voice1_filter_gain" class="darkgreen wobble-mode-disabled" title="Gain" data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="voice1_filterEnvelope_attack" class="darkgreen wobble-mode-disabled" title="Attack" data-template="knob-template" type="range" min="0" max="2" value="0.01" step="0.01">
+                  <input name="voice1_filterEnvelope_decay" class="darkgreen wobble-mode-disabled" title="Decay" data-template="knob-template" type="range" min="0" max="2" value="0.5" step="0.01">
+                  <input name="voice1_filterEnvelope_sustain" class="darkgreen wobble-mode-disabled" title="Sust." data-template="knob-template" type="range" min="0" max="1" value="0.5" step="0.01">
+                  <input name="voice1_filterEnvelope_release" class="darkgreen wobble-mode-disabled" title="Rel." data-template="knob-template" type="range" min="0" max="2" value="0.1" step="0.01">
                 </div>
-              </div>
-              
-            <!--  <div class="ParameterGroup Filter">
-                <span title="Filter" class="ParameterGroupTitle" data-template="toggle-sectiontitle-template"></span>
-                <div data-template="synth-filter-template"></div>
-              </div>-->
-
-              <div class="ParameterGroup AmpEnv">
-                <span title="Amp" class="ParameterGroupTitle" data-template="sectiontitle-template"></span>
-                <div data-template="synth-ampenv-template"></div>
               </div>
             </div>
 
@@ -762,9 +752,9 @@
               <button class="save icon-button" onclick="audioApp.browser.savePreset()"><img src="img/save_icon.png"></button>
 
               <div class="bpm-buttons">
-                <button class="lower-bpm bpm icon-button" title="Lower BPM" onclick="audioApp.lowerBpm()"><img src="img/down_icon.png"></button>
+                <button id="lowerbpm-button" class="lower-bpm bpm icon-button" title="Lower BPM"><img src="img/down_icon.png"></button>
                 <div class="bpm-text"></div>
-                <button class="higher-bpm bpm icon-button" title="Higher BPM" onclick="audioApp.higherBpm()"><img src="img/up_icon.png"></button>
+                <button id="higherbpm-button" class="higher-bpm bpm icon-button" title="Higher BPM" ><img src="img/up_icon.png"></button>
               </div>
             </span>
 

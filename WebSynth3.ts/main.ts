@@ -62,6 +62,8 @@ export function initialize() {
   document.querySelector("#play-button").addEventListener("click", async () => await audioApp.play());
   document.querySelector("#rec-button").addEventListener("click", async () => await audioApp.record());
   document.querySelector("#stop-button").addEventListener("click", async () => await audioApp.stop());
+  document.querySelector("#lowerbpm-button").addEventListener("click", async () => await audioApp.lowerBpm());
+  document.querySelector("#higherbpm-button").addEventListener("click", async () => await audioApp.higherBpm());
   
   document.querySelectorAll("button.play-step").forEach(button => button.addEventListener("click", () => stepOnOffClick(button)));
 }
