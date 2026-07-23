@@ -28,8 +28,8 @@ export function applyControlTemplate(element: HTMLElement, itemTemplate: HTMLTem
   }
   else {
     for (var i = 0; i < element.attributes.length; i++){ 
-    let name = element.attributes[i].name;
-    let value = element.attributes[i].value;
+    let name = element.attributes[i]!.name;
+    let value = element.attributes[i]!.value;
     
     if (!templatedElement.getAttribute(name)) {
       Logger.log("copying att " + name, value);

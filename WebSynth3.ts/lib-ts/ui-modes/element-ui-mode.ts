@@ -1,17 +1,17 @@
 import { Logger } from "../logger";
 
-export class ElementUIMode {
+export class ElementUIMode<TI, TC> {
   _activationEventHandler: (e: any) => void;
   _deactivationEventHandler: (e: any) => void;
   element: HTMLElement;
   name: string;
-  initialState: string;
-  currentState: string;
+  initialState: TI;
+  currentState: TC;
   modeCssClass: string;
   modeDisabledCssClass: string;
   activationEvent: string;
   deactivationEvent: string;
-  constructor(element: HTMLElement, name: string, activationEvent: string, deactivationEvent: string, initialState: string, currentState: string) {
+  constructor(element: HTMLElement, name: string, activationEvent: string, deactivationEvent: string, initialState: TI, currentState: TC) {
     this.element = element;
     this.name = name;
     this.initialState = initialState;
@@ -30,7 +30,7 @@ export class ElementUIMode {
   get isDisabled() { return this.element.classList.contains(this.modeDisabledCssClass); }
   //this.element.querySelector(`input.${this.modeDisabledCssClass}`) != null; }
   
-  processActivationEvent(e: { detail: { element: HTMLElement; }; }) {
+  processActivationEvent(e: CustomEvent) {
     if (e.detail.element != this.element) 
       return;
     if (this.isDisabled)
@@ -50,7 +50,7 @@ export class ElementUIMode {
       document.addEventListener(this.deactivationEvent, this._deactivationEventHandler);
   }
   
-  activate(e: { detail: { element: HTMLElement; }; }) {
+  activate(e: CustomEvent) {
 
   }
   

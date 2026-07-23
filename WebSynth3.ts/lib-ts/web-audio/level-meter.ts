@@ -1,6 +1,5 @@
-import { Logger } from "../../../lib-ts/logger";
-import { VuMeter } from "../../../lib-ts/vu-meter";
-import "tone"; 
+import { Logger } from "../logger";
+import { VuMeter } from "../vu-meter";
 export class LevelMeterManager {
   static meters: LevelMeter[]  = [];
 

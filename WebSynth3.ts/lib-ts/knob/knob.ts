@@ -1,10 +1,24 @@
 import { Logger } from "../logger";
-import { ElementUIMode } from "../ui-modes/element-ui-mode" ;
+import { ElementUIMode } from "../ui-modes/element-ui-mode";
 
-export function setupKnob(knob: HTMLDivElement) {
-  
-  class WobbleMode extends ElementUIMode {
-    constructor(knob: HTMLInputElement) {
+export function setupKnob(knob: HTMLElement) {
+  const initialWobbleModeState = {
+    startValue: 0,
+    framesPerSecond: 0
+  };
+  const currentWobbleModeState = {
+    wobbleDepth: 0,
+    wobbleRate: 0,
+    wobbleRange: 0,
+    wobbleValue: 0,
+    currentRadian: 0,
+    radianStepPerFrame: 0
+  };
+
+
+  class WobbleMode extends ElementUIMode<typeof initialWobbleModeState, typeof currentWobbleModeState> {
+    _processWobbleChangeEventHandler: (e: CustomEvent) => void;
+    constructor(knob: HTMLElement) {
       super(knob, "wobble", "DoubleTap", "DoubleTap",
         {
           framesPerSecond: 100,
@@ -18,32 +32,36 @@ export function setupKnob(knob: HTMLDivElement) {
           wobbleValue: 0,
           currentRadian: 0
         });
-      this._processWobbleChangeEventHandler = (e) => this.processWobbleChangeEvent(e);
+      this._processWobbleChangeEventHandler = (e: CustomEvent) => this.processWobbleChangeEvent(e);
     }
 
-    activate(e) {
+    activate(e: CustomEvent) {
       if (knobUIModes.wobbleConfigMode.isActive)
         return;
 
       super.activate(e);
-      this.initialState.startValue = parseFloat(knobInput.value);
-      this.currentState.wobbleRate = parseFloat(this.element.dataset.wobbleRate);
-      this.currentState.wobbleDepth = parseFloat(this.element.dataset.wobbleDepth);
+
+      const initialState = this.initialState as { startValue?: number; framesPerSecond?: number;[key: string]: any };
+      const currentState = this.currentState as { wobbleDepth?: number; wobbleRate?: number;[key: string]: any };
+
+      initialState["startValue"] = parseFloat(knobInput.value);
+      currentState["wobbleRate"] = parseFloat(this.element.dataset.wobbleRate!);
+      currentState.wobbleDepth = parseFloat(this.element.dataset.wobbleDepth!);
 
       this.calculateWobble();
-      document.addEventListener("WobbleChange", this._processWobbleChangeEventHandler);
+      document.addEventListener("WobbleChange", (e: Event) => this._processWobbleChangeEventHandler(e as CustomEvent));
 
-      consoleLog(`Start wobbling:`, this.initialState, this.currentState);
+      Logger.log(`Start wobbling:`, this.initialState, this.currentState);
 
-      window.setTimeout(() => this.wobbleValue(), 1000 / this.initialState.framesPerSecond);
+      window.setTimeout(() => this.wobbleValue(), 1000 / this.initialState.framesPerSecond!);
     }
 
-    processWobbleChangeEvent(e) {
+    processWobbleChangeEvent(e: CustomEvent) {
       if (e.detail.element == this.element) {
         this.currentState.wobbleDepth = e.detail.wobbleDepth;
         this.currentState.wobbleRate = e.detail.wobbleRate;
         this.calculateWobble();
-        consoleLog("WobbleChange", this.currentState)
+        Logger.log("WobbleChange", this.currentState)
       }
     }
 
@@ -56,8 +74,8 @@ export function setupKnob(knob: HTMLDivElement) {
     wobbleValue() {
       if (this.isActive) {
         let valueWobble = this.initialState.startValue + Math.sin(this.currentState.currentRadian) * this.currentState.wobbleRange;
-        this.currentState.wobbleValue = valueWobble.toFixed(knobDefinition.valueDecimals);
-        setKnobValue(parseFloat(this.currentState.wobbleValue));
+        this.currentState.wobbleValue = parseFloat(valueWobble.toFixed(knobDefinition.valueDecimals));
+        setKnobValue(this.currentState.wobbleValue);
         this.currentState.currentRadian += this.currentState.radianStepPerFrame;
 
         window.setTimeout(() => this.wobbleValue(), 1000 / this.initialState.framesPerSecond);
@@ -67,14 +85,35 @@ export function setupKnob(knob: HTMLDivElement) {
     deactivate() {
       if (knobUIModes.wobbleConfigMode.isActive)
         return;
-      document.removeEventListener("WobbleChange", this._processWobbleChangeEventHandler);
+      document.removeEventListener("WobbleChange", (e: Event) => this._processWobbleChangeEventHandler(e as CustomEvent));
       setKnobValue(this.initialState.startValue);
       super.deactivate();
     }
   }
-  
-  class WobbleConfigMode extends ElementUIMode {
-    noMovementTimer;
+
+  const initialWobbleConfigModeState = {
+    x: 0,
+    y: 0,
+    framesPerSecond: 0,
+    wobbleDepth: 0,
+    wobbleRate: 0,
+    startValue: 0,
+    targetRectangle: new DOMRect()
+  };
+  const currentWobbleConfigModeState = {
+    x: 0,
+    y: 0,
+    wobbleDepth: 0,
+    wobbleRate: 0,
+    wobbleRange: 0,
+    currentRadian: 0,
+    radianStepPerFrame: 0,
+    deltaX: 0,
+    deltaY: 0
+  };
+
+  class WobbleConfigMode extends ElementUIMode<typeof initialWobbleConfigModeState, typeof currentWobbleConfigModeState> {
+    noMovementTimer: any;
     noMovementDuration = 5000;
 
     constructor(knob: HTMLInputElement) {
@@ -85,11 +124,17 @@ export function setupKnob(knob: HTMLDivElement) {
           y: 0,
           wobbleDepth: 0,
           wobbleRate: 0,
+          startValue: 0,
           targetRectangle: knob.getBoundingClientRect()
         },
         {
+          x: 0,
+          y: 0,
           wobbleDepth: 0,
           wobbleRate: 0,
+          wobbleRange: 0,
+          currentRadian: 0,
+          radianStepPerFrame: 0,
           deltaX: 0,
           deltaY: 0
         });
@@ -97,14 +142,14 @@ export function setupKnob(knob: HTMLDivElement) {
 
     get isDisabled() { return knobUIModes.wobbleMode.isDisabled; }
 
-    activate(e) {
+    activate(e: CustomEvent<any>) {
       super.activate(e);
-      consoleLog(e);
+      Logger.log(e.toString());
 
       //document.dispatchEvent(new CustomEvent("WobbleConfigStarted", { detail: {element: knob }}));
 
-      this.initialState.wobbleDepth = parseFloat(this.element.dataset.wobbleDepth);
-      this.initialState.wobbleRate = parseFloat(this.element.dataset.wobbleRate);
+      this.initialState.wobbleDepth = parseFloat(this.element.dataset.wobbleDepth!);
+      this.initialState.wobbleRate = parseFloat(this.element.dataset.wobbleRate!);
       this.currentState.wobbleDepth = this.initialState.wobbleDepth;
       this.currentState.wobbleRate = this.initialState.wobbleRate;
 
@@ -117,11 +162,11 @@ export function setupKnob(knob: HTMLDivElement) {
       this.currentState.radianStepPerFrame = ((2 * Math.PI) * this.currentState.wobbleRate) / this.initialState.framesPerSecond;
       this.element.addEventListener("touchmove", (e) => this.pointerMove(e));
       //this.noMovementTimer = setTimeout(() => this.noMovementDetected(), this.noMovementDuration);
-      consoleLog(`Start wobble config:`, this.initialState, this.currentState);
+      Logger.log(`Start wobble config:`, this.initialState, this.currentState);
     }
 
-    pointerMove(e) {
-      //consoleLog("PointerMoved", e)
+    pointerMove(e: TouchEvent) {
+      //Logger.log("PointerMoved", e)
       if (this.isActive) {
         var position = getEventElementPosition(e);
         this.currentState.deltaX = position.x - this.initialState.x;
@@ -136,52 +181,55 @@ export function setupKnob(knob: HTMLDivElement) {
 
         // clearTimeout(() => this.noMovementTimer);
         //this.noMovementTimer = setTimeout(() => this.noMovementDetected(), this.noMovementDuration);
-        consoleLog("Move", this.initialState, this.currentState)
-        //consoleLog(`X=${position.x}, Y=${position.y}, DX=${_wobbleConfigDeltaX}, DY=${_wobbleConfigDeltaY}, XR=${deltaXToWidthRatio}, YR=${deltaYToHeightRatio}, WCD=${_wobbleConfigNewDepth}, WCR=${_wobbleConfigNewRate}`);
+        Logger.log("Move", this.initialState, this.currentState)
+        //Logger.log(`X=${position.x}, Y=${position.y}, DX=${_wobbleConfigDeltaX}, DY=${_wobbleConfigDeltaY}, XR=${deltaXToWidthRatio}, YR=${deltaYToHeightRatio}, WCD=${_wobbleConfigNewDepth}, WCR=${_wobbleConfigNewRate}`);
       }
     }
 
     noMovementDetected() {
-      consoleLog(`No movement detected for ${this.name}`);
+      Logger.log(`No movement detected for ${this.name}`);
       super.deactivate();
-      consoleLog(`Called super.deactivate for ${this.name}`);
+      Logger.log(`Called super.deactivate for ${this.name}`);
     }
   }
 
-    /*    deactivate() {
-          //this.element.dataset.wobbleDepth = this.currentState.wobbleDepth;
-         // this.element.dataset.wobbleRate = this.currentState.wobbleRate;
-          //document.dispatchEvent(new CustomEvent("WobbleChange", { detail: {element: knob, wobbleDepth: this.currentState.wobbleDepth, wobbleRate: this.currentState.wobbleRate}}));
-          super.deactivate();
-        }*/
-    
+  /*    deactivate() {
+        //this.element.dataset.wobbleDepth = this.currentState.wobbleDepth;
+       // this.element.dataset.wobbleRate = this.currentState.wobbleRate;
+        //document.dispatchEvent(new CustomEvent("WobbleChange", { detail: {element: knob, wobbleDepth: this.currentState.wobbleDepth, wobbleRate: this.currentState.wobbleRate}}));
+        super.deactivate();
+      }*/
 
-  let knobInput = (knob.nodeName == "INPUT") ? knob : knob.querySelector("input");
+
+  let knobInput: HTMLInputElement = (knob.nodeName == "INPUT") ? knob as HTMLInputElement : knob.querySelector("input")!;
   if (!knobInput) {
     Logger.error("Knob input element not found", knob);
     return;
   }
-  
+
   //Logger.log("Knob...")
 
   let knobSvg = knob.querySelector("svg");
   let knobValueLabel = knob.querySelector(".value-label");
-  let dial = knob.querySelector(".dial");
-  let line = knob.querySelector(".position-line");
+  let dial: HTMLElement = knob.querySelector(".dial") as HTMLElement;
+  let line: HTMLElement = knob.querySelector(".position-line") as HTMLElement;
 
-  if (isNaN(knobInput.min)) {
-    consoleError("Knob value is not a number", knobInput);
-    return;
-  }
+  // if (isNaN(parseFloat(knobInput.min))) {
+  //   Logger.error("Knob value is not a number", knobInput);
+  //   return;
+  // }
 
- // Logger.log("Setup knob " + knobInput.name, knob);
-  
-  let knobMin = knobInput.min ? parseFloat(knobInput.getAttribute("min")) : 0;
+  // Logger.log("Setup knob " + knobInput.name, knob);
+
+  let knobMin = knobInput.min ? parseFloat(knobInput.getAttribute("min")!) : 0;
   let knobMax = knobInput.max ? parseFloat(knobInput.max) : 100;
   let stepSize = knobInput.step ? parseFloat(knobInput.step) : 1;
   let knobDefinition = {
     minAngle: -135,
     maxAngle: 135,
+    angleRange: 0,
+    stepAngle: 0,
+    tickAngle: 0,
     steps: 1 + (knobMax - knobMin),
     min: knobMin,
     max: knobMax,
@@ -200,34 +248,33 @@ export function setupKnob(knob: HTMLDivElement) {
   knobDefinition.tickAngle = knobDefinition.angleRange / (knobDefinition.ticks - 1);
 
   if (knobMin < 0) {
-    //consoleLog("min knob", knob)
+    //Logger.log("min knob", knob)
   }
   if (stepSize == 1) {
-    //    consoleLog("Knob " + knob.getAttribute("name"), knobDefinition)
+    //    Logger.log("Knob " + knob.getAttribute("name"), knobDefinition)
   }
 
-  knob.dataset.wobbleRate = 0.25;
-  knob.dataset.wobbleDepth = 0.25;
-  
+  knob.dataset.wobbleRate = "0.25";
+  knob.dataset.wobbleDepth = "0.25";
+
 
   setKnobValue(parseFloat(knobInput.value));
 
   let knobUIModes = {
     wobbleMode: new WobbleMode(knob),
-    wobbleConfigMode: new WobbleConfigMode(knob)
+    wobbleConfigMode: new WobbleConfigMode(knob as HTMLInputElement)
   };
   let mouseDown = false;
-  let mouseY = null, deltaY = null;
-  let pointerType = null;
+  let mouseY = 0;
+  let pointerType: string = "";
 
-  let prevAngle = 0;
   let newAngle = 0;
   let angle = 0;
 
   //Logger.log("Knob settings done", knob);
-  
-function setKnobValue(value, angle) {
-    if (knobInput.value === value)
+
+  function setKnobValue(value: number, previousAngle?: number | null) {
+    if (parseFloat(knobInput.value) === value)
       return;
 
     if (value < knobDefinition.min) {
@@ -244,15 +291,15 @@ function setKnobValue(value, angle) {
     if (line)
       line.style.rotate = angle + "deg";
 
-    knobInput.value = value;
-    knobInput.dataset.value = value;
+    knobInput.value = value.toString();
+    knobInput.dataset.value = value.toString();
     if (knobValueLabel) {
       let listName = knobInput.getAttribute("list");
       if (listName) {
         let list = document.getElementById(listName);
         if (!list) {
-          consoleError("List " + listName + " not found for knob input", knobInput);
-          knobValueLabel.innerHTML = value;
+          Logger.error("List " + listName + " not found for knob input", knobInput);
+          knobValueLabel.innerHTML = value.toString();
           return;
         }
         let option = list.querySelector("option[value='" + value + "']");
@@ -261,78 +308,78 @@ function setKnobValue(value, angle) {
           knobInput.dataset.optionValue = option.innerHTML;
         }
         else {
-          knobValueLabel.innerHTML = floatToFixed(value, knobDefinition.valueDecimals);
+          knobValueLabel.innerHTML = floatToFixed(value, knobDefinition.valueDecimals).toString();
         }
       }
       else {
-        knobValueLabel.innerHTML = floatToFixed(value, knobDefinition.valueDecimals);
+        knobValueLabel.innerHTML = floatToFixed(value, knobDefinition.valueDecimals).toString();
       }
     }
 
     var evnt = knobInput["oninput"];
     if (evnt)
-      evnt.call(knobInput);
+      evnt.call(knobInput, new InputEvent("input"));
 
-    function floatToFixed(value, digits) {
+    function floatToFixed(value: number, digits: number) {
       if (Math.round(value) != value) {
-        let text = parseFloat(value).toFixed(digits);
+        let text = value.toFixed(digits);
         if (text.indexOf(".") > -1) {
           while (text.substring(text.length - 1) == "0") {
             text = text.substring(0, text.length - 1);
           }
-          value = text;
+          value = parseFloat(text);
         }
 
       }
       return value;
     }
   }
-  
-  knob.onkeydown = () => keyDownHandler();
-  knob.onwheel = () => wheelHandler();
 
-  knob.onpointerdown = () => pointerDownHandler();
-  knob.onpointermove = () => pointerMoveHandler();
-  knob.onpointerup = () => pointerUpHandler();
-  knob.onpointerleave = () => pointerLeaveHandler();
+  knob.onkeydown = (e) => keyDownHandler(e);
+  knob.onwheel = (e) => wheelHandler(e);
+
+  knob.onpointerdown = (e) => pointerDownHandler(e);
+  knob.onpointermove = (e) => pointerMoveHandler(e);
+  knob.onpointerup = (e) => pointerUpHandler(e);
+  knob.onpointerleave = (e) => pointerLeaveHandler(e);
 
   //Logger.log("Knob events done", knob);
-  
+
   knobInput.onchange = () => {
     setKnobValue(parseFloat(knobInput.value));
   }
 
-  function keyDownHandler() {
-    let valueStep = !window.event.shiftKey ? knobDefinition.stepSize : knobDefinition.largeStepSize;
-    switch (window.event.key) {
+  function keyDownHandler(e: KeyboardEvent) {
+    let valueStep = !e.shiftKey ? knobDefinition.stepSize : knobDefinition.largeStepSize;
+    switch (e.key) {
       case "ArrowDown":
         decreaseValue(valueStep);
-        window.event.preventDefault();
-        window.event.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
         break;
       case "ArrowUp":
         increaseValue(valueStep);
-        window.event.preventDefault();
-        window.event.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
         break;
     }
   }
 
-  function wheelHandler() {
-    if (window.event.deltaY == 0)
+  function wheelHandler(e: WheelEvent) {
+    if (e.deltaY == 0)
       return;
 
-    let valueStep = !window.event.shiftKey ? knobDefinition.stepSize : knobDefinition.largeStepSize;
+    let valueStep = !e.shiftKey ? knobDefinition.stepSize : knobDefinition.largeStepSize;
 
-    if (window.event.deltaY > 0)
+    if (e.deltaY > 0)
       decreaseValue(valueStep);
-    else if (window.event.deltaY < 0)
+    else if (e.deltaY < 0)
       increaseValue(valueStep);
-    window.event.preventDefault();
-    window.event.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
   }
 
-  function pointerDownHandler() {
+  function pointerDownHandler(e: PointerEvent) {
     mouseDown = true;
 
     if (_doubleTapTimer) {
@@ -341,20 +388,20 @@ function setKnobValue(value, angle) {
       return;
     }
     else {
-      startLongTouchTimer(window.event);
-      startDoubleTapTimer(window.event);
+      startLongTouchTimer();
+      startDoubleTapTimer();
     }
 
 
-   // if (knobUIModes.wobbleConfigMode.isActive)
-     // return;
+    // if (knobUIModes.wobbleConfigMode.isActive)
+    // return;
 
-    mouseY = window.event.y;
+    mouseY = e.y;
     angle = knobInput.dataset.angle ? parseFloat(knobInput.dataset.angle) : 0;
-    pointerType = window.event.pointerType;
+    pointerType = e.pointerType;
   }
 
-  function pointerMoveHandler() {
+  function pointerMoveHandler(e: PointerEvent) {
     document.dispatchEvent(new CustomEvent("PointerMoved", { detail: { element: knob, event: window.event } }));
 
     if (knobUIModes.wobbleConfigMode.isActive)
@@ -362,7 +409,7 @@ function setKnobValue(value, angle) {
 
     if (!mouseDown) return;
 
-    let verticalPointerMovement = mouseY - window.event.y;
+    let verticalPointerMovement = mouseY - e.y;
     let multiplier = (pointerType == "mouse") ? 180 : 90;
     let circleMovement = (verticalPointerMovement / knob.clientHeight) * multiplier;
 
@@ -380,7 +427,7 @@ function setKnobValue(value, angle) {
     setKnobValue(value, newAngle);
   }
 
-  function pointerUpHandler() {
+  function pointerUpHandler(e: PointerEvent) {
     if (_longTouchTimer) {
       stopLongTouchTimer();
     }
@@ -388,10 +435,10 @@ function setKnobValue(value, angle) {
       return;
 
     mouseDown = false;
-    knobInput.dataset.angle = newAngle;
+    knobInput.dataset.angle = newAngle.toString();
   }
 
-  function pointerLeaveHandler() {
+  function pointerLeaveHandler(e: PointerEvent) {
     if (!mouseDown)
       return;
 
@@ -399,76 +446,72 @@ function setKnobValue(value, angle) {
     document.addEventListener("pointerup", documentPointerUpHandler);
   }
 
-  function documentPointerUpHandler() {
-    pointerUpHandler();
+  function documentPointerUpHandler(e: PointerEvent) {
+    pointerUpHandler(e);
     document.removeEventListener("pointermove", pointerMoveHandler);
     document.removeEventListener("pointerup", documentPointerUpHandler);
   }
 
-  let _longTouchTimer;
+  let _longTouchTimer: number | null;
   let _longTouchDuration = 1000;
 
-  let _doubleTapTimer;
+  let _doubleTapTimer: number | null;
   let _doubleTapDuration = 500;
 
   let _longTouchEvent;
   let _longTouchPosition;
 
-//  Logger.log("Long touch confife", knob);
-  
-  function startLongTouchTimer(e) {
-    _longTouchEvent = e;
+  //  Logger.log("Long touch confife", knob);
+
+  function startLongTouchTimer() {
     _longTouchTimer = setTimeout(longTouch, _longTouchDuration);
-   // consoleLog("Start long touch timer");
   }
 
   function longTouch() {
     if (!_longTouchTimer)
       return;
 
-   // consoleLog("Long touch detected", _longTouchEvent);
     stopLongTouchTimer();
-    document.dispatchEvent(new CustomEvent("LongTouch", { detail: { element: knob, event: _longTouchEvent } }));
   }
 
   function stopLongTouchTimer() {
     if (_longTouchTimer) {
       clearTimeout(_longTouchTimer);
       _longTouchTimer = null;
-     // consoleLog("Cleared long touch timer");
+      // Logger.log("Cleared long touch timer");
     }
   }
 
   function startDoubleTapTimer() {
     _doubleTapTimer = setTimeout(doubleTapTimeElapsed, _doubleTapDuration);
-    //consoleLog("Start double tap detection");
+    //Logger.log("Start double tap detection");
   }
 
   function stopDoubleTapTimer() {
     if (!_doubleTapTimer)
       return;
-    //consoleLog(`Stop double tap timer for ${knobInput.name}`);
+    //Logger.log(`Stop double tap timer for ${knobInput.name}`);
     clearTimeout(_doubleTapTimer);
     _doubleTapTimer = null;
   }
 
   function doubleTapTimeElapsed() {
-    //consoleLog(`No double tap detected for ${knobInput.name} in ${_doubleTapDuration}`);
+    //Logger.log(`No double tap detected for ${knobInput.name} in ${_doubleTapDuration}`);
     stopDoubleTapTimer();
   }
 
   function doubleTap() {
-   // consoleLog("Double tap detected for " + knobInput.name);
-    clearTimeout(_doubleTapTimer);
+    // Logger.log("Double tap detected for " + knobInput.name);
+    clearTimeout(_doubleTapTimer!);
     _doubleTapTimer = null;
     document.dispatchEvent(new CustomEvent("DoubleTap", { detail: { element: knob } }));
   }
 
-  function getEventElementPosition(e) {
-    let target = e.target ? e.target : e.touches[0].target;
-    var rect = target.getBoundingClientRect();
-    let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  function getEventElementPosition(e: TouchEvent) {
+    let target: EventTarget = e.target ? e.target : e.touches[0]!.target;
+    var rect = (target as HTMLElement).getBoundingClientRect();
+    let clientX = e.touches ? e.touches[0]!.clientX : rect.x;
+    let clientY = e.touches ? e.touches[0]!.clientY : rect.y;
     var position = {
       x: clientX - rect.left,
       y: clientY - rect.top
@@ -476,18 +519,18 @@ function setKnobValue(value, angle) {
     return position;
   }
 
-  function decreaseValue(valueToDecrease) {
+  function decreaseValue(valueToDecrease: number) {
     let newValue = parseFloat(knobInput.value) - valueToDecrease;
     setKnobValue(newValue);
-    //consoleLog(`decreaseValue with ${valueToDecrease}`);
+    //Logger.log(`decreaseValue with ${valueToDecrease}`);
   }
 
-  function increaseValue(valueToIncrease) {
+  function increaseValue(valueToIncrease: number) {
     let newValue = parseFloat(knobInput.value) + valueToIncrease;
     setKnobValue(newValue);
   }
 }
 
 export function setupKnobs(className: string = "knob") {
-  document.querySelectorAll(`.${className}`).forEach(knob => setupKnob(knob));
+  (document.querySelectorAll(`.${className}`) as NodeListOf<HTMLElement>).forEach(knob => setupKnob(knob));
 }

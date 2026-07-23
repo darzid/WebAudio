@@ -1,10 +1,7 @@
-import { ElementHandlerRegistry } from "../../lib-ts/element-handler-registry/element-handler-registry";
+import { ElementHandlerRegistry } from "./element-handler-registry";
 import { Logger } from "../logger";
 
 export class ElementHandler {
-  logAudioEvent(startTime: any, id: any, arg2: string, arg3: string) {
-    throw new Error("Method not implemented.");
-  }
   _propertyValues: { [key: string]: number | boolean } = {};
   element: HTMLElement;
   elementClass: string;
@@ -82,13 +79,13 @@ export class ElementHandler {
     if (inputElement.type == "range" || inputElement.type == "number") {
       inputElement.oninput = () => {
         storePropertyValue();
-        this._raisePropertyChanged(elementName, this._propertyValues[elementName]);
+        this._raisePropertyChanged(elementName, this._propertyValues[elementName]!);
       };
     }
     else if (inputElement.type == "checkbox") {
       inputElement.onchange = () => {
         storePropertyValue();
-        this._raisePropertyChanged(elementName, this._propertyValues[elementName]);
+        this._raisePropertyChanged(elementName, this._propertyValues[elementName]!);
       };
     }
   }
@@ -143,7 +140,7 @@ export class ElementHandler {
   }
 
   getChildInputElement(elementName: string) {
-    let childElement: HTMLInputElement = this.getPropertyInputElement(elementName);
+    let childElement: HTMLInputElement = this.getPropertyInputElement(elementName)!;
     if (!childElement) {
       throw "Child element not found";
     }
@@ -212,7 +209,7 @@ export class ElementHandler {
     let preset: { [key: string]: any } = {};
     let elementNames = Object.keys(this.childElements);
     elementNames.forEach((name: string) => {
-      let inputElement = this.childElements[name];
+      let inputElement = this.childElements[name]!;
       if (inputElement.nodeName == "INPUT") {
         if (inputElement.type == "range" || inputElement.type == "number")
           preset[name] = inputElement.value;
@@ -224,7 +221,7 @@ export class ElementHandler {
 
     Object.keys(this.childHandlers).forEach(name => {
       preset[name] = [];
-      let childElementHandlers = this.findChildElementHandlers(this.childHandlers[name]);
+      let childElementHandlers = this.findChildElementHandlers(this.childHandlers[name]!);
       childElementHandlers.forEach(handler => preset[name].push(handler.getPreset()));
     });
     return preset;
@@ -250,7 +247,7 @@ export class ElementHandler {
           let childElementHandlers = this.findChildElementHandlers(this.childHandlers[name]);
           for (let childIndex = 0; childIndex < preset[name].length; childIndex++) {
             let childPreset = preset[name][childIndex];
-            childElementHandlers[childIndex].setPreset(childPreset);
+            childElementHandlers[childIndex]!.setPreset(childPreset);
           }
         }
       }
@@ -274,5 +271,5 @@ export class ElementHandler {
 
 export class Preset {
   name: string = "";
-  values: {[key: string]: any} = {};
+  values: { [key: string]: any } = {};
 }

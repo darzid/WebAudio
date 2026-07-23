@@ -33,11 +33,11 @@ export class Track extends AudioDevice {
 
     Logger.log("Connecting audio devices for track " + this.id);
     for (let deviceIndex = 0; deviceIndex < this.audioDevices.length - 1; deviceIndex++) {
-      Logger.log(`Connecting audio device ${this.audioDevices[deviceIndex].name} for track ${this.id}`);
-      this.audioDevices[deviceIndex].output!.connect(this.audioDevices[deviceIndex + 1].input!);
+      Logger.log(`Connecting audio device ${this.audioDevices[deviceIndex]!.name} for track ${this.id}`);
+      this.audioDevices[deviceIndex]!.output!.connect(this.audioDevices[deviceIndex + 1]!.input!);
     }
     if (this.audioDevices.length > 0)
-      this.audioDevices[this.audioDevices.length - 1].output!.connect(this.wetOutput!);
+      this.audioDevices[this.audioDevices.length - 1]!.output!.connect(this.wetOutput!);
 
     this.output!.connect(this.audioApp.wetOutput!);
   }

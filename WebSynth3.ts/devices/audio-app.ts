@@ -1,8 +1,9 @@
 import { Logger } from "../lib-ts/logger";
-import { MidiClock } from "../lib-ts/web-audio/midi-clock.ts";
-import { PresetBrowser } from "../preset-browser.ts";
+import { MidiClock } from "../lib-ts/web-audio/midi-clock";
+import { PresetBrowser } from "../preset-browser";
 import { AudioDevice } from "./base-devices/audio-device";
 import { Track } from "./track";
+// import * as Tone from "tone";
 
 export class AudioApp extends AudioDevice {
   // #### SETTINGS ####
@@ -104,7 +105,7 @@ export class AudioApp extends AudioDevice {
       if (!this.output) {
         Logger.warn("No output om audioapp")
       }
-      this.output!.output.toDestination();
+      this.output!.toDestination();
     }
   }
 
@@ -193,7 +194,7 @@ export class AudioApp extends AudioDevice {
     (document.querySelector(".bpm-text") as HTMLElement).title = MidiClock.tempo + " BPM";
   }
 
-  private async init() {
+  public async init() {
     Logger.log("AudioApp.init(): Starting Tone")
     await Tone.start();
 

@@ -1,7 +1,7 @@
 import { Logger } from "../../lib-ts/logger";
 import { Device } from "./device";
 import { LevelMeterManager } from "../../level-meter";
-//import * as Tone from "../../node_modules/tone/build/esm/index";
+// import * as Tone from "tone";
 
 // export class AudioDeviceNew extends Channel {
 //   private _elementHandler: ElementHandler;
@@ -131,8 +131,10 @@ export class AudioDevice extends Device {
     this.output = new Tone.Channel();
 
     if (hasDryWet) {
-      this.connectFloatPropertyToDecibelsParam(this.dryOutput!.volume, "DryWet", (value) => 1 - value);
-      this.connectFloatPropertyToDecibelsParam(this.wetOutput!.volume, "DryWet");
+      // this.connectFloatPropertyToDecibelsParam(this.dryOutput!.volume, "DryWet", (value) => 1 - value);
+      // this.connectFloatPropertyToDecibelsParam(this.wetOutput!.volume, "DryWet");
+      this.connectPropertyToParam(this.dryOutput!, this.dryOutput!.volume, "DryWet", (value) => 1 - value);
+      this.connectPropertyToParam(this.wetOutput, this.wetOutput!.volume, "DryWet");
     }
     else {
       this.dryOutput!.volume.value = 0;
