@@ -29,7 +29,7 @@ export class ElementHandlerRegistry {
   static processCssClass(cssClass: string, factory: IDeviceFactory) {
     let elements: NodeListOf<HTMLElement> = document.querySelectorAll("." + cssClass);
     elements.forEach((element: HTMLElement) => {
-      Logger.log("processCssClass " + cssClass)
+      Logger.log("processCssClass " + cssClass, element)
       if (!this.findElementHandler(element)) {
         let typeName = this.handlerClasses[cssClass];
         // let constructorString = `new ${typeName}(element, cssClass)`;
@@ -41,6 +41,7 @@ export class ElementHandlerRegistry {
   }
 
   static findElementHandler(element: HTMLElement) {
+    Logger.log("HandlerRegistry.handlers", this.handlers);
     return this.handlers.find(handler => handler.element === element);
   }
 

@@ -2,9 +2,6 @@ import { ElementHandlerRegistry } from "../../lib-ts/element-handler-registry/el
 import { Logger } from "../logger";
 
 export class ElementHandler {
-  logAudioEvent(startTime: any, id: any, arg2: string, arg3: string) {
-    throw new Error("Method not implemented.");
-  }
   _propertyValues: { [key: string]: number | boolean } = {};
   element: HTMLElement;
   elementClass: string;
@@ -13,6 +10,7 @@ export class ElementHandler {
   id: any;
 
   constructor(element: HTMLElement, elementClass: string) {
+    if (!element) throw "No element";
     this.element = element;
     this.elementClass = elementClass;
     this.childElements = {};
@@ -25,6 +23,11 @@ export class ElementHandler {
   }
 
   findChildElementHandlers(cssClass: string): ElementHandler[] {
+    Logger.log("Finding child element handlers for cssClass " + cssClass, this);
+    if (! cssClass) { 
+      return null;
+    }
+    if (! cssClass) throw "Empty css class for element " + this.element
     // querySelectorAll returns a NodeList; convert to an array of HTMLElements
     let childNodeList = this.element.querySelectorAll("." + cssClass);
     // cast elements to HTMLElement and convert NodeList to Array
@@ -34,9 +37,9 @@ export class ElementHandler {
   }
 
   findChildElementHandler(cssClass: string) {
-    let childElement = this.element.querySelector("." + cssClass) as HTMLElement | null;
-    //Logger.log("findChildElementHandlers", childElements)
-    return ElementHandlerRegistry.findElementHandler(childElement as HTMLElement);
+    let childElement = this.element.querySelector("." + cssClass) as HTMLElement;
+    Logger.log("findChildElementHandler for class " + cssClass, childElement)
+    return ElementHandlerRegistry.findElementHandler(childElement);
   }
 
   hasPropertyInputElement(elementPath: string) {

@@ -1,6 +1,6 @@
 import { ElementHandler } from "../../lib-ts/element-handler-registry/element-handler";
 import { Logger } from "../../lib-ts/logger";
-import * as Tone from "tone";
+// import * as Tone from "tone";
 
 export class Device extends ElementHandler {
   name: string;

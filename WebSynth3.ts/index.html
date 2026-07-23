@@ -236,7 +236,7 @@
       <template id="toggle-title-template-h2">
         <h2>
           <input class="Enabled" type="checkbox" name="Enabled" data-template="enabled-template" checked="true">
-          <span onclick="toggleNextSiblingVisibility(window.event.srcElement.parentElement)" class="title">Title</span>
+          <span class="title">Title</span>
           <span class="Expand">🔻</span>
           <span class="Collapse">🔺️</span>
         </h2>
@@ -245,7 +245,7 @@
       <template id="toggle-tracktitle-template">
         <h3>
           <input class="Enabled" type="checkbox" name="Enabled" data-template="enabled-template" checked="true">
-          <span onclick="toggleNextSiblingVisibility(window.event.srcElement.parentElement)" class="title collapser">Title</span>
+          <span class="title collapser">Title</span>
           <span class="Expand">🔻</span>
           <span class="Collapse">🔺️</span>
         </h3>
@@ -254,7 +254,7 @@
       <template id="toggle-title-template-h3">
         <h3>
           <input class="Enabled" type="checkbox" name="Enabled" data-template="enabled-template" checked="true">
-          <span onclick="toggleNextSiblingVisibility(window.event.srcElement.parentElement)" class="title collapser">Title</span>
+          <span class="title collapser">Title</span>
           <span class="Expand">🔻</span>
           <span class="Collapse">🔺️</span>
         </h3>
@@ -651,9 +651,9 @@
 
           <div class="app-buttons">
             <span class="left-buttons">
-              <!-- <button id="play-button" class="play icon-button"><img src="img/Play_icon.png"></button> -->
-              <button class="rec icon-button" onclick="audioApp.record()"><img src="img/rec_icon.png"></button>
-              <button class="stop icon-button" onclick="audioApp.stop()"><img src="img/stop_icon.png"></button>
+              <button id="play-button" class="play icon-button"><img src="img/Play_icon.png"></button>
+              <button id="rec-button" class="rec icon-button"><img src="img/rec_icon.png"></button>
+              <button id="stop-button" class="stop icon-button"><img src="img/stop_icon.png"></button>
 
               <button class="load icon-button" onclick="audioApp.browser.show()"><img src="img/open_icon.png"></button>
               <button class="save icon-button" onclick="audioApp.browser.savePreset()"><img src="img/save_icon.png"></button>
@@ -679,7 +679,7 @@
               <span data-template="synth-track-devices-template"></span>
             </div>
 
-            <div id="track2" class="Track">
+            <!-- <div id="track2" class="Track">
               <span class="TrackTitle DeviceTitle" title="🎶 Synth Track 2" data-template="toggle-tracktitle-template"></span>
               <span data-template="synth-track-devices-template"></span>
             </div>
@@ -697,7 +697,7 @@
             <div id="track5" class="Track" list="group-colors">
               <span class="TrackTitle DeviceTitle" title="🥁 Drum track 2" data-template="toggle-tracktitle-template"></span>
               <span data-template="drum-track-devices-template"></span>
-            </div>
+            </div> -->
 
           </div>
         </div>
@@ -706,7 +706,7 @@
     </span>
 
     <div class="root">
-      <button id="play-button" class="play icon-button" style="width: auto"><img src="img/Play_icon.png" width="50" height="50"></button>
+      <!-- <button id="play-button" class="play icon-button" style="width: auto"><img src="img/Play_icon.png" width="50" height="50"></button> -->
 
       <div data-template="app-template"></div>
 

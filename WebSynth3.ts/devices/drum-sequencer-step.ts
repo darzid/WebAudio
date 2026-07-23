@@ -2,13 +2,14 @@ import { ElementHandler } from "../lib-ts/element-handler-registry/element-handl
 import { Logger } from "../lib-ts/logger";
 import { MidiClock } from "../lib-ts/web-audio/midi-clock";
 import { AudioApp } from "./audio-app";
+import { Device } from "./base-devices/device";
 import { Track } from "./track";
 
-export class DrumSequencerStep extends ElementHandler {
+export class DrumSequencerStep extends Device {
   voices: DrumVoice[];
   _context: null;
   constructor(element: HTMLElement, elementClass: string) {
-    super(element, elementClass);
+    super(element, elementClass, "DrumSequencerStep", "MidiDevice");
     
     Logger.log("Create DrumSequencerStep for element", element);
     const voiceNames = ["CH", "OH", "SD", "BD"];

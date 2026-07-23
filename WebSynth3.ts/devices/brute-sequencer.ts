@@ -1,5 +1,6 @@
 import { Logger } from "../lib-ts/logger";
 import { toggleNextSiblingVisibility } from "../main.ts";
+import { BruteSequencerStep } from "./brute-sequencer-step.ts";
 import { SequencerBase } from "./sequencer-base";
 
 export class BruteSequencer extends SequencerBase {

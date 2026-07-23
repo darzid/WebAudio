@@ -2,7 +2,7 @@ import { NonCustomOscillatorType } from "tone/build/esm/source/oscillator/Oscill
 import { Logger } from "../lib-ts/logger";
 import { toggleNextSiblingVisibility } from "../main.ts";
 import { AudioDevice } from "./base-devices/audio-device";
-import * as Tone from "tone";
+// import * as Tone from "tone";
 
 export class Synth extends AudioDevice {
   private _bypassFilters = false;

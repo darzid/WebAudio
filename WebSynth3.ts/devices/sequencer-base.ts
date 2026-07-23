@@ -1,6 +1,9 @@
 import { Logger } from "../lib-ts/logger";
 import { MidiClock } from "../lib-ts/web-audio/midi-clock";
 import { MidiDevice } from "./base-devices/midi-device";
+import { BruteSequencerStep } from "./brute-sequencer-step";
+import { DrumSequencerStep } from "./drum-sequencer-step";
+import { SequencerStep } from "./sequencer-step";
 
 export class SequencerBase extends MidiDevice {
   _stepLength: number = 0;
@@ -9,16 +12,18 @@ export class SequencerBase extends MidiDevice {
   _stepLengthElement;
   private _stepCssClass: string;
   private _isPlaying: boolean;
-  private _steps: any[] = [];
+  private _steps: SequencerStep[] = [];
   
   constructor(element: HTMLElement, elementClass: string, deviceName: string, stepCssClass: string) {
     super(element, elementClass, deviceName);
     Logger.log("Create SequencerBase for element", element);
+    this._stepCssClass = stepCssClass;
     this.registerPropertyInputElement("Enabled", "input[name='Enabled']");
     this.registerPropertyInputElement("StepLength", "input[name='StepLength']");
     this.registerPropertyInputElement("LoopLength", "input[name='LoopLength']");
+    Logger.log("Trying to register child element handlers for BruteSequencerSteps", element);
+
     this.registerChildElementHandler("Steps", stepCssClass);
-    this._stepCssClass = stepCssClass;
 
     this._isPlaying = false;
     
@@ -43,7 +48,7 @@ export class SequencerBase extends MidiDevice {
 
   get steps() { 
     if (! this._steps) 
-      this._steps = this.findChildElementHandlers(this._stepCssClass); 
+      this._steps = this.findChildElementHandlers(this._stepCssClass) as any[]; 
     return this._steps;
   }
 
@@ -77,6 +82,8 @@ export class SequencerBase extends MidiDevice {
     if (this.playingStep)
       this.playingStep.isPlaying = false;
       
+    if (this.steps.length == 0) throw "Sequencer has no steps";
+
     this.steps[this._nextStep].play(this._nextStepTime, this._nextStep);
     
     this._nextStepTime += this.stepLength;

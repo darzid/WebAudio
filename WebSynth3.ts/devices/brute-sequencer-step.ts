@@ -3,13 +3,14 @@ import { Logger } from "./../lib-ts/logger";
 import { MidiClock } from "./../lib-ts/web-audio/midi-clock";
 import { AudioApp } from "./audio-app";
 import { BruteSequencer } from "./brute-sequencer";
+import { SequencerStep } from "./sequencer-step";
 import { Track } from "./track";
 
-export class BruteSequencerStep extends ElementHandler {
+export class BruteSequencerStep extends SequencerStep {
   constructor(element: HTMLElement, elementClass: string) {
-    super(element, elementClass);
+    super(element, elementClass, "SequencerStep");
     
-  //  Logger.log("Create BruteSequencerStep for element", element);
+    Logger.log("Create BruteSequencerStep for element", element);
     this.registerPropertyInputElement("Note", "input[name='Note']");
     this.registerPropertyInputElement("Velocity", "input[name='Velocity']");
     this.registerPropertyInputElement("Gate", "input[name='Gate']");
@@ -20,7 +21,7 @@ export class BruteSequencerStep extends ElementHandler {
    // let buttons = element.querySelectorAll("button");
    // buttons.forEach(button => button.onclick = () => button.dataset.isOn = !button.dataset.isOn);
     
-    Logger.log("Created BruteSequencerStep for element");
+    Logger.log("Created BruteSequencerStep for element", element);
   }
 
   get audioApp(): AudioApp { return this.getParentElementHandler("AudioApp") as AudioApp; }
@@ -38,9 +39,7 @@ export class BruteSequencerStep extends ElementHandler {
   get pressure() { return this.getPropertyValue("Pressure"); }
   get isOn() { return this.getPropertyValue("OnOff"); }
 
-  get isPlaying() { return this.hasState("is-playing"); }
-  set isPlaying(value) { this.setState("is-playing", value); }
-
+  
   setupAudioGraph() {
   }
   

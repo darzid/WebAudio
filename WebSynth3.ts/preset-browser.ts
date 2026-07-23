@@ -1,4 +1,4 @@
-import { Logger } from "../lib-ts/logger";
+import { Logger } from "./lib-ts/logger";
 import { AudioApp } from "./devices/audio-app";
 
 export class PresetBrowser {

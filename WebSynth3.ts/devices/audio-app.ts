@@ -1,3 +1,4 @@
+// import { Tone } from "https://unpkg.com/tone";
 import { Logger } from "../lib-ts/logger";
 import { MidiClock } from "../lib-ts/web-audio/midi-clock.ts";
 import { PresetBrowser } from "../preset-browser.ts";
@@ -122,11 +123,11 @@ export class AudioApp extends AudioDevice {
       return;
     this.isPlaying = true;
 
-    // this.tracks.forEach(track => track.sequencer.start(Tone.now()));
     this._timerWorker!.postMessage("start");
+    //this.tracks.forEach(track => track.sequencer.start(Tone.now()));
 
-    //this.tracks.forEach(track => track.startSequencer(Tone.now() + (10 * this.renderTime)));
-    //this.isPlaying = true;
+    // this.tracks.forEach(track => track.startSequencer(Tone.now() + (10 * this.renderTime)));
+    // this.isPlaying = true;
   }
 
   async record() {
@@ -188,7 +189,7 @@ export class AudioApp extends AudioDevice {
 
   private async init() {
     Logger.log("AudioApp.init(): Starting Tone")
-    // await Tone.start();
+    await Tone.start();
 
     this._monitor = document.querySelector(".monitor");
     this._timerWorker = new Worker("../../lib/web-audio/timer-worker.js");
@@ -206,9 +207,9 @@ export class AudioApp extends AudioDevice {
 
   private scheduler() {
     this.tracks.forEach(track => {
-      // while (track.sequencer.nextStepTime <= Tone.now() + this._scheduleAheadTime) {
-      //   track.sequencer.scheduleNextStep();
-      // }
+      while (track.sequencer.nextStepTime <= Tone.now() + this._scheduleAheadTime) {
+        track.sequencer.scheduleNextStep();
+      }
     });
     this.monitorAudioContext();
   }

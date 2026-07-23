@@ -1,14 +1,52 @@
-import { ElementHandlerRegistry } from "./lib-ts/element-handler-registry/element-handler-registry";
+import { ElementHandlerRegistry, IDeviceFactory } from "./lib-ts/element-handler-registry/element-handler-registry";
 import { Logger } from "./lib-ts/logger";
-// import { Device } from "./devices/base-devices/device";
-// import { Synth } from "./devices/synth";
-// import { Track } from "./devices/track";
-// import { AudioApp } from "./devices/audio-app";
+import { AudioApp } from "./devices/audio-app";
+import { SequencerBase } from "./devices/sequencer-base";
+import { SequencerStep } from "./devices/sequencer-step";
+import { BruteSequencerStep } from "./devices/brute-sequencer-step";
+import { BruteSequencer } from "./devices/brute-sequencer";
+import { Device } from "./devices/base-devices/device";
+import { DrumSequencerStep } from "./devices/drum-sequencer-step";
+import { DrumSequencer } from "./devices/drum-sequencer";
+import { Synth } from "./devices/synth";
+import { Track } from "./devices/track";
+
 import { applyTemplates } from "./lib-ts/template-expander/template-expander";
 
 Logger.log('TypeScript works!');
 
-var audioApp = null;
+var audioApp: AudioApp | null = null;
+
+export class DeviceFactory implements IDeviceFactory {
+  constructor() {
+    Logger.log("DeviceFactory constructor");
+  }
+
+  create(typeName: string, element: HTMLElement, cssClass: string): Device | undefined {
+    switch (typeName) {
+      case "AudioApp":
+        return new AudioApp(element, cssClass);
+      case "BruteSequencer":
+        return new BruteSequencer(element, cssClass);
+      case "BruteSequencerStep":
+        return new BruteSequencerStep(element, cssClass);
+      case "DrumSequencer":
+        return new DrumSequencer(element, cssClass);
+      case "DrumSequencerStep":
+        return new DrumSequencerStep(element, cssClass);
+      case "Synth":
+        return new Synth(element, cssClass);
+      case "Track":
+        return new Track(element, cssClass);
+      default:
+        return undefined;
+    }
+    // let constructorString = `new ${typeName}(element, cssClass)`;
+    // let instance = eval(constructorString);
+    // return instance;
+    //return null;
+  }
+}
 
 export function initialize() {
   renderTemplates();
@@ -16,18 +54,23 @@ export function initialize() {
   audioAppElement.style.opacity = "0.5";
 
   createElementHandlerRegistry();
-  // let deviceFactory = new DeviceFactory();
-  // ElementHandlerRegistry.processAll(deviceFactory);
+  let deviceFactory = new DeviceFactory();
+  ElementHandlerRegistry.processAll(deviceFactory);
 
-  // audioApp = ElementHandlerRegistry.handlers.find(handler => handler.elementClass == "AudioApp");
+  audioApp = ElementHandlerRegistry.handlers.find(handler => handler.elementClass == "AudioApp") as AudioApp;
+  document.querySelector("#play-button")?.addEventListener("click", async () => await audioApp!.play());
+  document.querySelector("#rec-button")?.addEventListener("click", async () => await audioApp!.record());
+  document.querySelector("#stop-button")?.addEventListener("click", async () => await audioApp!.stop());
 
   // setupAudioGraph();
   setupKnobs();
-  Logger.log("Initialised");
-  Logger.log("Ready");
+  Logger.log("Knobs setup");
   audioAppElement.style.opacity = "1.0";
 
-  //  document.querySelectorAll(".collapser").forEach(div => toggleNextSiblingVisibility(div));
+  let collapserSpans = document.querySelectorAll(".collapser") as NodeListOf<HTMLSpanElement>;
+  collapserSpans.forEach(span => span.addEventListener("click", () => toggleNextSiblingVisibility(span.parentElement)));
+  collapserSpans.forEach(span => toggleNextSiblingVisibility(span.parentElement!));
+  Logger.log("Collapser divs set", collapserSpans);
 }
 
 function renderTemplates() {
@@ -61,9 +104,11 @@ function createElementHandlerRegistry() {
   // ElementHandlerRegistry.registerHandler("Effector", Effector);
   ElementHandlerRegistry.registerHandler("Synth", "Synth");
   // ElementHandlerRegistry.registerHandler("DrumSynth", DrumSynth);
+
   ElementHandlerRegistry.registerHandler("Step", "BruteSequencerStep");
-  ElementHandlerRegistry.registerHandler("BruteSequencer", "BruteSequencer");
   ElementHandlerRegistry.registerHandler("DrumStep", "DrumSequencerStep");
+
+  ElementHandlerRegistry.registerHandler("BruteSequencer", "BruteSequencer");
   ElementHandlerRegistry.registerHandler("DrumSequencer", "DrumSequencer");
 
 
@@ -110,18 +155,3 @@ export function toggleNextSiblingVisibility(element: HTMLElement) {
 initialize();
 Logger.log('Initialized');
 
-// export class DeviceFactory implements IDeviceFactory {
-//   create(typeName: string, element: HTMLElement, cssClass: string): Device {
-//     switch (typeName) {
-//       case "AudioApp":
-//         return new AudioApp(element, cssClass);
-//       case "Synth": 
-//         return new Synth(element, cssClass);
-//       case "Track":
-//         return new Track(element, cssClass);
-//     }
-//     let constructorString = `new ${typeName}(element, cssClass)`;
-//     let instance = eval(constructorString);
-//     return instance;
-//   }
-// }
