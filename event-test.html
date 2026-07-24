@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <style>
+button{
+  background: rgba(0,0,0,0.1);
+  border: 0.05rem solid rgba(50,50,50,0.8);
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;  
+}
+
+.unit > .content > .param-group {
+  flex-direction: column;
+}
+
+.unit > .content > .unit {
+  display: flex;
+  flex-direction: column;
+}
+
+ .unit > h1,
+ .unit > button {
+  font-size: 0.8rem;
+  margin: 0rem;
+  padding: 0.2rem;
+  width: 100%;
+  display: block;
+}
+
+.param > label,
+.param > value {
+  font-size: 0.6rem;
+}
+.param > label {
+  display: block;
+}
+
+ .green {
+   background: rgba(76, 175, 80, 0.6);
+    color: white;  
+ }
+ .toggle-button.green:hover {  
+  background: #45a049;  
+}  
+ .toggle-button.dark-green {
+   background: rgba(0,100,0,0.6);  
+    color: white;  
+ }
+.toggle-button.dark-green:hover {
+   background: darkgreen;  
+    color: white;  
+ }
+
+ .toggle-button.brown {
+   background: rgba(42,120,100,0.6);  
+  color: white;  
+ }
+.toggle-button.brown:hover {
+   background: rgb(42,120,100);
+  color: white;  
+ }
+/* Collapsible Content (Collapsed State) */  
+.content {  
+  height: 0; /* Hide content initially */  
+  overflow: hidden; /* Clip content when collapsed */  
+  transition: opacity 0.2s;
+  transition: height 0.2s;
+  opacity: 0;  
+  display: block;
+}  
+
+/* Expanded State */  
+.content.expanded {  
+  height: 100%;/* Larger than content's actual height */  
+  opacity: 1; /* Fade in */  
+  transition2: height 0.2s;
+  transition2: opacity 2s;
+}  
+
+.device, 
+.unit {
+  border: 0.05rem solid rgba(50,50,50,0.8);
+  border-radius: 0.2rem;
+  background: rgba(0,0,0,0.2);
+  margin: 0.1rem;
+  padding: 0rem;
+}
+
+.device > button,
+.unit > button {
+  border: 0.05rem solid rgba(50,50,50,0.8);
+  border-radius: 0.2rem;
+  margin: 0.0rem;
+}
+
+.device > .content,
+.unit > .content {
+  margin: 0.1rem;
+}
+
+.content > .unit {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+article {
+  display: flex;
+  flex-direction: column;
+}
+
+article.property {
+  border: 1pt solid green;
+}
+label { display2: block; }
+
+value { 
+  vertical-align: bottom;
+  font-size: 0.3rem;
+}
+
+input.propertyValue {
+  text-align: right;
+  margin-right: auto;
+}
+
+
+</style>
+    <script src="http://unpkg.com/tone"></script>
+</head>
+
+<body>
+  <button id="start-button" class="green">Start</button>
+  <!--
+  <div class="device-group" style="display: none">
+    <article class="unit" data-type="DuoSynth">
+      <button class="toggle-button green">DuoSynth</button>
+      <div class="content">
+        <article class="param">
+          <label for="harmonicity">harmonicity</label>
+          <input type="range" name="harmonicity">
+        </article>
+        <article class="param">
+          <label>detune</label>
+          <input type="range" name="detune">
+        </article>
+        <article class="param">
+          <label>portamento</label>
+          <input type="range" name="portamento">
+        </article>
+    
+        <article class="unit" data-type="MonoSynth" name="voice0">
+          <button class="toggle-button dark-green">MonoSynth</button>
+          <div class="content">
+            <article class="param">
+              <label>type</label>
+              <input type="range" name="type">
+            </article>
+            <article class="param">
+              <label>detune</label>
+              <input type="range" name="detune">              
+            </article>
+            <article class="param">
+              <label>portamento</label>
+              <input type="range" name="portamento">
+            </article>
+        
+            <article class="unit" data-type="Filter" name="filter">
+              <button class="toggle-button">Filter</button>
+              <article class="param-group">
+                <article class="param">
+                  <label>harmonicity</label>
+                  <input type="range" name="harmonicity">
+                </article>
+                <article class="param">
+                  <label>detune</label>
+                  <input type="range" name="detune">
+                </article>
+                <article class="param">
+                  <label>portamento</label>
+                  <input type="range" name="portamento">
+                </article>
+              </article>
+            </article>
+            
+            <article class="unit" data-type="Envelope" name="filterEnvelope">
+              <button class="toggle-button">Filter Envelope</button>
+              <article class="param-group">
+                <article class="param">
+                  <label>Attack</label>
+                  <input type="range" name="attack">
+                </article>
+                <article class="param">
+                  <label>Decay</label>
+                  <input type="range" name="decay">
+                </article>
+                <article class="param">
+                  <label>Sustain</label>
+                  <input type="range" name="sustain">
+                </article>
+                <article class="param">
+                  <label>Release</label>
+                  <input type="range" name="release">
+                </article>
+              </article>
+            </article>
+          </div>
+        </article>
+    
+        <article class="unit" data-type="MonoSynth" name="voice1">
+          <button class="toggle-button dark-green">MonoSynth</button>
+          <div class="content">
+            <article class="param">
+              <label>type</label>
+              <input type="range" name="type">
+            </article>
+            <article class="param">
+              <label>detune</label>
+              <input type="range" name="detune">
+            </article>
+            <article class="param">
+              <label>portamento</label>
+              <input type="range" name="portamento">
+            </article>
+          </article>
+        
+          <article class="unit" data-type="Filter" name="filter">
+            <button class="toggle-button">Filter</button>
+            <article class="param-group">
+              <article class="param">
+                <label>harmonicity</label>
+                <input type="range" name="harmonicity">
+              </article>
+              <article class="param">
+                <label>detune</label>
+                <input type="range" name="detune">
+              </article>
+              <article class="param">
+                <label>portamento</label>
+                <input type="range" name="portamento">
+              </article>
+            </article>
+          </article>
+          
+          <article class="unit" data-type="Envelope" name="filterEnvelope">
+            <button class="toggle-button">Filter Envelope</button>
+            <article class="param-group">
+              <article class="param">
+                <label>Attack</label>
+                <input type="range" name="attack">
+              </article>
+              <article class="param">
+                <label>Decay</label>
+                <input type="range" name="decay">
+              </article>
+              <article class="param">
+                <label>Sustain</label>
+                <input type="range" name="sustain">
+              </article>
+              <article class="param">
+                <label>Release</label>
+                <input type="range" name="release">
+              </article>
+            </article>
+          </article>
+        </div>
+      </article>
+    </div>
+  </article>
+  </div>
+-->
+<div id="templates">
+  
+  <template data-types="DuoSynth,MonoSynth,OmniOscillator" data-sortOrder="3">
+    <article class="device">
+      <button class="toggle-button dark-green">${propertyName}: ${propertyType}</button>
+      <div class="content">${children}</div>
+    </article>
+  </template>
+  
+  <template data-types="Filter,FrequencyEnvelope,AmplitudeEnvelope,Volume" data-sortOrder="2">
+    <article class="unit">
+      <button class="toggle-button brown">${propertyName}: ${propertyType}</button>
+      <div class="content">${children}</div>
+    </article>
+  </template>
+  
+  
+  <template data-types="Signal,Param,Multiply,Scale,Frequency,Pow,Gain" data-sortOrder="1">
+    <article class="param ${propertyType}">
+      <label for="${propertyName}">${propertyName}: ${propertyType} = <value for="${propertyName}">${value}</value></label>
+      <input class="propertyValue" type="range" name="${propertyName}" value="${value}">
+    </article>
+  </template>
+</div>
+
+<div id="builder">
+  
+</div>
+  <script>
+  document.querySelector("#start-button")?.addEventListener("click", async () => {
+    await Tone.start();
+    console.log("audio is ready");
+        
+    let objects = {
+      duoSynth: new Tone.DuoSynth()
+    }
+    console.log("DuoSynth is ready");
+    const builder = document.querySelector("#builder");
+    Object.keys(objects).forEach(objectKey => builder.innerHTML += processObject(objectKey, objects[objectKey]));
+    
+    const toggleBtns = document.querySelectorAll('.toggle-button');  
+    alert("Found buttons " + toggleBtns.length)
+    toggleBtns.forEach(button => {
+      let content = button.parentElement.querySelector(".content");
+      button.addEventListener('click', () => {  
+        content.classList.toggle('expanded');  
+      });  
+    });
+  });
+  
+  function processObject(propertyName, currentObject) {
+    let objectType = currentObject["name"];
+    let objectHtml = applyTemplate(objectType, propertyName, currentObject);
+    //console.log("Object html", objectHtml)
+    if (objectHtml && objectHtml.indexOf("${children}") > -1) {
+      let childrenHtml = "";
+      let propNames = getObjectProperties(currentObject);
+      let childObjectsHtml = "";
+      //console.log("processObject " + objectType, currentObject, propNames);
+      propNames.forEach(propertyName => {
+        let objectProperty = currentObject[propertyName];
+        let childObjectHtml = processObject(propertyName, objectProperty);
+        if (! childObjectHtml) {
+          let propertyHtml = processObjectProperty(propertyName, objectProperty);
+          if (propertyHtml) {
+            childrenHtml += propertyHtml;
+          }
+        } else {
+          childObjectsHtml += childObjectHtml;
+        }
+      });
+      
+      if (childObjectsHtml) {
+          childrenHtml += childObjectsHtml;
+        }
+      //if (childrenHtml) {
+        objectHtml = objectHtml.replace("${children}", childrenHtml);
+        //console.log("Replaced ${children} with ", childrenHtml)
+    //  } else {
+        
+    //  }
+    }
+    return objectHtml;
+  }
+  
+  function getObjectProperties(object) {
+    let publicProperties = Object.keys(object)
+      .filter(name => !name.startsWith("_"))
+    let objectProperties = publicProperties
+      .filter(name => typeof object[name] == "object")
+      .sort();
+    
+    if (publicProperties.length > objectProperties.length) {
+      let nonObjectProperties = publicProperties
+        .filter(name => typeof object[name] != "object");
+      console.log("Non object public properties", nonObjectProperties)
+    }
+    return objectProperties;
+  }
+  
+  function processObjectProperty(propertyName, objectProperty) {
+    //console.log("processObjectProperty", objectProperty);
+    if (objectProperty["name"]) {
+      let propertyType = objectProperty["name"];
+      let templateResult = applyTemplate(propertyType, propertyName, objectProperty);
+      if (templateResult != "") 
+        return templateResult;
+      else 
+        console.log("No template result for " + propertyType, propertyName)
+    }
+    else 
+        console.log("No name for " + propertyName, objectProperty)
+  }
+  
+  function applyTemplate(typeName, propertyName, objectProperty) {
+    let template = document.querySelector(`template[data-types*="${typeName}"]`);
+    if (template) {
+      let metadataProperties = {
+        propertyName: propertyName,
+        propertyType: typeName
+      }
+      let templateHtml = template.innerHTML;
+      
+      let matches  = templateHtml.matchAll("[$]{(?<token>[a-zA-Z]+[0-9]?)}");
+      matches.forEach(match => {
+        let tokenName = match.groups["token"];
+        let completeToken = match[0];
+        //console.log("Match:", tokenName, completeToken );
+        if (tokenName != "children")
+        {
+          let tokenValue = (metadataProperties[tokenName]) ? metadataProperties[tokenName] : objectProperty[tokenName];
+          if (tokenValue != undefined) {
+            templateHtml = templateHtml.replace(completeToken, tokenValue);
+            //console.log(`Replacing token "${completeToken}" with "${tokenValue}"`);
+          } 
+          else {
+          //  console.log(`Token "${completeToken}" has no value`);
+          }
+        }
+      });
+      return templateHtml;
+    }
+    else 
+      console.log("No template for " + typeName);
+  }
+
+  
+  
+
+
+    
+    </script>
+</body>
+
+</html>
