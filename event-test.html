@@ -12,8 +12,12 @@ button{
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;  
+  box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.4);
 }
 
+.unit {
+  box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.4);
+}
 .unit > .content > .param-group {
   flex-direction: column;
 }
@@ -30,6 +34,7 @@ button{
   padding: 0.2rem;
   width: 100%;
   display: block;
+  
 }
 
 .param > label,
@@ -40,6 +45,9 @@ button{
   display: block;
 }
 
+.small {
+  font-size: 0.3rem;
+}
  .green {
    background: rgba(76, 175, 80, 0.6);
     color: white;  
@@ -68,8 +76,7 @@ button{
 .content {  
   height: 0; /* Hide content initially */  
   overflow: hidden; /* Clip content when collapsed */  
-  transition: opacity 0.2s;
-  transition: height 0.2s;
+  transition: max-height 10s ease-in-out, opacity 0.5s ease-in-out;  
   opacity: 0;  
   display: block;
 }  
@@ -78,10 +85,9 @@ button{
 .content.expanded {  
   height: 100%;/* Larger than content's actual height */  
   opacity: 1; /* Fade in */  
-  transition2: height 0.2s;
-  transition2: opacity 2s;
 }  
 
+ 
 .device, 
 .unit {
   border: 0.05rem solid rgba(50,50,50,0.8);
@@ -100,12 +106,16 @@ button{
 
 .device > .content,
 .unit > .content {
-  margin: 0.1rem;
+  margin: 0.0rem;
+  padding: 0.0rem;
 }
 
 .content > .unit {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+  margin: 0.5rem;
+}
+
+.content > article {
+  margin: 0.5rem;
 }
 
 article {
@@ -274,47 +284,139 @@ input.propertyValue {
   </div>
 -->
 <div id="templates">
-  
-  <template data-types="DuoSynth,MonoSynth,OmniOscillator" data-sortOrder="3">
-    <article class="device">
+  <template data-types="Daw" data-sortOrder="4">
+    <article class="unit">
       <button class="toggle-button dark-green">${propertyName}: ${propertyType}</button>
       <div class="content">${children}</div>
     </article>
   </template>
   
-  <template data-types="Filter,FrequencyEnvelope,AmplitudeEnvelope,Volume" data-sortOrder="2">
+  <template data-types="Track,Channel,DuoSynth,MonoSynth,OmniOscillator" data-sortOrder="3">
+    <article class="device">
+      <button class="toggle-button dark-green">${propertyName}: ${propertyType}</button>
+      <div class="content">${children}</div>
+    </article>
+  </template>
+  <template data-types="Filter,FrequencyEnvelope,AmplitudeEnvelope,Volume,Gain" data-sortOrder="2">
     <article class="unit">
       <button class="toggle-button brown">${propertyName}: ${propertyType}</button>
       <div class="content">${children}</div>
     </article>
   </template>
   
-  
-  <template data-types="Signal,Param,Multiply,Scale,Frequency,Pow,Gain" data-sortOrder="1">
+  <template data-types="Signal,Param,Multiply,Scale,Frequency,Pow" data-sortOrder="1">
     <article class="param ${propertyType}">
-      <label for="${propertyName}">${propertyName}: ${propertyType} = <value for="${propertyName}">${value}</value></label>
-      <input class="propertyValue" type="range" name="${propertyName}" value="${value}">
+      <label for="${propertyName}"><b>${propertyName}</b>: <i>${propertyType}</i> <span class="small">[${minValue}..${maxValue}]</span> = <value for="${propertyName}">${value}</value> </label>
+      <input class="propertyValue" type="range" name="${propertyName}" id="${namespace}" value="${value}" min="${minValue}" max="${maxValue}">
     </article>
   </template>
 </div>
 
 <div id="builder">
-  
 </div>
+
   <script>
+
   document.querySelector("#start-button")?.addEventListener("click", async () => {
     await Tone.start();
     console.log("audio is ready");
         
-    let objects = {
-      duoSynth: new Tone.DuoSynth()
-    }
     console.log("DuoSynth is ready");
     const builder = document.querySelector("#builder");
-    Object.keys(objects).forEach(objectKey => builder.innerHTML += processObject(objectKey, objects[objectKey]));
+    
+    console.log("Creating daw");
+    let channels = {
+      master: new Tone.Channel(),
+      track1: {
+        output: new Tone.Channel(),
+        duoSynth: new Tone.DuoSynth()
+      },
+      track2: {
+        output: new Tone.Channel(),
+        duoSynth: new Tone.DuoSynth()
+      }
+    };
+    let daw = {
+      channels: channels
+    }
+  
+    try {
+      channels.track1.duoSynth.connect(channels.track1.output);
+      channels.track1.output.connect(channels.master);
+      channels.track2.duoSynth.connect(channels.track2.output);
+      channels.track2.output.connect(channels.master);
+      channels.master.toDestination();
+      
+      console.log("Daw created", channels, channels.track1.duoSynth);
+      
+    }
+    catch (err) {
+      console.error("Failed to create daw", err)
+      throw "Failed to create daw"
+    }
+    
+    let synthA = channels.track1.duoSynth;
+    let synthB = channels.track2.duoSynth;
+    
+    /*
+    const track1 = new Track(new Tone.DuoSynth());
+    const track2 = new Track(new Tone.DuoSynth());
+    
+    const daw = {
+      track1: track1,
+      track2: track2
+    }*/
+  
+    
+    //play a note every quarter-note
+    const loopA = new Tone.Loop((time) => {
+      synthA.triggerAttackRelease("C2", "8n", time);
+    }, "4n").start(0);
+    
+    //play another note every off quarter-note, by starting it "8n"
+    const loopB = new Tone.Loop((time) => {
+      synthB.triggerAttackRelease("C4", "8n", time);
+    }, "4n").start("8n");
+    // all loops start when the Transport is started
+    Tone.getTransport().start();
+    // ramp up to 800 bpm over 10 seconds
+    Tone.getTransport().bpm.rampTo(800, 50);
+    
+    //builder.innerHTML += processObject("daw", channels, "daw").templateHtml;
+    builder.innerHTML += processObject("DuoSynth", synthA, "channels.track1.duoSynth").templateHtml;
+    builder.innerHTML += processObject("DuoSynth", synthB, "channels.track2.duoSynth").templateHtml;
+      
+    
+    const rangeInputs = document.querySelectorAll('input[type="range"]');  
+    rangeInputs.forEach(rangeInput => 
+    {
+      if (rangeInput.max == "Infinity")
+        rangeInput.max = 1000000;
+      if (rangeInput.min == "-Infinity")
+        rangeInput.min = -1000000;
+      let range = parseFloat(rangeInput.max - rangeInput.min);
+      if (range < 10) 
+        rangeInput.step = range / 100;
+      
+      var updateParam = () => {
+        let parts = rangeInput.id.split(".");
+        let item = daw;
+        parts.forEach(part => item = item[part]);
+        let oldValue = item.value;
+        item.value = parseFloat(rangeInput.value);
+        
+        //console.log("Param updated from " + oldValue + " to " + item.value, item);
+      }
+      
+      rangeInput.addEventListener("input", (e) => {
+        rangeInput.parentElement.querySelector("value").innerHTML = e.target.value;
+        updateParam();
+      });
+      updateParam();
+    }
+    );
     
     const toggleBtns = document.querySelectorAll('.toggle-button');  
-    alert("Found buttons " + toggleBtns.length)
     toggleBtns.forEach(button => {
       let content = button.parentElement.querySelector(".content");
       button.addEventListener('click', () => {  
@@ -323,39 +425,58 @@ input.propertyValue {
     });
   });
   
-  function processObject(propertyName, currentObject) {
+  function processObject(propertyName, currentObject, namespace) {
     let objectType = currentObject["name"];
-    let objectHtml = applyTemplate(objectType, propertyName, currentObject);
-    //console.log("Object html", objectHtml)
-    if (objectHtml && objectHtml.indexOf("${children}") > -1) {
-      let childrenHtml = "";
+    let result = applyTemplate(objectType, propertyName, currentObject, namespace);
+    
+    var templateResults = [];
+    console.log("Object html", result)
+    if (result.templateHtml && result.templateHtml.indexOf("${children}") > -1) {
       let propNames = getObjectProperties(currentObject);
-      let childObjectsHtml = "";
-      //console.log("processObject " + objectType, currentObject, propNames);
+      console.log("processObject " + objectType, currentObject, propNames);
+      
       propNames.forEach(propertyName => {
         let objectProperty = currentObject[propertyName];
-        let childObjectHtml = processObject(propertyName, objectProperty);
-        if (! childObjectHtml) {
-          let propertyHtml = processObjectProperty(propertyName, objectProperty);
-          if (propertyHtml) {
-            childrenHtml += propertyHtml;
+        let templateResult = processObject(propertyName, objectProperty, namespace + "." + propertyName);
+        if (templateResult.templateHtml && templateResult.templateHtml.indexOf(",") > -1)
+          throw "Found in obj ,"
+          
+        if (templateResult.templateHtml) {
+          templateResults.push(templateResult);
+        }
+        else {
+          templateResult = processObjectProperty(propertyName, objectProperty, namespace + "." + propertyName);
+          if (templateResult.templateHtml && templateResult.templateHtml.indexOf(",") > -1)
+            throw "Found in obj prop ,"
+          if (templateResult.templateHtml) {
+            templateResults.push(templateResult);
           }
-        } else {
-          childObjectsHtml += childObjectHtml;
         }
       });
       
-      if (childObjectsHtml) {
-          childrenHtml += childObjectsHtml;
-        }
-      //if (childrenHtml) {
-        objectHtml = objectHtml.replace("${children}", childrenHtml);
-        //console.log("Replaced ${children} with ", childrenHtml)
-    //  } else {
-        
-    //  }
+      let childrenHtml = "";
+      
+      const sortOrders = templateResults.filter((obj, index, self) =>
+        index === self.findIndex((t) => t.templateSortOrder === obj.templateSortOrder)
+      ).map(tr => tr.templateSortOrder).sort();
+      
+      sortOrders.forEach(sortOrder => {
+        let groupedResults = templateResults.filter(tr => tr.templateSortOrder == sortOrder);
+        groupedResults.forEach(result => childrenHtml += result.templateHtml);
+      });
+      if (childrenHtml.indexOf(",") > -1)
+        console.error("Found in childrenhtml,", childrenHtml);
+      result.templateHtml = result.templateHtml.replace("${children}", childrenHtml);
+      console.log("parsed html", result, templateResults);
+      if (result.templateHtml && result.templateHtml.indexOf(",") > -1)
+        throw "Found ,"
+      return result;
     }
-    return objectHtml;
+    else 
+      return {
+        templateHtml: null,
+        templateSortOrder: null
+      }
   }
   
   function getObjectProperties(object) {
@@ -373,38 +494,73 @@ input.propertyValue {
     return objectProperties;
   }
   
-  function processObjectProperty(propertyName, objectProperty) {
+  function processObjectProperty(propertyName, objectProperty, namespace) {
     //console.log("processObjectProperty", objectProperty);
     if (objectProperty["name"]) {
       let propertyType = objectProperty["name"];
-      let templateResult = applyTemplate(propertyType, propertyName, objectProperty);
-      if (templateResult != "") 
+      let templateResult = applyTemplate(propertyType, propertyName, objectProperty, namespace);
+      if (templateResult.templateHtml != "") 
         return templateResult;
       else 
         console.log("No template result for " + propertyType, propertyName)
     }
     else 
-        console.log("No name for " + propertyName, objectProperty)
+        console.log("No name for " + propertyName, objectProperty);
+    return {
+      templateHtml: null,
+      templateSortOrder: null
+    }
   }
   
-  function applyTemplate(typeName, propertyName, objectProperty) {
+  const customRanges = {
+    detune: {
+      minValue: -1200,
+      maxValue: 1200
+    },
+    volume: {
+      minValue: -100,
+      maxValue: 0
+    }
+  }
+  
+  function applyTemplate(typeName, propertyName, objectProperty, namespace) {
+    console.log("applyTemplate for " + typeName, propertyName, objectProperty, namespace)
     let template = document.querySelector(`template[data-types*="${typeName}"]`);
     if (template) {
       let metadataProperties = {
         propertyName: propertyName,
-        propertyType: typeName
+        propertyType: typeName,
+        namespace: namespace
       }
       let templateHtml = template.innerHTML;
+      let templateSortOrder = parseInt(template.dataset.sortorder);
       
       let matches  = templateHtml.matchAll("[$]{(?<token>[a-zA-Z]+[0-9]?)}");
       matches.forEach(match => {
         let tokenName = match.groups["token"];
         let completeToken = match[0];
-        //console.log("Match:", tokenName, completeToken );
+      /*  if (propertyName == "volume")
+          console.log("Match:", tokenName, completeToken );*/
         if (tokenName != "children")
         {
-          let tokenValue = (metadataProperties[tokenName]) ? metadataProperties[tokenName] : objectProperty[tokenName];
-          if (tokenValue != undefined) {
+          let tokenValue = "";
+          if (customRanges[propertyName] && customRanges[propertyName][tokenName]) {
+            let customRange = customRanges[propertyName][tokenName]
+            console.log(`Property ${propertyName}: updating token ${tokenName}=${tokenValue} with custom range ${customRange}`);
+            tokenValue = customRanges[propertyName][tokenName]
+          } 
+          else {
+            tokenValue = (metadataProperties[tokenName]) ? metadataProperties[tokenName] : objectProperty[tokenName];
+            if (tokenValue != undefined) {
+              if (tokenValue == "3.4028234663852886e+38")
+                tokenValue = "Infinity";
+              else if (tokenValue == "-3.4028234663852886e+38")
+                tokenValue = "-Infinity";
+            }
+          }
+        
+          if (tokenValue) {
+            
             templateHtml = templateHtml.replace(completeToken, tokenValue);
             //console.log(`Replacing token "${completeToken}" with "${tokenValue}"`);
           } 
@@ -413,17 +569,18 @@ input.propertyValue {
           }
         }
       });
-      return templateHtml;
+      return {
+        templateHtml: templateHtml,
+        templateSortOrder: templateSortOrder
+      }
     }
-    else 
-      console.log("No template for " + typeName);
+    else {
+      return {
+        templateHtml: null,
+        templateSortOrder: null
+      }
+    }
   }
-
-  
-  
-
-
-    
     </script>
 </body>
 
