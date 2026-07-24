@@ -47,8 +47,8 @@ export class MidiClock {
     }
 
     let parts = timeSignature.split("/");
-    let beatsPerMeasure = parseInt(parts[0]);
-    let stepsPerBeatString: string = parts[1];
+    let beatsPerMeasure = parseInt(parts[0]!);
+    let stepsPerBeatString: string = parts[1]!;
     let triplet = stepsPerBeatString.endsWith('t');
     let stepsPerBeat = 0;
     if (triplet) {

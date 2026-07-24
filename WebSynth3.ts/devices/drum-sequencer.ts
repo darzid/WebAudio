@@ -1,5 +1,5 @@
 import { Logger } from "../lib-ts/logger";
-import { toggleNextSiblingVisibility } from "../main.ts";
+import { toggleNextSiblingVisibility } from "../main";
 import { SequencerBase } from "./sequencer-base";
 
 export class DrumSequencer extends SequencerBase {

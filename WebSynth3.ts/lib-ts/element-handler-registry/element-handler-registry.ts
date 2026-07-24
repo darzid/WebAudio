@@ -1,9 +1,6 @@
 import { Logger } from "../logger";
 import { ElementHandler } from "./element-handler";
-
-
-// Create a dynamic class
-// type ElementHandlerConstructor = new (element: Element, cssClass: string) => ElementHandler;
+import { DeviceFactory } from "./device-factory";
 
 export class ElementHandlerRegistry {
   static handlerClasses: { [key: string]: string } = {};
@@ -16,7 +13,7 @@ export class ElementHandlerRegistry {
     Logger.log("Registered handler for " + elementClass)
   }
 
-  static processAll(factory: IDeviceFactory) {
+  static processAll(factory: DeviceFactory) {
     let start: number = new Date().getTime();
 
     this.handlerCssClasses.forEach(cls => this.processCssClass(cls, factory));
@@ -26,7 +23,7 @@ export class ElementHandlerRegistry {
     Logger.log(`processAll took ${duration} ms`);
   }
 
-  static processCssClass(cssClass: string, factory: IDeviceFactory) {
+  static processCssClass(cssClass: string, factory: DeviceFactory) {
     let elements: NodeListOf<HTMLElement> = document.querySelectorAll("." + cssClass);
     elements.forEach((element: HTMLElement) => {
       Logger.log("processCssClass " + cssClass)
@@ -34,7 +31,7 @@ export class ElementHandlerRegistry {
         let typeName = this.handlerClasses[cssClass];
         // let constructorString = `new ${typeName}(element, cssClass)`;
         // let handler = eval(constructorString);
-        let handler = factory.create(typeName, element, cssClass);
+        let handler = factory.create(typeName!, element, cssClass)!;
         this.handlers.push(handler);
       }
     });
@@ -52,12 +49,9 @@ export class ElementHandlerRegistry {
   }
 }
 
-export interface IDeviceFactory {
-  create(typename: string, element: HTMLElement, cssClass: string) : any;
-}
 
 function boolToInt(value: boolean): number { return value ? 1 : 0; }
 
-function inverseBoolToInt(value: boolean): number { return 1 - boolToInt(value); }
+// function inverseBoolToInt(value: boolean): number { return 1 - boolToInt(value); }
 
-function inverseFloat(value: number): number { return 1 - value; }
+// function inverseFloat(value: number): number { return 1 - value; }
