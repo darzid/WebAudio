@@ -291,23 +291,24 @@ input.propertyValue {
     </article>
   </template>
   
-  <template data-types="Track,Channel,DuoSynth,MonoSynth,OmniOscillator" data-sortOrder="3">
+  <template data-types="Track,Channel,DuoSynth,MonoSynth,OmniOscillator,Reverb" data-sortOrder="3">
     <article class="device">
       <button class="toggle-button dark-green">${propertyName}: ${propertyType}</button>
       <div class="content">${children}</div>
     </article>
   </template>
-  <template data-types="Filter,FrequencyEnvelope,AmplitudeEnvelope,Volume,Gain" data-sortOrder="2">
+  <template data-types="Filter,FrequencyEnvelope,AmplitudeEnvelope,Envelope,Volume,Gain" data-sortOrder="2">
     <article class="unit">
       <button class="toggle-button brown">${propertyName}: ${propertyType}</button>
       <div class="content">${children}</div>
     </article>
   </template>
   
-  <template data-types="Signal,Param,Multiply,Scale,Frequency,Pow" data-sortOrder="1">
+  <template data-types="Signal,Param,Multiply,Scale,Frequency,Pow,number" data-sortOrder="1">
     <article class="param ${propertyType}">
       <label for="${propertyName}"><b>${propertyName}</b>: <i>${propertyType}</i> <span class="small">[${minValue}..${maxValue}]</span> = <value for="${propertyName}">${value}</value> </label>
       <input class="propertyValue" type="range" name="${propertyName}" id="${namespace}" value="${value}" min="${minValue}" max="${maxValue}">
+     <!-- <div>${namespace}</div>-->
     </article>
   </template>
 </div>
@@ -316,11 +317,11 @@ input.propertyValue {
 </div>
 
   <script>
-
+  var dawData = null;
   document.querySelector("#start-button")?.addEventListener("click", async () => {
     await Tone.start();
     console.log("audio is ready");
-        
+    
     console.log("DuoSynth is ready");
     const builder = document.querySelector("#builder");
     
@@ -329,22 +330,34 @@ input.propertyValue {
       master: new Tone.Channel(),
       track1: {
         output: new Tone.Channel(),
-        duoSynth: new Tone.DuoSynth()
+        duoSynth: new Tone.DuoSynth(),
+        stereo: new Tone.StereoWidener(),
+        reverb: new Tone.Reverb(10)
       },
       track2: {
         output: new Tone.Channel(),
-        duoSynth: new Tone.DuoSynth()
+        fmSynth: new Tone.FMSynth(),
+        delay: new Tone.PingPongDelay(),
+        reverb: new Tone.Reverb(10)
       }
     };
     let daw = {
       channels: channels
     }
-  
+    dawData = daw;
     try {
-      channels.track1.duoSynth.connect(channels.track1.output);
-      channels.track1.output.connect(channels.master);
-      channels.track2.duoSynth.connect(channels.track2.output);
-      channels.track2.output.connect(channels.master);
+      let track1 = channels.track1;
+      track1.duoSynth.output.connect(track1.stereo.input);
+      track1.stereo.output.connect(track1.reverb.input);
+      track1.reverb.output.connect(track1.output);
+      track1.output.connect(channels.master);
+      
+      let track2 = channels.track2;
+      track2.fmSynth.output.connect(track2.delay.input);
+      track2.delay.output.connect(track2.reverb.input);
+      track2.reverb.output.connect(track2.output);
+      track2.output.connect(channels.master);
+      
       channels.master.toDestination();
       
       console.log("Daw created", channels, channels.track1.duoSynth);
@@ -357,15 +370,8 @@ input.propertyValue {
     
     let synthA = channels.track1.duoSynth;
     let synthB = channels.track2.duoSynth;
-    
-    /*
-    const track1 = new Track(new Tone.DuoSynth());
-    const track2 = new Track(new Tone.DuoSynth());
-    
-    const daw = {
-      track1: track1,
-      track2: track2
-    }*/
+    synthB.volume.value = -100;
+  
   
     
     //play a note every quarter-note
@@ -380,30 +386,75 @@ input.propertyValue {
     // all loops start when the Transport is started
     Tone.getTransport().start();
     // ramp up to 800 bpm over 10 seconds
-    Tone.getTransport().bpm.rampTo(800, 50);
+    //Tone.getTransport().bpm.rampTo(800, 50);
     
-    //builder.innerHTML += processObject("daw", channels, "daw").templateHtml;
-    builder.innerHTML += processObject("DuoSynth", synthA, "channels.track1.duoSynth").templateHtml;
-    builder.innerHTML += processObject("DuoSynth", synthB, "channels.track2.duoSynth").templateHtml;
-      
+    
+   // builder.innerHTML += processObject("daw", channels, "daw").templateHtml;
+    //builder.innerHTML += processObject("DuoSynth", synthA, "channels.track1.duoSynth").templateHtml;
+    builder.innerHTML += processObject("Reverb", channels.track1.reverb, "channels.track1.reverb").templateHtml;
+    //builder.innerHTML += processObject("DuoSynth", synthB, "channels.track2.duoSynth").templateHtml;
+    
+    //console.log("reverbProps", getObjectProperties(channels.track1.reverb));
+
     
     const rangeInputs = document.querySelectorAll('input[type="range"]');  
+    let propertyIgnoreList = [];
     rangeInputs.forEach(rangeInput => 
     {
       if (rangeInput.max == "Infinity")
         rangeInput.max = 1000000;
+      else if (rangeInput.max == "${maxValue}")
+        rangeInput.max = 1;
       if (rangeInput.min == "-Infinity")
         rangeInput.min = -1000000;
+      else if (rangeInput.min == "${minValue}") 
+        rangeInput.min = 0;
       let range = parseFloat(rangeInput.max - rangeInput.min);
       if (range < 10) 
         rangeInput.step = range / 100;
       
+      if (isNaN(rangeInput.min) || isNaN(rangeInput.max)) {
+        console.warn("range error for " + rangeInput.id, rangeInput)
+      }
       var updateParam = () => {
         let parts = rangeInput.id.split(".");
         let item = daw;
-        parts.forEach(part => item = item[part]);
-        let oldValue = item.value;
-        item.value = parseFloat(rangeInput.value);
+        let prevItem = daw;
+        parts.forEach(part => {
+          prevItem = item;
+          item = item[part]
+        });
+        
+        let propertyName = parts[parts.length - 1];
+        let newFloatValue = parseFloat(rangeInput.value);
+        if (typeof item == "number") {
+          if (propertyIgnoreList.indexOf(propertyName) == -1) {
+            if (item != newFloatValue) {
+              if (prevItem) {
+               // console.log("Updating a number?", rangeInput.id, prevItem, propertyName);
+                if (prevItem[propertyName]) {
+                  try {
+                    prevItem[propertyName] = newFloatValue;
+                    if (prevItem[propertyName] != newFloatValue) {
+                      console.warn("Failed to update property " + propertyName, rangeInput.id)
+                      propertyIgnoreList.push(propertyName);
+                    }
+                  //  console.log("Updated a number", rangeInput.id, prevItem[propertyName])
+                  }
+                  catch {
+                    console.warn("Failed to uodate a number", rangeInput.id, prevItem[propertyName])
+                  }
+                }
+              }
+            }
+          }
+        } else {
+          if (item.value != newFloatValue) {
+           // console.log("Updating an object", rangeInput.id)
+            item.value = newFloatValue
+          }
+        }
+        
         
         //console.log("Param updated from " + oldValue + " to " + item.value, item);
       }
@@ -426,11 +477,13 @@ input.propertyValue {
   });
   
   function processObject(propertyName, currentObject, namespace) {
-    let objectType = currentObject["name"];
+    let objectType = currentObject["name"] ? currentObject["name"] : typeof currentObject;
     let result = applyTemplate(objectType, propertyName, currentObject, namespace);
     
+    if (objectType == "number") {
+      console.log("Number", propertyName, currentObject, result)
+    }
     var templateResults = [];
-    console.log("Object html", result)
     if (result.templateHtml && result.templateHtml.indexOf("${children}") > -1) {
       let propNames = getObjectProperties(currentObject);
       console.log("processObject " + objectType, currentObject, propNames);
@@ -438,16 +491,12 @@ input.propertyValue {
       propNames.forEach(propertyName => {
         let objectProperty = currentObject[propertyName];
         let templateResult = processObject(propertyName, objectProperty, namespace + "." + propertyName);
-        if (templateResult.templateHtml && templateResult.templateHtml.indexOf(",") > -1)
-          throw "Found in obj ,"
           
         if (templateResult.templateHtml) {
           templateResults.push(templateResult);
         }
         else {
           templateResult = processObjectProperty(propertyName, objectProperty, namespace + "." + propertyName);
-          if (templateResult.templateHtml && templateResult.templateHtml.indexOf(",") > -1)
-            throw "Found in obj prop ,"
           if (templateResult.templateHtml) {
             templateResults.push(templateResult);
           }
@@ -467,9 +516,7 @@ input.propertyValue {
       if (childrenHtml.indexOf(",") > -1)
         console.error("Found in childrenhtml,", childrenHtml);
       result.templateHtml = result.templateHtml.replace("${children}", childrenHtml);
-      console.log("parsed html", result, templateResults);
-      if (result.templateHtml && result.templateHtml.indexOf(",") > -1)
-        throw "Found ,"
+     // console.log("parsed html", result, templateResults);
       return result;
     }
     else 
@@ -480,35 +527,49 @@ input.propertyValue {
   }
   
   function getObjectProperties(object) {
-    let publicProperties = Object.keys(object)
-      .filter(name => !name.startsWith("_"))
-    let objectProperties = publicProperties
-      .filter(name => typeof object[name] == "object")
+    let properties = Object.getOwnPropertyNames(object);//.filter(name => Object.getOwnPropertyDescriptor(object, name).writable);
+    let baseObject = Object.getPrototypeOf(object);
+    while (baseObject) {
+      let baseProperties = Object.getOwnPropertyNames(baseObject)
+        //.filter(name => Object.getOwnPropertyDescriptor(baseObject, name).writable);
+      if (baseProperties.length > 0) {
+        baseProperties.forEach(prop => {
+          properties.push(prop);
+          //console.log(Object.getOwnPropertyDescriptor(baseObject, prop));
+        });
+      }
+      baseObject = Object.getPrototypeOf(baseObject);
+    }
+    properties = properties.filter(name => typeof object[name] != "function");
+    console.log("base props", properties);
+    
+    let publicProperties = properties.filter(name => !name.startsWith("_"));
+    
+    let objectOrNumberProperties = publicProperties
+      .filter(name => typeof object[name] == "object" || typeof object[name] == "number")
       .sort();
     
-    if (publicProperties.length > objectProperties.length) {
+    if (publicProperties.length > objectOrNumberProperties.length) {
       let nonObjectProperties = publicProperties
         .filter(name => typeof object[name] != "object");
-      console.log("Non object public properties", nonObjectProperties)
+      //console.log("Non object public properties", nonObjectProperties)
     }
-    return objectProperties;
+    
+    return objectOrNumberProperties;
   }
   
   function processObjectProperty(propertyName, objectProperty, namespace) {
     //console.log("processObjectProperty", objectProperty);
-    if (objectProperty["name"]) {
-      let propertyType = objectProperty["name"];
-      let templateResult = applyTemplate(propertyType, propertyName, objectProperty, namespace);
-      if (templateResult.templateHtml != "") 
-        return templateResult;
-      else 
-        console.log("No template result for " + propertyType, propertyName)
-    }
-    else 
-        console.log("No name for " + propertyName, objectProperty);
-    return {
-      templateHtml: null,
-      templateSortOrder: null
+    let propertyType = objectProperty["name"] ? objectProperty["name"] : typeof objectProperty;
+    let templateResult = applyTemplate(propertyType, propertyName, objectProperty, namespace);
+    if (templateResult.templateHtml != "") 
+      return templateResult;
+    else {
+      console.log("No template result for " + propertyType, propertyName)
+      return {
+        templateHtml: null,
+        templateSortOrder: null
+      }
     }
   }
   
@@ -524,13 +585,15 @@ input.propertyValue {
   }
   
   function applyTemplate(typeName, propertyName, objectProperty, namespace) {
-    console.log("applyTemplate for " + typeName, propertyName, objectProperty, namespace)
+    //console.log(`applyTemplate for templates with datatype '${typeName}'....${propertyName}: ${typeName} = ${objectProperty}`, namespace)
     let template = document.querySelector(`template[data-types*="${typeName}"]`);
     if (template) {
       let metadataProperties = {
         propertyName: propertyName,
         propertyType: typeName,
-        namespace: namespace
+        namespace: namespace,
+        minValue: 0,
+        maxValue: 1
       }
       let templateHtml = template.innerHTML;
       let templateSortOrder = parseInt(template.dataset.sortorder);
