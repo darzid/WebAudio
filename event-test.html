@@ -159,7 +159,7 @@
 
       <template data-types="Track,Channel,DuoSynth,FMSynth,MonoSynth,MembraneSynth,OmniOscillator" data-sortOrder="3">
         <article class="device">
-          <button class="toggle-button dark-green">${propertyName}: ${propertyType}</button>
+          <button class="toggle-button dark-green">${namespace}: ${propertyType}</button>
           <div class="content">${children}</div>
         </article>
       </template>
@@ -242,9 +242,10 @@
         //builder.innerHTML += processObject("daw", channels, "daw").templateHtml;
 
         builder.innerHTML += processObject("Kick", channels.track1.kick, "channels.track1.kick").templateHtml;
-        builder.innerHTML += processObject("MonoSynth", channels.track2.monoSynth, "channels.track2.monoSynth").templateHtml;
-        builder.innerHTML += processObject("MonoSynth2", channels.track2.monoSynth2, "channels.track2.monoSynth2").templateHtml;
-        builder.innerHTML += processObject("Synth", channels.track6.synth, "channels.track6.synth").templateHtml;
+        builder.innerHTML += processObject("bass1", channels.track2.bass1, "channels.track2.bass1").templateHtml;
+        builder.innerHTML += processObject("bass2", channels.track2.bass2, "channels.track2.bass2").templateHtml;
+        builder.innerHTML += processObject("bass3", channels.track2.bass3, "channels.track2.bass3").templateHtml;
+        builder.innerHTML += processObject("fmSynth", channels.track5.fmSynth, "channels.track5.fmSynth").templateHtml;
 
         // builder.innerHTML += processObject("Kick", channels.track1.kick, "channels.track1.kick").templateHtml;
         // builder.innerHTML += processObject("Compressor", channels.track1.compressor, "channels.track1.compressor").templateHtml;
@@ -286,7 +287,22 @@
           },
           track2: {
             output: new Tone.Channel(),
-            monoSynth: new Tone.MonoSynth({
+            bass1: new Tone.MonoSynth({
+              amplitudeEnvelope: {
+                attack: 0.001,
+                decay: 15,
+                sustain: 0.1,
+                release: 0.1
+              },
+              filterEnvelope: {
+                attack: 0.001,
+                decay: 0.44,
+                sustain: 0.01,
+                release: 0.5
+              },
+              volume: -10,
+            }),
+            bass2: new Tone.MonoSynth({
               amplitudeEnvelope: {
                 attack: 0.001,
                 decay: 15,
@@ -301,7 +317,7 @@
               },
               volume: -3,
             }),
-            monoSynth2: new Tone.MonoSynth({
+            bass3: new Tone.MonoSynth({
               amplitudeEnvelope: {
                 attack: 0.001,
                 decay: 15,
@@ -316,21 +332,6 @@
               },
               volume: -8,
             }),
-            monoSynth3: new Tone.MonoSynth({
-              amplitudeEnvelope: {
-                attack: 0.001,
-                decay: 15,
-                sustain: 0.1,
-                release: 0.1
-              },
-              filterEnvelope: {
-                attack: 0.001,
-                decay: 0.44,
-                sustain: 0.01,
-                release: 0.5
-              },
-              volume: -16,
-            })
           },
           track3: {
             output: new Tone.Channel(),
@@ -342,7 +343,15 @@
           },
           track5: {
             output: new Tone.Channel(),
-            fmSynth: new Tone.FMSynth(),
+            fmSynth: new Tone.FMSynth({
+              envelope: {
+                attack: 0.001,
+                decay: 1,
+                sustain: 0,
+                release: 0
+              },
+
+            })
           },
           track6: {
             output: new Tone.Channel(),
@@ -359,9 +368,9 @@
           channels.track1.compressor.connect(channels.track1.output);
           channels.track1.output.connect(channels.master);
 
-          channels.track2.monoSynth.connect(channels.track2.output);
-          channels.track2.monoSynth2.connect(channels.track2.output);
-          channels.track2.monoSynth3.connect(channels.track2.output);
+          channels.track2.bass1.connect(channels.track2.output);
+          channels.track2.bass2.connect(channels.track2.output);
+          channels.track2.bass3.connect(channels.track2.output);
           channels.track2.output.connect(channels.master);
 
           channels.track3.duoSynth.connect(channels.track3.output);
@@ -393,9 +402,9 @@
       function createLoop(daw) {
         let channels = daw.channels;
         let kick = channels.track1.kick;
-        let bass = channels.track2.monoSynth;
-        let bass2 = channels.track2.monoSynth2;
-        let bass3 = channels.track2.monoSynth3;
+        let bass1 = channels.track2.bass1;
+        let bass2 = channels.track2.bass2;
+        let bass3 = channels.track2.bass3;
         let synthA = channels.track3.duoSynth;
         let synthB = channels.track4.duoSynth;
         let fmSynth = channels.track5.fmSynth;
@@ -410,22 +419,26 @@
         }, "4n").start(0);
 
         const bassA = new Tone.Loop((time) => {
-          bass3.triggerAttackRelease("G#1", "8n", time);
+          bass1.triggerAttackRelease("G#1", "8n", time);
         }, "4n").start("4n");
 
         const bassB = new Tone.Loop((time) => {
-          bass.triggerAttackRelease("G#1", "8n", time);
+          bass2.triggerAttackRelease("G#1", "8n", time);
         }, "4n").start("8n");
 
         const bassC = new Tone.Loop((time) => {
-          bass2.triggerAttackRelease("G#1", "8n", time);
+          bass3.triggerAttackRelease("G#1", "8n", time);
         }, "4n").start("16n");
+
+        const fmLoop = new Tone.Loop((time) => {
+          fmSynth.triggerAttackRelease("G#1", "4n", time);
+        }, "4n").start(0);
 
         // all loops start when the Transport is started
         Tone.getTransport().start();
 
         // ramp up to 800 bpm over 10 seconds
-        Tone.getTransport().stop(30);
+        Tone.getTransport().stop(60);
 
 
         // const kickLoop = new Tone.Loop((time) => {
@@ -496,20 +509,20 @@
 
           //console.log(`Param info for ${namespace}`, param);
 
-          if (param.units === "decibel") {
-            rangeInput.min = -10;
-            rangeInput.max = 0;
-          }
-          else if (propertyName === "sustain") {
-            rangeInput.min = 0;
-            rangeInput.max = 1;
-          }
-          else {
-            if (rangeInput.max == "Infinity")
-              rangeInput.max = 0;
-            if (rangeInput.min == "-Infinity")
-              rangeInput.min = -1000000;
-          }
+          // if (param.units === "decibel") {
+          //   rangeInput.min = -10;
+          //   rangeInput.max = 0;
+          // }
+          // else if (propertyName === "sustain") {
+          //   rangeInput.min = 0;
+          //   rangeInput.max = 1;
+          // }
+          // else {
+          //   if (rangeInput.max == "Infinity")
+          //     rangeInput.max = 0;
+          //   if (rangeInput.min == "-Infinity")
+          //     rangeInput.min = -1000000;
+          // }
           let range = parseFloat(rangeInput.max - rangeInput.min);
           if (range < 10)
             rangeInput.step = range / 100;
@@ -518,6 +531,15 @@
 
           rangeInput.value = paramValue;
           rangeInput.parentElement.querySelector("value").innerHTML = paramValue;
+
+          // if (isNaN(rangeInput.min) || rangeInput.min === "-Infinity") {
+          //   console.warn(`RangeInput ${rangeInput.id}.min is not a number`, rangeInput.min, rangeInput.value);
+          //   rangeInput.min = 0;
+          // }
+          // if (isNaN(rangeInput.max)) {
+          //   console.warn(`RangeInput ${rangeInput.id}.max is not a number`, rangeInput.max, rangeInput.value);
+          //   rangeInput.max = rangeInput.value;
+          // }
 
           var updateParam = () => {
             let namespace = rangeInput.id;
@@ -798,6 +820,13 @@
             namespace: namespace,
             value: objectProperty
           }
+          if (objectProperty.minValue) {
+            metadataProperties["minValue"] = objectProperty.minValue;
+          }
+          if (objectProperty.maxValue) {
+            metadataProperties["maxValue"] = objectProperty.maxValue;
+          }
+
           let templateHtml = template.innerHTML;
           let templateSortOrder = parseInt(template.dataset.sortorder);
 
