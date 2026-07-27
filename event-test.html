@@ -242,6 +242,8 @@
         //builder.innerHTML += processObject("daw", channels, "daw").templateHtml;
 
         builder.innerHTML += processObject("Kick", channels.track1.kick, "channels.track1.kick").templateHtml;
+        builder.innerHTML += processObject("MonoSynth", channels.track2.monoSynth, "channels.track2.monoSynth").templateHtml;
+        builder.innerHTML += processObject("MonoSynth2", channels.track2.monoSynth2, "channels.track2.monoSynth2").templateHtml;
         builder.innerHTML += processObject("Synth", channels.track6.synth, "channels.track6.synth").templateHtml;
 
         // builder.innerHTML += processObject("Kick", channels.track1.kick, "channels.track1.kick").templateHtml;
@@ -284,7 +286,51 @@
           },
           track2: {
             output: new Tone.Channel(),
-            monoSynth: new Tone.MonoSynth()
+            monoSynth: new Tone.MonoSynth({
+              amplitudeEnvelope: {
+                attack: 0.001,
+                decay: 15,
+                sustain: 0.1,
+                release: 0.1
+              },
+              filterEnvelope: {
+                attack: 0.001,
+                decay: 0.44,
+                sustain: 0.01,
+                release: 0.5
+              },
+              volume: -3,
+            }),
+            monoSynth2: new Tone.MonoSynth({
+              amplitudeEnvelope: {
+                attack: 0.001,
+                decay: 15,
+                sustain: 0.1,
+                release: 0.1
+              },
+              filterEnvelope: {
+                attack: 0.001,
+                decay: 0.44,
+                sustain: 0.01,
+                release: 0.5
+              },
+              volume: -8,
+            }),
+            monoSynth3: new Tone.MonoSynth({
+              amplitudeEnvelope: {
+                attack: 0.001,
+                decay: 15,
+                sustain: 0.1,
+                release: 0.1
+              },
+              filterEnvelope: {
+                attack: 0.001,
+                decay: 0.44,
+                sustain: 0.01,
+                release: 0.5
+              },
+              volume: -16,
+            })
           },
           track3: {
             output: new Tone.Channel(),
@@ -310,10 +356,12 @@
 
         try {
           channels.track1.kick.connect(channels.track1.compressor);
-          channels.track1.compressor.toDestination(); //.connect(channels.track1.output);
+          channels.track1.compressor.connect(channels.track1.output);
           channels.track1.output.connect(channels.master);
 
           channels.track2.monoSynth.connect(channels.track2.output);
+          channels.track2.monoSynth2.connect(channels.track2.output);
+          channels.track2.monoSynth3.connect(channels.track2.output);
           channels.track2.output.connect(channels.master);
 
           channels.track3.duoSynth.connect(channels.track3.output);
@@ -330,7 +378,7 @@
 
           channels.master.toDestination();
 
-          console.log("Daw created", channels);
+          console.log("Daw created", channels, channels.track2.monoSynth, channels, channels.track2.monoSynth2);
 
           return daw;
 
@@ -346,6 +394,8 @@
         let channels = daw.channels;
         let kick = channels.track1.kick;
         let bass = channels.track2.monoSynth;
+        let bass2 = channels.track2.monoSynth2;
+        let bass3 = channels.track2.monoSynth3;
         let synthA = channels.track3.duoSynth;
         let synthB = channels.track4.duoSynth;
         let fmSynth = channels.track5.fmSynth;
@@ -360,16 +410,16 @@
         }, "4n").start(0);
 
         const bassA = new Tone.Loop((time) => {
-          synth.triggerAttackRelease("C2", "8n", time);
-        }, "4n").start("16n");
+          bass3.triggerAttackRelease("G#1", "8n", time);
+        }, "4n").start("4n");
 
         const bassB = new Tone.Loop((time) => {
-          synth.triggerAttackRelease("C2", "8n", time);
+          bass.triggerAttackRelease("G#1", "8n", time);
         }, "4n").start("8n");
 
         const bassC = new Tone.Loop((time) => {
-          synth.triggerAttackRelease("B0", "16n", time);
-        }, "4n").start("8n");
+          bass2.triggerAttackRelease("G#1", "8n", time);
+        }, "4n").start("16n");
 
         // all loops start when the Transport is started
         Tone.getTransport().start();
@@ -442,7 +492,9 @@
             item = item[part];
           });
           let param = (typeof item === "number") ? parentItem : item;
-          console.log(`Param info for ${namespace}`, param);
+          let paramValue = (typeof item === "number") ? item : item.value;
+
+          //console.log(`Param info for ${namespace}`, param);
 
           if (param.units === "decibel") {
             rangeInput.min = -10;
@@ -461,6 +513,11 @@
           let range = parseFloat(rangeInput.max - rangeInput.min);
           if (range < 10)
             rangeInput.step = range / 100;
+          else
+            rangeInput.step = 0.01;
+
+          rangeInput.value = paramValue;
+          rangeInput.parentElement.querySelector("value").innerHTML = paramValue;
 
           var updateParam = () => {
             let namespace = rangeInput.id;
@@ -479,7 +536,7 @@
               parentItem[propertyName] = parseFloat(rangeInput.value);
             }
 
-            console.log(`Param ${rangeInput.id} updated from ${oldValue} to ${rangeInput.value}`, item);
+            //console.log(`Param ${rangeInput.id} updated from ${oldValue} to ${rangeInput.value}`, item);
           }
 
           rangeInput.addEventListener("input", (e) => {

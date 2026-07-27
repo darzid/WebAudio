@@ -133,11 +133,12 @@
 
       label {
         display: block;
+        font-size: 2rem;
       }
 
       value {
         vertical-align: bottom;
-        font-size: 0.3rem;
+        font-size: 0.8rem;
       }
 
       input.propertyValue {
