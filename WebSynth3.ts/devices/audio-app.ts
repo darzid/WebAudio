@@ -123,6 +123,7 @@ export class AudioApp extends AudioDevice {
       await this.init();
     }
 
+    await Tone.start();
     if (this.isPlaying)
       return;
     this.isPlaying = true;

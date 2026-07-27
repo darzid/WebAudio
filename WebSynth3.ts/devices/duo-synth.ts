@@ -72,6 +72,17 @@ export class DuoSynthDevice extends AudioDevice {
   setupAudioGraph() {
     super.setupAudioGraph();
     this.duoSynth = new Tone.DuoSynth();
+    this.duoSynth.voice0.filter.type = "lowpass";
+    this.duoSynth.voice0.filter.frequency.value = "2000hz";
+    this.duoSynth.voice0.filter.rolloff = -24;
+    this.duoSynth.voice0.filter.Q.value = 24;
+    
+    this.duoSynth.voice1.filter.type = "highpass";
+    this.duoSynth.voice0.filter.frequency.value = "1000hz";
+    this.duoSynth.voice1.filter.gain.value = 0;
+    this.duoSynth.voice1.filter.rolloff = -24;
+    this.duoSynth.voice1.filter.Q.value = 12;
+    
     this.duoSynth!.connect(this.wetOutput!);
 
     let propertyKeys = Object.keys(this.childElements);

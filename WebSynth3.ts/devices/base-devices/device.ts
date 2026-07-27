@@ -1,7 +1,6 @@
 import { ElementHandler } from "../../lib-ts/element-handler-registry/element-handler";
 import { Logger } from "../../lib-ts/logger";
 
-
 export class Device extends ElementHandler {
   name: string;
   type: string;
@@ -77,8 +76,21 @@ export class Device extends ElementHandler {
       }
       else {
         let currentValue = audioParam.value;
-        if (audioParam.value != parseFloat(paramValue)) {
-          audioParam.value = parseFloat(paramValue);
+        let parsedTargetValue = parseFloat(paramValue);
+        if (audioParam.value != parsedTargetValue) {
+          audioParam.value = parsedTargetValue;
+          if (audioParam.value != parsedTargetValue) {
+            Logger.warn(`Property ${propertyPath} not updated from ${currentValue} to ${parsedTargetValue}`, audioParam);
+            let units = audioParam.input.units;
+            if (units == "frequency") {
+              audioParam.setValueAtTime(parsedTargetValue, Tone.now());
+              //audioParam.value = Tone.Frequency(parsedTargetValue);
+              // audioParam.set(frequency);
+              //audioParam.set(valueWrapper);
+
+            }
+
+          }
           Logger.log(`Property ${propertyPath} updated from ${currentValue} to ${audioParam.value}`, audioParam);
         }
       }
@@ -88,16 +100,25 @@ export class Device extends ElementHandler {
     if (!inputElement) {
       throw "Could not find inputElement for " + propertyPath;
     }
-    if (typeof audioParam == "object" && inputElement.type == "range"){
-      // inputElement.min = audioParam.min;
-      // inputElement.max = audioParam.max;
+    // inputElement.min = audioParam.min;
+    // inputElement.max = audioParam.max;
+  
+    if (typeof audioParam == "object" && inputElement.type == "range") {
+      if (inputElement.value != audioParam.value.toString()) {
+        inputElement.value = audioParam.value;
+        Logger.log("InputElement " + inputElement.name + " set to " + audioParam.value);
+        var evnt = inputElement["oninput"];
+        if (evnt)
+          evnt.call(inputElement, new InputEvent("input"));
+      }
     }
-    inputElement.oninput = () => paramUpdater2(inputElement.value);
-    //this.subscribeToPropertyChange(propertyName, () => paramUpdater());
 
-    //inputElement.oninput = () => paramUpdater();
-    paramUpdater2(inputElement.value);
-  }
+    inputElement.onchange = () => paramUpdater2(inputElement.value);
+    // this.subscribeToPropertyChange(propertyPath, () => paramUpdater2(inputElement.value));
+
+  //inputElement.oninput = () => paramUpdater();
+  paramUpdater2(inputElement.value);
+}
 
   /*  connectFloatPropertyToAudioParam(audioParam: AudioParam, propertyName: string, propertyConverter: ((value: any) => number) | null = null) {
       //  let inputElement = this.getPropertyInputElement(propertyName);

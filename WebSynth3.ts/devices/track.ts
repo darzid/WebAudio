@@ -26,6 +26,7 @@ export class Track extends AudioDevice {
     }
   }
   get audioDevices() { return this.findChildElementHandlers("AudioDevice") as AudioDevice[]; }
+  get id() { return this.element.id!; }
 
   setupAudioGraph(): void {
     super.setupAudioGraph();

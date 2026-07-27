@@ -6,6 +6,7 @@ import { BruteSequencer } from "./brute-sequencer";
 import { Track } from "./track";
 import { Device } from "./base-devices/device";
 import type { ISequencerStep } from "./sequencer-base";
+import { NOTE_FREQUENCIES } from "../notes";
 
 export class BruteSequencerStep extends Device implements ISequencerStep {
   constructor(element: HTMLElement, elementClass: string) {
@@ -32,7 +33,9 @@ export class BruteSequencerStep extends Device implements ISequencerStep {
   get stepInterval() { return MidiClock.stepInterval; }
   get renderTime() { return this.audioApp.renderTime; }
   
-  get noteText() { return this.getPropertyInputElement("Note")!.dataset.optionValue; }
+  get noteText(): string { 
+    let noteIndex = this.getPropertyValue<number>("Note");
+    return Object.keys(NOTE_FREQUENCIES)[noteIndex]!; }
 
   get note() { return this.getPropertyValue("Note"); }
   get velocity() { return this.getPropertyValue("Velocity"); }

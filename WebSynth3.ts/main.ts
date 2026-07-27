@@ -45,12 +45,12 @@ export function initialize() {
 
   createElementHandlerRegistry();
   let deviceFactory : DeviceFactory= new AppDeviceFactory();
+  setupKnobs();
   ElementHandlerRegistry.processAll(deviceFactory);
 
   audioApp = ElementHandlerRegistry.handlers.find(handler => handler.elementClass == "AudioApp")! as AudioApp;
   audioApp.setupAudioGraph();
   // setupAudioGraph();
-  setupKnobs();
   Logger.log("Initialised");
   Logger.log("Ready");
   audioAppElement.style.opacity = "1.0";

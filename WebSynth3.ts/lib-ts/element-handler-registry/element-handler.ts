@@ -7,7 +7,13 @@ export class ElementHandler {
   elementClass: string;
   childElements: { [key: string]: HTMLInputElement };
   childHandlers: { [key: string]: string };
-  id: any;
+  private _id: any;
+  public get id(): any {
+    return this._id;
+  }
+  public set id(value: any) {
+    this._id = value;
+  }
 
   constructor(element: HTMLElement, elementClass: string) {
     this.element = element;

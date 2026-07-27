@@ -1,4 +1,4 @@
-export const NOTE_FREQUENCIES = {
+export const NOTE_FREQUENCIES: { [key: string]: number } = {
   'C0': 16.351,
   'C#0': 17.324,
   'D0': 18.354,

@@ -1,0 +1,99 @@
+<article class="device"> <button class="toggle-button dark-green">signal: Channel</button>
+  <div class="content">
+    <article class="param Param"> <label for="pan"><b>pan</b>: <i>Param</i> <span class="small">[-1..1]</span> = <value for="pan">${value}</value> </label> <input class="propertyValue" type="range" name="pan" id=".pan" value="${value}" min="-1" max="1"> </article>
+    <article class="param Param"> <label for="volume"><b>volume</b>: <i>Param</i> <span class="small">[-10..Infinity]</span> = <value for="volume">${value}</value> </label> <input class="propertyValue" type="range" name="volume" id=".volume" value="${value}" min="-10" max="Infinity"> </article>
+  </div>
+</article>
+<article class="device"> <button class="toggle-button dark-green">Signal: Channel</button>
+  <div class="content">${children}</div>
+</article>
+<article class="device"> <button class="toggle-button dark-green">signal: Channel</button>
+  <div class="content">
+    <article class="param Param"> <label for="pan"><b>pan</b>: <i>Param</i> <span class="small">[-1..1]</span> = <value for="pan">${value}</value> </label> <input class="propertyValue" type="range" name="pan" id=".pan" value="${value}" min="-1" max="1"> </article>
+    <article class="param Param"> <label for="volume"><b>volume</b>: <i>Param</i> <span class="small">[-10..Infinity]</span> = <value for="volume">${value}</value> </label> <input class="propertyValue" type="range" name="volume" id=".volume" value="${value}" min="-10" max="Infinity"> </article>
+  </div>
+</article>
+<article class="device"> <button class="toggle-button dark-green">Signal: Channel</button>
+  <div class="content">${children}</div>
+</article> nullnull <article class="device"> <button class="toggle-button dark-green">signal: MembraneSynth</button>
+  <div class="content">
+    <article class="param Signal"> <label for="detune"><b>detune</b>: <i>Signal</i> <span class="small">[-1200..1200]</span> = <value for="detune">${value}</value> </label> <input class="propertyValue" type="range" name="detune" id=".detune" value="${value}" min="-1200" max="1200"> </article>
+    <article class="param Signal"> <label for="frequency"><b>frequency</b>: <i>Signal</i> <span class="small">[${minValue}..Infinity]</span> = <value for="frequency">200.10450190940776</value> </label> <input class="propertyValue" type="range" name="frequency" id=".frequency" value="200.10450190940776" min="${minValue}" max="Infinity"> </article>
+    <article class="param Param"> <label for="volume"><b>volume</b>: <i>Param</i> <span class="small">[-10..Infinity]</span> = <value for="volume">${value}</value> </label> <input class="propertyValue" type="range" name="volume" id=".volume" value="${value}" min="-10" max="Infinity"> </article>
+    <article class="unit"> <button class="toggle-button brown">envelope: AmplitudeEnvelope</button>
+      <div class="content">
+        <article class="unit"> <button class="toggle-button brown">input: Gain</button>
+          <div class="content">
+            <article class="param Param"> <label for="gain"><b>gain</b>: <i>Param</i> <span class="small">[-Infinity..Infinity]</span> = <value for="gain">${value}</value> </label> <input class="propertyValue" type="range" name="gain" id=".envelope.input.gain" value="${value}" min="-Infinity" max="Infinity"> </article>
+          </div>
+        </article>
+        <article class="unit"> <button class="toggle-button brown">output: Gain</button>
+          <div class="content">
+            <article class="param Param"> <label for="gain"><b>gain</b>: <i>Param</i> <span class="small">[-Infinity..Infinity]</span> = <value for="gain">${value}</value> </label> <input class="propertyValue" type="range" name="gain" id=".envelope.output.gain" value="${value}" min="-Infinity" max="Infinity"> </article>
+          </div>
+        </article>
+      </div>
+    </article>
+    <article class="unit"> <button class="toggle-button brown">output: Volume</button>
+      <div class="content">
+        <article class="param Param"> <label for="volume"><b>volume</b>: <i>Param</i> <span class="small">[-10..Infinity]</span> = <value for="volume">${value}</value> </label> <input class="propertyValue" type="range" name="volume" id=".output.volume" value="${value}" min="-10" max="Infinity"> </article>
+        <article class="unit"> <button class="toggle-button brown">input: Gain</button>
+          <div class="content">
+            <article class="param Param"> <label for="gain"><b>gain</b>: <i>Param</i> <span class="small">[-Infinity..Infinity]</span> = <value for="gain">${value}</value> </label> <input class="propertyValue" type="range" name="gain" id=".output.input.gain" value="${value}" min="-Infinity" max="Infinity"> </article>
+          </div>
+        </article>
+        <article class="unit"> <button class="toggle-button brown">output: Gain</button>
+          <div class="content">
+            <article class="param Param"> <label for="gain"><b>gain</b>: <i>Param</i> <span class="small">[-Infinity..Infinity]</span> = <value for="gain">${value}</value> </label> <input class="propertyValue" type="range" name="gain" id=".output.output.gain" value="${value}" min="-Infinity" max="Infinity"> </article>
+          </div>
+        </article>
+      </div>
+    </article>
+    <article class="device"> <button class="toggle-button dark-green">oscillator: OmniOscillator</button>
+      <div class="content">
+        <article class="param Signal"> <label for="detune"><b>detune</b>: <i>Signal</i> <span class="small">[-1200..1200]</span> = <value for="detune">${value}</value> </label> <input class="propertyValue" type="range" name="detune" id=".oscillator.detune" value="${value}" min="-1200" max="1200"> </article>
+        <article class="param Signal"> <label for="frequency"><b>frequency</b>: <i>Signal</i> <span class="small">[${minValue}..Infinity]</span> = <value for="frequency">122.44005783886003</value> </label> <input class="propertyValue" type="range" name="frequency" id=".oscillator.frequency" value="122.44005783886003" min="${minValue}" max="Infinity"> </article>
+        <article class="param Param"> <label for="volume"><b>volume</b>: <i>Param</i> <span class="small">[-10..Infinity]</span> = <value for="volume">${value}</value> </label> <input class="propertyValue" type="range" name="volume" id=".oscillator.volume" value="${value}" min="-10" max="Infinity"> </article>
+        <article class="unit"> <button class="toggle-button brown">output: Volume</button>
+          <div class="content">
+            <article class="param Param"> <label for="volume"><b>volume</b>: <i>Param</i> <span class="small">[-10..Infinity]</span> = <value for="volume">${value}</value> </label> <input class="propertyValue" type="range" name="volume" id=".oscillator.output.volume" value="${value}" min="-10" max="Infinity"> </article>
+            <article class="unit"> <button class="toggle-button brown">input: Gain</button>
+              <div class="content">
+                <article class="param Param"> <label for="gain"><b>gain</b>: <i>Param</i> <span class="small">[-Infinity..Infinity]</span> = <value for="gain">${value}</value> </label> <input class="propertyValue" type="range" name="gain" id=".oscillator.output.input.gain" value="${value}" min="-Infinity" max="Infinity"> </article>
+              </div>
+            </article>
+            <article class="unit"> <button class="toggle-button brown">output: Gain</button>
+              <div class="content">
+                <article class="param Param"> <label for="gain"><b>gain</b>: <i>Param</i> <span class="small">[-Infinity..Infinity]</span> = <value for="gain">${value}</value> </label> <input class="propertyValue" type="range" name="gain" id=".oscillator.output.output.gain" value="${value}" min="-Infinity" max="Infinity"> </article>
+              </div>
+            </article>
+          </div>
+        </article>
+      </div>
+    </article>
+  </div>
+</article>
+<article class="device"> <button class="toggle-button dark-green">Signal: MembraneSynth</button>
+  <div class="content">${children}</div>
+</article>
+<article class="unit"> <button class="toggle-button brown">signal: Compressor</button>
+  <div class="content">
+    <article class="param Param"> <label for="attack"><b>attack</b>: <i>Param</i> <span class="small">[0.001..1]</span> = <value for="attack">0.003</value> </label> <input class="propertyValue" type="range" name="attack" id=".attack" value="0.003" min="0.001" max="1"> </article>
+    <article class="param Param"> <label for="knee"><b>knee</b>: <i>Param</i> <span class="small">[${minValue}..40]</span> = <value for="knee">30</value> </label> <input class="propertyValue" type="range" name="knee" id=".knee" value="30" min="${minValue}" max="40"> </article>
+    <article class="param Param"> <label for="ratio"><b>ratio</b>: <i>Param</i> <span class="small">[1..20]</span> = <value for="ratio">3</value> </label> <input class="propertyValue" type="range" name="ratio" id=".ratio" value="3" min="1" max="20"> </article>
+    <article class="param Param"> <label for="release"><b>release</b>: <i>Param</i> <span class="small">[0.001..1]</span> = <value for="release">0.25</value> </label> <input class="propertyValue" type="range" name="release" id=".release" value="0.25" min="0.001" max="1"> </article>
+    <article class="param Param"> <label for="threshold"><b>threshold</b>: <i>Param</i> <span class="small">[-100..${maxValue}]</span> = <value for="threshold">-30</value> </label> <input class="propertyValue" type="range" name="threshold" id=".threshold" value="-30" min="-100" max="${maxValue}"> </article>
+  </div>
+</article>
+<article class="unit"> <button class="toggle-button brown">Signal: Compressor</button>
+  <div class="content">${children}</div>
+</article>
+<article class="device"> <button class="toggle-button dark-green">signal: Channel</button>
+  <div class="content">
+    <article class="param Param"> <label for="pan"><b>pan</b>: <i>Param</i> <span class="small">[-1..1]</span> = <value for="pan">${value}</value> </label> <input class="propertyValue" type="range" name="pan" id=".pan" value="${value}" min="-1" max="1"> </article>
+    <article class="param Param"> <label for="volume"><b>volume</b>: <i>Param</i> <span class="small">[-10..Infinity]</span> = <value for="volume">${value}</value> </label> <input class="propertyValue" type="range" name="volume" id=".volume" value="${value}" min="-10" max="Infinity"> </article>
+  </div>
+</article>
+<article class="device"> <button class="toggle-button dark-green">Signal: Channel</button>
+  <div class="content">${children}</div>
+</article>
