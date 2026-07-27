@@ -1,0 +1,146 @@
+      button {
+        background: rgba(0, 0, 0, 0.1);
+        border: 0.05rem solid rgba(50, 50, 50, 0.8);
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.4);
+      }
+
+      .unit {
+        box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.4);
+      }
+
+      .unit>.content>.param-group {
+        flex-direction: column;
+      }
+
+      .unit>.content>.unit {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .unit>h1,
+      .unit>button {
+        font-size: 0.8rem;
+        margin: 0rem;
+        padding: 0.2rem;
+        width: 100%;
+        display: block;
+
+      }
+
+      .param>label,
+      .param>value {
+        font-size: 0.6rem;
+      }
+
+      .param>label {
+        display: block;
+      }
+
+      .small {
+        font-size: 0.3rem;
+      }
+
+      .green {
+        background: rgba(76, 175, 80, 0.6);
+        color: white;
+      }
+
+      .toggle-button.green:hover {
+        background: #45a049;
+      }
+
+      .toggle-button.dark-green {
+        background: rgba(0, 100, 0, 0.6);
+        color: white;
+      }
+
+      .toggle-button.dark-green:hover {
+        background: darkgreen;
+        color: white;
+      }
+
+      .toggle-button.brown {
+        background: rgba(42, 120, 100, 0.6);
+        color: white;
+      }
+
+      .toggle-button.brown:hover {
+        background: rgb(42, 120, 100);
+        color: white;
+      }
+
+      /* Collapsible Content (Collapsed State) */
+      .content {
+        height: 0;
+        /* Hide content initially */
+        overflow: hidden;
+        /* Clip content when collapsed */
+        transition: max-height 10s ease-in-out, opacity 0.5s ease-in-out;
+        opacity: 0;
+        display: block;
+      }
+
+      /* Expanded State */
+      .content.expanded {
+        height: 100%;
+        /* Larger than content's actual height */
+        opacity: 1;
+        /* Fade in */
+      }
+
+
+      .device,
+      .unit {
+        border: 0.05rem solid rgba(50, 50, 50, 0.8);
+        border-radius: 0.2rem;
+        background: rgba(0, 0, 0, 0.2);
+        margin: 0.1rem;
+        padding: 0rem;
+      }
+
+      .device>button,
+      .unit>button {
+        border: 0.05rem solid rgba(50, 50, 50, 0.8);
+        border-radius: 0.2rem;
+        margin: 0.0rem;
+      }
+
+      .device>.content,
+      .unit>.content {
+        margin: 0.0rem;
+        padding: 0.0rem;
+      }
+
+      .content>.unit {
+        margin: 0.5rem;
+      }
+
+      .content>article {
+        margin: 0.5rem;
+      }
+
+      article {
+        display: flex;
+        flex-direction: column;
+      }
+
+      article.property {
+        border: 1pt solid green;
+      }
+
+      label {
+        display: block;
+      }
+
+      value {
+        vertical-align: bottom;
+        font-size: 0.3rem;
+      }
+
+      input.propertyValue {
+        text-align: right;
+        margin-right: auto;
+      }

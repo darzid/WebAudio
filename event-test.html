@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link rel="stylesheet" href="event-test.css">
+    <script src="http://unpkg.com/tone"></script>
+  </head>
+
+  <body>
+    <button id="start-button" class="green">Start</button>
+    <!--
+  <div class="device-group" style="display: none">
+    <article class="unit" data-type="DuoSynth">
+      <button class="toggle-button green">DuoSynth</button>
+      <div class="content">
+        <article class="param">
+          <label for="harmonicity">harmonicity</label>
+          <input type="range" name="harmonicity">
+        </article>
+        <article class="param">
+          <label>detune</label>
+          <input type="range" name="detune">
+        </article>
+        <article class="param">
+          <label>portamento</label>
+          <input type="range" name="portamento">
+        </article>
+    
+        <article class="unit" data-type="MonoSynth" name="voice0">
+          <button class="toggle-button dark-green">MonoSynth</button>
+          <div class="content">
+            <article class="param">
+              <label>type</label>
+              <input type="range" name="type">
+            </article>
+            <article class="param">
+              <label>detune</label>
+              <input type="range" name="detune">              
+            </article>
+            <article class="param">
+              <label>portamento</label>
+              <input type="range" name="portamento">
+            </article>
+        
+            <article class="unit" data-type="Filter" name="filter">
+              <button class="toggle-button">Filter</button>
+              <article class="param-group">
+                <article class="param">
+                  <label>harmonicity</label>
+                  <input type="range" name="harmonicity">
+                </article>
+                <article class="param">
+                  <label>detune</label>
+                  <input type="range" name="detune">
+                </article>
+                <article class="param">
+                  <label>portamento</label>
+                  <input type="range" name="portamento">
+                </article>
+              </article>
+            </article>
+            
+            <article class="unit" data-type="Envelope" name="filterEnvelope">
+              <button class="toggle-button">Filter Envelope</button>
+              <article class="param-group">
+                <article class="param">
+                  <label>Attack</label>
+                  <input type="range" name="attack">
+                </article>
+                <article class="param">
+                  <label>Decay</label>
+                  <input type="range" name="decay">
+                </article>
+                <article class="param">
+                  <label>Sustain</label>
+                  <input type="range" name="sustain">
+                </article>
+                <article class="param">
+                  <label>Release</label>
+                  <input type="range" name="release">
+                </article>
+              </article>
+            </article>
+          </div>
+        </article>
+    
+        <article class="unit" data-type="MonoSynth" name="voice1">
+          <button class="toggle-button dark-green">MonoSynth</button>
+          <div class="content">
+            <article class="param">
+              <label>type</label>
+              <input type="range" name="type">
+            </article>
+            <article class="param">
+              <label>detune</label>
+              <input type="range" name="detune">
+            </article>
+            <article class="param">
+              <label>portamento</label>
+              <input type="range" name="portamento">
+            </article>
+          </article>
+        
+          <article class="unit" data-type="Filter" name="filter">
+            <button class="toggle-button">Filter</button>
+            <article class="param-group">
+              <article class="param">
+                <label>harmonicity</label>
+                <input type="range" name="harmonicity">
+              </article>
+              <article class="param">
+                <label>detune</label>
+                <input type="range" name="detune">
+              </article>
+              <article class="param">
+                <label>portamento</label>
+                <input type="range" name="portamento">
+              </article>
+            </article>
+          </article>
+          
+          <article class="unit" data-type="Envelope" name="filterEnvelope">
+            <button class="toggle-button">Filter Envelope</button>
+            <article class="param-group">
+              <article class="param">
+                <label>Attack</label>
+                <input type="range" name="attack">
+              </article>
+              <article class="param">
+                <label>Decay</label>
+                <input type="range" name="decay">
+              </article>
+              <article class="param">
+                <label>Sustain</label>
+                <input type="range" name="sustain">
+              </article>
+              <article class="param">
+                <label>Release</label>
+                <input type="range" name="release">
+              </article>
+            </article>
+          </article>
+        </div>
+      </article>
+    </div>
+  </article>
+  </div>
+-->
+    <div id="templates">
+      <template data-types="Daw" data-sortOrder="4">
+        <article class="unit">
+          <button class="toggle-button dark-green">${propertyName}: ${propertyType}</button>
+          <div class="content">${children}</div>
+        </article>
+      </template>
+
+      <template data-types="Track,Channel,DuoSynth,FMSynth,MonoSynth,MembraneSynth,OmniOscillator" data-sortOrder="3">
+        <article class="device">
+          <button class="toggle-button dark-green">${propertyName}: ${propertyType}</button>
+          <div class="content">${children}</div>
+        </article>
+      </template>
+      <template data-types="Filter,FrequencyEnvelope,AmplitudeEnvelope,Volume,Gain,Compressor" data-sortOrder="2">
+        <article class="unit">
+          <button class="toggle-button brown">${propertyName}: ${propertyType}</button>
+          <div class="content">${children}</div>
+        </article>
+      </template>
+
+      <template data-types="Signal,Param,Multiply,Scale,Frequency,Pow,OscillatorType,NormalRange,sustain,octaves,number" data-sortOrder="1">
+        <article class="param ${propertyType}">
+          <label for="${propertyName}"><b>${propertyName}</b>: <i>${propertyType}</i> <span class="small">[${minValue}..${maxValue}]</span> = <value for="${propertyName}">${value}</value> </label>
+          <input class="propertyValue" type="range" name="${propertyName}" id="${namespace}" value="${value}" min="${minValue}" max="${maxValue}">
+        </article>
+      </template>
+
+      <template data-types="string" data-sortOrder="1">
+        <article class="param ${propertyType}">
+          <label for="${propertyName}"><b>${propertyName}</b>: <i>${propertyType}</i> <span class="small">[${minValue}..${maxValue}]</span> = <value for="${propertyName}">${value}</value> </label>
+          <input class="propertyValue" type="text" name="${propertyName}" id="${namespace}" value="${value}">
+        </article>
+      </template>
+    </div>
+
+    <div id="builder">
+    </div>
+
+    <script>
+
+      document.querySelector("#start-button")?.addEventListener("click", async () => {
+        console.log("DuoSynth is ready");
+        const builder = document.querySelector("#builder");
+
+        let daw = createDaw();
+        let channels = daw.channels;
+        await Tone.start();
+        console.log("audio is ready");
+
+        // const signalChains = [];
+
+        // const master = new Tone.Channel();
+        // const track1 = new Tone.Channel();
+        // signalChains.push([track1, master, Tone.Destination]);
+        // track1.chain(...signalChains[signalChains.length - 1].slice(1));
+
+        // const kick = new Tone.MembraneSynth(
+        //   {
+        //     pitchDecay: 0.05,
+        //     octaves: 10,
+        //     envelope: {
+        //       attack: 0.001,
+        //       decay: 0.4,
+        //       sustain: 0.01,
+        //       release: 1.4
+        //     }
+        //   });
+        // const comp = new Tone.Compressor(-30, 3);
+        // signalChains.push([kick, comp, track1]);
+        // kick.chain(...signalChains[signalChains.length - 1].slice(1));
+
+        // kick.triggerAttackRelease("C1", "4n");
+
+        // builder.innerHTML += processSignalChains(signalChains).templateHtml;
+
+
+
+
+
+
+        //builder.innerHTML += processObject("Channel", track1, "channel").templateHtml;
+
+
+        // let mySynth = new Tone.MonoSynth();
+        // mySynth.triggerAttackRelease("C3", "1n", 0);
+
+        createLoop(daw);
+
+
+        //builder.innerHTML += processObject("daw", channels, "daw").templateHtml;
+
+        builder.innerHTML += processObject("Synth", channels.track6.synth, "channels.track6.synth").templateHtml;
+
+        // builder.innerHTML += processObject("Kick", channels.track1.kick, "channels.track1.kick").templateHtml;
+        // builder.innerHTML += processObject("Compressor", channels.track1.compressor, "channels.track1.compressor").templateHtml;
+
+
+        // builder.innerHTML += processObject("MonoSynth", channels.track2.monoSynth, "channels.track2.monoSynth").templateHtml;
+        // builder.innerHTML += processObject("DuoSynth", channels.track3.duoSynth, "channels.track3.duoSynth").templateHtml;
+        // builder.innerHTML += processObject("DuoSynth", channels.track4.duoSynth, "channels.track4.duoSynth").templateHtml;
+        // builder.innerHTML += processObject("FMSynth", channels.track5.fmSynth, "channels.track5.fmSynth").templateHtml;
+
+        setupUiElements(daw);
+
+
+      });
+
+
+
+
+
+      function createDaw() {
+
+        console.log("Creating daw");
+        let channels = {
+          master: new Tone.Channel(),
+          track1: {
+            output: new Tone.Channel(),
+            compressor: new Tone.Compressor(-30, 3),
+            kick: new Tone.MembraneSynth(
+              {
+                pitchDecay: 0.05,
+                octaves: 10,
+                envelope: {
+                  attack: 0.001,
+                  decay: 0.4,
+                  sustain: 0.01,
+                  release: 1.4
+                }
+              })
+          },
+          track2: {
+            output: new Tone.Channel(),
+            monoSynth: new Tone.MonoSynth()
+          },
+          track3: {
+            output: new Tone.Channel(),
+            duoSynth: new Tone.DuoSynth()
+          },
+          track4: {
+            output: new Tone.Channel(),
+            duoSynth: new Tone.DuoSynth(),
+          },
+          track5: {
+            output: new Tone.Channel(),
+            fmSynth: new Tone.FMSynth(),
+          },
+          track6: {
+            output: new Tone.Channel(),
+            synth: new Tone.Synth(),
+          },
+        };
+
+        let daw = {
+          channels: channels
+        }
+
+        try {
+          channels.track1.kick.connect(channels.track1.compressor);
+          channels.track1.compressor.toDestination(); //.connect(channels.track1.output);
+          channels.track1.output.connect(channels.master);
+
+          channels.track2.monoSynth.connect(channels.track2.output);
+          channels.track2.output.connect(channels.master);
+
+          channels.track3.duoSynth.connect(channels.track3.output);
+          channels.track3.output.connect(channels.master);
+
+          channels.track4.duoSynth.connect(channels.track4.output);
+          channels.track4.output.connect(channels.master);
+
+          channels.track5.fmSynth.connect(channels.track5.output);
+          channels.track5.output.connect(channels.master);
+
+          // channels.track6.synth.connect(channels.track6.output);
+          // channels.track6.output.connect(channels.master);
+
+          channels.master.toDestination();
+
+          console.log("Daw created", channels);
+
+          return daw;
+
+        }
+        catch (err) {
+          console.error("Failed to create daw", err)
+          throw "Failed to create daw"
+        }
+
+      }
+
+      function createLoop(daw) {
+        let channels = daw.channels;
+        let kick = channels.track1.kick;
+        let bass = channels.track2.monoSynth;
+        let synthA = channels.track3.duoSynth;
+        let synthB = channels.track4.duoSynth;
+        let fmSynth = channels.track5.fmSynth;
+        let synth = channels.track6.synth;
+
+        Tone.getTransport().bpm.value = 150;
+
+        synth.toDestination();
+        //const synth = new Tone.Synth().toDestination();
+        synth.triggerAttackRelease("C4", "1n");
+
+        const loopA = new Tone.Loop((time) => {
+          synth.triggerAttackRelease("C2", "8n", time);
+        }, "4n").start(0);
+
+        // all loops start when the Transport is started
+        Tone.getTransport().start();
+
+        // ramp up to 800 bpm over 10 seconds
+        Tone.getTransport().stop(30);
+
+
+        // const kickLoop = new Tone.Loop((time) => {
+        //   kick.triggerAttackRelease("C1", "1n", time);
+        // }, "4n");
+        // kick.volume = -10;
+
+        // const bassLoop = new Tone.Loop((time) => {
+        //   bass.triggerAttackRelease("G#1", "1n", time);
+        //   bass.triggerAttackRelease("G#1", "1n", time + 0.5);
+        //   bass.triggerAttackRelease("G#2", "1n", time + 1);
+        // }, "4n");
+
+        // console.log("Starting transport");
+
+        // Tone.getTransport().start();
+        console.log("Transport started");
+        /*
+        const track1 = new Track(new Tone.DuoSynth());
+        const track2 = new Track(new Tone.DuoSynth());
+        
+        const daw = {
+          track1: track1,
+          track2: track2
+        }*/
+
+
+
+        //play a note every quarter-note
+        /*    const loopA = new Tone.Loop((time) => {
+              synthA.triggerAttackRelease("C2", "8n", time);
+            }, "4n").start(0);
+            */
+        //play another note every off quarter-note, by starting it "8n"
+        /*   const loopB = new Tone.Loop((time) => {
+            // kick.triggerAttackRelease("C1", "4n", time);
+            // synthB.triggerAttackRelease("C4", "8n", time);
+           }, "4n").start("8n");
+           */
+        /*
+          const loopC = new Tone.Loop((time) => {
+            fmSynth.triggerAttackRelease("C2", "8n", time);
+          }, "4n").start("8n");*/
+
+        // all loops start when the Transport is started
+        // Tone.getTransport().bpm.value = 150;
+        // Tone.getTransport().start();
+
+        // ramp up to 800 bpm over 10 seconds
+        //Tone.getTransport().bpm.rampTo(800, 50);
+      }
+
+      function setupUiElements(daw) {
+        const rangeInputs = document.querySelectorAll('input[type="range"]');
+        rangeInputs.forEach(rangeInput => {
+          if (rangeInput.max == "Infinity")
+            rangeInput.max = 1000000;
+          if (rangeInput.min == "-Infinity")
+            rangeInput.min = -1000000;
+          let range = parseFloat(rangeInput.max - rangeInput.min);
+          if (range < 10)
+            rangeInput.step = range / 100;
+
+          var updateParam = () => {
+            let parts = rangeInput.id.split(".");
+            let item = daw;
+            let parentItem = null;
+            let propertyName = parts[parts.length - 1];
+            parts.forEach(part => {
+              parentItem = item;
+              item = item[part];
+            }
+            );
+            let oldValue = (typeof item === "object") ? item.value : item;
+            if (typeof item === "object") {
+              item.value = parseFloat(rangeInput.value);
+            } else {
+              parentItem[propertyName] = parseFloat(rangeInput.value);
+            }
+
+            console.log("Param updated from " + oldValue + " to " + item.value, item);
+          }
+
+          rangeInput.addEventListener("input", (e) => {
+            rangeInput.parentElement.querySelector("value").innerHTML = e.target.value;
+            updateParam();
+          });
+          //updateParam();
+        });
+
+
+        const textInputs = document.querySelectorAll('input[type="text"]');
+        textInputs.forEach(textInput => {
+          // var updateTextParam = () => {
+          //   let parts = rangeInput.id.split(".");
+          //   let item = daw;
+          //   let parentItem = null;
+          //   let propertyName = parts[parts.length - 1];
+          //   parts.forEach(part => {
+          //     parentItem = item;
+          //     item = item[part];
+          //   }
+          //   );
+          //   let oldValue = (typeof item === "object") ? item.value : item;
+          //   if (typeof item === "object") {
+          //     item.value = parseFloat(rangeInput.value);
+          //   } else {
+          //     parentItem[propertyName] = parseFloat(rangeInput.value);
+          //   }
+
+          //   let parts = textInput.id.split(".");
+          //   let item = daw;
+          //   parts.forEach(part => item = item[part]);
+          //   let oldValue = item.value;
+          //   item.value = textInput.value;
+          // }
+
+          // textInput.addEventListener("input", (e) => {
+          //   textInput.parentElement.querySelector("value").innerHTML = e.target.value;
+          //   updateTextParam();
+          // });
+          //updateTextParam();
+        });
+
+        const toggleBtns = document.querySelectorAll('.toggle-button');
+        toggleBtns.forEach(button => {
+          let content = button.parentElement.querySelector(".content");
+          button.addEventListener('click', () => {
+            content.classList.toggle('expanded');
+          });
+        });
+      }
+
+
+
+      function processSignalChains(signalChains) {
+        let namespace = "";
+        let chainIndex = 0;
+        let templateHtml = "";
+        signalChains.forEach(signalChain => {
+          chainIndex += 1;
+          namespace += "chain" + chainIndex;
+          let signalIndex = 0;
+          let previousSignalTemplateHtml = "";
+          signalChain.forEach(signal => {
+            let signalTemplateHtml = "";
+            signalIndex += 1;
+            namespace += "[" + signalIndex + "]";
+            let objectResult = processObject(signal.name, signal, namespace);
+            if (objectResult.templateHtml) {
+              templateHtml += objectResult.templateHtml;
+            }
+            // let objectType = signal["name"];
+            // let result = applyTemplate(objectType, "Signal", signal, namespace);
+            // signalTemplateHtml += result.templateHtml;
+            // templateHtml += signalTemplateHtml;
+            // if (previousSignalTemplateHtml) {
+            //   console.log("Contains children: " + previousSignalTemplateHtml.includes("${children}"));
+            //   previousSignalTemplateHtml = previousSignalTemplateHtml.replace("${children}", signalTemplateHtml);
+            //   console.log("Still Contains children: " + previousSignalTemplateHtml.includes("${children}"));
+            //   templateHtml += previousSignalTemplateHtml;
+            // }
+            // previousSignalTemplateHtml = signalTemplateHtml;
+          })
+        });
+        return {
+          templateHtml: templateHtml,
+          templateSortOrder: 1
+        }
+      }
+
+      function processObject(propertyName, currentObject, namespace) {
+        let objectType = currentObject["name"];
+        let propertyType = objectType ? objectType : typeof currentObject;
+        let result = applyTemplate(propertyType, propertyName, currentObject, namespace);
+        if (result.templateHtml == "")
+          console.log(`No result HTML for object {propertyName}`, currentObject)
+
+        var templateResults = [];
+        if (result.templateHtml && result.templateHtml.indexOf("${children}") > -1) {
+          let propNames = getObjectProperties(currentObject);
+          console.log("processObject " + objectType, currentObject, propNames);
+
+          propNames.forEach(propertyName => {
+            let objectProperty = currentObject[propertyName];
+            let templateResult = processObject(propertyName, objectProperty, namespace + "." + propertyName);
+
+            if (templateResult.templateHtml) {
+              templateResults.push(templateResult);
+            }
+            else {
+              let propDescriptor = Object.getOwnPropertyDescriptor(currentObject, propertyName);
+              let propObject = currentObject;
+              while (!propDescriptor && propObject) {
+                propObject = Object.getPrototypeOf(propObject);
+                propDescriptor = Object.getOwnPropertyDescriptor(propObject, propertyName);
+              }
+
+              if (propDescriptor) {
+                if (propDescriptor.enumerable) {
+                  console.log(`Applying template for property ${namespace}.${propertyName}: ${typeof objectProperty}`);
+                  templateResult = processObjectProperty(propertyName, objectProperty, namespace + "." + propertyName);
+                  if (templateResult.templateHtml) {
+                    templateResults.push(templateResult);
+                  }
+                }
+                else {
+                  console.log(`Skipping property ${namespace}.${propertyName}: ${typeof objectProperty}, because it's not enumerable`);
+                }
+              }
+              // if (typeof objectProperty == "object") {
+              // }
+            }
+          });
+
+          let childrenHtml = "";
+
+          const sortOrders = templateResults.filter((obj, index, self) =>
+            index === self.findIndex((t) => t.templateSortOrder === obj.templateSortOrder)
+          ).map(tr => tr.templateSortOrder).sort();
+
+          sortOrders.forEach(sortOrder => {
+            let groupedResults = templateResults.filter(tr => tr.templateSortOrder == sortOrder);
+            groupedResults.forEach(result => childrenHtml += result.templateHtml);
+          });
+          if (childrenHtml.indexOf(",") > -1)
+            console.error("Found in childrenhtml,", childrenHtml);
+          result.templateHtml = result.templateHtml.replace("${children}", childrenHtml);
+          console.log("parsed html", result, templateResults);
+          return result;
+        }
+        else
+          return {
+            templateHtml: null,
+            templateSortOrder: null
+          }
+      }
+
+      function getObjectProperties(object) {
+        let properties = Object.getOwnPropertyNames(object);//.filter(name => Object.getOwnPropertyDescriptor(object, name).writable);
+        let baseObject = Object.getPrototypeOf(object);
+        while (baseObject) {
+          let baseProperties = Object.getOwnPropertyNames(baseObject)
+          //.filter(name => Object.getOwnPropertyDescriptor(baseObject, name).writable);
+          if (baseProperties.length > 0) {
+            baseProperties.forEach(prop => {
+              properties.push(prop);
+              //console.log(Object.getOwnPropertyDescriptor(baseObject, prop));
+            });
+          }
+          baseObject = Object.getPrototypeOf(baseObject);
+        }
+        properties = properties.filter(name => typeof object[name] != "function");
+        console.log("base props", properties);
+
+        let publicProperties = properties.filter(name => !name.startsWith("_"));
+
+        let objectOrNumberProperties = publicProperties
+          .filter(name => typeof object[name] == "object" || typeof object[name] == "number" || typeof object[name] == "string")
+          .sort();
+
+        if (publicProperties.length > objectOrNumberProperties.length) {
+          let nonObjectProperties = publicProperties
+            .filter(name => typeof object[name] != "object");
+          //console.log("Non object public properties", nonObjectProperties)
+        }
+
+        return objectOrNumberProperties;
+      }
+      /*
+      function getObjectProperties(object) {
+        let publicProperties = Object.keys(object)
+          .filter(name => !name.startsWith("_"))
+        let objectProperties = publicProperties
+          .filter(name => typeof object[name] == "object")
+          .sort();
+        
+        if (publicProperties.length > objectProperties.length) {
+          let nonObjectProperties = publicProperties
+            .filter(name => typeof object[name] != "object");
+          console.log("Non object public properties", nonObjectProperties)
+        }
+        return objectProperties;
+      }
+      */
+
+      function processObjectProperty(propertyName, objectProperty, namespace) {
+        //console.log("processObjectProperty", objectProperty);
+        // if (objectProperty["name"]) {
+        let propertyType = typeof objectProperty == "object" ? objectProperty["name"] : typeof objectProperty;
+        let templateResult = applyTemplate(propertyType, propertyName, objectProperty, namespace);
+        if (templateResult.templateHtml != "")
+          return templateResult;
+        else
+          console.log(`No template found for Object property ${propertyName} with type ${propertyType}`, propertyName)
+        // }
+        // else
+        //   console.log(`Object property ${propertyName} doesn't have a name property`, objectProperty);
+        // return {
+        //   templateHtml: null,
+        //   templateSortOrder: null
+        // }
+      }
+
+      const customRanges = {
+        detune: {
+          minValue: -1200,
+          maxValue: 1200
+        },
+        volume: {
+          minValue: -10,
+          maxValue: 0
+        },
+        threshold: {
+          minValue: -100,
+          maxValue: 0
+        },
+        attack: {
+          minValue: 0.001,
+          maxValue: 1
+        },
+        release: {
+          minValue: 0.001,
+          maxValue: 1
+        }
+      }
+
+      function applyTemplate(typeName, propertyName, objectProperty, namespace) {
+        if (propertyName === "name") {
+          return {
+            templateHtml: null,
+            templateSortOrder: null
+          }
+        }
+        let template = document.querySelector(`template[data-types*="${typeName}"]`);
+        if (template) {
+          let metadataProperties = {
+            propertyName: propertyName,
+            propertyType: typeName,
+            namespace: namespace,
+            value: objectProperty
+          }
+          let templateHtml = template.innerHTML;
+          let templateSortOrder = parseInt(template.dataset.sortorder);
+
+          let matches = templateHtml.matchAll("[$]{(?<token>[a-zA-Z]+[0-9]?)}");
+          matches.forEach(match => {
+            let tokenName = match.groups["token"];
+            let completeToken = match[0];
+            /*  if (propertyName == "volume")
+                console.log("Match:", tokenName, completeToken );*/
+            if (tokenName != "children") {
+              let tokenValue = "";
+              if (customRanges[propertyName] && customRanges[propertyName][tokenName]) {
+                let customRange = customRanges[propertyName][tokenName]
+                //console.log(`Property ${propertyName}: updating token ${tokenName}=${tokenValue} with custom range ${customRange}`);
+                tokenValue = customRanges[propertyName][tokenName]
+              }
+              else {
+                tokenValue = (metadataProperties[tokenName]) ? metadataProperties[tokenName] : objectProperty[tokenName];
+                if (tokenValue != undefined) {
+                  if (tokenValue == "3.4028234663852886e+38")
+                    tokenValue = "Infinity";
+                  else if (tokenValue == "-3.4028234663852886e+38")
+                    tokenValue = "-Infinity";
+                }
+              }
+
+              if (tokenValue) {
+
+                templateHtml = templateHtml.replace(completeToken, tokenValue);
+                //console.log(`Replacing token "${completeToken}" with "${tokenValue}"`);
+              }
+              else {
+                //  console.log(`Token "${completeToken}" has no value`);
+              }
+            }
+          });
+          return {
+            templateHtml: templateHtml,
+            templateSortOrder: templateSortOrder
+          }
+        }
+        else {
+          console.warn(`applyTemplate(): No template found for ${namespace}: ${typeName}`, objectProperty);
+
+          return {
+            templateHtml: null,
+            templateSortOrder: null
+          }
+        }
+      }
+
+    </script>
+  </body>
+
+</html>
