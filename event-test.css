@@ -92,6 +92,7 @@
       }
 
 
+      .group,
       .device,
       .unit {
         border: 0.05rem solid rgba(50, 50, 50, 0.8);
@@ -101,6 +102,7 @@
         padding: 0rem;
       }
 
+      .group > button,
       .device>button,
       .unit>button {
         border: 0.05rem solid rgba(50, 50, 50, 0.8);

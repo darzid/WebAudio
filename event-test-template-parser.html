@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link rel="stylesheet" href="event-test.css">
+    <script src="http://unpkg.com/tone"></script>
+    <script src="event-test-template-parser.js"></script>
+    <style>
+      body {
+        background-color: lightgray;
+      }
+
+      body,
+      button,
+      input,
+      text,
+      label,
+      value {
+        font-size: 1.2vmax;
+        text-shadow: none;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0.1rem;
+      }
+
+      .Track,
+      .Device {
+        border: 1pt solid rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.1);
+        padding: 0.5rem;
+        margin: 0.1rem;
+      }
+
+      .Parameters {
+        border: 1pt solid rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.1);
+        padding: 0rem;
+        margin: 0rem;
+
+      }
+
+      .Device h1 {
+        font-size: 2vmax;
+      }
+
+      .Device h2 {
+        font-size: 1.5vmax;
+      }
+
+      label,
+      value {
+        font-size: 1vmax;
+      }
+    </style>
+  </head>
+
+  <body>
+    <span id="templates">
+
+      <template data-object-names="Track">
+        <article class="Track">
+          <h1>${item.id}</h1>
+          <h2>Devices</h2>
+          {{item.devices}}
+        </article>
+      </template>
+
+      <template data-property-names="oscillator" data-object-names="MonoSynth,DuoSynth,OmniOscillator,Filter,Oscillator,AmplitudeEnvelope,Volume,FrequencyEnvelope,Multiply">
+        <article class="Device">
+          <h1>${item.name}</h1>
+          <h2>Parameters</h2>
+          <div class="Parameters">
+            {{item.parameters}}
+          </div>
+        </article>
+      </template>
+
+      <template data-property-types="number">
+        <article>
+          <label for="${item.name}"><b>${item.name}</b>: <i>${item.type}</i> = <value for="${item.name}">${item.value}</value> </label>
+          <input class="propertyValue" type="range" name="${item.name}" value="${item.value}">
+        </article>
+      </template>
+
+      <template data-property-names="name" data-property-types="string">
+        <article>
+          <label for="${item.name}"><b>${item.name}</b>: <i>${item.type}</i></label>
+          <input class="propertyValue" type="text" name="${item.name}" value="${item.value}">
+        </article>
+      </template>
+
+      <template data-property-types="string">
+        <article>
+          <label for="${item.name}"><b>${item.name}</b>: <i>${item.type}</i></label>
+          <input class="propertyValue" type="text" name="${item.name}" value="${item.value}">
+        </article>
+      </template>
+
+      <template data-object-names="Signal,Param,volume,frequency,detune,harmonicity,vibratoRate,vibratoAmount">
+        <article>
+          <label for="${item.name}"><b>${item.name}</b>: <i>${item.type}</i> = <value for="${item.name}">${item.value.value}</value> </label>
+          <input class="propertyValue" type="range" name="${item.name}" min="${item.value.minValue}" max="${item.value.maxValue}" value="${item.value.value}">
+        </article>
+      </template>
+
+      <template data-object-names="portamento">
+        <article>
+          <label for="${item.name}"><b>${item.name}</b>: <i>${item.type}</i> = <value for="${item.name}">${item.value}</value> </label>
+          <input class="propertyValue" type="range" name="${item.name}" value="${item.value}">
+        </article>
+      </template>
+
+    </span>
+
+    <div id="output"></div>
+
+    <script>
+      class Track {
+        _id = "";
+        _name = "Track";
+        _devices = [];
+        constructor(id, devices) {
+          this._id = id;
+
+          Object.defineProperty(this, 'id', {
+            enumerable: true,
+            get: function () {
+              return this._id;
+            }
+          });
+
+          Object.defineProperty(this, 'name', {
+            enumerable: true,
+            get: function () {
+              return this._name;
+            }
+          });
+
+          Object.defineProperty(this, 'devices', {
+            enumerable: true,
+            get: function () {
+              return this._devices;
+            }
+          });
+
+
+          devices.forEach(device => {
+            var getChildProperties = (property) => {
+              if (property.value.name) {
+                let parameters = getObjectInfo(property.value).properties;
+                parameters.forEach(childProperty => getChildProperties(childProperty));
+                property.value["parameters"] = parameters;
+                property["parameters"] = parameters;
+              }
+            }
+
+            let objectInfo = getObjectInfo(device);
+            objectInfo.properties.forEach(property => {
+              getChildProperties(property);
+            })
+            device["parameters"] = objectInfo.properties;
+            this._devices.push(device);
+          })
+        }
+      }
+
+
+      let output = document.getElementById("output");
+
+      let track = new Track("Track1", [new Tone.MonoSynth(), new Tone.DuoSynth()]);
+
+      let monoSynthObjectInfo = getObjectInfo(track.devices[0]);
+      console.log("MonoSynth object info", monoSynthObjectInfo);
+
+      let trackObjectInfo = getObjectInfo(track);
+      console.log("Track object info", trackObjectInfo);
+      output.innerHTML += applyTemplate(track);
+
+    </script>
+  </body>
+
+</html>-

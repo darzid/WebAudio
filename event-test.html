@@ -150,14 +150,21 @@
   </div>
 -->
     <div id="templates">
-      <template data-types="Daw" data-sortOrder="4">
-        <article class="unit">
+      <template data-types="Daw,channels,track1,track2" data-sortOrder="4">
+        <article class="group">
           <button class="toggle-button dark-green">${propertyName}: ${propertyType}</button>
           <div class="content">${children}</div>
         </article>
       </template>
 
-      <template data-types="Track,Channel,DuoSynth,FMSynth,MonoSynth,MembraneSynth,OmniOscillator" data-sortOrder="3">
+      <template data-types="Track" data-sortOrder="3">
+        <article class="device" style="background: yellow">
+          <button class="toggle-button dark-green">${namespace}: ${propertyType}</button>
+          <div class="content">${children}</div>
+        </article>
+      </template>
+
+      <template data-types="Channel,DuoSynth,FMSynth,MonoSynth,MembraneSynth,OmniOscillator,PingPongDelay" data-sortOrder="3">
         <article class="device">
           <button class="toggle-button dark-green">${namespace}: ${propertyType}</button>
           <div class="content">${children}</div>
@@ -190,6 +197,14 @@
 
     <script>
 
+      class Item {
+        constructor() {
+          this.value = 10;
+          this.minValue = 0;
+          this.maxValue = 100;
+          this.name = "volume";
+        }
+      }
       document.querySelector("#start-button")?.addEventListener("click", async () => {
         console.log("DuoSynth is ready");
         const builder = document.querySelector("#builder");
@@ -238,14 +253,30 @@
 
         createLoop(daw);
 
+        let templateHtml = "<article class='${typeof item}'>${item.value}</article>";
+        let targetHtml = templateHtml;
+        let item = new Item();
+        let tokens = getTokens(templateHtml);
+        tokens.forEach(tokenInfo => {
+          let tokenValue = eval(tokenInfo.tokenName);
+          targetHtml = targetHtml.replace(tokenInfo.token, tokenValue);
+        })
 
+        console.log("TemplateHTML to target", templateHtml, targetHtml);
+
+        let kickDescriptor = getPropDescriptor(channels.track1, "kick");
+        console.log("Kick descriptor", kickDescriptor);
         //builder.innerHTML += processObject("daw", channels, "daw").templateHtml;
 
+        builder.innerHTML += processDictionary("Daw", "Daw", daw, "daw").templateHtml;
+
+        builder.innerHTML += processObject("Track", channels.track1.output, "channels.track1.output").templateHtml;
         builder.innerHTML += processObject("Kick", channels.track1.kick, "channels.track1.kick").templateHtml;
         builder.innerHTML += processObject("bass1", channels.track2.bass1, "channels.track2.bass1").templateHtml;
         builder.innerHTML += processObject("bass2", channels.track2.bass2, "channels.track2.bass2").templateHtml;
         builder.innerHTML += processObject("bass3", channels.track2.bass3, "channels.track2.bass3").templateHtml;
         builder.innerHTML += processObject("fmSynth", channels.track5.fmSynth, "channels.track5.fmSynth").templateHtml;
+        builder.innerHTML += processObject("delay", channels.track5.delay, "channels.track5.delay").templateHtml;
 
         // builder.innerHTML += processObject("Kick", channels.track1.kick, "channels.track1.kick").templateHtml;
         // builder.innerHTML += processObject("Compressor", channels.track1.compressor, "channels.track1.compressor").templateHtml;
@@ -268,104 +299,121 @@
       function createDaw() {
 
         console.log("Creating daw");
-        let channels = {
-          master: new Tone.Channel(),
-          track1: {
-            output: new Tone.Channel(),
-            compressor: new Tone.Compressor(-30, 3),
-            kick: new Tone.MembraneSynth(
-              {
-                pitchDecay: 0.05,
-                octaves: 10,
+        let daw = {
+          channels: {
+            master: new Tone.Channel(),
+            track1: {
+              kick: new Tone.MembraneSynth(
+                {
+                  pitchDecay: 0.05,
+                  octaves: 10,
+                  envelope: {
+                    attack: 0.001,
+                    decay: 0.4,
+                    sustain: 0.01,
+                    release: 1.4
+                  },
+                  volume: 10
+                }),
+              output: new Tone.Channel(),
+            },
+            track2: {
+              bass1: new Tone.MonoSynth({
+                amplitudeEnvelope: {
+                  attack: 0.001,
+                  decay: 15,
+                  sustain: 0.1,
+                  release: 0.1
+                },
+                filterEnvelope: {
+                  attack: 0.001,
+                  decay: 0.44,
+                  sustain: 0.01,
+                  release: 0.5
+                },
+                volume: -5,
+              }),
+              bass2: new Tone.MonoSynth({
+                amplitudeEnvelope: {
+                  attack: 0.001,
+                  decay: 15,
+                  sustain: 0.1,
+                  release: 0.1
+                },
+                filterEnvelope: {
+                  attack: 0.001,
+                  decay: 0.44,
+                  sustain: 0.01,
+                  release: 0.5
+                },
+                volume: -1,
+              }),
+              bass3: new Tone.MonoSynth({
+                amplitudeEnvelope: {
+                  attack: 0.001,
+                  decay: 15,
+                  sustain: 0.1,
+                  release: 0.1
+                },
+                filterEnvelope: {
+                  attack: 0.001,
+                  decay: 0.44,
+                  sustain: 0.01,
+                  release: 0.5
+                },
+                volume: -5,
+              }),
+              output: new Tone.Channel(),
+            },
+            track3: {
+              duoSynth: new Tone.DuoSynth(),
+              output: new Tone.Channel(),
+            },
+            track4: {
+              duoSynth: new Tone.DuoSynth(),
+              output: new Tone.Channel(),
+            },
+            track5: {
+              fmSynth: new Tone.FMSynth({
+                harmonicity: 6,
+                modulationIndex: 30,
+                volume: -30,
                 envelope: {
                   attack: 0.001,
-                  decay: 0.4,
-                  sustain: 0.01,
-                  release: 1.4
+                  decay: 1,
+                  sustain: 0,
+                  release: 0
+                },
+              }),
+              fmLfo: new Tone.LFO(
+                {
+                  type: 'sine',
+                  min: 50,
+                  max: 100,
+                  frequency: 0.1
                 }
-              })
-          },
-          track2: {
-            output: new Tone.Channel(),
-            bass1: new Tone.MonoSynth({
-              amplitudeEnvelope: {
-                attack: 0.001,
-                decay: 15,
-                sustain: 0.1,
-                release: 0.1
-              },
-              filterEnvelope: {
-                attack: 0.001,
-                decay: 0.44,
-                sustain: 0.01,
-                release: 0.5
-              },
-              volume: -10,
-            }),
-            bass2: new Tone.MonoSynth({
-              amplitudeEnvelope: {
-                attack: 0.001,
-                decay: 15,
-                sustain: 0.1,
-                release: 0.1
-              },
-              filterEnvelope: {
-                attack: 0.001,
-                decay: 0.44,
-                sustain: 0.01,
-                release: 0.5
-              },
-              volume: -3,
-            }),
-            bass3: new Tone.MonoSynth({
-              amplitudeEnvelope: {
-                attack: 0.001,
-                decay: 15,
-                sustain: 0.1,
-                release: 0.1
-              },
-              filterEnvelope: {
-                attack: 0.001,
-                decay: 0.44,
-                sustain: 0.01,
-                release: 0.5
-              },
-              volume: -8,
-            }),
-          },
-          track3: {
-            output: new Tone.Channel(),
-            duoSynth: new Tone.DuoSynth()
-          },
-          track4: {
-            output: new Tone.Channel(),
-            duoSynth: new Tone.DuoSynth(),
-          },
-          track5: {
-            output: new Tone.Channel(),
-            fmSynth: new Tone.FMSynth({
-              envelope: {
-                attack: 0.001,
-                decay: 1,
-                sustain: 0,
-                release: 0
-              },
-
-            })
-          },
-          track6: {
-            output: new Tone.Channel(),
-            synth: new Tone.Synth(),
-          },
+              ),
+              delay: new Tone.PingPongDelay({
+                delayTime: 0.14,
+                wet: 0.25,
+                input: {
+                  gain: 4
+                }
+              }),
+              output: new Tone.Channel(),
+            },
+            track6: {
+              synth: new Tone.Synth(),
+              output: new Tone.Channel(),
+            },
+          }
         };
 
-        let daw = {
-          channels: channels
-        }
+        let channels = daw.channels;
+
 
         try {
-          channels.track1.kick.connect(channels.track1.compressor);
-          channels.track1.compressor.connect(channels.track1.output);
+          channels.track1.kick.connect(channels.track1.output);
           channels.track1.output.connect(channels.master);
 
           channels.track2.bass1.connect(channels.track2.output);
@@ -379,7 +427,10 @@
           channels.track4.duoSynth.connect(channels.track4.output);
           channels.track4.output.connect(channels.master);
 
-          channels.track5.fmSynth.connect(channels.track5.output);
+          channels.track5.fmSynth.connect(channels.track5.delay);
+          channels.track5.fmLfo.connect(channels.track5.fmSynth.modulationIndex);
+          channels.track5.fmLfo.start();
+          channels.track5.delay.connect(channels.track5.output);
           channels.track5.output.connect(channels.master);
 
           // channels.track6.synth.connect(channels.track6.output);
@@ -387,6 +438,8 @@
 
           channels.master.toDestination();
 
+          console.log("Delay input gain", channels.track5.delay.input.gain.value);
+          channels.track5.delay.input.gain.value = 5;
           console.log("Daw created", channels, channels.track2.monoSynth, channels, channels.track2.monoSynth2);
 
           return daw;
@@ -431,7 +484,7 @@
         }, "4n").start("16n");
 
         const fmLoop = new Tone.Loop((time) => {
-          fmSynth.triggerAttackRelease("G#1", "4n", time);
+          fmSynth.triggerAttackRelease("G#0", "4n", time);
         }, "4n").start(0);
 
         // all loops start when the Transport is started
@@ -611,44 +664,75 @@
         });
       }
 
-
-
-      function processSignalChains(signalChains) {
-        let namespace = "";
-        let chainIndex = 0;
-        let templateHtml = "";
-        signalChains.forEach(signalChain => {
-          chainIndex += 1;
-          namespace += "chain" + chainIndex;
-          let signalIndex = 0;
-          let previousSignalTemplateHtml = "";
-          signalChain.forEach(signal => {
-            let signalTemplateHtml = "";
-            signalIndex += 1;
-            namespace += "[" + signalIndex + "]";
-            let objectResult = processObject(signal.name, signal, namespace);
-            if (objectResult.templateHtml) {
-              templateHtml += objectResult.templateHtml;
-            }
-            // let objectType = signal["name"];
-            // let result = applyTemplate(objectType, "Signal", signal, namespace);
-            // signalTemplateHtml += result.templateHtml;
-            // templateHtml += signalTemplateHtml;
-            // if (previousSignalTemplateHtml) {
-            //   console.log("Contains children: " + previousSignalTemplateHtml.includes("${children}"));
-            //   previousSignalTemplateHtml = previousSignalTemplateHtml.replace("${children}", signalTemplateHtml);
-            //   console.log("Still Contains children: " + previousSignalTemplateHtml.includes("${children}"));
-            //   templateHtml += previousSignalTemplateHtml;
-            // }
-            // previousSignalTemplateHtml = signalTemplateHtml;
-          })
-        });
-        return {
-          templateHtml: templateHtml,
-          templateSortOrder: 1
+      function processDictionary(propertyName, objectType, currentObject, namespace) {
+        let result = applyTemplate(objectType, propertyName, currentObject, namespace);
+        if (result.templateHtml == "") {
+          console.log(`No result HTML for object ${objectType}`, currentObject);
+          return {
+            templateHtml: null,
+            templateSortOrder: null
+          }
         }
+        else {
+          var templateResults = [];
+          if (result.templateHtml && result.templateHtml.indexOf("${children}") > -1) {
+            let childNames = Object.keys(currentObject);
+            childNames.forEach(propertyName => {
+              let objectProperty = currentObject[propertyName];
+              let templateResult = processObject(propertyName, objectProperty, namespace + "." + propertyName);
+
+              if (templateResult.templateHtml) {
+                templateResults.push(templateResult);
+              }
+              else {
+                let propDescriptor = getPropDescriptor(objectProperty, propertyName);
+                if (propDescriptor) {
+                  let enumProperty = objectProperty;
+                  while (propDescriptor && propDescriptor.enumerable) {
+                    console.log(`Applying template for property ${namespace}.${propertyName}: ${typeof enumProperty}`, enumProperty.length);
+                    templateResult = processObjectProperty(propertyName, enumProperty, namespace + "." + propertyName);
+                    if (templateResult.templateHtml) {
+                      templateResults.push(templateResult);
+                    }
+                    propDescriptor = getPropDescriptor(enumProperty, propertyName);
+                  }
+                  if (propDescriptor.enumerable) {
+                  }
+                  else {
+                    console.log(`Skipping property ${namespace}.${propertyName}: ${typeof objectProperty}, because it's not enumerable`);
+                  }
+                }
+                // if (typeof objectProperty == "object") {
+                // }
+              }
+            });
+
+            let childrenHtml = "";
+
+            const sortOrders = templateResults.filter((obj, index, self) =>
+              index === self.findIndex((t) => t.templateSortOrder === obj.templateSortOrder)
+            ).map(tr => tr.templateSortOrder).sort();
+
+            sortOrders.forEach(sortOrder => {
+              let groupedResults = templateResults.filter(tr => tr.templateSortOrder == sortOrder);
+              groupedResults.forEach(result => childrenHtml += result.templateHtml);
+            });
+            result.templateHtml = result.templateHtml.replace("${children}", childrenHtml);
+            console.log("parsed html", result, templateResults);
+          }
+        }
+        return result;
       }
 
+      function getPropDescriptor(currentObject, propertyName) {
+        let propDescriptor = Object.getOwnPropertyDescriptor(currentObject, propertyName);
+        let propObject = currentObject;
+        while (!propDescriptor && propObject) {
+          propObject = Object.getPrototypeOf(propObject);
+          propDescriptor = Object.getOwnPropertyDescriptor(propObject, propertyName);
+        }
+        return propDescriptor;
+      }
       function processObject(propertyName, currentObject, namespace) {
         let objectType = currentObject["name"];
         let propertyType = objectType ? objectType : typeof currentObject;
@@ -678,7 +762,7 @@
 
               if (propDescriptor) {
                 if (propDescriptor.enumerable) {
-                  console.log(`Applying template for property ${namespace}.${propertyName}: ${typeof objectProperty}`);
+                  console.log(`Applying template for property ${namespace}.${propertyName}: ${typeof objectProperty}`, objectProperty.length);
                   templateResult = processObjectProperty(propertyName, objectProperty, namespace + "." + propertyName);
                   if (templateResult.templateHtml) {
                     templateResults.push(templateResult);
@@ -703,8 +787,6 @@
             let groupedResults = templateResults.filter(tr => tr.templateSortOrder == sortOrder);
             groupedResults.forEach(result => childrenHtml += result.templateHtml);
           });
-          if (childrenHtml.indexOf(",") > -1)
-            console.error("Found in childrenhtml,", childrenHtml);
           result.templateHtml = result.templateHtml.replace("${children}", childrenHtml);
           console.log("parsed html", result, templateResults);
           return result;
@@ -768,6 +850,9 @@
         //console.log("processObjectProperty", objectProperty);
         // if (objectProperty["name"]) {
         let propertyType = typeof objectProperty == "object" ? objectProperty["name"] : typeof objectProperty;
+        if (!propertyType)
+          propertyType = propertyName;
+
         let templateResult = applyTemplate(propertyType, propertyName, objectProperty, namespace);
         if (templateResult.templateHtml != "")
           return templateResult;
@@ -788,7 +873,7 @@
           maxValue: 1200
         },
         volume: {
-          minValue: -10,
+          minValue: -100,
           maxValue: 0
         },
         threshold: {
@@ -825,6 +910,11 @@
           }
           if (objectProperty.maxValue) {
             metadataProperties["maxValue"] = objectProperty.maxValue;
+          }
+          if (objectProperty.minValue && objectProperty.maxValue) {
+            if (objectProperty.maxValue == 1 && objectProperty.minValue == 0) {
+              metadataProperties["step"] = 0.001;
+            }
           }
 
           let templateHtml = template.innerHTML;
