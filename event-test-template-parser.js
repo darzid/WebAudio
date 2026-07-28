@@ -1,53 +1,54 @@
 var missingTemplates = [];
 
-function applyTemplate(item) {
-  let objectName = item.descriptor ? item.value.name : item.name;
+function getTemplate(item) {
+  let template = getObjectTemplate(item.name);
+  if (!template)
+    template = getObjectTemplate(item.value.name);
+  if (!template)
+    template = getPropertyTemplate(item.name, item.type);
 
-  let query = `template[data-object-names*="${objectName}"]`;
-  let template = document.querySelector(query);
-
-  if (template) {
-    return parseTokenizedTemplate(template.innerHTML, item);
-  }
-
-  if (item.value && item.value.name) {
-    query = `template[data-object-names*="${item.value.name}"]`;
-    template = document.querySelector(query);
-    if (template) {
-      return parseTokenizedTemplate(template.innerHTML, item);
-    }
-  }
-
-  if (item.type) {
-    query = `template[data-property-types*="${item.type}"][data-property-names*="${item.name}"]`;
-    template = document.querySelector(query);
-    if (template) {
-      return parseTokenizedTemplate(template.innerHTML, item);
+  if (template)
+    return template;
+  else {
+    if (item.type) {
+      if (!missingTemplates.includes(item.type)) {
+        console.warn(`No property template found for ${item.type}`, item);
+        missingTemplates.push(item.type);
+      }
     } else {
-      query = `template[data-property-types*="${item.type}"]`;
-      template = document.querySelector(query);
-      if (template) {
-        return parseTokenizedTemplate(template.innerHTML, item);
-      } else {
-        if (item.name) {
-          query = `template[data-property-names*="${item.name}"]`;
-          template = document.querySelector(query);
-          if (template) {
-            return parseTokenizedTemplate(template.innerHTML, item);
-          }
-        }
-
-        if (!missingTemplates.includes(item.type)) {
-          console.warn(`No property template found for ${item.type}`, item);
-          missingTemplates.push(item.type);
-        }
+      if (!missingTemplates.includes(item.name)) {
+        console.warn(`No object template found for ${item.name}`, item);
+        missingTemplates.push(item.name);
       }
     }
   }
 
-  if (!missingTemplates.includes(item.name)) {
-    console.warn(`No object template found for ${item.name}`, item);
-    missingTemplates.push(item.name);
+  function getObjectTemplate(objectName) {
+    let query = `template[data-object-names*="${objectName}"]`;
+    return document.querySelector(query);
+  }
+
+  function getPropertyTemplate(propertyName, propertyType) {
+    query = `template[data-property-types*="${propertyType}"][data-property-names*="${propertyName}"]`;
+    template = document.querySelector(query);
+
+    if (!template) {
+      query = `template[data-property-types*="${propertyType}"]`;
+      template = document.querySelector(query);
+    }
+
+    if (!template) {
+      query = `template[data-property-names*="${propertyName}"]`;
+      template = document.querySelector(query);
+    }
+    return template;
+  }
+}
+
+function applyTemplate(item) {
+  let template = getTemplate(item);
+  if (template) {
+    return parseTokenizedTemplate(template.innerHTML, item);
   }
 }
 

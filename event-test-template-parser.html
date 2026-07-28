@@ -34,16 +34,36 @@
       .Device {
         border: 1pt solid rgba(0, 0, 0, 0.2);
         background-color: rgba(0, 0, 0, 0.1);
-        padding: 0.5rem;
+        padding: 0rem;
         margin: 0.1rem;
       }
 
-      .Parameters {
-        border: 1pt solid rgba(0, 0, 0, 0.2);
-        background-color: rgba(0, 0, 0, 0.1);
-        padding: 0rem;
-        margin: 0rem;
+      .Track>button,
+      .Device>button {
+        color: white;
+      }
 
+      .Track>span,
+      .Device>span {
+        margin-top: 0.1rem;
+        margin-left: 0.2rem;
+        margin-right: 0.2rem;
+      }
+
+      .Track>button {
+        font-size: 1rem;
+        background-color: rgba(0, 100, 0, 0.6);
+      }
+
+      .Device>button {
+        font-size: 0.8rem;
+        background-color: rgba(0, 80, 0, 0.6);
+      }
+
+      .Device>.Device>button {
+        font-size: 0.8rem;
+        background-color: rgba(0, 60, 0, 0.6);
+        color: white;
       }
 
       .Device h1 {
@@ -66,19 +86,15 @@
 
       <template data-object-names="Track">
         <article class="Track">
-          <h1>${item.id}</h1>
-          <h2>Devices</h2>
-          {{item.devices}}
+          <button class="toggle-button">${item.id}</button>
+          <span>{{item.devices}}</span>
         </article>
       </template>
 
       <template data-property-names="oscillator" data-object-names="MonoSynth,DuoSynth,OmniOscillator,Filter,Oscillator,AmplitudeEnvelope,Volume,FrequencyEnvelope,Multiply">
         <article class="Device">
-          <h1>${item.name}</h1>
-          <h2>Parameters</h2>
-          <div class="Parameters">
-            {{item.parameters}}
-          </div>
+          <button class="toggle-button">${item.name}</button>
+          <span>{{item.parameters}}</span>
         </article>
       </template>
 
@@ -92,7 +108,7 @@
       <template data-property-names="name" data-property-types="string">
         <article>
           <label for="${item.name}"><b>${item.name}</b>: <i>${item.type}</i></label>
-          <input class="propertyValue" type="text" name="${item.name}" value="${item.value}">
+          <input disabled class="propertyValue" type="text" name="${item.name}" value="${item.value}">
         </article>
       </template>
 
