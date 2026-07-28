@@ -30,6 +30,10 @@
         margin: 0.1rem;
       }
 
+      .Project > h1 {
+        font-size: 1rem;
+      }
+      
       .Track,
       .Device {
         border: 1pt solid rgba(0, 0, 0, 0.2);
@@ -76,45 +80,62 @@
   <body>
     <span id="templates">
 
+      <template data-object-names="Project">
+        <article class="Project">
+          <h1>${item.id}</h1>
+          <span class="content.expanded">{{item.tracks}}</span>
+        </article>
+      </template>
+      
       <template data-object-names="Track">
         <article class="Track">
           <button class="toggle-button">${item.id}</button>
-          <span>{{item.devices}}</span>
+          <span class="content">
+            <span>{{item.parameters}}</span>
+            <span>{{item.devices}}</span>
+          </span>
         </article>
       </template>
 
-      <template data-property-names="oscillator" data-object-names="MonoSynth,DuoSynth,OmniOscillator,Filter,Oscillator,AmplitudeEnvelope,Volume,FrequencyEnvelope,Multiply">
+      <template data-object-names="MonoSynth,DuoSynth,OmniOscillator,Filter,Oscillator,AmplitudeEnvelope,Volume,FrequencyEnvelope,Multiply,PingPongDelay">
         <article class="Device">
           <button class="toggle-button">${item.name}</button>
-          <span>{{item.parameters}}</span>
+          <span class="content">{{item.parameters}}</span>
         </article>
       </template>
 
-      <template data-property-types="number">
+      <template data-property-types="number,Param">
         <article>
           <label for="${item.name}"><b>${item.name}</b>: <i>${item.type}</i> = <value for="${item.name}">${item.value}</value> </label>
-          <input class="propertyValue" type="range" name="${item.name}" value="${item.value}">
+          <input class="propertyValue" type="range" name="${item.name}" min="${item.minValue}" max="${item.maxValue}" value="${item.value}">
         </article>
       </template>
 
-      <template data-property-names="name" data-property-types="string">
+    <!--  <template data-property-names="name" data-property-types="string">
         <article>
           <label for="${item.name}"><b>${item.name}</b>: <i>${item.type}</i></label>
           <input disabled class="propertyValue" type="text" name="${item.name}" value="${item.value}">
         </article>
-      </template>
+      </template>-->
 
-      <template data-property-types="string">
+      <template data-excluded-property-names="name" data-property-types="string">
         <article>
           <label for="${item.name}"><b>${item.name}</b>: <i>${item.type}</i></label>
           <input class="propertyValue" type="text" name="${item.name}" value="${item.value}">
         </article>
       </template>
 
-      <template data-object-names="Signal,Param,volume,frequency,detune,harmonicity,vibratoRate,vibratoAmount">
+      <template data-property-types="Signal,Param,volume,frequency,detune,harmonicity,vibratoRate,vibratoAmount">
         <article>
           <label for="${item.name}"><b>${item.name}</b>: <i>${item.type}</i> = <value for="${item.name}">${item.value.value}</value> </label>
           <input class="propertyValue" type="range" name="${item.name}" min="${item.value.minValue}" max="${item.value.maxValue}" value="${item.value.value}">
+        </article>
+      </template>
+      
+      <template data-property-names="volume">
+        <article>
+          <label for="${item.name}"><b>${item.name}</b> : <value for="${item.name}">${item.value.value}</value> </label>
+          <input class="propertyValue" type="range" name="${item.name}" min="-100" max="0" value="${item.value.value}">
         </article>
       </template>
 
@@ -130,67 +151,101 @@
     <div id="output"></div>
 
     <script>
-      class Track {
-        _id = "";
-        _name = "Track";
-        _devices = [];
-        constructor(id, devices) {
+      class ProjectItemBase {
+        constructor(id, name) {
           this._id = id;
-
-          Object.defineProperty(this, 'id', {
+          this._name = name;
+        }
+        get id() { return this._id; }
+        get name() { return this._name; }
+        
+        getItemsParameters(items) {
+          items.forEach(item => this.getItemParameters(item));
+        }
+        
+        getItemParameters(item) {
+          var getChildProperties = (property) => {
+            if (property.value.name) {
+              let parameters = getObjectInfo(property.value).properties;
+              parameters.forEach(childProperty => getChildProperties(childProperty));
+              //property.value["parameters"] = parameters;
+              property["parameters"] = parameters;
+            }
+          }
+          
+          let objectInfo = getObjectInfo(item);
+          objectInfo.properties.forEach(property => {
+            getChildProperties(property);
+          })
+          item["parameters"] = objectInfo.properties;
+        }
+      }
+      
+      class Project extends ProjectItemBase {
+        tracks = [];
+        constructor(id) {
+          super(id, "Project");
+          
+       /*   Object.defineProperty(this, 'tracks', {
             enumerable: true,
             get: function () {
-              return this._id;
+              return this._tracks;
             }
-          });
-
-          Object.defineProperty(this, 'name', {
-            enumerable: true,
-            get: function () {
-              return this._name;
-            }
-          });
-
+          });*/
+        }
+      
+        //get tracks() { return this._tracks; }
+        addTrack(track) {
+          this.getItemParameters(track);
+          this.tracks.push(track);
+        }
+      }
+      
+      class Track extends ProjectItemBase {
+        _devices = [];
+        _volume = 0;
+        constructor(id, devices) {
+          super(id, "Track");
+        
+          this._channel = new Tone.Channel();
+          
           Object.defineProperty(this, 'devices', {
             enumerable: true,
             get: function () {
               return this._devices;
             }
           });
-
-
-          devices.forEach(device => {
-            var getChildProperties = (property) => {
-              if (property.value.name) {
-                let parameters = getObjectInfo(property.value).properties;
-                parameters.forEach(childProperty => getChildProperties(childProperty));
-                property.value["parameters"] = parameters;
-                property["parameters"] = parameters;
-              }
+          
+          Object.defineProperty(this, 'volume', {
+            enumerable: true,
+            get: function () {
+              return this._channel.output.volume;
             }
+          });
 
-            let objectInfo = getObjectInfo(device);
-            objectInfo.properties.forEach(property => {
-              getChildProperties(property);
-            })
-            device["parameters"] = objectInfo.properties;
-            this._devices.push(device);
-          })
+          this.getItemsParameters(devices);
+          this._devices = devices;
         }
       }
 
 
       let output = document.getElementById("output");
+      let project = new Project("Project1");
+      
+      project.addTrack(new Track("Track1", [new Tone.MonoSynth(), new Tone.DuoSynth()]));
+      project.addTrack(new Track("Track2", [new Tone.MonoSynth(), new Tone.PingPongDelay()]));
+      console.log("Track", project.tracks[0])
+      output.innerHTML += applyTemplate(project);
+      console.log("output", output.innerHTML, project)
 
-      let track = new Track("Track1", [new Tone.MonoSynth(), new Tone.DuoSynth()]);
-
-      let monoSynthObjectInfo = getObjectInfo(track.devices[0]);
-      console.log("MonoSynth object info", monoSynthObjectInfo);
-
-      let trackObjectInfo = getObjectInfo(track);
-      console.log("Track object info", trackObjectInfo);
-      output.innerHTML += applyTemplate(track);
-
+      const toggleBtns = document.querySelectorAll('.toggle-button');
+        toggleBtns.forEach(button => {
+          let content = button.parentElement.querySelector(".content");
+          button.addEventListener('click', () => {
+            content.classList.toggle('expanded');
+          });
+        });
+    
     </script>
   </body>
 
