@@ -16,7 +16,7 @@ export class PianoRoll {
     // if (selectedTrack) 
     //   return selectedTrack.id.replace("-container", "");
     // else 
-    return "Track1";
+    return "track1";
   }
   init() {
     // let pianoRollKeys = this._pianoRollPanel.querySelectorAll("button");

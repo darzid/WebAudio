@@ -42,6 +42,13 @@ input[type="checkbox"][name="enabled"]:checked {
   padding: 0.2em;
   margin: 0.2em;
 
+  .TrackDevices {
+    flex-wrap: nowrap;
+    width: auto;
+    overflow: auto;
+    display: flex;
+  }
+
   .toggle-button {
     font-size: 1.6em;
   }
@@ -58,6 +65,7 @@ input[type="checkbox"][name="enabled"]:checked {
   border: 1pt solid rgba(0, 0, 0, 0.2);
   padding: 0rem;
   margin: 0.0rem;
+  margin-right: 0.2em;
 
   .title-bar {
     background-color: rgba(50, 50, 50, 0.3);
@@ -68,7 +76,7 @@ input[type="checkbox"][name="enabled"]:checked {
 
 .Instrument,
 .Effect {
-  display: inline-block;
+  /* display: inline-block; */
   vertical-align: top;
   height: 100%;
   background-color: rgba(150, 150, 160, 1);

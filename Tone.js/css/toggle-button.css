@@ -9,6 +9,7 @@ button.toggle-button {
   height: auto;
   display: flex;
   vertical-align: top;
+  text-wrap: nowrap;
 }
 
 .expander-content {
