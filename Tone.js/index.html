@@ -597,6 +597,45 @@
 
         tracks.push({
           id: "track1", name: "Track 1", devices: [
+            new Tone.MembraneSynth(),
+            new Tone.Compressor()
+          ]
+        });
+
+        tracks.push({
+          id: "track2", name: "Track 2", devices: [
+            new Tone.MonoSynth({
+              "volume": 10,
+              "oscillator": {
+                "type": "sawtooth"
+              },
+              "filter": {
+                "Q": 2,
+                "type": "bandpass",
+                "rolloff": -24
+              },
+              "envelope": {
+                "attack": 0.01,
+                "decay": 0.1,
+                "sustain": 0.2,
+                "release": 0.6
+              },
+              "filterEnvelope": {
+                "attack": 0.02,
+                "decay": 0.4,
+                "sustain": 1,
+                "release": 0.7,
+                "releaseCurve": "linear",
+                "baseFrequency": 20,
+                "octaves": 5
+              }
+            }),
+            new Tone.Compressor()
+          ]
+        });
+
+        tracks.push({
+          id: "track3", name: "Track 3", devices: [
             new Tone.DuoSynth(),
             new Tone.AutoFilter(),
             new Tone.Phaser(),
@@ -606,16 +645,18 @@
         });
 
         tracks.push({
-          id: "track2", name: "Track 2", devices: [
+          id: "track4", name: "Track 4", devices: [
             new Tone.MonoSynth(),
             new Tone.JCReverb()
           ]
         });
 
         tracks.push({
-          id: "track3", name: "Track 3", devices: [
-            new Tone.MembraneSynth(),
-            new Tone.Compressor()
+          id: "track5", name: "Track 5", devices: [
+            new Tone.FMSynth(),
+            new Tone.Phaser(),
+            new Tone.PingPongDelay(),
+            new Tone.JCReverb()
           ]
         });
 

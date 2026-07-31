@@ -2,7 +2,7 @@ import { KeyDownEvent, KeyUpEvent } from "../lib-ts/keyboard-events";
 import { PlayNoteRequestEvent, StopNoteRequestEvent, NotePlayingEvent, NoteStoppedEvent } from "./websynth-events";
 
 export class PianoRoll {
-  _currentOctave: number = 4;
+  _currentOctave: number = 2;
   // _trackId = "Track1";
   _pianoRollPanel = document.getElementById("piano-roll") as HTMLDivElement;
 
