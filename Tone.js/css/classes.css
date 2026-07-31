@@ -1,0 +1,101 @@
+:root {
+  --device-btn-enabled-checked-bg: rgba(190, 140, 50, 0.85);
+  --device-btn-enabled-checked-shadow: rgba(190, 140, 50, 0.8);
+}
+
+input[name="enabled"] {
+  outline: 0.0em;
+  vertical-align: top;
+  height: auto;
+  margin-bottom: auto;
+}
+
+input[type="checkbox"][name="enabled"]:checked {
+  accent-color: var(--device-btn-enabled-checked-bg);
+  box-shadow: 0.0em 0.0em 1em var(--device-btn-enabled-checked-shadow);
+}
+
+.title-bar {
+  display: flex;
+  flex-direction: row;
+  margin: 0rem;
+  padding: 0rem;
+  height: auto;
+  vertical-align: top;
+}
+
+.toggle-button {
+  background-color: transparent;
+  text-align: left;
+  border: 0rem solid rgba(50, 50, 50, 0.8);
+  margin-bottom: auto;
+  margin-top: 0;
+}
+
+.Track {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+
+  background-color: rgba(180, 180, 180, 1);
+  border: 0.1em solid rgba(0, 0, 0, 0.2);
+  padding: 0.2em;
+  margin: 0.2em;
+
+  .toggle-button {
+    font-size: 1.6em;
+  }
+
+  .arrow {
+    margin: 0.2rem;
+  }
+}
+
+.Instrument,
+.Effect,
+.Source,
+.Component {
+  border: 1pt solid rgba(0, 0, 0, 0.2);
+  padding: 0rem;
+  margin: 0.0rem;
+
+  .title-bar {
+    background-color: rgba(50, 50, 50, 0.3);
+    border: 0.05rem solid rgba(50, 50, 50, 0.8);
+    box-shadow: 0.1em 0.1em 0.5em rgba(0, 0, 0, 0.4);
+  }
+}
+
+.Instrument,
+.Effect {
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  background-color: rgba(150, 150, 160, 1);
+
+  .toggle-button {
+    font-size: 1.4em;
+  }
+
+  input[name="enabled"] {
+    float: right;
+  }
+}
+
+.Component {
+  background-color: rgba(160, 150, 150, 1);
+  margin: 0.05em;
+
+  .toggle-button {
+    font-size: 1.3em;
+  }
+}
+
+.Source {
+  background-color: rgba(150, 160, 150, 1);
+  margin: 0.05em;
+
+  .toggle-button {
+    font-size: 1.4em;
+  }
+}

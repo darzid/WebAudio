@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tone.JS</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/input-range.css">
+    <link rel="stylesheet" href="css/toggle-button.css">
+    <link rel="stylesheet" href="css/classes.css">
+
+    <script src="//unpkg.com/systemjs@0.19.47/dist/system.js"></script>
+    <script src="http://unpkg.com/tone"></script>
+    <script src="..\lib\template-expander\template-expander.js"></script>
+    <script src=".\ui-components\toggle-button.js"></script>
+  </head>
+
+  <body>
+    <span id="templates">
+
+      <!-- Auto-generated Value type templates -->
+      <span id="datatype-templates">
+        <template id="NormalRange">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="1" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="AudioRange">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="-1" max="1" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="Decibels">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="-100" max="0" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="Cents">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="-1200" max="1200" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="Frequency">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="22050" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="Time">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="TransportTime">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="Ticks">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="Degrees">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="360" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="Radians">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="6.28318530717959" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="Gain">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="1" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="Volume">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="-60" max="0" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="Pan">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="-1" max="1" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="amplitude">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="1" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="outputRange">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="any" max="any" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="attack">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="decay">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="release">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="detune">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="-1200" max="1200" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="phase">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="360" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="partialCount">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="Infinity" step="1" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="Q">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="FilterGain">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="-Infinity" max="Infinity" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+      </span>
+
+      <!-- Option Value templates -->
+      <span id="optionvalue-templates">
+        <template id="OscillatorType">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <select name="${item.name}" value="${item.value}">
+              <option>sine</option>
+              <option>square</option>
+              <option>triangle</option>
+              <option>sawtooth</option>
+              <option>pulse</option>
+              <option>pwm</option>
+              <option>fatsine</option>
+              <option>fatsquare</option>
+              <option>fattriangle</option>
+              <option>fatsawtooth</option>
+              <option>amsine</option>
+              <option>amsquare</option>
+              <option>amtriangle</option>
+              <option>amsawtooth</option>
+              <option>fmsine</option>
+              <option>fmsquare</option>
+              <option>fmtriangle</option>
+              <option>fmsawtooth</option>
+            </select>
+          </article>
+        </template>
+
+        <template id="EnvelopeCurve">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <select name="${item.name}" value="${item.value}">
+              <option>linear</option>
+              <option>exponential</option>
+              <option>sine</option>
+              <option>cosine</option>
+              <option>bounce</option>
+              <option>ripple</option>
+              <option>step</option>
+            </select>
+          </article>
+        </template>
+
+        <template id="Rolloff">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <select name="${item.name}" value="${item.value}">
+              <option>-12</option>
+              <option>-24</option>
+              <option>-48</option>
+              <option>-96</option>
+            </select>
+          </article>
+        </template>
+
+        <template id="FilterType">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <select name="${item.name}" value="${item.value}">
+              <option>lowpass</option>
+              <option>highpass</option>
+              <option>bandpass</option>
+              <option>lowshelf</option>
+              <option>highshelf</option>
+              <option>peaking</option>
+              <option>notch</option>
+              <option>allpass</option>
+            </select>
+          </article>
+        </template>
+      </span>
+
+      <!-- Components -->
+      <span id="component-templates">
+        <template id="EnvelopeBase">
+          <span>
+            <div name="attack" data-template="Time" value="0.1"></div>
+            <div name="attackCurve" data-template="EnvelopeCurve" value="exponential"></div>
+            <div name="decay" data-template="Time" value="0.2"></div>
+            <div name="decayCurve" data-template="EnvelopeCurve" value="exponential"></div>
+            <div name="sustain" data-template="NormalRange" value="1.0"></div>
+            <div name="release" data-template="Time" value="0.8"></div>
+            <div name="releaseCurve" data-template="EnvelopeCurve" value="exponential"></div>
+          </span>
+        </template>
+
+        <template id="AmplitudeEnvelope">
+          <article class="Component">
+            <div class="title-bar"><button class="toggle-button">Envelope</button></div>
+            <div class="expander-content" data-template="EnvelopeBase"></div>
+          </article>
+        </template>
+
+        <template id="FrequencyEnvelope">
+          <article class="Component">
+            <div class="title-bar"><button class="toggle-button">Filter envelope</button></div>
+            <div class="expander-content" data-template="EnvelopeBase"></div>
+          </article>
+        </template>
+
+        <template id="Filter">
+          <article class="Component">
+            <div class="title-bar"><button class="toggle-button">Filter</button></div>
+            <div class="expander-content">
+              <div name="Q" data-template="Q" value="1"></div>
+              <div name="detune" data-template="Cents" value="0"></div>
+              <div name="frequency" data-template="Frequency" value="0"></div>
+              <div name="gain" data-template="FilterGain" value="0"></div>
+              <div name="rolloff" data-template="Rolloff" value="-12"></div>
+              <div name="type" data-template="FilterType" value="lowpass"></div>
+            </div>
+          </article>
+        </template>
+      </span>
+
+      <!-- Sources -->
+      <span id="source-templates">
+        <template id="OmniOscillator">
+          <article class="Source">
+            <div class="title-bar"><button class="toggle-button">OmniOscillator</button></div>
+            <div class="expander-content">
+              <div name="detune" data-template="Cents" value="0"></div>
+              <div name="frequency" data-template="Frequency" value="0"></div>
+              <div name="partialCount" data-template="partialCount" value="1"></div>
+              <div name="phase" data-template="Degrees" value="0"></div>
+              <div name="type" data-template="OscillatorType" value="square"></div>
+              <!-- <div name="volume" data-template="Decibels" value="0"></div> -->
+            </div>
+          </article>
+        </template>
+      </span>
+
+      <!-- Instruments -->
+      <span id="instrument-templates">
+        <template id="SynthBase">
+          <span>
+            <div name="detune" data-template="Cents" value="0"></div>
+            <div name="portamento" data-template="Time" value="0"></div>
+            <div name="volume" data-template="Decibels" value="0"></div>
+          </span>
+        </template>
+
+        <template id="Synth">
+          <article class="Instrument">
+            <div class="title-bar"><button class="toggle-button">Synth</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+            <div class="expander-content">
+              <div data-template="SynthBase"></div>
+              <div name="envelope" data-template="AmplitudeEnvelope"></div>
+              <div name="oscillator" data-template="OmniOscillator"></div>
+            </div>
+          </article>
+        </template>
+
+        <template id="MonoSynth">
+          <article class="Instrument">
+            <div class="title-bar"><button class="toggle-button">MonoSynth</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+            <div class="expander-content">
+              <div data-template="SynthBase"></div>
+              <div name="envelope" data-template="AmplitudeEnvelope"></div>
+              <div name="filter" data-template="Filter"></div>
+              <div name="filterEnvelope" data-template="FrequencyEnvelope"></div>
+              <div name="oscillator" data-template="OmniOscillator"></div>
+            </div>
+          </article>
+        </template>
+      </span>
+
+      <!-- Effects -->
+      <span id="effect-templates">
+        <template id="AutoFilter">
+          <article class="Effect">
+            <div class="title-bar"><button class="toggle-button">AutoFilter</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+            <div class="expander-content">
+              <div name="type" data-template="OscillatorType" value="lowpass"></div>
+              <div name="frequency" data-template="Time" value="0"></div>
+              <div name="depth" data-template="NormalRange" value="0"></div>
+              <div name="baseFrequency" data-template="Frequency" value="0"></div>
+              <div name="octaves" data-template="NormalRange" value="0"></div>
+              <div name="filter" data-template="Filter"></div>
+            </div>
+          </article>
+        </template>
+
+        <template id="PingPongDelay">
+          <article class="Effect">
+            <div class="title-bar"><button class="toggle-button">PingPong Delay</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+            <div class="expander-content">
+              <div name="delayTime" data-template="Time" value="0"></div>
+              <div name="feedback" data-template="NormalRange" value="0"></div>
+            </div>
+          </article>
+        </template>
+      </span>
+
+      <span id="daw-templates">
+        <!-- <template id="Track">
+          <article class="Track">
+            <button class="toggle-button">Track</button>
+            <div class="expander-content">
+              <div name="delayTime" data-template="Time" value="0"></div>
+              <div name="feedback" data-template="NormalRange" value="0"></div>
+            </div>
+          </article>
+        </template> -->
+      </span>
+    </span>
+
+    <div id="track1" class="Track" style="opacity: 0.2">
+      <div class="title-bar"><button class="toggle-button">Track 1</button><input type="checkbox" name="enabled" checked></div>
+      <div class="expander-content">
+        <div id="track1-MonoSynth" name="MonoSynth" data-template="MonoSynth"></div>
+        <div id="track1-AutoFilter" name="AutoFilter" data-template="AutoFilter"></div>
+        <div id="track1-PingPongDelay" name="PingPongDelay" data-template="PingPongDelay"></div>
+      </div>
+    </div>
+
+    <div id="PresetBrowser" class="PresetBrowser">
+      <h1>Presets</h1>
+      <div id="presets-data" style="display: none"></div>
+      <select id="MonoSynth-presets" size="5" style="display: none">
+      </select>
+      <select id="AutoFilter-presets" size="5" style="display: none">
+      </select>
+      <select id="PingPongDelay-presets" size="5" style="display: none">
+      </select>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+      function consoleLog(...message) {
+        console.log(message);
+      }
+
+      function consoleError(...message) {
+        console.error(message);
+      }
+      applyTemplates();
+      initializeToggleButtons();
+
+      let output = document.getElementById("output");
+      var presets;
+      var pingPongDelay;
+      var pingPongDelayElement;
+      var autoFilter;
+      var autoFilterElement;
+      var monoSynth;
+      var monoSynthElement;
+
+      var isInitialized = false;
+      document.addEventListener("click", async () => {
+        await initialize();
+      });
+      // document.addEventListener("keydown", async () => {
+      //   await initialize();
+      // });
+
+      async function initialize() {
+        if (isInitialized == true)
+          return;
+        console.log("Initializing");
+
+        isInitialized = true;
+        await Tone.start();
+
+        if (!presets) {
+          loadPresets();
+          console.log(`Loaded presets to presets-data`, document.getElementById("presets-data"));
+        }
+        else {
+          console.warn("Already loaded presets");
+        }
+
+        pingPongDelay = new Tone.PingPongDelay().toDestination();
+        pingPongDelayElement = document.getElementById("track1-PingPongDelay");
+        bind(pingPongDelayElement, pingPongDelay);
+        pingPongDelayElement.querySelector(".browse-button").addEventListener("click", (e) => showPresetBrowser(pingPongDelay, pingPongDelayElement));
+
+        autoFilter = new Tone.AutoFilter().connect(pingPongDelay);
+        autoFilterElement = document.getElementById("track1-AutoFilter");
+        bind(autoFilterElement, autoFilter);
+        autoFilterElement.querySelector(".browse-button").addEventListener("click", (e) => showPresetBrowser(autoFilter, autoFilterElement));
+
+        monoSynth = new Tone.MonoSynth({
+          envelope: {
+            decay: 0.5,
+            sustain: 1,
+            release: 2
+          }
+        }).connect(autoFilter);
+        monoSynthElement = document.getElementById("track1-MonoSynth");
+        bind(monoSynthElement, monoSynth);
+        monoSynthElement.querySelector(".browse-button").addEventListener("click", (e) => showPresetBrowser(monoSynth, monoSynthElement));
+
+        document.addEventListener("PlayNoteRequestEvent", (e) => playNote(e));
+        document.addEventListener("StopNoteRequestEvent", (e) => stopNote(e));
+
+        document.getElementById("track1").style.opacity = 1;
+
+        console.log("Initialized");
+      }
+
+      function loadPresets() {
+        fetch('.\\preset-bank.json')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            presets = data;
+            document.getElementById('presets-data').textContent = JSON.stringify(data, null, 2);
+
+            let monoSynthPresets = document.getElementById("MonoSynth-presets");
+            let autoFilterPresets = document.getElementById("AutoFilter-presets");
+            let pingPongDelayPresets = document.getElementById("PingPongDelay-presets");
+
+            let presetPaths = Object.keys(data);
+            presetPaths.forEach(presetPath => {
+              presetPath = presetPath.replace("effect\\", "").replace("instrument\\", "").replace(".json", "");
+              if (presetPath.startsWith("AutoFilter")) {
+                let option = document.createElement("option");
+                option.innerText = presetPath.split("\\")[1];
+                autoFilterPresets.appendChild(option);
+              } else if (presetPath.startsWith("PingPongDelay")) {
+                let option = document.createElement("option");
+                option.innerText = presetPath.split("\\")[1];
+                pingPongDelayPresets.appendChild(option);
+              } else if (presetPath.startsWith("MonoSynth")) {
+                let option = document.createElement("option");
+                option.innerText = presetPath.split("\\")[1];
+                monoSynthPresets.appendChild(option);
+              }
+            })
+          })
+          .catch(error => {
+            console.error('Error loading JSON:', error);
+          });
+      }
+
+      function showPresetBrowser(device, deviceElement) {
+        let deviceName = deviceElement.getAttribute("name");
+        let presetListElement = document.getElementById(`${deviceName}-presets`);
+        let boundingRect = deviceElement.getBoundingClientRect();
+        presetListElement.style.position = "absolute";
+        presetListElement.style.left = `${boundingRect.left}px`;
+        presetListElement.style.top = `${boundingRect.top + boundingRect.height}px`;
+        presetListElement.style.width = `${boundingRect.width}px`;
+        presetListElement.style.display = "inline";
+        presetListElement.addEventListener("change", () => applyPreset(device, deviceElement, presetListElement, presetListElement.value));
+      }
+
+      function applyPreset(device, deviceElement, presetListElement, presetName) {
+        let presetPaths = Object.keys(presets);
+        let presetPath = presetPaths.find(presetPath => presetPath.endsWith("\\" + presetName));
+        let preset = presets[presetPath];
+
+        let presetParameterNames = Object.keys(preset);
+        let presetCursor = preset;
+        let module = device;
+        applyModuleParameters(presetCursor, module, presetParameterNames);
+
+        let addEventHandler = false;
+
+        let numberParameters = deviceElement.querySelectorAll(".Parameter input");
+        numberParameters.forEach(element => {
+          bindNumberInputElement(element, device, addEventHandler);
+        });
+
+        let optionParameters = deviceElement.querySelectorAll(".Parameter select");
+        optionParameters.forEach(element => {
+          bindOptionSelectElement(element, device, addEventHandler);
+        });
+
+        presetListElement.style.display = "none";
+        console.log(`Preset ${presetName} applied`);
+      }
+
+      function applyModuleParameters(presetCursor, module, presetParameterNames) {
+        presetParameterNames.forEach(paramName => {
+          if (typeof presetCursor[paramName] === "object") {
+            let moduleParamNames = Object.keys(presetCursor[paramName]);
+            applyModuleParameters(presetCursor[paramName], module[paramName], moduleParamNames);
+          }
+          else {
+            let paramType = typeof presetCursor[paramName];
+            if (paramType === "number" || paramType === "string") {
+              if (typeof module[paramName] != "object") {
+                module[paramName] = presetCursor[paramName];
+              } else {
+                module[paramName].value = presetCursor[paramName];
+              }
+            }
+          }
+        });
+      }
+
+
+      function playNote(eventInfo) {
+        monoSynth.triggerAttack(eventInfo.detail.note, Tone.now());
+      }
+
+      function stopNote(eventInfo) {
+        monoSynth.triggerRelease(Tone.now());
+      }
+
+      var bindings = [];
+      function bind(element, object) {
+        bindings.push({ element: element, object: object });
+
+        let addEventHandler = true;
+
+        let numberParameters = element.querySelectorAll(".Parameter input");
+        numberParameters.forEach(element => {
+          bindNumberInputElement(element, object, addEventHandler);
+        });
+
+        let optionParameters = element.querySelectorAll(".Parameter select");
+        optionParameters.forEach(element => {
+          bindOptionSelectElement(element, object, addEventHandler);
+        });
+
+        let partialCountParameters = element.querySelectorAll(".Parameter input[name='partialCount']");
+        partialCountParameters.forEach(element => {
+          let oscillatorTypeParameterSelectElement = element.parentElement.parentElement.querySelector(".Parameter select[name='type']");
+          let oscillatorTypeOptionElements = oscillatorTypeParameterSelectElement.querySelectorAll("option");
+          let currentPartialCountSuffix = element.value > 0 ? `${element.value}` : "";
+          element.addEventListener("change", () => {
+            let newPartialCountSuffix = element.value > 0 ? `${element.value}` : "";
+            oscillatorTypeOptionElements.forEach(option => option.innerText = option.innerText.replace(currentPartialCountSuffix, "") + newPartialCountSuffix);
+            currentPartialCountSuffix = newPartialCountSuffix;
+          })
+        });
+
+      }
+
+      function bindNumberInputElement(element, object, addEventHandler) {
+        let namespace = getParameterNamespace(element);
+        let parameterOwner = getParameterOwner(object, namespace);
+        let parameterName = element.name;
+        let isNumberProperty = (typeof parameterOwner[parameterName] === "number");
+        let valueElement = element.parentElement.querySelector(`value[for="${element.name}"]`);
+
+        //console.log(`Connecting input event for parameter "${namespace}"`, parameterOwner, parameterOwner[parameterName]);
+
+        element.value = isNumberProperty ? parameterOwner[parameterName] : parameterOwner[parameterName].value;
+        valueElement.innerHTML = element.value;
+
+        if (addEventHandler) {
+          element.addEventListener("input", () => {
+            let oldValue = isNumberProperty ? parameterOwner[parameterName] : parameterOwner[parameterName].value;
+            if (isNumberProperty)
+              parameterOwner[parameterName] = element.value;
+            else
+              parameterOwner[parameterName].value = element.value;
+            valueElement.innerHTML = element.value;
+            //console.log(`Updated "${namespace}" from ${oldValue} to ${element.value}`);
+          })
+        }
+      }
+
+      function bindOptionSelectElement(element, object, addEventHandler) {
+        let namespace = getParameterNamespace(element);
+        let parameterOwner = getParameterOwner(object, namespace);
+        let parameterName = element.name;
+
+        //console.log(`Connecting select event for parameter "${namespace}"`, parameterOwner, parameterOwner[parameterName]);
+
+        element.value = parameterOwner[parameterName];
+
+        if (addEventHandler) {
+          element.addEventListener("input", () => {
+            let oldValue = parameterOwner[parameterName];
+            parameterOwner[parameterName] = element.value;
+            //console.log(`Updated "${namespace}" from ${oldValue} to ${element.value}`);
+          });
+        }
+      }
+
+      function getParameterNamespace(element) {
+        let parentName = "";
+        let parentElement = element.parentElement;
+        while (parentElement && !parentName) {
+          if (parentElement.classList.contains("Component") || parentElement.classList.contains("Source")) {
+            parentName = parentElement.getAttribute("name");
+          }
+          else {
+            parentElement = parentElement.parentElement;
+          }
+        }
+
+        let namespace = parentName ? `${parentName}.${element.name}` : element.name;
+
+        return namespace;
+      }
+
+      function getParameterOwner(object, namespace) {
+        let namespaceParts = namespace.split(".");
+        let parameterOwner = object;
+        for (let namespacePartIndex = 0; namespacePartIndex < namespaceParts.length - 1; namespacePartIndex++) {
+          parameterOwner = parameterOwner[namespaceParts[namespacePartIndex]];
+        }
+
+        if (!parameterOwner) {
+          throw "Parameter owner object not found for parameter " + parameterName;
+        }
+
+        return parameterOwner;
+      }
+    </script>
+  </body>
+
+</html>

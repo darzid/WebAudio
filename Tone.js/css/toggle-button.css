@@ -1,0 +1,31 @@
+
+button.toggle-button {
+  color: white;
+
+  font-weight: bold;
+  cursor: pointer;
+
+  width: 100%;
+  height: auto;
+  display: flex;
+  vertical-align: top;
+}
+
+.expander-content {
+  margin: 0.0rem;
+  height: 0;
+  /* Hide content initially */
+  overflow: hidden;
+  /* Clip content when collapsed */
+  transition: max-height 10s ease-in-out, opacity 0.5s ease-in-out;
+  opacity: 0;
+  display: block;
+}
+
+/* Expanded State */
+.expander-content.expanded {
+  height: 100%;
+  /* Larger than content's actual height */
+  opacity: 1;
+  /* Fade in */
+}
