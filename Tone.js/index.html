@@ -141,6 +141,14 @@
           </article>
         </template>
 
+        <template id="octaves">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="8" step="1" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
         <template id="outputRange">
           <article class="Parameter">
             <label for="${item.name}">${item.name}</label>
@@ -209,6 +217,22 @@
           <article class="Parameter">
             <label for="${item.name}">${item.name}</label>
             <input name="${item.name}" type="range" min="-Infinity" max="Infinity" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="knee">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="0" max="40" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="ratio">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="1" max="20" step="0.01" value="${item.value}">
             <value for="${item.name}">${item.value}</value>
           </article>
         </template>
@@ -334,6 +358,19 @@
             </div>
           </article>
         </template>
+
+        <template id="Compressor">
+          <article class="Component">
+            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button></div>
+            <div class="expander-content">
+              <div name="threshold" data-template="Decibels" value="1"></div>
+              <div name="knee" data-template="knee" value="0"></div>
+              <div name="ratio" data-template="ratio" value="0"></div>
+              <div name="attack" data-template="NormalRange" value="0"></div>
+              <div name="release" data-template="NormalRange" value="0"></div>
+            </div>
+          </article>
+        </template>
       </span>
 
       <!-- Sources -->
@@ -413,6 +450,19 @@
             </div>
           </article>
         </template>
+
+        <template id="MembraneSynth">
+          <article class="Instrument">
+            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+            <div class="expander-content">
+              <div data-template="SynthBase"></div>
+              <div name="pitchDecay" data-template="Time" value="0"></div>
+              <div name="octaves" data-template="octaves" value="0"></div>
+              <div name="envelope" data-template="AmplitudeEnvelope"></div>
+              <div name="oscillator" data-template="OmniOscillator"></div>
+            </div>
+          </article>
+        </template>
       </span>
 
       <!-- Effects -->
@@ -489,16 +539,15 @@
 
       <span id="daw-templates">
         <template id="Track">
-          <div id="${item.id}" class="Track" style="opacity: 0.2">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button><input type="checkbox" name="enabled" checked></div>
+          <div id="${item.id}" class="Track">
+            <div class="title-bar"><label class="arm-track" for="arm-${item.name}">ARM</label><input type="radio" id="arm-${item.name}" class="arm-track" name="arm-track" value="${item.id}"><button class="toggle-button">${item.name}</button><input type="checkbox" name="enabled" checked></div>
             <div name="Devices" class="TrackDevices expander-content"></div>
           </div>
         </template>
       </span>
     </span>
 
-    <div id="tracks">
-      <div id="track1" name="Track 1" data-template="Track"></div>
+    <div id="tracks" style="opacity: 0.2">
     </div>
 
     <div id="PresetBrowser" class="PresetBrowser">
@@ -520,6 +569,7 @@
       var presets;
 
       let tracks = [];
+      let selectedTrackId = null;
 
       var isInitialized = false;
       document.addEventListener("click", async () => {
@@ -545,44 +595,73 @@
           console.warn("Already loaded presets");
         }
 
-        tracks.push({ id: "track1", name: "Track 1", devices: [] });
-
-        tracks[0].devices.push(new Tone.DuoSynth());
-        tracks[0].devices.push(new Tone.AutoFilter());
-        tracks[0].devices.push(new Tone.Phaser());
-        tracks[0].devices.push(new Tone.PingPongDelay());
-        tracks[0].devices.push(new Tone.JCReverb());
-
-        let track1DevicesElement = document.getElementById("track1").querySelector("div[name='Devices']");
-
-        tracks[0].devices.forEach(device => {
-          let newDeviceElement = document.createElement("div");
-          newDeviceElement.id = `track1-${device.name}`;
-          newDeviceElement.setAttribute("name", device.name);
-          newDeviceElement.setAttribute("data-template", device.name);
-          track1DevicesElement.appendChild(newDeviceElement);
-
-          applyTemplates();
-          let deviceElement = document.getElementById(newDeviceElement.id);
-          bind(deviceElement, device);
-          // let devicePresetsElement = document.getElementById(`${device.name}-presets`);
-          // if (devicePresetsElement)
-          deviceElement.querySelector(".browse-button").addEventListener("click", (e) => showPresetBrowser(device, deviceElement));
-          // else
-          //   deviceElement.querySelector(".browse-button").disabled = true;
+        tracks.push({
+          id: "track1", name: "Track 1", devices: [
+            new Tone.DuoSynth(),
+            new Tone.AutoFilter(),
+            new Tone.Phaser(),
+            new Tone.PingPongDelay(),
+            new Tone.JCReverb()
+          ]
         });
 
-        for (let deviceIndex = 0; deviceIndex < tracks[0].devices.length - 1; deviceIndex++) {
-          tracks[0].devices[deviceIndex].connect(tracks[0].devices[deviceIndex + 1]);
-        }
-        tracks[0].devices[tracks[0].devices.length - 1].toDestination();
+        tracks.push({
+          id: "track2", name: "Track 2", devices: [
+            new Tone.MonoSynth(),
+            new Tone.JCReverb()
+          ]
+        });
+
+        tracks.push({
+          id: "track3", name: "Track 3", devices: [
+            new Tone.MembraneSynth(),
+            new Tone.Compressor()
+          ]
+        });
+
+        let tracksElement = document.getElementById("tracks");
+
+        tracks.forEach(track => {
+          let trackElement = document.createElement("div");
+          trackElement.id = track.id;
+          trackElement.setAttribute("name", track.name);
+          trackElement.setAttribute("data-template", "Track");
+          tracksElement.appendChild(trackElement);
+          applyTemplates();
+
+          let trackDevicesElement = document.getElementById(track.id).querySelector("div[name='Devices']");
+
+          track.devices.forEach(device => {
+            let newDeviceElement = document.createElement("div");
+            newDeviceElement.id = `${track.id}-${device.name}`;
+            newDeviceElement.setAttribute("name", device.name);
+            newDeviceElement.setAttribute("data-template", device.name);
+            trackDevicesElement.appendChild(newDeviceElement);
+
+            applyTemplates();
+            let deviceElement = document.getElementById(newDeviceElement.id);
+            bind(deviceElement, device);
+            deviceElement.querySelector(".browse-button").addEventListener("click", (e) => showPresetBrowser(device, deviceElement));
+          });
+
+          for (let deviceIndex = 0; deviceIndex < track.devices.length - 1; deviceIndex++) {
+            track.devices[deviceIndex].connect(track.devices[deviceIndex + 1]);
+          }
+          track.devices[track.devices.length - 1].toDestination();
+        })
 
         initializeToggleButtons();
+        let armTrackInputs = document.querySelectorAll("input[type='radio'][name='arm-track']");
+        armTrackInputs[0].checked = true;
+        selectedTrackId = tracks[0].id;
+        armTrackInputs.forEach(armTrackInput => {
+          armTrackInput.addEventListener("change", () => selectedTrackId = armTrackInput.value);
+        });
 
         document.addEventListener("PlayNoteRequestEvent", (e) => playNote(e));
         document.addEventListener("StopNoteRequestEvent", (e) => stopNote(e));
 
-        document.getElementById("track1").style.opacity = 1;
+        document.getElementById("tracks").style.opacity = 1;
 
         console.log("Initialized");
       }
@@ -686,12 +765,14 @@
 
 
       function playNote(eventInfo) {
-        let track = tracks.find(track => track.id === eventInfo.detail.trackId);
+        let track = tracks.find(track => track.id === selectedTrackId);
+        if (track.devices.length == 0) return;
         track.devices[0].triggerAttack(eventInfo.detail.note, Tone.now());
       }
 
       function stopNote(eventInfo) {
-        let track = tracks.find(track => track.id === eventInfo.detail.trackId);
+        let track = tracks.find(track => track.id === selectedTrackId);
+        if (track.devices.length == 0) return;
         track.devices[0].triggerRelease(Tone.now());
       }
 

@@ -1,13 +1,32 @@
 :root {
+  --device-btn-arm-checked-bg: rgba(255, 80, 50, 0.85);
   --device-btn-enabled-checked-bg: rgba(190, 140, 50, 0.85);
   --device-btn-enabled-checked-shadow: rgba(190, 140, 50, 0.8);
 }
 
-input[name="enabled"] {
+.title-bar>label {
+  vertical-align: top;
+  margin-top: 0.3em;
+  margin-bottom: auto;
+  height: 100%;
+}
+
+.Parameter>label {
+  display: inline-block;
+  min-width: 6em;
+  margin-right: 0.5em;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
   outline: 0.0em;
   vertical-align: top;
   height: auto;
   margin-bottom: auto;
+}
+
+input[type="radio"][name="arm-track"]:checked {
+  accent-color: var(--device-btn-arm-checked-bg);
 }
 
 input[type="checkbox"][name="enabled"]:checked {
@@ -44,9 +63,10 @@ input[type="checkbox"][name="enabled"]:checked {
 
   .TrackDevices {
     flex-wrap: nowrap;
-    width: auto;
+    width: 100%;
     overflow: auto;
     display: flex;
+    border: 0.1em solid rgba(0, 0, 0, 0.2);
   }
 
   .toggle-button {
