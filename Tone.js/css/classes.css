@@ -6,23 +6,24 @@
 
 .title-bar>label {
   vertical-align: top;
-  margin-top: 0.3em;
+  margin-top: 0.35em;
   margin-bottom: auto;
   height: 100%;
 }
 
 .Parameter>label {
   display: inline-block;
-  min-width: 6em;
+  min-width: 8em;
   margin-right: 0.5em;
 }
 
 input[type="radio"],
 input[type="checkbox"] {
-  outline: 0.0em;
   vertical-align: top;
-  height: auto;
+  margin-top: 0.7em;
   margin-bottom: auto;
+  height: auto;
+  outline: 0.0em;
 }
 
 input[type="radio"][name="arm-track"]:checked {
@@ -55,6 +56,7 @@ input[type="checkbox"][name="enabled"]:checked {
   display: flex;
   flex-direction: row;
   gap: 10px;
+  min-height: 2rem;
 
   background-color: rgba(180, 180, 180, 1);
   border: 0.1em solid rgba(0, 0, 0, 0.2);
@@ -78,6 +80,7 @@ input[type="checkbox"][name="enabled"]:checked {
 
   .arrow {
     margin: 0.2rem;
+    margin-top: 0.5rem;
   }
 }
 
@@ -129,4 +132,9 @@ input[type="checkbox"][name="enabled"]:checked {
   .toggle-button {
     font-size: 1.4em;
   }
+}
+
+.Parameter { 
+  display: flex;
+  flex-wrap: nowrap;
 }
