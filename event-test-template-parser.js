@@ -1,55 +1,77 @@
 var missingTemplates = [];
 
-function getTemplate(item) {
-  let template = getObjectTemplate(item.name);
-  if (!template)
-    template = getObjectTemplate(item.value.name);
-  if (!template)
-    template = getPropertyTemplate(item.name, item.type);
-
-  if (template)
-    return template;
-  else {
-    if (item.type) {
-      if (!missingTemplates.includes(item.type)) {
-        console.warn(`No property template found for ${item.type}`, item);
-        missingTemplates.push(item.type);
-      }
-    } else {
-      if (!missingTemplates.includes(item.name)) {
-        console.warn(`No object template found for ${item.name}`, item);
-        missingTemplates.push(item.name);
-      }
-    }
-  }
-
-  function getObjectTemplate(objectName) {
-    let query = `template[data-object-names*="${objectName}"]`;
-    return document.querySelector(query);
-  }
-
-  function getPropertyTemplate(propertyName, propertyType) {
-    query = `template[data-property-types*="${propertyType}"][data-property-names*="${propertyName}"]`;
-    template = document.querySelector(query);
-
-    if (!template) {
-      query = `template[data-property-types*="${propertyType}"]`;
-      template = document.querySelector(query);
-    }
-
-    if (!template) {
-      query = `template[data-property-names*="${propertyName}"]`;
-      template = document.querySelector(query);
-    }
-    return template;
-  }
-}
 
 function applyTemplate(item) {
   let template = getTemplate(item);
-  if (template) {
+  if (template)
     return parseTokenizedTemplate(template.innerHTML, item);
+}
+
+function applyPropertyTemplate(item) {
+  let template = getPropertyTemplate(item.name, item.type);
+  if (template)
+    return parseTokenizedTemplate(template.innerHTML, item);
+}
+
+function applyObjectTemplate(item) {
+  let template = getObjectTemplate(item.name);
+  if (!template)
+    template = getObjectTemplate(item.value.name);
+  if (template)
+    return parseTokenizedTemplate(template.innerHTML, item);
+}
+
+function getTemplate(item) {
+    let template = getObjectTemplate(item.name);
+    if (!template)
+      template = getObjectTemplate(item.value.name);
+    if (!template)
+      template = getPropertyTemplate(item.name, item.type);
+  
+    if (template)
+      return template;
+    else {
+      if (item.type) {
+        if (!missingTemplates.includes(item.type)) {
+          console.warn(`No property template found for ${item.type}`, item);
+          missingTemplates.push(item.type);
+        }
+      } else {
+        if (!missingTemplates.includes(item.name)) {
+          console.warn(`No object template found for ${item.name}`, item);
+          missingTemplates.push(item.name);
+        }
+      }
+    }
   }
+  
+function getObjectTemplate(objectName) {
+  let query = `template[data-object-names*="${objectName}"]`;
+  return document.querySelector(query);
+}
+
+function getPropertyTemplate(propertyName, propertyType) {
+  query = `template[data-property-types*="${propertyType}"][data-property-names*="${propertyName}"]`;
+  template = document.querySelector(query);
+  
+  if (!template) {
+    query = `template[data-property-types*="${propertyType}"][data-excluded-property-names*="${propertyName}"]`;
+    template = document.querySelector(query);
+    if (template) {
+      return;
+    }
+  }
+  
+  if (!template) {
+    query = `template[data-property-types*="${propertyType}"]`;
+    template = document.querySelector(query);
+  }
+  
+  if (!template) {
+    query = `template[data-property-names*="${propertyName}"]`;
+    template = document.querySelector(query);
+  }
+  return template;
 }
 
 function parseTokenizedTemplate(templateHtml, item) {
@@ -69,12 +91,25 @@ function parseTokenizedTemplate(templateHtml, item) {
   let listTokens = getListTokens(templateHtml);
   listTokens.forEach(tokenInfo => {
     let propertyName = tokenInfo.tokenName.replace("item.", "");
+    console.log("Process list token", item.name, propertyName)
     let listItems = item[propertyName];
     if (listItems) {
       let listHtml = "";
+      
       listItems.forEach(listItem => {
         if (typeof listItem === "object") {
-          let listItemHtml = applyTemplate(listItem);
+          let listItemHtml = applyPropertyTemplate(listItem);
+          if (listItemHtml) {
+            listHtml += listItemHtml;
+          }
+        }
+        else {
+          console.warn(`Cannot apply template to property ${propertyName} item of type ${typeof listItem}`, listItem);
+        }
+      });
+      listItems.forEach(listItem => {
+        if (typeof listItem === "object") {
+          let listItemHtml = applyObjectTemplate(listItem);
           if (listItemHtml) {
             listHtml += listItemHtml;
           }
@@ -175,12 +210,20 @@ function getPropertiesFromObjectPrototype(objectPrototype, objectInfo) {
     .filter(name => !name.startsWith("_"))
     .filter(name => isValidPropertyType(objectPrototype, name))
     .forEach(propertyName => {
-      objectInfo.properties.push({
+      
+      let propertyInfo = {
         name: propertyName,
         type: typeof objectPrototype[propertyName],
         descriptor: Object.getOwnPropertyDescriptor(objectPrototype, propertyName),
         value: getPropertyValue(propertyName)
-      })
+      }
+     if (objectPrototype[propertyName].minValue) {
+        propertyInfo["minValue"] = objectPrototype.minValue;
+      }
+      if (objectPrototype[propertyName].maxValue) {
+        propertyInfo["maxValue"] = objectPrototype.maxValue;
+      }
+      objectInfo.properties.push(propertyInfo);
     });
 }
 
