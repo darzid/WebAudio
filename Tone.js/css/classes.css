@@ -68,9 +68,10 @@ input[type="checkbox"][name="enabled"]:checked {
     width: 100%;
     overflow: auto;
     display: flex;
-    background-color: rgba(100, 100, 100, 0.4);
+    background-color: rgba(100, 100, 100, 0.1);
     border: 0.1em solid rgba(0, 0, 0, 0.2);
     margin: 0em;
+    margin-top: 0.1em;
     padding: 0em;
   }
 
