@@ -51,13 +51,23 @@ input[type="checkbox"][name="enabled"]:checked {
   display: flex;
   flex-direction: row;
   gap: 10px;
-  min-height: 2rem;
+  min-height2: 2rem;
 
   background-color: rgba(180, 180, 180, 1);
   border: 0.1em solid rgba(0, 0, 0, 0.2);
   padding: 0.2em;
   margin: 0.2em;
 
+  .title-bar {
+    vertical-align: middle;
+    
+    label {
+      vertical-align: middle;
+      margin-top: 0.45rem;
+      margin-bottom: auto;
+      height: 100%;
+    }
+  }
   .TrackDevices {
     flex-wrap: nowrap;
     width: 100%;
@@ -73,6 +83,10 @@ input[type="checkbox"][name="enabled"]:checked {
 
   .toggle-button {
     font-size: 1.6em;
+    margin-top: 0.15rem;
+    margin-bottom: auto;
+    padding-top: 0.3rem;
+    vertical-align: top;
   }
 
   .track-header {

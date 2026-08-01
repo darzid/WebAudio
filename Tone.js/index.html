@@ -572,7 +572,8 @@
       </span>
     </span>
 
-    <div id="tracks" style="opacity: 0.2">
+    <div id="loading">Loading</div>
+    <div id="tracks" style="opacity: 0.5">
     </div>
 
     <div id="PresetBrowser" class="PresetBrowser">
@@ -740,7 +741,7 @@
         document.addEventListener("StopNoteRequestEvent", (e) => stopNote(e));
 
         document.getElementById("tracks").style.opacity = 1;
-
+        document.getElementById("loading").style.display = "none";
         console.log("Initialized");
       }
 
