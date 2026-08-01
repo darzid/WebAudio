@@ -553,7 +553,7 @@
       <span id="daw-templates">
 
         <template id="TrackChannel">
-          <div class="TrackChannel expander-content ModuleParameters">
+          <div class="TrackChannel ModuleParameters">
             <div name="pan" data-template="TrackPan"></div>
             <div name="volume" data-template="TrackVolume"></div>
           </div>
@@ -842,7 +842,6 @@
         });
       }
 
-
       function playNote(eventInfo) {
         let track = project.tracks.find(track => track.id === selectedTrackId);
         if (track.devices.length == 0) return;
@@ -886,21 +885,6 @@
           bind(childModuleElement, object[childModuleElement.getAttribute("name")]);
         });
 
-        // let childComponents = element.querySelectorAll(`:scope > .ModuleParameters > article.Component`);
-        // childComponents.forEach(childElement => {
-        //   bind(childElement, object[childElement.getAttribute("name")]);
-        // });
-
-        // let childSources = element.querySelectorAll(`:scope > .ModuleParameters > article.Source`);
-        // childSources.forEach(childElement => {
-        //   bind(childElement, object[childElement.getAttribute("name")]);
-        // })
-
-
-        // let childInstruments = element.querySelectorAll(`:scope > .ModuleParameters > article.Instrument`);
-        // childInstruments.forEach(childElement => {
-        //   bind(childElement, object[childElement.getAttribute("name")]);
-        // });
         console.log(`Bind finished ${element.getAttribute("name")} to object ${object.name}`, element, object);
       }
 
