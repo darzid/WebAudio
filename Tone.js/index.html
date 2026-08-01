@@ -321,6 +321,17 @@
             </select>
           </article>
         </template>
+
+        <template id="OversampleType">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <select name="${item.name}" value="${item.value}">
+              <option>none</option>
+              <option>2x</option>
+              <option>4x</option>
+            </select>
+          </article>
+        </template>
       </span>
 
       <!-- Components -->
@@ -551,6 +562,17 @@
               </div>
             </article>
           </template>
+
+          <template id="Distortion">
+            <article class="Effect Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div name="distortion" data-template="NormalRange" value="1"></div>
+                <div name="oversample" data-template="OversampleType" value="none"></div>
+                <div name="wet" data-template="NormalRange" value="0"></div>
+              </div>
+            </article>
+          </template>
         </span>
 
       </span>
@@ -641,7 +663,22 @@
           id: "track1",
           name: "Track 1",
           devices: [
-            new Tone.MembraneSynth(),
+            new Tone.MembraneSynth({
+              "detune": -585,
+              "pitchDecay": 0.05,
+              "octaves": 8,
+              "envelope": {
+                "attack": 0.001,
+                "decay": 100,
+                "sustain": 1,
+                "release": 40
+              },
+            }),
+            new Tone.Distortion({
+              "distortion": 0.1,
+              "oversample": "none",
+              "wet": 0.2
+            }),
             new Tone.Compressor()
           ],
           sequence: new Tone.Sequence(playTrack1Note, ["C1"], "4n"),
@@ -671,8 +708,8 @@
                 "release": 0
               },
               "filterEnvelope": {
-                "attack": 0.02,
-                "decay": 0.4,
+                "attack": 3,
+                "decay": 1.3,
                 "sustain": 1,
                 "release": 0.7,
                 "releaseCurve": "linear",
