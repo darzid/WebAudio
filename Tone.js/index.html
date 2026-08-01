@@ -372,182 +372,183 @@
           </article>
         </template>
 
-        <template id="Compressor">
-          <article class="Effect Module">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button></div>
-            <div class="expander-content ModuleParameters">
-              <div name="threshold" data-template="Decibels" value="1"></div>
-              <div name="knee" data-template="knee" value="0"></div>
-              <div name="ratio" data-template="ratio" value="0"></div>
-              <div name="attack" data-template="NormalRange" value="0"></div>
-              <div name="release" data-template="NormalRange" value="0"></div>
-            </div>
-          </article>
-        </template>
-      </span>
+        <!-- Sources -->
+        <span id="source-templates">
+          <template id="OmniOscillator">
+            <article class="Source Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
+              <div class="expander-content ModuleParameters">
+                <div name="detune" data-template="Cents" class="${item.class}" value="0"></div>
+                <div name="frequency" data-template="Frequency" value="0"></div>
+                <div name="partialCount" data-template="partialCount" value="1"></div>
+                <div name="phase" data-template="Degrees" value="0"></div>
+                <div name="type" data-template="OscillatorType" value="square"></div>
+                <!-- <div name="volume" data-template="Decibels" value="0"></div> -->
+              </div>
+            </article>
+          </template>
+        </span>
 
-      <!-- Sources -->
-      <span id="source-templates">
-        <template id="OmniOscillator">
-          <article class="Source Module">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
-            <div class="expander-content ModuleParameters">
-              <div name="detune" data-template="Cents" class="${item.class}" value="0"></div>
-              <div name="frequency" data-template="Frequency" value="0"></div>
-              <div name="partialCount" data-template="partialCount" value="1"></div>
-              <div name="phase" data-template="Degrees" value="0"></div>
-              <div name="type" data-template="OscillatorType" value="square"></div>
-              <!-- <div name="volume" data-template="Decibels" value="0"></div> -->
-            </div>
-          </article>
-        </template>
-      </span>
+        <!-- Instruments -->
+        <span id="instrument-templates">
+          <template id="SynthBase">
+            <div name="detune" data-template="Cents" value="0"></div>
+            <div name="portamento" data-template="Time" value="0"></div>
+            <div name="volume" data-template="Decibels" value="0"></div>
+          </template>
 
-      <!-- Instruments -->
-      <span id="instrument-templates">
-        <template id="SynthBase">
-          <div name="detune" data-template="Cents" value="0"></div>
-          <div name="portamento" data-template="Time" value="0"></div>
-          <div name="volume" data-template="Decibels" value="0"></div>
-        </template>
+          <template id="Synth">
+            <article class="Instrument Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div data-template="SynthBase"></div>
+                <div name="envelope" class="envelope" data-template="AmplitudeEnvelope"></div>
+                <div name="oscillator" class="oscillator" data-template="OmniOscillator"></div>
+              </div>
+            </article>
+          </template>
 
-        <template id="Synth">
-          <article class="Instrument Module">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content ModuleParameters">
-              <div data-template="SynthBase"></div>
-              <div name="envelope" class="envelope" data-template="AmplitudeEnvelope"></div>
-              <div name="oscillator" class="oscillator" data-template="OmniOscillator"></div>
-            </div>
-          </article>
-        </template>
+          <template id="MonoSynth">
+            <article class="Instrument Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div data-template="SynthBase"></div>
+                <div name="envelope" class="envelope" data-template="AmplitudeEnvelope"></div>
+                <div name="filter" class="filter" data-template="Filter"></div>
+                <div name="filterEnvelope" class="filterEnvelope" data-template="FrequencyEnvelope"></div>
+                <div name="oscillator" class="oscillator" data-template="OmniOscillator"></div>
+              </div>
+            </article>
+          </template>
 
-        <template id="MonoSynth">
-          <article class="Instrument Module">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content ModuleParameters">
-              <div data-template="SynthBase"></div>
-              <div name="envelope" class="envelope" data-template="AmplitudeEnvelope"></div>
-              <div name="filter" class="filter" data-template="Filter"></div>
-              <div name="filterEnvelope" class="filterEnvelope" data-template="FrequencyEnvelope"></div>
-              <div name="oscillator" class="oscillator" data-template="OmniOscillator"></div>
-            </div>
-          </article>
-        </template>
+          <template id="FMSynth">
+            <article class="Instrument Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div data-template="SynthBase"></div>
+                <div name="harmonicity" data-template="NormalRange" value="0"></div>
+                <div name="modulationIndex" data-template="NormalRange" value="0"></div>
+                <div name="envelope" data-template="AmplitudeEnvelope"></div>
+                <div name="modulation" data-template="OmniOscillator"></div>
+                <div name="modulationEnvelope" data-template="ModulationEnvelope"></div>
+                <div name="oscillator" data-template="OmniOscillator"></div>
+              </div>
+            </article>
+          </template>
 
-        <template id="FMSynth">
-          <article class="Instrument Module">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content ModuleParameters">
-              <div data-template="SynthBase"></div>
-              <div name="harmonicity" data-template="NormalRange" value="0"></div>
-              <div name="modulationIndex" data-template="NormalRange" value="0"></div>
-              <div name="envelope" data-template="AmplitudeEnvelope"></div>
-              <div name="modulation" data-template="OmniOscillator"></div>
-              <div name="modulationEnvelope" data-template="ModulationEnvelope"></div>
-              <div name="oscillator" data-template="OmniOscillator"></div>
-            </div>
-          </article>
-        </template>
+          <template id="DuoSynth">
+            <article class="Instrument Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div data-template="SynthBase"></div>
+                <div name="harmonicity" data-template="NormalRange" value="0"></div>
+                <div name="vibratoAmount" data-template="NormalRange" value="0"></div>
+                <div name="vibratoRate" data-template="Frequency" value="0"></div>
+                <div name="voice0" data-template="MonoSynth"></div>
+                <div name="voice1" data-template="MonoSynth"></div>
+              </div>
+            </article>
+          </template>
 
-        <template id="DuoSynth">
-          <article class="Instrument Module">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content ModuleParameters">
-              <div data-template="SynthBase"></div>
-              <div name="harmonicity" data-template="NormalRange" value="0"></div>
-              <div name="vibratoAmount" data-template="NormalRange" value="0"></div>
-              <div name="vibratoRate" data-template="Frequency" value="0"></div>
-              <div name="voice0" data-template="MonoSynth"></div>
-              <div name="voice1" data-template="MonoSynth"></div>
-            </div>
-          </article>
-        </template>
+          <template id="MembraneSynth">
+            <article class="Instrument Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div data-template="SynthBase"></div>
+                <div name="pitchDecay" data-template="Time" value="0"></div>
+                <div name="octaves" data-template="octaves" value="0"></div>
+                <div name="envelope" data-template="AmplitudeEnvelope"></div>
+                <div name="oscillator" data-template="OmniOscillator"></div>
+              </div>
+            </article>
+          </template>
+        </span>
 
-        <template id="MembraneSynth">
-          <article class="Instrument Module">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content ModuleParameters">
-              <div data-template="SynthBase"></div>
-              <div name="pitchDecay" data-template="Time" value="0"></div>
-              <div name="octaves" data-template="octaves" value="0"></div>
-              <div name="envelope" data-template="AmplitudeEnvelope"></div>
-              <div name="oscillator" data-template="OmniOscillator"></div>
-            </div>
-          </article>
-        </template>
-      </span>
+        <!-- Effects -->
+        <span id="effect-templates">
+          <template id="AutoFilter">
+            <article class="Effect Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div name="type" data-template="OscillatorType" value="lowpass"></div>
+                <div name="frequency" data-template="Time" value="0"></div>
+                <div name="depth" data-template="NormalRange" value="0"></div>
+                <div name="baseFrequency" data-template="Frequency" value="0"></div>
+                <div name="octaves" data-template="NormalRange" value="0"></div>
+                <div name="filter" data-template="Filter"></div>
+              </div>
+            </article>
+          </template>
 
-      <!-- Effects -->
-      <span id="effect-templates">
-        <template id="AutoFilter">
-          <article class="Effect Module">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content ModuleParameters">
-              <div name="type" data-template="OscillatorType" value="lowpass"></div>
-              <div name="frequency" data-template="Time" value="0"></div>
-              <div name="depth" data-template="NormalRange" value="0"></div>
-              <div name="baseFrequency" data-template="Frequency" value="0"></div>
-              <div name="octaves" data-template="NormalRange" value="0"></div>
-              <div name="filter" data-template="Filter"></div>
-            </div>
-          </article>
-        </template>
+          <template id="PingPongDelay">
+            <article class="Effect Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div name="delayTime" data-template="Time" value="0"></div>
+                <div name="feedback" data-template="NormalRange" value="0"></div>
+                <div name="wet" data-template="NormalRange" value="0"></div>
+              </div>
+            </article>
+          </template>
 
-        <template id="PingPongDelay">
-          <article class="Effect Module">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content ModuleParameters">
-              <div name="delayTime" data-template="Time" value="0"></div>
-              <div name="feedback" data-template="NormalRange" value="0"></div>
-              <div name="wet" data-template="NormalRange" value="0"></div>
-            </div>
-          </article>
-        </template>
+          <template id="Reverb">
+            <article class="Effect Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div name="decay" data-template="Time" value="0"></div>
+                <div name="preDelay" data-template="Time" value="0"></div>
+                <div name="wet" data-template="NormalRange" value="0"></div>
+              </div>
+            </article>
+          </template>
 
-        <template id="Reverb">
-          <article class="Effect Module">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content ModuleParameters">
-              <div name="decay" data-template="Time" value="0"></div>
-              <div name="preDelay" data-template="Time" value="0"></div>
-              <div name="wet" data-template="NormalRange" value="0"></div>
-            </div>
-          </article>
-        </template>
+          <template id="Freeverb">
+            <article class="Effect Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div name="roomSize" data-template="NormalRange" value="0"></div>
+                <div name="wet" data-template="NormalRange" value="0"></div>
+              </div>
+            </article>
+          </template>
 
-        <template id="Freeverb">
-          <article class="Effect Module">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content ModuleParameters">
-              <div name="roomSize" data-template="NormalRange" value="0"></div>
-              <div name="wet" data-template="NormalRange" value="0"></div>
-            </div>
-          </article>
-        </template>
+          <template id="JCReverb">
+            <article class="Effect Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div name="roomSize" data-template="NormalRange" value="0"></div>
+                <div name="wet" data-template="NormalRange" value="0"></div>
+              </div>
+            </article>
+          </template>
 
-        <template id="JCReverb">
-          <article class="Effect Module">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content ModuleParameters">
-              <div name="roomSize" data-template="NormalRange" value="0"></div>
-              <div name="wet" data-template="NormalRange" value="0"></div>
-            </div>
-          </article>
-        </template>
+          <template id="Phaser">
+            <article class="Effect Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div name="frequency" data-template="Time" value="0"></div>
+                <div name="Q" data-template="Positive" value="0"></div>
+                <div name="baseFrequency" data-template="Frequency" value="0"></div>
+                <div name="octaves" data-template="NormalRange" value="0"></div>
+                <div name="wet" data-template="NormalRange" value="0"></div>
+              </div>
+            </article>
+          </template>
 
-        <template id="Phaser">
-          <article class="Effect Module">
-            <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content ModuleParameters">
-              <div name="frequency" data-template="Time" value="0"></div>
-              <div name="Q" data-template="Positive" value="0"></div>
-              <div name="baseFrequency" data-template="Frequency" value="0"></div>
-              <div name="octaves" data-template="NormalRange" value="0"></div>
-              <div name="wet" data-template="NormalRange" value="0"></div>
-            </div>
-          </article>
-        </template>
+          <template id="Compressor">
+            <article class="Effect Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div name="threshold" data-template="Decibels" value="1"></div>
+                <div name="knee" data-template="knee" value="0"></div>
+                <div name="ratio" data-template="ratio" value="0"></div>
+                <div name="attack" data-template="NormalRange" value="0"></div>
+                <div name="release" data-template="NormalRange" value="0"></div>
+              </div>
+            </article>
+          </template>
+        </span>
+
       </span>
 
       <span id="daw-templates">
