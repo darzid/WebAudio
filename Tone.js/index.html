@@ -391,17 +391,13 @@
 
         <!-- Instruments -->
         <span id="instrument-templates">
-          <template id="SynthBase">
-            <div name="detune" data-template="Cents" value="0"></div>
-            <div name="portamento" data-template="Time" value="0"></div>
-            <div name="volume" data-template="Decibels" value="0"></div>
-          </template>
-
           <template id="Synth">
             <article class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
-                <div data-template="SynthBase"></div>
+                <div name="detune" data-template="Cents" value="0"></div>
+                <div name="portamento" data-template="Time" value="0"></div>
+                <div name="volume" data-template="Decibels" value="0"></div>
                 <div name="envelope" class="envelope" data-template="AmplitudeEnvelope"></div>
                 <div name="oscillator" class="oscillator" data-template="OmniOscillator"></div>
               </div>
@@ -412,7 +408,9 @@
             <article class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
-                <div data-template="SynthBase"></div>
+                <div name="detune" data-template="Cents" value="0"></div>
+                <div name="portamento" data-template="Time" value="0"></div>
+                <div name="volume" data-template="Decibels" value="0"></div>
                 <div name="envelope" class="envelope" data-template="AmplitudeEnvelope"></div>
                 <div name="filter" class="filter" data-template="Filter"></div>
                 <div name="filterEnvelope" class="filterEnvelope" data-template="FrequencyEnvelope"></div>
@@ -425,7 +423,9 @@
             <article class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
-                <div data-template="SynthBase"></div>
+                <div name="detune" data-template="Cents" value="0"></div>
+                <div name="portamento" data-template="Time" value="0"></div>
+                <div name="volume" data-template="Decibels" value="0"></div>
                 <div name="harmonicity" data-template="NormalRange" value="0"></div>
                 <div name="modulationIndex" data-template="NormalRange" value="0"></div>
                 <div name="envelope" data-template="AmplitudeEnvelope"></div>
@@ -440,7 +440,9 @@
             <article class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
-                <div data-template="SynthBase"></div>
+                <div name="detune" data-template="Cents" value="0"></div>
+                <div name="portamento" data-template="Time" value="0"></div>
+                <div name="volume" data-template="Decibels" value="0"></div>
                 <div name="harmonicity" data-template="NormalRange" value="0"></div>
                 <div name="vibratoAmount" data-template="NormalRange" value="0"></div>
                 <div name="vibratoRate" data-template="Frequency" value="0"></div>
@@ -454,7 +456,9 @@
             <article class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
-                <div data-template="SynthBase"></div>
+                <div name="detune" data-template="Cents" value="0"></div>
+                <div name="portamento" data-template="Time" value="0"></div>
+                <div name="volume" data-template="Decibels" value="0"></div>
                 <div name="pitchDecay" data-template="Time" value="0"></div>
                 <div name="octaves" data-template="octaves" value="0"></div>
                 <div name="envelope" data-template="AmplitudeEnvelope"></div>
@@ -574,6 +578,11 @@
     </span>
 
     <div id="loading">Loading</div>
+    <div class="transport-bar">
+      <button id="play-button">PLAY</button>
+      <button id="stop-button">STOP</button>
+    </div>
+
     <div id="tracks" style="opacity: 0.5">
     </div>
 
@@ -629,29 +638,37 @@
         }
 
         project.tracks.push({
-          id: "track1", name: "Track 1", pan: 0, volume: 0, devices: [
+          id: "track1",
+          name: "Track 1",
+          devices: [
             new Tone.MembraneSynth(),
             new Tone.Compressor()
-          ]
+          ],
+          sequence: new Tone.Sequence(playTrack1Note, ["C1"], "4n"),
         });
 
         project.tracks.push({
-          id: "track2", name: "Track 2", pan: 0, volume: 0, devices: [
+          id: "track2",
+          name: "Track 2",
+          devices: [
             new Tone.MonoSynth({
               "volume": 10,
               "oscillator": {
                 "type": "sawtooth"
               },
               "filter": {
-                "Q": 2,
-                "type": "bandpass",
-                "rolloff": -24
+                "Q": 0.3,
+                "detune": -1000,
+                "frequency": 0,
+                "gain": 0,
+                "rolloff": -48,
+                "type": "bandpass"
               },
               "envelope": {
                 "attack": 0.01,
-                "decay": 0.1,
-                "sustain": 0.2,
-                "release": 0.6
+                "decay": 0.4,
+                "sustain": 0,
+                "release": 0
               },
               "filterEnvelope": {
                 "attack": 0.02,
@@ -664,11 +681,12 @@
               }
             }),
             new Tone.Compressor()
-          ]
+          ],
+          sequence: new Tone.Sequence(playTrack2Note, ["", "G#1", "G#1", "G#1"], "4n")
         });
 
         project.tracks.push({
-          id: "track3", name: "Track 3", pan: 0, volume: 0, devices: [
+          id: "track3", name: "Track 3", devices: [
             new Tone.DuoSynth(),
             new Tone.AutoFilter(),
             new Tone.PingPongDelay(),
@@ -677,14 +695,14 @@
         });
 
         project.tracks.push({
-          id: "track4", name: "Track 4", pan: 0, volume: 0, devices: [
+          id: "track4", name: "Track 4", devices: [
             new Tone.MonoSynth(),
             new Tone.JCReverb()
           ]
         });
 
         project.tracks.push({
-          id: "track5", name: "Track 5", pan: 0, volume: 0, devices: [
+          id: "track5", name: "Track 5", devices: [
             new Tone.FMSynth(),
             new Tone.Phaser(),
             new Tone.PingPongDelay(),
@@ -693,6 +711,16 @@
         });
 
         let tracksElement = document.getElementById("tracks");
+
+        project.tracks[0].loop = new Tone.Loop((time) => {
+          project.tracks[0].devices[0].triggerAttackRelease("C2", "8n", time);
+        }, "4n").start(0);
+
+        project.tracks[1].loop = new Tone.Loop((time) => {
+          project.tracks[1].devices[0].triggerAttackRelease("G1", "16n", time + Tone.Time("16n"));
+          project.tracks[1].devices[0].triggerAttackRelease("G#1", "16n", time + Tone.Time("8n"));
+          project.tracks[1].devices[0].triggerAttackRelease("G1", "16n", time + Tone.Time("16n") * 3);
+        }, "4n").start(0);
 
         project.tracks.forEach(track => {
           let trackElement = document.createElement("div");
@@ -727,6 +755,13 @@
             track.devices[deviceIndex].connect(track.devices[deviceIndex + 1]);
           }
           track.devices[track.devices.length - 1].connect(track.channel);
+
+          if (track.sequence) {
+            // track.sequence.synth = track.devices[0];
+            // track.sequence.part = new Tone.Part((time, value) => {
+            //   track.sequence.synth?.triggerAttackRelease(value.note, value.duration, time, value.velocity / 127);
+            // }, track.sequence.events);
+          }
         })
 
         initializeToggleButtons();
@@ -742,8 +777,35 @@
         document.addEventListener("StopNoteRequestEvent", (e) => stopNote(e));
 
         document.getElementById("tracks").style.opacity = 1;
+
+        Tone.getTransport().bpm.value = 130;
+
+        document.getElementById("play-button").addEventListener("click", () => {
+          project.tracks.forEach(track => {
+            if (track.sequence && track.sequence.part) {
+              track.sequence.part.start(0);
+            }
+          });
+          Tone.getTransport().start();
+        });
+        document.getElementById("stop-button").addEventListener("click", () => {
+          Tone.getTransport().stop();
+        });
+
         document.getElementById("loading").style.display = "none";
         console.log("Initialized");
+      }
+
+      function playTrack1Note(time, note) {
+        let track = project.tracks.find(track => track.id === "track1");
+        if (track.devices.length == 0) return;
+        track.devices[0].triggerAttackRelease(note, "8n", time);
+      }
+
+      function playTrack2Note(time, note) {
+        let track = project.tracks.find(track => track.id === "track2");
+        if (track.devices.length == 0) return;
+        track.devices[0].triggerAttackRelease(note, "8n", time);
       }
 
       function loadPresets() {
@@ -896,7 +958,7 @@
         let isNumberProperty = (typeof parameterOwner[parameterName] === "number");
         let valueElement = element.parentElement.querySelector(`value[for="${element.name}"]`);
 
-        //console.log(`Connecting input event for parameter "${namespace}"`, parameterOwner, parameterOwner[parameterName]);
+        console.log(`Connecting input event for parameter "${namespace}"`, parameterOwner, parameterOwner[parameterName]);
 
         element.value = isNumberProperty ? parameterOwner[parameterName] : parameterOwner[parameterName].value;
         if (valueElement)
