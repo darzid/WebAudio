@@ -12,7 +12,7 @@ button.toggle-button {
   text-wrap: nowrap;
 }
 
-.expander-content {
+Article > .expander-content {
   margin: 0.0rem;
   height: 0;
   /* Hide content initially */
@@ -24,7 +24,7 @@ button.toggle-button {
 }
 
 /* Expanded State */
-.expander-content.expanded {
+Article.expanded > .expander-content {
   height: 100%;
   /* Larger than content's actual height */
   opacity: 1;

@@ -20,10 +20,13 @@
 input[type="radio"],
 input[type="checkbox"] {
   vertical-align: top;
-  margin-top: 0.7em;
   margin-bottom: auto;
   height: auto;
   outline: 0.0em;
+}
+
+input[type="checkbox"] {
+  margin-top: 0.45em;
 }
 
 input[type="radio"][name="arm-track"]:checked {
@@ -42,14 +45,6 @@ input[type="checkbox"][name="enabled"]:checked {
   padding: 0rem;
   height: auto;
   vertical-align: top;
-}
-
-.toggle-button {
-  background-color: transparent;
-  text-align: left;
-  border: 0rem solid rgba(50, 50, 50, 0.8);
-  margin-bottom: auto;
-  margin-top: 0;
 }
 
 .Track {
@@ -72,6 +67,7 @@ input[type="checkbox"][name="enabled"]:checked {
     border: 0.1em solid rgba(0, 0, 0, 0.2);
     margin: 0em;
     margin-top: 0.1em;
+    margin-bottom: auto;
     padding: 0em;
   }
 
@@ -79,9 +75,30 @@ input[type="checkbox"][name="enabled"]:checked {
     font-size: 1.6em;
   }
 
-  .arrow {
-    margin: 0.2rem;
-    margin-top: 0.5rem;
+  .track-header {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(120, 120, 120, 0.5);
+    height: auto;
+    margin: 0rem;
+    padding: 0rem;
+  }
+
+  .TrackChannel {
+    display: none;
+
+    input[type="number"] {
+      margin-right: 0.1em;
+      width: 4em;
+      font-size: 1.2em;
+    }
+  }
+}
+
+.Track.expanded {
+  .TrackChannel {
+    display: flex;
+    flex-direction: row;
   }
 }
 
@@ -135,7 +152,7 @@ input[type="checkbox"][name="enabled"]:checked {
   }
 }
 
-.Parameter { 
+.Parameter {
   display: flex;
   flex-wrap: nowrap;
 }

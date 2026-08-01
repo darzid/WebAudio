@@ -133,6 +133,19 @@
           </article>
         </template>
 
+        <template id="TrackVolume">
+          <article class="Parameter">
+            <input name="${item.name}" title="${item.name}" type="number" min="-60" max="0" step="0.01" value="${item.value}">
+          </article>
+        </template>
+
+        <template id="TrackPan">
+          <article class="Parameter">
+            <input name="${item.name}" title="${item.name}" type="number" min="-1" max="1" step="0.1" value="${item.value}">
+          </article>
+        </template>
+
+
         <template id="amplitude">
           <article class="Parameter">
             <label for="${item.name}">${item.name}</label>
@@ -325,30 +338,30 @@
         </template>
 
         <template id="AmplitudeEnvelope">
-          <article class="Component">
+          <article class="Component Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
-            <div class="expander-content" data-template="EnvelopeBase"></div>
+            <div class="expander-content ModuleParameters" data-template="EnvelopeBase"></div>
           </article>
         </template>
 
         <template id="ModulationEnvelope">
-          <article class="Component">
+          <article class="Component Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
-            <div class="expander-content" data-template="EnvelopeBase"></div>
+            <div class="expander-content ModuleParameters" data-template="EnvelopeBase"></div>
           </article>
         </template>
 
         <template id="FrequencyEnvelope">
-          <article class="Component">
+          <article class="Component Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
-            <div class="expander-content" data-template="EnvelopeBase"></div>
+            <div class="expander-content ModuleParameters" data-template="EnvelopeBase"></div>
           </article>
         </template>
 
         <template id="Filter">
-          <article class="Component">
+          <article class="Component Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
-            <div class="expander-content">
+            <div class="expander-content ModuleParameters">
               <div name="Q" data-template="Q" value="1"></div>
               <div name="detune" data-template="Cents" value="0"></div>
               <div name="frequency" data-template="Frequency" value="0"></div>
@@ -360,9 +373,9 @@
         </template>
 
         <template id="Compressor">
-          <article class="Component">
+          <article class="Effect Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button></div>
-            <div class="expander-content">
+            <div class="expander-content ModuleParameters">
               <div name="threshold" data-template="Decibels" value="1"></div>
               <div name="knee" data-template="knee" value="0"></div>
               <div name="ratio" data-template="ratio" value="0"></div>
@@ -376,10 +389,10 @@
       <!-- Sources -->
       <span id="source-templates">
         <template id="OmniOscillator">
-          <article class="Source">
+          <article class="Source Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
-            <div class="expander-content">
-              <div name="detune" data-template="Cents" value="0"></div>
+            <div class="expander-content ModuleParameters">
+              <div name="detune" data-template="Cents" class="${item.class}" value="0"></div>
               <div name="frequency" data-template="Frequency" value="0"></div>
               <div name="partialCount" data-template="partialCount" value="1"></div>
               <div name="phase" data-template="Degrees" value="0"></div>
@@ -399,33 +412,33 @@
         </template>
 
         <template id="Synth">
-          <article class="Instrument">
+          <article class="Instrument Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content">
+            <div class="expander-content ModuleParameters">
               <div data-template="SynthBase"></div>
-              <div name="envelope" data-template="AmplitudeEnvelope"></div>
-              <div name="oscillator" data-template="OmniOscillator"></div>
+              <div name="envelope" class="envelope" data-template="AmplitudeEnvelope"></div>
+              <div name="oscillator" class="oscillator" data-template="OmniOscillator"></div>
             </div>
           </article>
         </template>
 
         <template id="MonoSynth">
-          <article class="Instrument">
+          <article class="Instrument Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content">
+            <div class="expander-content ModuleParameters">
               <div data-template="SynthBase"></div>
-              <div name="envelope" data-template="AmplitudeEnvelope"></div>
-              <div name="filter" data-template="Filter"></div>
-              <div name="filterEnvelope" data-template="FrequencyEnvelope"></div>
-              <div name="oscillator" data-template="OmniOscillator"></div>
+              <div name="envelope" class="envelope" data-template="AmplitudeEnvelope"></div>
+              <div name="filter" class="filter" data-template="Filter"></div>
+              <div name="filterEnvelope" class="filterEnvelope" data-template="FrequencyEnvelope"></div>
+              <div name="oscillator" class="oscillator" data-template="OmniOscillator"></div>
             </div>
           </article>
         </template>
 
         <template id="FMSynth">
-          <article class="Instrument">
+          <article class="Instrument Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content">
+            <div class="expander-content ModuleParameters">
               <div data-template="SynthBase"></div>
               <div name="harmonicity" data-template="NormalRange" value="0"></div>
               <div name="modulationIndex" data-template="NormalRange" value="0"></div>
@@ -438,9 +451,9 @@
         </template>
 
         <template id="DuoSynth">
-          <article class="Instrument">
+          <article class="Instrument Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content">
+            <div class="expander-content ModuleParameters">
               <div data-template="SynthBase"></div>
               <div name="harmonicity" data-template="NormalRange" value="0"></div>
               <div name="vibratoAmount" data-template="NormalRange" value="0"></div>
@@ -452,9 +465,9 @@
         </template>
 
         <template id="MembraneSynth">
-          <article class="Instrument">
+          <article class="Instrument Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content">
+            <div class="expander-content ModuleParameters">
               <div data-template="SynthBase"></div>
               <div name="pitchDecay" data-template="Time" value="0"></div>
               <div name="octaves" data-template="octaves" value="0"></div>
@@ -468,9 +481,9 @@
       <!-- Effects -->
       <span id="effect-templates">
         <template id="AutoFilter">
-          <article class="Effect">
+          <article class="Effect Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content">
+            <div class="expander-content ModuleParameters">
               <div name="type" data-template="OscillatorType" value="lowpass"></div>
               <div name="frequency" data-template="Time" value="0"></div>
               <div name="depth" data-template="NormalRange" value="0"></div>
@@ -482,9 +495,9 @@
         </template>
 
         <template id="PingPongDelay">
-          <article class="Effect">
+          <article class="Effect Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content">
+            <div class="expander-content ModuleParameters">
               <div name="delayTime" data-template="Time" value="0"></div>
               <div name="feedback" data-template="NormalRange" value="0"></div>
               <div name="wet" data-template="NormalRange" value="0"></div>
@@ -493,9 +506,9 @@
         </template>
 
         <template id="Reverb">
-          <article class="Effect">
+          <article class="Effect Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content">
+            <div class="expander-content ModuleParameters">
               <div name="decay" data-template="Time" value="0"></div>
               <div name="preDelay" data-template="Time" value="0"></div>
               <div name="wet" data-template="NormalRange" value="0"></div>
@@ -504,9 +517,9 @@
         </template>
 
         <template id="Freeverb">
-          <article class="Effect">
+          <article class="Effect Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content">
+            <div class="expander-content ModuleParameters">
               <div name="roomSize" data-template="NormalRange" value="0"></div>
               <div name="wet" data-template="NormalRange" value="0"></div>
             </div>
@@ -514,9 +527,9 @@
         </template>
 
         <template id="JCReverb">
-          <article class="Effect">
+          <article class="Effect Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content">
+            <div class="expander-content ModuleParameters">
               <div name="roomSize" data-template="NormalRange" value="0"></div>
               <div name="wet" data-template="NormalRange" value="0"></div>
             </div>
@@ -524,9 +537,9 @@
         </template>
 
         <template id="Phaser">
-          <article class="Effect">
+          <article class="Effect Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
-            <div class="expander-content">
+            <div class="expander-content ModuleParameters">
               <div name="frequency" data-template="Time" value="0"></div>
               <div name="Q" data-template="Positive" value="0"></div>
               <div name="baseFrequency" data-template="Frequency" value="0"></div>
@@ -538,12 +551,24 @@
       </span>
 
       <span id="daw-templates">
-        <template id="Track">
-          <div id="${item.id}" class="Track">
-            <div class="title-bar"><label class="arm-track" for="arm-${item.name}">ARM</label><input type="radio" id="arm-${item.name}" class="arm-track" name="arm-track" value="${item.id}"><button class="toggle-button">${item.name}</button><input type="checkbox" name="enabled" checked></div>
-            <div name="Devices" class="TrackDevices expander-content"></div>
+
+        <template id="TrackChannel">
+          <div class="TrackChannel expander-content ModuleParameters">
+            <div name="pan" data-template="TrackPan"></div>
+            <div name="volume" data-template="TrackVolume"></div>
           </div>
         </template>
+
+        <template id="Track">
+          <article id="${item.id}" class="Track">
+            <div class="track-header">
+              <div class="title-bar"><label class="arm-track" for="arm-${item.name}">ARM</label><input type="radio" id="arm-${item.name}" class="arm-track" name="arm-track" value="${item.id}"><button class="toggle-button">${item.name}</button><input type="checkbox" name="enabled" checked></div>
+              <div name="channel" data-template="TrackChannel"></div>
+            </div>
+            <div name="Devices" class="TrackDevices"></div>
+          </article>
+        </template>
+
       </span>
     </span>
 
@@ -568,7 +593,13 @@
       let output = document.getElementById("output");
       var presets;
 
-      let tracks = [];
+      let project = {
+        tracks: [],
+        masterChannel: new Tone.Channel()
+      };
+      project.masterChannel.receive("master", 0);
+      project.masterChannel.toDestination();
+
       let selectedTrackId = null;
 
       var isInitialized = false;
@@ -595,15 +626,15 @@
           console.warn("Already loaded presets");
         }
 
-        tracks.push({
-          id: "track1", name: "Track 1", devices: [
+        project.tracks.push({
+          id: "track1", name: "Track 1", pan: 0, volume: 0, devices: [
             new Tone.MembraneSynth(),
             new Tone.Compressor()
           ]
         });
 
-        tracks.push({
-          id: "track2", name: "Track 2", devices: [
+        project.tracks.push({
+          id: "track2", name: "Track 2", pan: 0, volume: 0, devices: [
             new Tone.MonoSynth({
               "volume": 10,
               "oscillator": {
@@ -634,8 +665,8 @@
           ]
         });
 
-        tracks.push({
-          id: "track3", name: "Track 3", devices: [
+        project.tracks.push({
+          id: "track3", name: "Track 3", pan: 0, volume: 0, devices: [
             new Tone.DuoSynth(),
             new Tone.AutoFilter(),
             new Tone.PingPongDelay(),
@@ -643,15 +674,15 @@
           ]
         });
 
-        tracks.push({
-          id: "track4", name: "Track 4", devices: [
+        project.tracks.push({
+          id: "track4", name: "Track 4", pan: 0, volume: 0, devices: [
             new Tone.MonoSynth(),
             new Tone.JCReverb()
           ]
         });
 
-        tracks.push({
-          id: "track5", name: "Track 5", devices: [
+        project.tracks.push({
+          id: "track5", name: "Track 5", pan: 0, volume: 0, devices: [
             new Tone.FMSynth(),
             new Tone.Phaser(),
             new Tone.PingPongDelay(),
@@ -661,13 +692,19 @@
 
         let tracksElement = document.getElementById("tracks");
 
-        tracks.forEach(track => {
+        project.tracks.forEach(track => {
           let trackElement = document.createElement("div");
           trackElement.id = track.id;
           trackElement.setAttribute("name", track.name);
           trackElement.setAttribute("data-template", "Track");
           tracksElement.appendChild(trackElement);
+
+          track.channel = new Tone.Channel();
+          track.channel.send("master", 0);
+
           applyTemplates();
+
+          bind(document.getElementById(track.id).querySelector(".track-header"), track.channel);
 
           let trackDevicesElement = document.getElementById(track.id).querySelector("div[name='Devices']");
 
@@ -687,13 +724,14 @@
           for (let deviceIndex = 0; deviceIndex < track.devices.length - 1; deviceIndex++) {
             track.devices[deviceIndex].connect(track.devices[deviceIndex + 1]);
           }
-          track.devices[track.devices.length - 1].toDestination();
+          track.devices[track.devices.length - 1].connect(track.channel);
         })
 
         initializeToggleButtons();
+
         let armTrackInputs = document.querySelectorAll("input[type='radio'][name='arm-track']");
         armTrackInputs[0].checked = true;
-        selectedTrackId = tracks[0].id;
+        selectedTrackId = project.tracks[0].id;
         armTrackInputs.forEach(armTrackInput => {
           armTrackInput.addEventListener("change", () => selectedTrackId = armTrackInput.value);
         });
@@ -805,13 +843,13 @@
 
 
       function playNote(eventInfo) {
-        let track = tracks.find(track => track.id === selectedTrackId);
+        let track = project.tracks.find(track => track.id === selectedTrackId);
         if (track.devices.length == 0) return;
         track.devices[0].triggerAttack(eventInfo.detail.note, Tone.now());
       }
 
       function stopNote(eventInfo) {
-        let track = tracks.find(track => track.id === selectedTrackId);
+        let track = project.tracks.find(track => track.id === selectedTrackId);
         if (track.devices.length == 0) return;
         track.devices[0].triggerRelease(Tone.now());
       }
@@ -820,17 +858,17 @@
         console.log(`Bind ${element.getAttribute("name")} to object ${object.name}`, element, object);
         let addEventHandler = true;
 
-        let numberParameters = element.querySelectorAll(`:scope > div.expander-content > article.Parameter input`);
+        let numberParameters = element.querySelectorAll(`:scope > .ModuleParameters > article.Parameter input`);
         numberParameters.forEach(element => {
           bindNumberInputElement(element, object, addEventHandler);
         });
 
-        let optionParameters = element.querySelectorAll(`:scope > div.expander-content > article.Parameter select`);
+        let optionParameters = element.querySelectorAll(`:scope > .ModuleParameters > article.Parameter select`);
         optionParameters.forEach(element => {
           bindOptionSelectElement(element, object, addEventHandler);
         });
 
-        let partialCountParameters = element.querySelectorAll(":scope > div.expander-content > article.Parameter input[name='partialCount']");
+        let partialCountParameters = element.querySelectorAll(":scope > .ModuleParameters > article.Parameter input[name='partialCount']");
         partialCountParameters.forEach(element => {
           let oscillatorTypeParameterSelectElement = element.parentElement.parentElement.querySelector(".Parameter select[name='type']");
           let oscillatorTypeOptionElements = oscillatorTypeParameterSelectElement.querySelectorAll("option");
@@ -842,21 +880,26 @@
           })
         });
 
-        let childComponents = element.querySelectorAll(`:scope > div.expander-content > article.Component`);
-        childComponents.forEach(childElement => {
-          bind(childElement, object[childElement.getAttribute("name")]);
+        let childModules = element.querySelectorAll(`:scope > .ModuleParameters > article.Module`);
+        childModules.forEach(childModuleElement => {
+          bind(childModuleElement, object[childModuleElement.getAttribute("name")]);
         });
 
-        let childSources = element.querySelectorAll(`:scope > div.expander-content > article.Source`);
-        childSources.forEach(childElement => {
-          bind(childElement, object[childElement.getAttribute("name")]);
-        })
+        // let childComponents = element.querySelectorAll(`:scope > .ModuleParameters > article.Component`);
+        // childComponents.forEach(childElement => {
+        //   bind(childElement, object[childElement.getAttribute("name")]);
+        // });
+
+        // let childSources = element.querySelectorAll(`:scope > .ModuleParameters > article.Source`);
+        // childSources.forEach(childElement => {
+        //   bind(childElement, object[childElement.getAttribute("name")]);
+        // })
 
 
-        let childInstruments = element.querySelectorAll(`:scope > div.expander-content > article.Instrument`);
-        childInstruments.forEach(childElement => {
-          bind(childElement, object[childElement.getAttribute("name")]);
-        });
+        // let childInstruments = element.querySelectorAll(`:scope > .ModuleParameters > article.Instrument`);
+        // childInstruments.forEach(childElement => {
+        //   bind(childElement, object[childElement.getAttribute("name")]);
+        // });
         console.log(`Bind finished ${element.getAttribute("name")} to object ${object.name}`, element, object);
       }
 
@@ -870,7 +913,8 @@
         //console.log(`Connecting input event for parameter "${namespace}"`, parameterOwner, parameterOwner[parameterName]);
 
         element.value = isNumberProperty ? parameterOwner[parameterName] : parameterOwner[parameterName].value;
-        valueElement.innerHTML = element.value;
+        if (valueElement)
+          valueElement.innerHTML = element.value;
 
         if (addEventHandler) {
           element.addEventListener("input", () => {
@@ -879,7 +923,8 @@
               parameterOwner[parameterName] = element.value;
             else
               parameterOwner[parameterName].value = element.value;
-            valueElement.innerHTML = element.value;
+            if (valueElement)
+              valueElement.innerHTML = element.value;
             //console.log(`Updated "${namespace}" from ${oldValue} to ${element.value}`);
           })
         }
