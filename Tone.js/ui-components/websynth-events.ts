@@ -52,7 +52,7 @@ export class PlayNoteRequestEvent {
     const evt = new CustomEvent(PlayNoteRequestEvent._name, { detail: { trackId: trackId, note: note, velocity: velocity, time: time } });
     console.log("sending PlayNoteREquest")
     document.dispatchEvent(evt);
-    console.log("sent PlayNoteREquest")
+    console.log("sent PlayNoteREquest" + note)
   }
   static subscribe(eventHandler: Function) {
     CustomEventBase.addEventListener(PlayNoteRequestEvent._name, eventHandler);

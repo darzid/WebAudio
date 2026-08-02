@@ -828,7 +828,7 @@
           tracksElement.appendChild(trackElement);
 
           track.channel = new Tone.Channel();
-          track.channel.send("master", 0);
+          track.channel.send("master", track.volume);
 
           applyTemplates();
 
@@ -855,13 +855,6 @@
             trackDevices[deviceIndex].connect(trackDevices[deviceIndex + 1]);
           }
           track.devices[track.devices.length - 1].connect(track.channel);
-
-          if (track.sequence) {
-            // track.sequence.synth = track.devices[0];
-            // track.sequence.part = new Tone.Part((time, value) => {
-            //   track.sequence.synth?.triggerAttackRelease(value.note, value.duration, time, value.velocity / 127);
-            // }, track.sequence.events);
-          }
         })
 
         initializeToggleButtons();
@@ -920,6 +913,7 @@
               let sessionTrack = {
                 id: track.id,
                 name: track.name,
+                volume: track.volume,
                 devices: devices
               };
               
@@ -929,7 +923,7 @@
                 })
               }
               let trackLoop = new Tone.Loop((time) => loopFunction(time), track.loop.length);
-              trackLoop.start(0);
+              trackLoop.start(Tone.Time(track.loop.startTime));
 
               sessionTrack.loop = trackLoop;
 

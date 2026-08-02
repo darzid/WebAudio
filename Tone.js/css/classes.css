@@ -57,6 +57,10 @@ input[type="checkbox"][name="enabled"]:checked {
   padding: 0.2em;
   margin: 0.2em;
 
+  .track-header {
+    width: 22em;
+  }
+
   .title-bar {
     vertical-align: middle;
 
