@@ -687,7 +687,7 @@
           name: "Track 1",
           devices: [
             new Tone.MembraneSynth({
-              "detune": -585,
+              "detune": -1000,
               "pitchDecay": 0.05,
               "octaves": 8,
               "envelope": {
@@ -700,9 +700,16 @@
             new Tone.Distortion({
               "distortion": 0.1,
               "oversample": "none",
-              "wet": 0.2
+              "wet": 0.5
             }),
-            new Tone.Compressor()
+            new Tone.Compressor({
+              "threshold": -12,
+              "knee": 25,
+              "ratio": 20,
+              "attack": 0.6,
+              "release:": 0.25
+            }
+            )
           ],
           sequence: new Tone.Sequence(playTrack1Note, ["C1"], "4n"),
         });
@@ -747,7 +754,9 @@
 
         project.tracks.push({
           id: "track3", name: "Track 3", devices: [
-            new Tone.DuoSynth(),
+            new Tone.DuoSynth({
+              "volume": -20}
+            ),
             new Tone.AutoFilter(),
             new Tone.PingPongDelay(),
             new Tone.JCReverb()
@@ -777,10 +786,19 @@
 
         project.tracks.push({
           id: "track5", name: "Track 5", devices: [
-            new Tone.FMSynth(),
+            new Tone.FMSynth({
+              "envelope": {
+                "release": 0
+              }
+            }),
             new Tone.Phaser(),
-            new Tone.PingPongDelay(),
-            new Tone.JCReverb()
+            new Tone.PingPongDelay({
+              "wet": 0
+            }),
+            new Tone.JCReverb({
+              "wet": 0
+            }
+            )
           ]
         });
 
@@ -795,10 +813,20 @@
           project.tracks[1].devices[0].triggerAttackRelease("G#1", "16n", time + Tone.Time("8n"));
           project.tracks[1].devices[0].triggerAttackRelease("G1", "16n", time + Tone.Time("16n") * 3);
         }, "4n").start(0);
+        
+        project.tracks[2].loop = new Tone.Loop((time) => {
+          project.tracks[2].devices[0].triggerAttackRelease("G3", "16n", time + Tone.Time("16n"));
+          project.tracks[2].devices[0].triggerAttackRelease("G#3", "16n", time + Tone.Time("8n"));
+          project.tracks[2].devices[0].triggerAttackRelease("G2", "16n", time + Tone.Time("16n") * 3);
+        }, "1n").start(0);
 
         project.tracks[3].loop = new Tone.Loop((time) => {
           project.tracks[3].devices[0].triggerAttackRelease("G1", "1n", time + Tone.Time("8n"));
         }, "1n").start(0);
+        
+        project.tracks[4].loop = new Tone.Loop((time) => {
+          project.tracks[4].devices[0].triggerAttackRelease("G1", "1n", time + Tone.Time("8n"));
+        }, "2n").start(0);
 
         project.tracks.forEach(track => {
           let trackElement = document.createElement("div");
