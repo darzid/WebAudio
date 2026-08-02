@@ -51,7 +51,6 @@ input[type="checkbox"][name="enabled"]:checked {
   display: flex;
   flex-direction: row;
   gap: 10px;
-  min-height2: 2rem;
 
   background-color: rgba(180, 180, 180, 1);
   border: 0.1em solid rgba(0, 0, 0, 0.2);
@@ -60,24 +59,30 @@ input[type="checkbox"][name="enabled"]:checked {
 
   .title-bar {
     vertical-align: middle;
-    
+
     label {
       vertical-align: middle;
       margin-bottom: auto;
       height: 100%;
     }
   }
+
   .TrackDevices {
     flex-wrap: nowrap;
     width: 100%;
     overflow: auto;
     display: flex;
     background-color: rgba(100, 100, 100, 0.1);
+    background-image: linear-gradient(to bottom,
+        rgba(100, 100, 100, 0.1),
+        rgba(200, 175, 130, 0.2),
+        rgba(100, 100, 100, 0.1));
+
     border: 0.1em solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3em;
     margin: 0em;
-    margin-top: 0.1em;
     margin-bottom: auto;
-    padding: 0em;
+    padding: 0.1em;
   }
 
   .toggle-button {
@@ -117,14 +122,22 @@ input[type="checkbox"][name="enabled"]:checked {
 .Source,
 .Component {
   border: 1pt solid rgba(0, 0, 0, 0.2);
-  padding: 0rem;
   margin: 0.0rem;
-  margin-right: 0.2em;
+  margin-right: 0.25em;
 
   .title-bar {
     background-color: rgba(50, 50, 50, 0.3);
+    background-image: linear-gradient(to bottom,
+        rgba(100, 100, 100, 0.1),
+        rgba(200, 175, 130, 0.2),
+        rgba(100, 100, 100, 0.1));
     border: 0.05rem solid rgba(50, 50, 50, 0.8);
     box-shadow: 0.1em 0.1em 0.5em rgba(0, 0, 0, 0.4);
+  }
+
+  .ModuleParameters {
+    padding-left: 0.4em;
+    padding-right: 0.4em;
   }
 }
 
@@ -134,6 +147,9 @@ input[type="checkbox"][name="enabled"]:checked {
   vertical-align: top;
   height: 100%;
   background-color: rgba(150, 150, 160, 1);
+  background-image: linear-gradient(to bottom,
+      rgba(100, 100, 100, 0.1),
+      rgba(200, 200, 200, 0.6));
 
   .toggle-button {
     font-size: 1.4em;
