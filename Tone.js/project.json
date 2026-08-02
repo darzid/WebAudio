@@ -92,19 +92,19 @@
       "loop": {
         "notes": [
           {
-            "note": "G1",
+            "note": "F1",
             "duration": "16n",
             "timeOffset": "1",
             "velocity": 127
           },
           {
-            "note": "G#1",
+            "note": "G1",
             "duration": "16n",
             "timeOffset": "2",
             "velocity": 127
           },
           {
-            "note": "G1",
+            "note": "F1",
             "duration": "16n",
             "timeOffset": "3",
             "velocity": 127
@@ -238,6 +238,93 @@
         ],
         "startTime": "12m",
         "length": "4n"
+      }
+    },
+    {
+      "id": "track6",
+      "name": "Track 6",
+      "volume": -5,
+      "devices": [
+        {
+          "PluckSynth": {
+            "volume": -20,
+            "attackNoise": 7,
+            "release": 3,
+            "dampening": 4700
+          }
+        },
+        {
+          "JCReverb": {}
+        }
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "G1",
+            "duration": "2n",
+            "timeOffset": "2",
+            "velocity": 127
+          },
+          {
+            "note": "G1",
+            "duration": "1n",
+            "timeOffset": "6",
+            "velocity": 127
+          }
+        ],
+        "startTime": "0",
+        "length": "1m"
+      }
+    },
+    {
+      "id": "track7",
+      "name": "Track 7",
+      "volume": -5,
+      "devices": [
+        {
+          "AMSynth": {
+            "volume": 0,
+            "harmonicity": 2,
+            "oscillator": {
+              "type": "amsine2",
+              "modulationType": "sine",
+              "harmonicity": 1.01
+            },
+            "envelope": {
+              "attack": 0.006,
+              "decay": 4,
+              "sustain": 0.04,
+              "release": 1.2
+            },
+            "modulation": {
+              "volume": 13,
+              "type": "amsine2",
+              "modulationType": "sine",
+              "harmonicity": 12
+            },
+            "modulationEnvelope": {
+              "attack": 0.006,
+              "decay": 0.2,
+              "sustain": 0.2,
+              "release": 0.4
+            }
+          }
+        },
+        {
+          "JCReverb": {}
+        }
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "G1",
+            "duration": "4n",
+            "timeOffset": "2",
+            "velocity": 127
+          }
+        ],
+        "startTime": "0",
+        "length": "1m"
       }
     }
   ]
