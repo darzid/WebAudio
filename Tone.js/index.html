@@ -855,6 +855,7 @@
             let deviceElement = document.getElementById(newDeviceElement.id);
             bind(deviceElement, device);
             deviceElement.querySelector(".browse-button").addEventListener("click", (e) => showPresetBrowser(device, deviceElement));
+            deviceElement.querySelector("input[name='enabled']").addEventListener("change", (e) => track.channel.mute != track.channel.mute);
           });
 
           let trackDevices = track.devices.filter(device => device.name != "LFO");
@@ -889,13 +890,12 @@
         project.tracks[3].devices[1].connect(project.tracks[3].devices[0].filter.detune);
         project.tracks[3].devices[1].start();
 
-
         document.getElementById("play-button").addEventListener("click", () => {
-          project.tracks.forEach(track => {
+          /*project.tracks.forEach(track => {
             if (track.sequence && track.sequence.part) {
               track.sequence.part.start(0);
             }
-          });
+          });*/
           Tone.getTransport().start();
         });
         document.getElementById("stop-button").addEventListener("click", () => {
