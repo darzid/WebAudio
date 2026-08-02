@@ -143,13 +143,17 @@
 
         <template id="TrackVolume">
           <article class="Parameter">
-            <input name="${item.name}" title="${item.name}" type="number" min="-60" max="0" step="0.01" value="${item.value}">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" title="${item.name}" type="range" min="-60" max="0" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
           </article>
         </template>
 
         <template id="TrackPan">
           <article class="Parameter">
-            <input name="${item.name}" title="${item.name}" type="number" min="-1" max="1" step="0.1" value="${item.value}">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" title="${item.name}" type="range" min="-1" max="1" step="0.1" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
           </article>
         </template>
 
@@ -738,7 +742,7 @@
       <span id="daw-templates">
 
         <template id="TrackChannel">
-          <div class="TrackChannel ModuleParameters">
+          <div class="TrackChannel ModuleParameters expanded">
             <div name="pan" data-template="TrackPan"></div>
             <div name="volume" data-template="TrackVolume"></div>
           </div>
@@ -747,7 +751,13 @@
         <template id="Track">
           <article id="${item.id}" class="Track">
             <div class="track-header">
-              <div class="title-bar"><label class="arm-track" for="arm-${item.name}">ARM</label><input type="radio" id="arm-${item.name}" class="arm-track" name="arm-track" value="${item.id}"><button class="toggle-button">${item.name}</button><input type="checkbox" name="enabled" checked></div>
+              <div class="title-bar">
+                <input type="radio" id="arm-${item.name}" class="arm-track" name="arm-track" value="${item.id}">
+                <!--<button class="toggle-button2">-->
+                  <div>${item.name}</div>
+              <!--  </button>-->
+                <input type="checkbox" name="enabled" checked>
+              </div>
               <div name="channel" data-template="TrackChannel"></div>
             </div>
             <div name="Devices" class="TrackDevices"></div>

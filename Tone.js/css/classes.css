@@ -29,10 +29,6 @@ input[type="checkbox"] {
   margin-top: 0.45em;
 }
 
-input[type="radio"][name="arm-track"]:checked {
-  accent-color: var(--device-btn-arm-checked-bg);
-}
-
 input[type="checkbox"][name="enabled"]:checked {
   accent-color: var(--device-btn-enabled-checked-bg);
   box-shadow: 0.0em 0.0em 1em var(--device-btn-enabled-checked-shadow);
@@ -47,6 +43,11 @@ input[type="checkbox"][name="enabled"]:checked {
   vertical-align: top;
 }
 
+.toggle-button {
+  font-size: 1.6em;
+  vertical-align: top;
+}
+
 .Track {
   display: flex;
   flex-direction: row;
@@ -57,17 +58,60 @@ input[type="checkbox"][name="enabled"]:checked {
   padding: 0.2em;
   margin: 0.2em;
 
-  .track-header {
-    width: 22em;
+  .track-header>.title-bar>div {
+    width: 3rem;
+    max-width: 3rem;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.6em;
+    font-weight: bold;
+    vertical-align: top;
+    margin-top: 0.2em;
   }
-
+  
   .title-bar {
     vertical-align: middle;
+    
+    input[type="checkbox"][name="enabled"] {
+      font-size: 0.5em;
+      height: 4em;
+    }
+    
+    input[type="radio"][name="arm-track"] {
+      font-size: 0.5em;
+      height: 4em;
+      margin-left: 0em;
+      margin-top: 0.4em;
+      margin-right: 0.1em;
+    }
+
+    input[type="radio"][name="arm-track"]:checked {
+      accent-color: var(--device-btn-arm-checked-bg);
+    }
 
     label {
       vertical-align: middle;
       margin-bottom: auto;
       height: 100%;
+    }
+  }
+  
+  .TrackChannel {
+    label { 
+      width: 4em;
+      min-width: 4em;
+    }
+    
+    input[type="range"] {
+      width: 7.5em;
+    }
+  
+    value {
+      max-width: 2em;
+      white-space: nowrap;
+      overflow: hidden;""
     }
   }
 
@@ -89,11 +133,6 @@ input[type="checkbox"][name="enabled"]:checked {
     padding: 0.1em;
   }
 
-  .toggle-button {
-    font-size: 1.6em;
-    vertical-align: top;
-  }
-
   .track-header {
     display: flex;
     flex-direction: column;
@@ -101,16 +140,6 @@ input[type="checkbox"][name="enabled"]:checked {
     height: auto;
     margin: 0rem;
     padding: 0rem;
-  }
-
-  .TrackChannel {
-    display: none;
-
-    input[type="number"] {
-      margin-right: 0.1em;
-      width: 4em;
-      font-size: 1.2em;
-    }
   }
 }
 

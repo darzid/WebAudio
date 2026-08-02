@@ -116,7 +116,7 @@
     },
     {
       "id": "track3",
-      "name": "Track 3",
+      "name": "Track 3 with a long name",
       "volume": -5,
       "devices": [
         {
