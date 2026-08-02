@@ -753,7 +753,10 @@
               <div class="title-bar">
                 <input type="radio" id="arm-${item.name}" class="arm-track" name="arm-track" value="${item.id}">
                 <div>${item.name}</div>
-                <input type="checkbox" name="enabled" switch="true" checked>
+                <label class="custom-checkbox">
+                  <input type="checkbox" name="enabled" checked>
+                  <span class="checkmark"></span>
+                </label>
               </div>
               <div name="channel" data-template="TrackChannel"></div>
             </div>
