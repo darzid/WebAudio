@@ -34,7 +34,18 @@
             "release:": 0.25
           }
         }
-      ]
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "C2",
+            "duration": "8n",
+            "timeOffset": "0",
+            "velocity": 127
+          }
+        ],
+        "length": "4n"
+      }
     },
     {
       "id": "track2",
@@ -74,7 +85,30 @@
         {
           "Compressor": {}
         }
-      ]
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "G1",
+            "duration": "16n",
+            "timeOffset": "1",
+            "velocity": 127
+          },
+          {
+            "note": "G#1",
+            "duration": "16n",
+            "timeOffset": "2",
+            "velocity": 127
+          },
+          {
+            "note": "G1",
+            "duration": "16n",
+            "timeOffset": "3",
+            "velocity": 127
+          }
+        ],
+        "length": "4n"
+      }
     },
     {
       "id": "track3",
@@ -99,7 +133,30 @@
         {
           "JCReverb": {}
         }
-      ]
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "G3",
+            "duration": "16n",
+            "timeOffset": "1",
+            "velocity": 127
+          },
+          {
+            "note": "G#3",
+            "duration": "16n",
+            "timeOffset": "2",
+            "velocity": 127
+          },
+          {
+            "note": "G2",
+            "duration": "16n",
+            "timeOffset": "3",
+            "velocity": 127
+          }
+        ],
+        "length": "1n"
+      }
     },
     {
       "id": "track4",
@@ -127,7 +184,18 @@
         {
           "JCReverb": {}
         }
-      ]
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "G1",
+            "duration": "1n",
+            "timeOffset": "2",
+            "velocity": 127
+          }
+        ],
+        "length": "1n"
+      }
     },
     {
       "id": "track5",
@@ -161,7 +229,18 @@
             "wet": 0
           }
         }
-      ]
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "G1",
+            "duration": "1n",
+            "timeOffset": "2",
+            "velocity": 127
+          }
+        ],
+        "length": "2n"
+      }
     }
   ]
 }

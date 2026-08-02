@@ -810,321 +810,39 @@
           console.warn("Already loaded presets");
         }
 
-        // let myProjectJson = {
-        //   "name": "My Project",
-        //   "tracks": [
-        //     {
-        //       "id": "track1",
-        //       "name": "Track 1",
-        //       "devices": [
-        //         {
-        //           "MembraneSynth": {
-        //             "detune": -1000,
-        //             "pitchDecay": 0.05,
-        //             "octaves": 8,
-        //             "envelope": {
-        //               "attack": 0.001,
-        //               "decay": 100,
-        //               "sustain": 1,
-        //               "release": 40
-        //             },
-        //           }
-        //         }, {
-        //           "Distortion": {
-        //             "distortion": 0.1,
-        //             "oversample": "none",
-        //             "wet": 0.5
-        //           }
-        //         }, {
-        //           "Compressor": {
-        //             "threshold": -12,
-        //             "knee": 25,
-        //             "ratio": 20,
-        //             "attack": 0.6,
-        //             "release:": 0.25
-        //           }
-        //         }
-        //       ]
-        //     },
-        //     {
-        //       "id": "track2",
-        //       "name": "Track 2",
-        //       "devices": [
-        //         {
-        //           "MonoSynth": {
-        //             "volume": 10,
-        //             "oscillator": {
-        //               "type": "sawtooth"
-        //             },
-        //             "filter": {
-        //               "Q": 0.3,
-        //               "detune": -1000,
-        //               "frequency": 0,
-        //               "gain": 0,
-        //               "rolloff": -48,
-        //               "type": "bandpass"
-        //             },
-        //             "envelope": {
-        //               "attack": 0.01,
-        //               "decay": 0.4,
-        //               "sustain": 0,
-        //               "release": 0
-        //             },
-        //             "filterEnvelope": {
-        //               "attack": 3,
-        //               "decay": 1.3,
-        //               "sustain": 1,
-        //               "release": 0.7,
-        //               "releaseCurve": "linear",
-        //               "baseFrequency": 20,
-        //               "octaves": 5
-        //             }
-        //           }
-        //         }, {
-        //           "Compressor": {}
-        //         },
-        //       ]
-        //     },
-        //     {
-        //       "id": "track3",
-        //       "name": "Track 3",
-        //       "devices": [
-        //         {
-        //           "DuoSynth": {
-        //             "volume": -20
-        //           }
-        //         },
-        //         {
-        //           "AutoFilter": {
-        //           }
-        //         },
-        //         {
-        //           "PingPongDelay": {}
-        //         },
-        //         {
-        //           "StereoWidener": { "width": 1 }
-        //         },
-        //         {
-        //           "JCReverb": {}
-        //         }
-        //       ]
-        //     },
-        //     {
-        //       "id": "track4",
-        //       "name": "Track 4",
-        //       "devices": [
-        //         {
-        //           "MonoSynth": {
-        //             "volume": -20,
-        //             "filter": {
-        //               "Q": 2.3,
-        //               "rolloff": -48
-        //             }
-        //           }
-        //         },
-        //         {
-        //           "LFO": {
-        //             "type": "sawtooth",
-        //             "frequency": 0.05,
-        //             "min": -1000,
-        //             "max": 400,
-        //             "phase": 180,
-        //             "amplitude": 1
-        //           }
-        //         },
-        //         {
-        //           "JCReverb": {}
-        //         }
-        //       ]
-        //     },
-        //     {
-        //       "id": "track5",
-        //       "name": "Track 5",
-        //       "devices": [
-        //         {
-        //           "FMSynth": {
-        //             "envelope": {
-        //               "release": 0
-        //             }
-        //           }
-        //         },
-        //         {
-        //           "AutoWah": {}
-        //         },
-        //         {
-        //           "StereoWidener": { "width": 1 }
-        //         },
-        //         {
-        //           "Phaser": {}
-        //         },
-        //         {
-        //           "PingPongDelay": { "wet": 0 }
-        //         },
-        //         {
-        //           "JCReverb": { "wet": 0 }
-        //         }
-        //       ]
-        //     }
-        //   ]
-        // };
-
-        // project.tracks.push({
-        //   id: "track1",
-        //   name: "Track 1",
-        //   devices: [
-        //     new Tone.MembraneSynth({
-        //       "detune": -1000,
-        //       "pitchDecay": 0.05,
-        //       "octaves": 8,
-        //       "envelope": {
-        //         "attack": 0.001,
-        //         "decay": 100,
-        //         "sustain": 1,
-        //         "release": 40
-        //       },
-        //     }),
-        //     new Tone.Distortion({
-        //       "distortion": 0.1,
-        //       "oversample": "none",
-        //       "wet": 0.5
-        //     }),
-        //     new Tone.Compressor({
-        //       "threshold": -12,
-        //       "knee": 25,
-        //       "ratio": 20,
-        //       "attack": 0.6,
-        //       "release:": 0.25
-        //     }
-        //     )
-        //   ]
-        // });
-
-        // project.tracks.push({
-        //   id: "track2",
-        //   name: "Track 2",
-        //   devices: [
-        //     new Tone.MonoSynth({
-        //       "volume": 10,
-        //       "oscillator": {
-        //         "type": "sawtooth"
-        //       },
-        //       "filter": {
-        //         "Q": 0.3,
-        //         "detune": -1000,
-        //         "frequency": 0,
-        //         "gain": 0,
-        //         "rolloff": -48,
-        //         "type": "bandpass"
-        //       },
-        //       "envelope": {
-        //         "attack": 0.01,
-        //         "decay": 0.4,
-        //         "sustain": 0,
-        //         "release": 0
-        //       },
-        //       "filterEnvelope": {
-        //         "attack": 3,
-        //         "decay": 1.3,
-        //         "sustain": 1,
-        //         "release": 0.7,
-        //         "releaseCurve": "linear",
-        //         "baseFrequency": 20,
-        //         "octaves": 5
-        //       }
-        //     }),
-        //     new Tone.Compressor()
-        //   ],
-        //   sequence: new Tone.Sequence(playTrack2Note, ["", "G#1", "G#1", "G#1"], "4n")
-        // });
-
-        // project.tracks.push({
-        //   id: "track3", name: "Track 3", devices: [
-        //     new Tone.DuoSynth({
-        //       "volume": -20
-        //     }
-        //     ),
-        //     new Tone.AutoFilter(),
-        //     new Tone.PingPongDelay(),
-        //     new Tone.StereoWidener({ "width": 1 }),
-        //     new Tone.JCReverb()
-        //   ]
-        // });
-
-        // project.tracks.push({
-        //   id: "track4", name: "Track 4", devices: [
-        //     new Tone.MonoSynth({
-        //       "volume": -20,
-        //       "filter": {
-        //         "Q": 2.3,
-        //         "rolloff": -48
-        //       }
-        //     }),
-        //     new Tone.LFO({
-        //       "type": "sawtooth",
-        //       "frequency": 0.05,
-        //       "min": -1000,
-        //       "max": 400,
-        //       "phase": 180,
-        //       "amplitude": 1
-        //     }),
-        //     new Tone.JCReverb()
-        //   ]
-        // });
-
-        // project.tracks.push({
-        //   id: "track5", name: "Track 5", devices: [
-        //     new Tone.FMSynth({
-        //       "envelope": {
-        //         "release": 0
-        //       }
-        //     }),
-        //     new Tone.AutoWah(),
-        //     new Tone.StereoWidener({ "width": 1 }),
-        //     new Tone.Phaser(),
-        //     new Tone.PingPongDelay({
-        //       "wet": 0
-        //     }),
-        //     new Tone.JCReverb({
-        //       "wet": 0
-        //     }
-        //     )
-        //   ]
-        // });
-
         projectSession = {
           tracks: [],
           masterChannel: new Tone.Channel()
         };
         projectSession.masterChannel.receive("master", 0);
         projectSession.masterChannel.toDestination();
-
         await loadProject(projectSession);
 
         let tracksElement = document.getElementById("tracks");
 
-        projectSession.tracks[0].loop = new Tone.Loop((time) => {
-          projectSession.tracks[0].devices[0].triggerAttackRelease("C2", "8n", time);
-        }, "4n").start(0);
+        // projectSession.tracks[0].loop = new Tone.Loop((time) => {
+        //   projectSession.tracks[0].devices[0].triggerAttackRelease("C2", "8n", time);
+        // }, "4n").start(0);
 
-        projectSession.tracks[1].loop = new Tone.Loop((time) => {
-          projectSession.tracks[1].devices[0].triggerAttackRelease("G1", "16n", time + Tone.Time("16n"));
-          projectSession.tracks[1].devices[0].triggerAttackRelease("G#1", "16n", time + Tone.Time("8n"));
-          projectSession.tracks[1].devices[0].triggerAttackRelease("G1", "16n", time + Tone.Time("16n") * 3);
-        }, "4n").start(0);
+        // projectSession.tracks[1].loop = new Tone.Loop((time) => {
+        //   projectSession.tracks[1].devices[0].triggerAttackRelease("G1", "16n", time + Tone.Time("16n"));
+        //   projectSession.tracks[1].devices[0].triggerAttackRelease("G#1", "16n", time + Tone.Time("8n"));
+        //   projectSession.tracks[1].devices[0].triggerAttackRelease("G1", "16n", time + Tone.Time("16n") * 3);
+        // }, "4n").start(0);
 
-        projectSession.tracks[2].loop = new Tone.Loop((time) => {
-          projectSession.tracks[2].devices[0].triggerAttackRelease("G3", "16n", time + Tone.Time("16n"));
-          projectSession.tracks[2].devices[0].triggerAttackRelease("G#3", "16n", time + Tone.Time("8n"));
-          projectSession.tracks[2].devices[0].triggerAttackRelease("G2", "16n", time + Tone.Time("16n") * 3);
-        }, "1n").start(0);
+        // projectSession.tracks[2].loop = new Tone.Loop((time) => {
+        //   projectSession.tracks[2].devices[0].triggerAttackRelease("G3", "16n", time + Tone.Time("16n"));
+        //   projectSession.tracks[2].devices[0].triggerAttackRelease("G#3", "16n", time + Tone.Time("8n"));
+        //   projectSession.tracks[2].devices[0].triggerAttackRelease("G2", "16n", time + Tone.Time("16n") * 3);
+        // }, "1n").start(0);
 
-        projectSession.tracks[3].loop = new Tone.Loop((time) => {
-          projectSession.tracks[3].devices[0].triggerAttackRelease("G1", "1n", time + Tone.Time("8n"));
-        }, "1n").start(0);
+        // projectSession.tracks[3].loop = new Tone.Loop((time) => {
+        //   projectSession.tracks[3].devices[0].triggerAttackRelease("G1", "1n", time + Tone.Time("8n"));
+        // }, "1n").start(0);
 
-        projectSession.tracks[4].loop = new Tone.Loop((time) => {
-          projectSession.tracks[4].devices[0].triggerAttackRelease("G1", "1n", time + Tone.Time("8n"));
-        }, "2n").start(0);
+        // projectSession.tracks[4].loop = new Tone.Loop((time) => {
+        //   projectSession.tracks[4].devices[0].triggerAttackRelease("G1", "1n", time + Tone.Time("8n"));
+        // }, "2n").start(0);
 
         projectSession.tracks.forEach(track => {
           let trackElement = document.createElement("div");
@@ -1222,11 +940,24 @@
                 let deviceInstance = new Tone[deviceName](deviceParams);
                 devices.push(deviceInstance);
               });
-              projectSession.tracks.push({
+
+              let sessionTrack = {
                 id: track.id,
                 name: track.name,
                 devices: devices
-              });
+              };
+              
+              let loopFunction = (time) => {
+                track.loop.notes.forEach(note => {
+                  sessionTrack.devices[0].triggerAttackRelease(note.note, note.duration, time + (Tone.Time("16n") * note.timeOffset), note.velocity / 127);
+                })
+              }
+              let trackLoop = new Tone.Loop((time) => loopFunction(time), track.loop.length);
+              trackLoop.start(0);
+
+              sessionTrack.loop = trackLoop;
+
+              projectSession.tracks.push(sessionTrack);
             })
 
           })
