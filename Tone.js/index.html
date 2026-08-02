@@ -734,7 +734,6 @@
             </article>
           </template>
 
-
         </span>
 
       </span>
@@ -742,7 +741,7 @@
       <span id="daw-templates">
 
         <template id="TrackChannel">
-          <div class="TrackChannel ModuleParameters expanded">
+          <div class="TrackChannel ModuleParameters">
             <div name="pan" data-template="TrackPan"></div>
             <div name="volume" data-template="TrackVolume"></div>
           </div>
@@ -753,10 +752,8 @@
             <div class="track-header">
               <div class="title-bar">
                 <input type="radio" id="arm-${item.name}" class="arm-track" name="arm-track" value="${item.id}">
-                <!--<button class="toggle-button2">-->
-                  <div>${item.name}</div>
-              <!--  </button>-->
-                <input type="checkbox" name="enabled" checked>
+                <div>${item.name}</div>
+                <input type="checkbox" name="enabled" switch="true" checked>
               </div>
               <div name="channel" data-template="TrackChannel"></div>
             </div>
@@ -841,10 +838,19 @@
           track.channel.send("master", track.volume);
 
           applyTemplates();
-
-          bind(document.getElementById(track.id).querySelector(".track-header"), track.channel);
-
-          let trackDevicesElement = document.getElementById(track.id).querySelector("div[name='Devices']");
+          
+          trackElement = document.getElementById(track.id);
+          
+          bind(trackElement.querySelector(".track-header"), track.channel);
+          
+          trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']").addEventListener("change", (e) => {
+              if (e.target.checked)
+                console.log("Activating track " + track.id);
+              else
+                console.log("Deactivating track " + track.id);
+              track.channel.mute = !e.target.checked;
+          });
+          let trackDevicesElement = trackElement.querySelector("div[name='Devices']");
 
           track.devices.forEach(device => {
             let newDeviceElement = document.createElement("div");
@@ -857,7 +863,13 @@
             let deviceElement = document.getElementById(newDeviceElement.id);
             bind(deviceElement, device);
             deviceElement.querySelector(".browse-button").addEventListener("click", (e) => showPresetBrowser(device, deviceElement));
-            deviceElement.querySelector("input[name='enabled']").addEventListener("change", (e) => track.channel.mute != track.channel.mute);
+           /* deviceElement.querySelector("input[type='checkbox'][name='enabled']").addEventListener("change", (e) => {
+              if (track.channel.mute)
+                console.log("Unmuting track " + track.id);
+              else
+                console.log("Muting track " + track.id);
+              track.channel.mute != track.channel.mute;
+            });*/
           });
 
           let trackDevices = track.devices.filter(device => device.name != "LFO");
