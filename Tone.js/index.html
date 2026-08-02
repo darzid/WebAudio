@@ -185,7 +185,7 @@
         <template id="attack">
           <article class="Parameter">
             <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <input name="${item.name}" type="range" min="0" max="4" step="0.01" value="${item.value}">
             <value for="${item.name}">${item.value}</value>
           </article>
         </template>
@@ -193,7 +193,7 @@
         <template id="decay">
           <article class="Parameter">
             <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <input name="${item.name}" type="range" min="0" max="4" step="0.01" value="${item.value}">
             <value for="${item.name}">${item.value}</value>
           </article>
         </template>
@@ -201,7 +201,7 @@
         <template id="release">
           <article class="Parameter">
             <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <input name="${item.name}" type="range" min="0" max="4" step="0.01" value="${item.value}">
             <value for="${item.name}">${item.value}</value>
           </article>
         </template>
@@ -378,12 +378,12 @@
       <span id="component-templates">
         <template id="EnvelopeBase">
           <span>
-            <div name="attack" data-template="Time" value="0.1"></div>
+            <div name="attack" data-template="attack" value="0.1"></div>
             <div name="attackCurve" data-template="EnvelopeCurve" value="exponential"></div>
-            <div name="decay" data-template="Time" value="0.2"></div>
+            <div name="decay" data-template="decay" value="0.2"></div>
             <div name="decayCurve" data-template="EnvelopeCurve" value="exponential"></div>
             <div name="sustain" data-template="NormalRange" value="1.0"></div>
-            <div name="release" data-template="Time" value="0.8"></div>
+            <div name="release" data-template="release" value="0.8"></div>
             <div name="releaseCurve" data-template="EnvelopeCurve" value="exponential"></div>
           </span>
         </template>
@@ -896,9 +896,10 @@
 
         document.getElementById("tracks").style.opacity = 1;
 
-        Tone.getTransport().bpm.value = 130;
-        session.tracks[3].devices[1].connect(session.tracks[3].devices[0].filter.detune);
-        session.tracks[3].devices[1].start();
+        Tone.getTransport().bpm.value = session.tempo;
+        
+        //session.tracks[3].devices[1].connect(session.tracks[3].devices[0].filter.detune);
+        //session.tracks[3].devices[1].start();
 
         document.getElementById("play-button").addEventListener("click", () => {
           /*project.tracks.forEach(track => {
@@ -951,7 +952,7 @@
               trackLoop.start(Tone.Time(track.loop.startTime));
 
               sessionTrack.loop = trackLoop;
-
+              projectSession.tempo = project.tempo;
               projectSession.tracks.push(sessionTrack);
             })
 
@@ -959,18 +960,6 @@
           .catch(error => {
             console.error('Error loading JSON:', error);
           });
-      }
-
-      function playTrack1Note(time, note) {
-        let track = session.tracks.find(track => track.id === "track1");
-        if (track.devices.length == 0) return;
-        track.devices[0].triggerAttackRelease(note, "8n", time);
-      }
-
-      function playTrack2Note(time, note) {
-        let track = session.tracks.find(track => track.id === "track2");
-        if (track.devices.length == 0) return;
-        track.devices[0].triggerAttackRelease(note, "8n", time);
       }
 
       function loadPresets() {

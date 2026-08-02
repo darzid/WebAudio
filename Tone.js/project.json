@@ -1,5 +1,6 @@
 {
   "name": "My Project",
+  "tempo": 146,
   "tracks": [
     {
       "id": "track1",
@@ -45,7 +46,7 @@
             "velocity": 127
           }
         ],
-        "startTime": "8m",
+        "startTime": "0",
         "length": "4n"
       }
     },
@@ -110,113 +111,38 @@
             "velocity": 127
           }
         ],
-        "startTime": "4m",
+        "startTime": "0",
         "length": "4n"
       }
     },
     {
       "id": "track3",
-      "name": "Track 3 with a long name",
-      "volume": -5,
-      "devices": [
-        {
-          "DuoSynth": {
-            "volume": -20
-          }
-        },
-        {
-          "AutoFilter": {}
-        },
-        {
-          "PingPongDelay": {}
-        },
-        {
-          "JCReverb": {}
-        }
-      ],
-      "loop": {
-        "notes": [
-          {
-            "note": "G3",
-            "duration": "16n",
-            "timeOffset": "1",
-            "velocity": 127
-          },
-          {
-            "note": "G#3",
-            "duration": "16n",
-            "timeOffset": "2",
-            "velocity": 127
-          },
-          {
-            "note": "G2",
-            "duration": "16n",
-            "timeOffset": "3",
-            "velocity": 127
-          }
-        ],
-        "startTime": "0",
-        "length": "1n"
-      }
-    },
-    {
-      "id": "track4",
-      "name": "Track 4",
-      "volume": -5,
-      "devices": [
-        {
-          "MonoSynth": {
-            "volume": -20,
-            "filter": {
-              "Q": 2.3,
-              "rolloff": -48
-            }
-          }
-        },
-        {
-          "LFO": {
-            "type": "sawtooth",
-            "frequency": 0.05,
-            "min": -1000,
-            "max": 400,
-            "phase": 180,
-            "amplitude": 1
-          }
-        },
-        {
-          "JCReverb": {}
-        }
-      ],
-      "loop": {
-        "notes": [
-          {
-            "note": "G1",
-            "duration": "1n",
-            "timeOffset": "2",
-            "velocity": 127
-          }
-        ],
-        "startTime": "0",
-        "length": "1n"
-      }
-    },
-    {
-      "id": "track5",
-      "name": "Hihat",
+      "name": "ClosedHat",
       "volume": -5,
       "devices": [
         {
           "MetalSynth": {
             "volume": -4,
+            "portamento": 100,
+            "modulationIndex": 1,
             "octaves": 0,
             "envelope": { 
-              "decay": 0.3
+              "attack": 0.01,
+              "decay": 1,
+              "sustain": 0.1,
+              "release": 3.4
             }
           }
         }
       ],
       "loop": {
         "notes": [
+          {
+            "note": "G3",
+            "duration": "32n",
+            "timeOffset": "0",
+            "velocity": 20
+          },
           {
             "note": "G3",
             "duration": "32n",
@@ -224,107 +150,53 @@
             "velocity": 40
           },
           {
-            "note": "G2",
-            "duration": "8n",
+            "note": "G3",
+            "duration": "32n",
             "timeOffset": "2",
-            "velocity": 80
+            "velocity": 20
           },
           {
             "note": "G3",
             "duration": "32n",
             "timeOffset": "3",
-            "velocity": 40
+            "velocity": 30
           }
         ],
-        "startTime": "12m",
+        "startTime": "2m",
         "length": "4n"
       }
     },
     {
-      "id": "track6",
-      "name": "Track 6",
+      "id": "track4",
+      "name": "OpenHat",
       "volume": -5,
       "devices": [
         {
-          "PluckSynth": {
-            "volume": -20,
-            "attackNoise": 7,
-            "release": 3,
-            "dampening": 4700
-          }
-        },
-        {
-          "JCReverb": {}
-        }
-      ],
-      "loop": {
-        "notes": [
-          {
-            "note": "G1",
-            "duration": "2n",
-            "timeOffset": "2",
-            "velocity": 127
-          },
-          {
-            "note": "G1",
-            "duration": "1n",
-            "timeOffset": "6",
-            "velocity": 127
-          }
-        ],
-        "startTime": "0",
-        "length": "1m"
-      }
-    },
-    {
-      "id": "track7",
-      "name": "Track 7",
-      "volume": -5,
-      "devices": [
-        {
-          "AMSynth": {
-            "volume": 0,
-            "harmonicity": 2,
-            "oscillator": {
-              "type": "amsine2",
-              "modulationType": "sine",
-              "harmonicity": 1.01
-            },
-            "envelope": {
-              "attack": 0.006,
-              "decay": 4,
-              "sustain": 0.04,
-              "release": 1.2
-            },
-            "modulation": {
-              "volume": 13,
-              "type": "amsine2",
-              "modulationType": "sine",
-              "harmonicity": 12
-            },
-            "modulationEnvelope": {
-              "attack": 0.006,
-              "decay": 0.2,
-              "sustain": 0.2,
-              "release": 0.4
+          "MetalSynth": {
+            "volume": -4,
+            "portamento": 100,
+            "modulationIndex": 1,
+            "octaves": 0,
+            "envelope": { 
+              "attack": 0.01,
+              "decay": 1.64,
+              "sustain": 0.01,
+              "release": 0.2
             }
           }
-        },
-        {
-          "JCReverb": {}
         }
       ],
       "loop": {
         "notes": [
           {
-            "note": "G1",
-            "duration": "4n",
+            "note": "A2",
+            "duration": "8n",
             "timeOffset": "2",
-            "velocity": 127
+            "velocity": 80
           }
         ],
-        "startTime": "0",
-        "length": "1m"
+        "startTime": "2m",
+        "length": "4n"
       }
     }
   ]
