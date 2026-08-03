@@ -48,7 +48,8 @@
         ],
         "startTime": "0",
         "length": "4n"
-      }
+      },
+      "automation": []
     },
     {
       "id": "track2",
@@ -113,7 +114,8 @@
         ],
         "startTime": "0",
         "length": "4n"
-      }
+      },
+      "automation": []
     },
     {
       "id": "track3",
@@ -126,12 +128,19 @@
             "portamento": 100,
             "modulationIndex": 1,
             "octaves": 0,
-            "envelope": { 
+            "envelope": {
               "attack": 0.01,
               "decay": 1,
               "sustain": 0.1,
               "release": 3.4
             }
+          }
+        },
+        {
+          "Filter": {
+            "type": "lowpass",
+            "frequency": 1,
+            "rolloff": -12
           }
         }
       ],
@@ -164,7 +173,15 @@
         ],
         "startTime": "2m",
         "length": "4n"
-      }
+      },
+      "automation": [
+        {
+          "target": "Filter.frequency",
+          "startTime": "2m",
+          "rampTime": "8m",
+          "value": 3000
+        }
+      ]
     },
     {
       "id": "track4",
@@ -177,12 +194,19 @@
             "portamento": 100,
             "modulationIndex": 1,
             "octaves": 0,
-            "envelope": { 
+            "envelope": {
               "attack": 0.01,
               "decay": 1.64,
               "sustain": 0.01,
               "release": 0.2
             }
+          }
+        },
+        {
+          "Filter": {
+            "type": "lowpass",
+            "frequency": 1,
+            "rolloff": -12
           }
         }
       ],
@@ -197,7 +221,15 @@
         ],
         "startTime": "2m",
         "length": "4n"
-      }
+      },
+      "automation": [
+        {
+          "target": "Filter.frequency",
+          "startTime": "2m",
+          "rampTime": "8m",
+          "value": 3000
+        }
+      ]
     }
   ]
 }

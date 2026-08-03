@@ -409,7 +409,7 @@
           </article>
         </template>
 
-        <template id="Filter">
+        <template id="FilterComponent">
           <article class="Component Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
             <div class="expander-content ModuleParameters">
@@ -531,7 +531,7 @@
                 <div name="portamento" data-template="Time" value="0"></div>
                 <div name="volume" data-template="Decibels" value="0"></div>
                 <div name="envelope" class="envelope" data-template="AmplitudeEnvelope"></div>
-                <div name="filter" class="filter" data-template="Filter"></div>
+                <div name="filter" class="filter" data-template="FilterComponent"></div>
                 <div name="filterEnvelope" class="filterEnvelope" data-template="FrequencyEnvelope"></div>
                 <div name="oscillator" class="oscillator" data-template="OmniOscillator"></div>
               </div>
@@ -599,7 +599,7 @@
                 <div name="depth" data-template="NormalRange" value="0"></div>
                 <div name="baseFrequency" data-template="Frequency" value="0"></div>
                 <div name="octaves" data-template="NormalRange" value="0"></div>
-                <div name="filter" data-template="Filter"></div>
+                <div name="filter" data-template="FilterComponent"></div>
               </div>
             </article>
           </template>
@@ -651,6 +651,20 @@
                 <div name="distortion" data-template="NormalRange" value="1"></div>
                 <div name="oversample" data-template="OversampleType" value="none"></div>
                 <div name="wet" data-template="NormalRange" value="0"></div>
+              </div>
+            </article>
+          </template>
+
+          <template id="Filter">
+            <article class="Effect Module">
+              <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
+              <div class="expander-content ModuleParameters">
+                <div name="Q" data-template="Q" value="1"></div>
+                <div name="detune" data-template="Cents" value="0"></div>
+                <div name="frequency" data-template="Frequency" value="0"></div>
+                <div name="gain" data-template="FilterGain" value="0"></div>
+                <div name="rolloff" data-template="Rolloff" value="-12"></div>
+                <div name="type" data-template="FilterType" value="lowpass"></div>
               </div>
             </article>
           </template>
@@ -928,6 +942,19 @@
           stopButton.disabled = false;
 
           Tone.getTransport().start();
+
+          session.tracks.forEach(track => {
+            track.automation.forEach(automation => {
+              let targetPathParts = automation.target.split(".");
+              let deviceName = targetPathParts[0];
+              let targetDevice = track.devices.find(device => device.name === deviceName);
+              let targetParameter = targetDevice;
+              for (let targetPathIndex = 1; targetPathIndex < targetPathParts.length; targetPathIndex++) {
+                targetParameter = targetParameter[targetPathParts[targetPathIndex]];
+              }
+              targetParameter.rampTo(automation.value, Tone.now() + Tone.Time(automation.rampTime), Tone.now() + Tone.Time(automation.startTime));
+            });
+          })
         });
 
         stopButton.addEventListener("click", async () => {
@@ -978,7 +1005,8 @@
                 id: track.id,
                 name: track.name,
                 volume: track.volume,
-                devices: devices
+                devices: devices,
+                automation: track.automation
               };
 
               let loopFunction = (time) => {
@@ -988,6 +1016,7 @@
               }
               let trackLoop = new Tone.Loop((time) => loopFunction(time), track.loop.length);
               trackLoop.start(Tone.Time(track.loop.startTime));
+
 
               sessionTrack.loop = trackLoop;
               projectSession.tempo = project.tempo;
