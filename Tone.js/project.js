@@ -67,7 +67,7 @@ class Track {
   get name() { return this._projectFileTrack.name; }
   set name(value) { this._projectFileTrack.name = value; }
 
-  get volume() { return this._channel.volume; }
+  get volume() { return this._channel.volume.value; }
   set volume(value) {
     this._channel.volume = value;
     this._projectFileTrack.volume = value;
@@ -123,7 +123,7 @@ class Track {
 
   _generateLoopInstance() {
     this._loopInstance = new Tone.Loop((time) =>
-      this._loopFunction(time)); //, this._projectFileTrack.loop.length
+      this._loopFunction(time), Tone.Time(this._projectFileTrack.loop.length));
     //this._loopInstance.start(Tone.now() + Tone.Time(this._projectFileTrack.loop.startTime));
     this._loopInstance.start(Tone.Time(this._projectFileTrack.loop.startTime));
   }
@@ -131,7 +131,7 @@ class Track {
   _loopFunction(time) {
     //console.log(`Playing loop on ${this.name} at ${time}, now=${Tone.now()}`);
     this._projectFileTrack.loop.notes.forEach(note => {
-      let noteTime = time + (Tone.Time("16n") * note.timeOffset);
+      let noteTime = (note.timeOffset) ? time + (Tone.Time("16n") * note.timeOffset) : time + Tone.Time(note.time);
       //console.log(`Playing note ${note.note} on ${this.name} at ${noteTime}, now=${Tone.now()}`);
       this.instrument.triggerAttackRelease(
         note.note, note.duration, noteTime, note.velocity / 127);

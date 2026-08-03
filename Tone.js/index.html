@@ -234,7 +234,15 @@
         <template id="Q">
           <article class="Parameter">
             <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <input name="${item.name}" type="range" min="-20" max="20" step="0.01" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </article>
+        </template>
+
+        <template id="FilterDetune">
+          <article class="Parameter">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="-2400" max="2400" step="0.1" value="${item.value}">
             <value for="${item.name}">${item.value}</value>
           </article>
         </template>
@@ -242,7 +250,7 @@
         <template id="FilterGain">
           <article class="Parameter">
             <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="-Infinity" max="Infinity" step="0.01" value="${item.value}">
+            <input name="${item.name}" type="range" min="-60" max="60" step="0.01" value="${item.value}">
             <value for="${item.name}">${item.value}</value>
           </article>
         </template>
@@ -277,6 +285,15 @@
             <input name="${item.name}" type="range" min="1" max="20" step="1" value="${item.value}">
             <value for="${item.name}">${item.value}</value>
           </article>
+        </template>
+
+
+        <template id="MixerTrack">
+          <div class="MixerChannel">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="-60" max="0" step="0.1" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </div>
         </template>
 
       </span>
@@ -661,7 +678,7 @@
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="Q" data-template="Q" value="1"></div>
-                <div name="detune" data-template="Cents" value="0"></div>
+                <div name="detune" data-template="FilterDetune" value="0"></div>
                 <div name="frequency" data-template="Frequency" value="0"></div>
                 <div name="gain" data-template="FilterGain" value="0"></div>
                 <div name="rolloff" data-template="Rolloff" value="-12"></div>
@@ -782,20 +799,25 @@
       </span>
     </span>
 
-    <div id="loading">Loading</div>
-
-    <div id="tracks" style="opacity: 0.5">
-      <div class="transport-bar">
-        <button id="rec-button">REC</button>
-        <button id="play-button">PLAY</button>
-        <button id="stop-button">STOP</button>
+    <div id="daw">
+      <div id="loading">Loading</div>
+      <div id="tracks" style="opacity: 0.5">
+        <div class="transport-bar">
+          <button id="rec-button">REC</button>
+          <button id="play-button">PLAY</button>
+          <button id="stop-button">STOP</button>
+        </div>
+      </div>
+      <div id="mixer">
+        <!-- <input type="range" orient="vertical" class="mixer">
+        <input type="range" orient="vertical" class="mixer">
+        <input type="range" orient="vertical" class="mixer">
+        <input type="range" orient="vertical" class="mixer"> -->
+      </div>
+      <div id="PresetBrowser" class="PresetBrowser">
+        <div id="presets-data" style="display: none"></div>
       </div>
     </div>
-
-    <div id="PresetBrowser" class="PresetBrowser">
-      <div id="presets-data" style="display: none"></div>
-    </div>
-
     <script src="config.js"></script>
     <script>
       function consoleLog(...message) {
@@ -832,7 +854,7 @@
         Tone.context.lookAhead = 0.3;
 
         if (!presets) {
-          loadPresets();
+          await loadPresets();
           console.log(`Loaded presets to presets-data`, document.getElementById("presets-data"));
         }
         else {
@@ -846,6 +868,7 @@
         Tone.getTransport().bpm.value = session.project.tempo;
 
         let tracksElement = document.getElementById("tracks");
+        let mixerElement = document.getElementById("mixer");
 
         session.project.tracks.forEach(track => {
           let trackElement = document.createElement("div");
@@ -854,11 +877,40 @@
           trackElement.setAttribute("data-template", "Track");
           tracksElement.appendChild(trackElement);
 
+          let trackFaderElement = document.createElement("div");
+          trackFaderElement.id = `${track.id}-fader`;
+          trackFaderElement.type = "range";
+          trackFaderElement.setAttribute("name", track.name);
+          trackFaderElement.setAttribute("value", track.channel.volume.value);
+          trackFaderElement.setAttribute("data-template", "MixerTrack");
+          mixerElement.appendChild(trackFaderElement);
+
           applyTemplates();
 
           trackElement = document.getElementById(track.id);
-
           bind(trackElement.querySelector(".track-header"), track.channel);
+
+          trackFaderElement = document.getElementById(`${track.id}-fader`);
+
+          let trackVolumeInputElement = trackElement.querySelector(".TrackChannel input[name='volume']");
+          let trackVolumeValueElement = trackElement.querySelector(".TrackChannel value[for='volume']");
+          let trackFaderInputElement = trackFaderElement.querySelector("input");
+          let trackFaderValueElement = trackFaderElement.querySelector("value");
+          trackVolumeInputElement.addEventListener("input", () => {
+            if (parseFloat(trackFaderInputElement.value) != parseFloat(trackVolumeInputElement.value)) {
+              trackFaderInputElement.value = trackVolumeInputElement.value;
+              trackFaderValueElement.innerHTML = trackFaderInputElement.value;
+            }
+          })
+
+          trackFaderInputElement.addEventListener("input", () => {
+            if (parseFloat(trackVolumeInputElement.value) != parseFloat(trackFaderInputElement.value)) {
+              trackVolumeInputElement.value = trackFaderInputElement.value;
+              track.channel.volume.value = parseFloat(trackFaderInputElement.value);
+              trackVolumeValueElement.innerHTML = trackFaderInputElement.value;
+              trackFaderValueElement.innerHTML = trackFaderInputElement.value;
+            }
+          });
 
           trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']").addEventListener("change", (e) => {
             if (e.target.checked)
