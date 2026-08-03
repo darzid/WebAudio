@@ -1,16 +1,23 @@
+:root {
+  --fader-bg-track: #5d9a90;
+  --fader-bg-progress: #43e5f7;
+  --fader-fill: #434343;
+  --fader-shadow: 
+}
+
 /*Chrome*/
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   input[type='range'] {
     overflow: hidden;
     width: 80px;
     -webkit-appearance: none;
-    background-color: #9a905d;
+    background-color: var(--fader-bg-track);
   }
 
   input[type='range']::-webkit-slider-runnable-track {
     height: 10px;
     -webkit-appearance: none;
-    color: #13bba4;
+    color: #53bba4;
     margin-top: -1px;
   }
 
@@ -19,26 +26,26 @@
     -webkit-appearance: none;
     height: 10px;
     cursor: ew-resize;
-    background: #434343;
-    box-shadow: -80px 0 0 80px #43e5f7;
+    background: var(--fader-fill);
+    box-shadow: -80px 0 0 80px var(--fader-shadow);
   }
 
 }
 
 /** FF*/
 input[type="range"]::-moz-range-progress {
-  background-color: #43e5f7;
+  background-color: var(--fader-bg-progress);
 }
 
 input[type="range"]::-moz-range-track {
-  background-color: #9a905d;
+  background-color: var(--fader-bg-off);
 }
 
 /* IE*/
 input[type="range"]::-ms-fill-lower {
-  background-color: #43e5f7;
+  background-color: var(--fader-bg-progress);
 }
 
 input[type="range"]::-ms-fill-upper {
-  background-color: #9a905d;
+  background-color: var(--fader-bg-off);
 }
