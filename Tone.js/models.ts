@@ -142,7 +142,7 @@ class Track {
 
   _generateLoopInstance() {
     this._loopInstance = new Tone.Loop((time) =>
-      this._loopFunction(Tone.now()), this._projectFileTrack.loop.length);
+      this._loopFunction(time)); //, this._projectFileTrack.loop.length);
     this._loopInstance.start(Tone.now() + Tone.Time(this._projectFileTrack.loop.startTime));
     // this._loopInstance = new Tone.Loop((time: Tone.Time) => {
     //   console.log(`Playing loop on track ${this.name} at ${time}, now=${Tone.now()} `);
@@ -166,7 +166,7 @@ class Track {
     // this._loopInstance.start(Tone.Time(this._projectFileTrack.loop.startTime).toSeconds());
   }
 
-  _loopFunction(time: Tone.Unit.Seconds) {
+  _loopFunction(time: Tone.Time) {
     console.log(`Playing loop on ${this.name} at ${time}, now=${Tone.now()}`);
     this._projectFileTrack.loop.notes.forEach(note => {
       let noteTime = time + (Tone.Time("16n") * note.timeOffset);

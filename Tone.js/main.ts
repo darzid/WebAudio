@@ -124,7 +124,8 @@ async function initialize() {
     playButton.disabled = true;
     stopButton.disabled = false;
 
-    session.start(0);
+    session.start(Tone.now() + 0.5);
+    //Tone.getTransport().stop(Tone.now() + 2.5);
   });
 
   stopButton.addEventListener("click", async () => {
