@@ -211,13 +211,13 @@
           "deviceIndex": 1,
           "parameter": "frequency",
           "startTime": "2m",
-          "rampTime": "8m",
+          "rampTime": "6m",
           "value": 3000
         },
         {
           "deviceIndex": 1,
           "parameter": "frequency",
-          "startTime": "10m",
+          "startTime": "8m",
           "rampTime": "1m",
           "value": 22500
         }
@@ -268,13 +268,13 @@
           "deviceIndex": 1,
           "parameter": "frequency",
           "startTime": "2m",
-          "rampTime": "8m",
+          "rampTime": "6m",
           "value": 3000
         },
         {
           "deviceIndex": 1,
           "parameter": "frequency",
-          "startTime": "10m",
+          "startTime": "8m",
           "rampTime": "1m",
           "value": 22500
         }

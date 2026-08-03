@@ -71,7 +71,7 @@ input[type="checkbox"][name="enabled"]:checked {
     font-size: 1.6em;
     font-weight: bold;
     vertical-align: top;
-    margin-top: 0.2em;
+    margin-top: 0.05em;
   }
 
   .title-bar {
@@ -85,7 +85,7 @@ input[type="checkbox"][name="enabled"]:checked {
     .custom-checkbox {
       display: inline-block;
       float: right;
-      margin-right: 0.2em;
+      margin-right: 0.5em;
     }
 
     .custom-checkbox>input[type="checkbox"] {
@@ -105,6 +105,7 @@ input[type="checkbox"][name="enabled"]:checked {
 
     .custom-checkbox input:checked+.checkmark {
       background-color: orange;
+      box-shadow: 0.0em 0.0em 0.4em rgba(255, 165, 0, 1);
     }
 
     input[type="radio"][name="arm-track"] {
@@ -168,6 +169,7 @@ input[type="checkbox"][name="enabled"]:checked {
     height: auto;
     margin: 0rem;
     padding: 0rem;
+    width: 10rem;
   }
 }
 

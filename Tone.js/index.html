@@ -828,6 +828,9 @@
         isInitialized = true;
         await Tone.start();
 
+        console.log("Tone lookahead: " + Tone.context.lookAhead);
+        Tone.context.lookAhead = 0.3;
+
         if (!presets) {
           loadPresets();
           console.log(`Loaded presets to presets-data`, document.getElementById("presets-data"));
