@@ -931,7 +931,8 @@
           playButton.disabled = true;
           stopButton.disabled = false;
 
-          Tone.getTransport().start();
+          Tone.getTransport().start(Tone.currentTime);
+          Tone.getTransport().stop(Tone.now() + 2.5);
         });
 
         stopButton.addEventListener("click", async () => {

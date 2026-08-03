@@ -23,7 +23,7 @@ class Project {
     this._masterChannel.receive("master", 0);
     this._masterChannel.toDestination();
 
-    this._projectFile.tracks.forEach(projectFileTrack => 
+    this._projectFile.tracks.forEach(projectFileTrack =>
       this._tracks.push(new Track(projectFileTrack)));
   }
 
@@ -45,7 +45,7 @@ class Track {
 
   constructor(projectFileTrack) {
     this._projectFileTrack = projectFileTrack;
-    this._projectFileTrack.devices.forEach(projectFileDevice => 
+    this._projectFileTrack.devices.forEach(projectFileDevice =>
       this.addDevice(Object.keys(projectFileDevice)[0], projectFileDevice[Object.keys(projectFileDevice)[0]]));
     this._generateLoopInstance();
     this._generateAutomations();
@@ -89,19 +89,24 @@ class Track {
   }
 
   _generateLoopInstance() {
-    this._loopInstance = new Tone.Loop((time) => 
-      this._loopFunction(time), this._projectFileTrack.loop.length);
-    this._loopInstance.start(Tone.Time(this._projectFileTrack.loop.startTime));
+    this._loopInstance = new Tone.Loop((time) =>
+      this._loopFunction(Tone.now(), this._projectFileTrack.loop.length));
+    this._loopInstance.start(Tone.now() + Tone.Time(this._projectFileTrack.loop.startTime));
   }
 
   _loopFunction(time) {
-    this._projectFileTrack.loop.notes.forEach(note =>
+    console.log(`Playing loop on ${this.name} at ${time}, now=${Tone.now()}`);
+    this._projectFileTrack.loop.notes.forEach(note => {
+      let noteTime = time + (Tone.Time("16n") * note.timeOffset);
+      console.log(`Playing note ${note.note} on ${this.name} at ${noteTime}, now=${Tone.now()}`);
       this.instrument.triggerAttackRelease(
-        note.note, note.duration, time + (Tone.Time("16n") * note.timeOffset), note.velocity / 127))
+        note.note, note.duration, noteTime, note.velocity / 127);
+    });
   }
 
+
   _generateAutomations() {
-    this._projectFileTrack.automations.forEach(projectFileAutomation => 
+    this._projectFileTrack.automations.forEach(projectFileAutomation =>
       this._automations.push(new Automation(this, projectFileAutomation)));
   }
 }
@@ -116,27 +121,27 @@ class Automation {
   get deviceIndex() { return this._projectFileAutomation.deviceIndex; }
   get parameter() { return this._projectFileAutomation.parameter; }
   get value() { return this._projectFileAutomation.value; }
-  set value(value) { 
-    this._projectFileAutomation.value = value; 
+  set value(value) {
+    this._projectFileAutomation.value = value;
     this._generate();
   }
 
   get startTime() { return this._projectFileAutomation.startTime; }
-  set startTime(value) { 
+  set startTime(value) {
     this._projectFileAutomation.startTime = value;
     this._generate();
   }
-  
+
   get rampTime() { return this._projectFileAutomation.rampTime; }
-  set rampTime(value) { 
-    this._projectFileAutomation.rampTime = value; 
+  set rampTime(value) {
+    this._projectFileAutomation.rampTime = value;
     this._generate();
   }
 
   get device() { return this._track.devices[this.deviceIndex]; }
   get parameterPathParts() { return this.parameter.split("."); }
-  get parameterName() { return this.parameterPathParts[this.parameterPathParts.length -1]; }
-  
+  get parameterName() { return this.parameterPathParts[this.parameterPathParts.length - 1]; }
+
   _generate() {
     let parameter = this.device[this.parameterPathParts[0]];
     for (let parameterPathIndex = 1; parameterPathIndex < this.parameterPathParts.length; parameterPathIndex++) {
