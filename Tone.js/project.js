@@ -90,7 +90,7 @@ class Track {
 
   _generateLoopInstance() {
     this._loopInstance = new Tone.Loop((time) =>
-      this._loopFunction(Tone.now(), this._projectFileTrack.loop.length));
+      this._loopFunction(time)); //, this._projectFileTrack.loop.length
     this._loopInstance.start(Tone.now() + Tone.Time(this._projectFileTrack.loop.startTime));
   }
 
