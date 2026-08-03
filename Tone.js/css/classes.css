@@ -35,8 +35,6 @@ input[type="checkbox"][name="enabled"]:checked {
 }
 
 .title-bar {
-  display: flex;
-  flex-direction: row;
   margin: 0rem;
   padding: 0rem;
   height: auto;
@@ -58,9 +56,14 @@ input[type="checkbox"][name="enabled"]:checked {
   padding: 0.2em;
   margin: 0.2em;
 
+  .track-name {
+    display: inline-block;
+    width: 100%;
+  }
+
   .track-header>.title-bar>div {
-    width: 3rem;
-    max-width: 3rem;
+    width: 4rem;
+    max-width: 4rem;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
@@ -70,20 +73,26 @@ input[type="checkbox"][name="enabled"]:checked {
     vertical-align: top;
     margin-top: 0.2em;
   }
-  
+
   .title-bar {
     vertical-align: middle;
-    
+
     input[type="checkbox"][name="enabled"] {
       font-size: 0.5em;
       height: 4em;
     }
-    
-    .custom-checkbox > input[type="checkbox"] {
+
+    .custom-checkbox {
+      display: inline-block;
+      float: right;
+      margin-right: 0.2em;
+    }
+
+    .custom-checkbox>input[type="checkbox"] {
       display: none;
     }
-    
-    .custom-checkbox > .checkmark {
+
+    .custom-checkbox>.checkmark {
       display: inline-block;
       width: 1.2em;
       height: 1.2em;
@@ -93,11 +102,11 @@ input[type="checkbox"][name="enabled"]:checked {
       margin-right: 0em;
       cursor: pointer;
     }
-    
-    .custom-checkbox input:checked + .checkmark {
+
+    .custom-checkbox input:checked+.checkmark {
       background-color: orange;
     }
-    
+
     input[type="radio"][name="arm-track"] {
       font-size: 0.5em;
       height: 4em;
@@ -116,17 +125,17 @@ input[type="checkbox"][name="enabled"]:checked {
       height: 100%;
     }
   }
-  
+
   .TrackChannel {
-    label { 
+    label {
       width: 4em;
       min-width: 4em;
     }
-    
+
     input[type="range"] {
       width: 7.5em;
     }
-  
+
     value {
       max-width: 2em;
       white-space: nowrap;
@@ -153,13 +162,17 @@ input[type="checkbox"][name="enabled"]:checked {
   }
 
   .track-header {
-    display: flex;
+    /* display: flex; */
     flex-direction: column;
     background-color: rgba(120, 120, 120, 0.5);
     height: auto;
     margin: 0rem;
     padding: 0rem;
   }
+}
+
+.Track>.title-bar {
+  display: inline-block;
 }
 
 .Track.expanded {
@@ -178,6 +191,9 @@ input[type="checkbox"][name="enabled"]:checked {
   margin-right: 0.25em;
 
   .title-bar {
+    display: flex;
+    flex-direction: row;
+
     background-color: rgba(50, 50, 50, 0.3);
     background-image: linear-gradient(to bottom,
         rgba(100, 100, 100, 0.1),

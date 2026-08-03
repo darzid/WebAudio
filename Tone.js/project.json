@@ -6,6 +6,7 @@
       "id": "track1",
       "name": "Kick",
       "volume": -5,
+      "pan": 0,
       "devices": [
         {
           "MembraneSynth": {
@@ -55,6 +56,7 @@
       "id": "track2",
       "name": "Bassline",
       "volume": -5,
+      "pan": 0,
       "devices": [
         {
           "MonoSynth": {
@@ -88,6 +90,13 @@
           }
         },
         {
+          "Filter": {
+            "type": "lowpass",
+            "frequency": 50,
+            "rolloff": -12
+          }
+        },
+        {
           "Compressor": {}
         }
       ],
@@ -115,12 +124,35 @@
         "startTime": "0",
         "length": "4n"
       },
-      "automations": []
+      "automations": [
+        {
+          "deviceIndex": 1,
+          "parameter": "frequency",
+          "startTime": "0m",
+          "rampTime": "0m",
+          "value": 50
+        },
+        {
+          "deviceIndex": 1,
+          "parameter": "frequency",
+          "startTime": "0m",
+          "rampTime": "4m",
+          "value": 3000
+        },
+        {
+          "deviceIndex": 1,
+          "parameter": "frequency",
+          "startTime": "4m",
+          "rampTime": "1m",
+          "value": 22500
+        }
+      ]
     },
     {
       "id": "track3",
       "name": "ClosedHat",
-      "volume": -5,
+      "volume": -14,
+      "pan": -0.1,
       "devices": [
         {
           "MetalSynth": {
@@ -139,7 +171,7 @@
         {
           "Filter": {
             "type": "lowpass",
-            "frequency": 1,
+            "frequency": 100,
             "rolloff": -12
           }
         }
@@ -181,13 +213,21 @@
           "startTime": "2m",
           "rampTime": "8m",
           "value": 3000
+        },
+        {
+          "deviceIndex": 1,
+          "parameter": "frequency",
+          "startTime": "10m",
+          "rampTime": "1m",
+          "value": 22500
         }
       ]
     },
     {
       "id": "track4",
       "name": "OpenHat",
-      "volume": -5,
+      "volume": -11,
+      "pan": 0.1,
       "devices": [
         {
           "MetalSynth": {
@@ -206,7 +246,7 @@
         {
           "Filter": {
             "type": "lowpass",
-            "frequency": 1,
+            "frequency": 100,
             "rolloff": -12
           }
         }
@@ -230,6 +270,13 @@
           "startTime": "2m",
           "rampTime": "8m",
           "value": 3000
+        },
+        {
+          "deviceIndex": 1,
+          "parameter": "frequency",
+          "startTime": "10m",
+          "rampTime": "1m",
+          "value": 22500
         }
       ]
     }
