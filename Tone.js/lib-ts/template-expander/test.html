@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title></title>
+     <link rel="stylesheet" href="../knob/knob.css">
+    <script src="../knob/knob.js"></script>
+ <script src="template-expander.js"></script>
+     <svg style="width: 50px; height: 50px">
+      <defs>
+        <radialGradient id="DefaultGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.6">
+          <stop class="stop1" offset="0%" stop-color="rgba(96,96,192,1.0)" />
+          <stop class="stop2" offset="30%" stop-color="rgba(64,64,160,1.0)" />
+          <stop class="stop3" offset="50%" stop-color="rgba(32,32,96,1.0)" />
+          <stop class="stop4" offset="100%" stop-color="rgba(16,16,64,1.0)" />
+        </radialGradient>
+      </defs>
+     </svg>
+     <style>
+     body {
+      background: silver;
+     }
+     
+     
+      .dial {
+       fill: url("#DefaultGradient");
+      }
+      
+
+.List {
+ background: gray;
+ width: auto;
+ 
+
+ display: flex;
+}
+svg {
+ width: 3em;
+ height: 3em;
+}
+.knob {
+  background: green;
+ border: 1pt solid yellow;
+ margin: 2pt;
+}
+/*
+.knob:contains(.title:contains("Volume")) {
+ fill: url("#CyanGradient");
+ .dial {
+  fill: url("#CyanGradient");
+  }
+}*/
+
+.title {
+ color: yellow;
+}
+
+div.knob:has(input.green) {
+  .dial {
+  fill: url("#GreenGradient");
+  }
+}
+
+div.knob:has(input.yellow) {
+  .dial {
+  fill: url("#YellowGradient");
+  }
+}
+.green2 {
+ .dial {
+  fill: url("#GreenGradient");
+  }
+}
+.HorizontalList {
+ color: red;
+  .knob {
+   height: min-content;
+   border: 1pt solid yellow;
+  }
+}
+
+.VerticalList {
+ color: blue;
+ .knob {
+  width: min-content;
+ }
+}
+     </style>
+</head>
+
+<body>
+ <svg>
+  <defs>
+           <radialGradient id="CyanGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.6">
+          <stop class="stop1" offset="0%" stop-color="rgba(0,160,192,1.0)" />
+          <stop class="stop2" offset="30%" stop-color="rgba(0,128,160,1.0)" />
+          <stop class="stop3" offset="50%" stop-color="rgba(0,96,128,1.0)" />
+          <stop class="stop4" offset="100%" stop-color="rgba(0,64,96,1.0)" />
+        </radialGradient>
+        <radialGradient id="YellowGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.6">
+          <stop class="stop1" offset="0%" stop-color="rgba(224,160,0,1.0)" />
+          <stop class="stop2" offset="30%" stop-color="rgba(192,128,0,1.0)" />
+          <stop class="stop3" offset="50%" stop-color="rgba(160,96,0,1.0)" />
+          <stop class="stop4" offset="100%" stop-color="rgba(128,64,0,1.0)" />
+        </radialGradient>
+        <radialGradient id="GreenGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.6">
+          <stop class="stop1" offset="0%" stop-color="rgba(128,160,0,1.0)" />
+          <stop class="stop2" offset="30%" stop-color="rgba(96,128,0,1.0)" />
+          <stop class="stop3" offset="50%" stop-color="rgba(64,96,0,1.0)" />
+          <stop class="stop4" offset="100%" stop-color="rgba(32,64,0,1.0)" />
+        </radialGradient>
+        <radialGradient id="RedGradient" cx="0.5" cy="0.5" r="0.5" fx="0.6" fy="0.6">
+          <stop class="stop1" offset="0%" stop-color="rgba(192,80,0,1.0)" />
+          <stop class="stop2" offset="30%" stop-color="rgba(160,60,0,1.0)" />
+          <stop class="stop3" offset="50%" stop-color="rgba(128,40,0,1.0)" />
+          <stop class="stop4" offset="100%" stop-color="rgba(96,20,0,1.0)" />
+        </radialGradient>
+  </defs>
+ </svg>
+     <span id="templates">
+      
+      <template id="knob-template">
+
+       <div class="knob">
+        <svg class="knob-container" tabindex="-1">
+         <circle class="gauge" cx="50%" cy="50%" r="45%" />
+         <line class="tick-line" x1="50%" y1="10%" x2="50%" y2="4%" transform="rotate(-135)" />
+         <line class="tick-line" x1="50%" y1="10%" x2="50%" y2="4%" />
+         <line class="tick-line" x1="50%" y1="10%" x2="50%" y2="4%" transform="rotate(135)" />
+ 
+         <circle class="dial" cx="50%" cy="50%" r="37%" />
+         <line class="position-line" x1="50%" y1="20%" x2="50%" y2="10%" />
+         <text class="value-label" x="50%" y="50%" dy="3">0</text>
+        </svg>
+        <h5 class="title">Knob</h5>
+        <span id="Content"/>
+       </div>
+       
+      </template>
+      
+    <!--  <template id="green-knob-template" data-class="green" data-color="orange" data-template="knob-template" />
+      <template id="cyan-knob-template" data-class="cyan" data-template="knob-template" />
+      -->
+      <template id="HorizontalList" data-class="HorizontalList List" data-style="display: flex; flex-direction: row" />
+      <template id="VerticalList" data-class="VerticalList List" data-style="display: flex; flex-direction: column" />
+     </span>
+     
+     <div title="Knobs horizontal" data-template="HorizontalList">
+       <h5 class="title">Knobs</h5>
+       <input name="Volume" class="green" type="range" min="10" max="50" value="20" data-template="knob-template">
+       <input name="Pitch" class="yellow" type="range" min="10" max="50" value="20" data-template="knob-template">
+       <input name="Detune" type="range" min="10" max="50" value="20" data-template="knob-template">
+       <input name="Fm" type="range" min="10" max="50" value="20" data-template="knob-template">
+     </div>
+      
+      <div title="Knobs vertical" data-template="VerticalList">
+       <h5 class="title">Knobs</h5>
+       <input name="Volume" class="green" type="range" min="10" max="50" value="20" data-template="knob-template">
+       <input name="Pitch" class="yellow" type="range" min="10" max="50" value="20" data-template="knob-template">
+       <input name="Detune" type="range" min="10" max="50" value="20" data-template="knob-template">
+       <input name="Fm" type="range" min="10" max="50" value="20" data-template="knob-template">
+      </div>
+ 
+ <script>
+  applyTemplates();
+  setupKnobs();
+ </script>
+</body>
+
+</html>

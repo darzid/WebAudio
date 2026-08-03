@@ -12,9 +12,6 @@
 
     <script src="//unpkg.com/systemjs@0.19.47/dist/system.js"></script>
     <script src="http://unpkg.com/tone"></script>
-    <script src="..\lib\template-expander\template-expander.js"></script>
-    <script src=".\ui-components\toggle-button.js"></script>
-    <script src=".\project.js"></script>
   </head>
 
   <body>
@@ -798,389 +795,391 @@
 
     <script src="config.js"></script>
     <script>
-      function consoleLog(...message) {
-        console.log(message);
-      }
+      // function consoleLog(...message) {
+      //   console.log(message);
+      // }
 
-      function consoleError(...message) {
-        console.error(message);
-      }
-      applyTemplates();
+      // function consoleError(...message) {
+      //   console.error(message);
+      // }
+      // applyTemplates();
 
-      let output = document.getElementById("output");
-      var presets;
-      var session = null;
-      let selectedTrackId = null;
+      // let output = document.getElementById("output");
+      // var presets;
+      // var session = null;
+      // let selectedTrackId = null;
 
-      var isInitialized = false;
-      document.addEventListener("click", async () => {
-        await initialize();
-      });
-      // document.addEventListener("keydown", async () => {
+      // var isInitialized = false;
+      // document.addEventListener("click", async () => {
       //   await initialize();
       // });
-
-      async function initialize() {
-        if (isInitialized == true)
-          return;
-        console.log("Initializing");
-
-        isInitialized = true;
-        await Tone.start();
-
-        if (!presets) {
-          loadPresets();
-          console.log(`Loaded presets to presets-data`, document.getElementById("presets-data"));
-        }
-        else {
-          console.warn("Already loaded presets");
-        }
-
-        session = {
-          project: null
-        }        
-        await loadProject(session);
-
-        let tracksElement = document.getElementById("tracks");
-
-        session.project.tracks.forEach(track => {
-          let trackElement = document.createElement("div");
-          trackElement.id = track.id;
-          trackElement.setAttribute("name", track.name);
-          trackElement.setAttribute("data-template", "Track");
-          tracksElement.appendChild(trackElement);
-
-          track.channel = new Tone.Channel();
-          track.channel.send("master", 0);
-
-          applyTemplates();
-
-          trackElement = document.getElementById(track.id);
-
-          bind(trackElement.querySelector(".track-header"), track.channel);
-
-          trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']").addEventListener("change", (e) => {
-            if (e.target.checked)
-              console.log("Activating track " + track.id);
-            else
-              console.log("Deactivating track " + track.id);
-            track.channel.mute = !e.target.checked;
-          });
-          let trackDevicesElement = trackElement.querySelector("div[name='Devices']");
-
-          track.devices.forEach(device => {
-            let newDeviceElement = document.createElement("div");
-            newDeviceElement.id = `${track.id}-${device.name}`;
-            newDeviceElement.setAttribute("name", device.name);
-            newDeviceElement.setAttribute("data-template", device.name);
-            trackDevicesElement.appendChild(newDeviceElement);
-
-            applyTemplates();
-            let deviceElement = document.getElementById(newDeviceElement.id);
-            bind(deviceElement, device);
-            deviceElement.querySelector(".browse-button").addEventListener("click", (e) => showPresetBrowser(device, deviceElement));
-          });
-
-          let trackDevices = track.devices.filter(device => device.name != "LFO");
-          for (let deviceIndex = 0; deviceIndex < trackDevices.length - 1; deviceIndex++) {
-            trackDevices[deviceIndex].connect(trackDevices[deviceIndex + 1]);
-          }
-          track.devices[track.devices.length - 1].connect(track.channel);
-        })
-
-        initializeToggleButtons();
-
-        let armTrackInputs = document.querySelectorAll("input[type='radio'][name='arm-track']");
-        armTrackInputs[0].checked = true;
-        selectedTrackId = session.project.tracks[0].id;
-        armTrackInputs.forEach(armTrackInput => 
-          armTrackInput.addEventListener("change", () => selectedTrackId = armTrackInput.value));
-
-        document.addEventListener("PlayNoteRequestEvent", (e) => playNote(e));
-        document.addEventListener("StopNoteRequestEvent", (e) => stopNote(e));
-
-        document.getElementById("tracks").style.opacity = 1;
-
-        Tone.getTransport().bpm.value = session.project.tempo;
-
-        //session.project.tracks[3].devices[1].connect(session.project.tracks[3].devices[0].filter.detune);
-        //session.project.tracks[3].devices[1].start();
-
-        let recButton = document.getElementById("rec-button");
-        let playButton = document.getElementById("play-button");
-        let stopButton = document.getElementById("stop-button");
-        stopButton.disabled = true;
-        let recorder = null;
-
-        recButton.addEventListener("click", () => {
-          recButton.disabled = true;
-          playButton.disabled = true;
-          stopButton.disabled = false;
-
-          recorder = new Tone.Recorder();
-          session.masterChannel.connect(recorder);
-
-          // start recording
-          recorder.start();
-
-          Tone.getTransport().start();
-        });
-
-        playButton.addEventListener("click", () => {
-          recButton.disabled = true;
-          playButton.disabled = true;
-          stopButton.disabled = false;
-
-          Tone.getTransport().start();
-        });
-
-        stopButton.addEventListener("click", async () => {
-          Tone.getTransport().stop();
-
-          if (recorder) {
-            // the recorded audio is returned as a blob
-            const recording = await recorder.stop();
-            // download the recording by creating an anchor element and blob url
-            const url = URL.createObjectURL(recording);
-            const anchor = document.createElement("a");
-            anchor.download = "recording.ogg";
-            anchor.href = url;
-            anchor.click();
-
-            recorder = null;
-          }
-
-          recButton.disabled = false;
-          playButton.disabled = false;
-          stopButton.disabled = true;
-        });
-
-        document.getElementById("loading").style.display = "none";
-        console.log("Initialized");
-      }
-
-      function loadPresets() {
-        fetch('.\\preset-bank.json')
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then(data => {
-            presets = data;
-            let presetBrowser = document.getElementById("PresetBrowser");
-            document.getElementById('presets-data').textContent = JSON.stringify(data, null, 2);
-
-            let presetPaths = Object.keys(data);
-            presetPaths.forEach(presetPath => {
-              presetPath = presetPath.replace("effect\\", "").replace("instrument\\", "").replace(".json", "");
-              let deviceName = presetPath.split("\\")[0];
-
-              let devicePresetSelect = document.getElementById(deviceName + "-presets");
-              if (!devicePresetSelect) {
-                devicePresetSelect = document.createElement("select");
-                devicePresetSelect.id = `${deviceName}-presets`;
-                devicePresetSelect.size = 5;
-                devicePresetSelect.style.display = "none";
-                presetBrowser.appendChild(devicePresetSelect);
-              }
-
-              let option = document.createElement("option");
-              option.innerText = presetPath.split("\\")[1];
-              devicePresetSelect.appendChild(option);
-            })
-          })
-          .catch(error => {
-            console.error('Error loading JSON:', error);
-          });
-      }
-
-      function showPresetBrowser(device, deviceElement) {
-        let deviceName = deviceElement.getAttribute("name");
-        let presetListElement = document.getElementById(`${deviceName}-presets`);
-        if (!presetListElement) {
-          return;
-        }
-        let boundingRect = deviceElement.querySelector(".title-bar").getBoundingClientRect();
-        presetListElement.style.position = "absolute";
-        presetListElement.style.left = `${boundingRect.left}px`;
-        presetListElement.style.top = `${boundingRect.top + boundingRect.height}px`;
-        presetListElement.style.width = `${boundingRect.width}px`;
-        presetListElement.style.display = "inline";
-        presetListElement.addEventListener("change", () => applyPreset(device, deviceElement, presetListElement, presetListElement.value));
-      }
-
-      function applyPreset(device, deviceElement, presetListElement, presetName) {
-        let presetPaths = Object.keys(presets);
-        let presetPath = presetPaths.find(presetPath => presetPath.endsWith("\\" + presetName));
-        let preset = presets[presetPath];
-
-        let presetParameterNames = Object.keys(preset);
-        let presetCursor = preset;
-        let module = device;
-        applyModuleParameters(presetCursor, module, presetParameterNames);
-
-        let addEventHandler = false;
-
-        let numberParameters = deviceElement.querySelectorAll(".Parameter input");
-        numberParameters.forEach(element => {
-          bindNumberInputElement(element, device, addEventHandler);
-        });
-
-        let optionParameters = deviceElement.querySelectorAll(".Parameter select");
-        optionParameters.forEach(element => {
-          bindOptionSelectElement(element, device, addEventHandler);
-        });
-
-        presetListElement.style.display = "none";
-        console.log(`Preset ${presetName} applied`);
-      }
-
-      function applyModuleParameters(presetCursor, module, presetParameterNames) {
-        presetParameterNames.forEach(paramName => {
-          if (typeof presetCursor[paramName] === "object") {
-            let moduleParamNames = Object.keys(presetCursor[paramName]);
-            applyModuleParameters(presetCursor[paramName], module[paramName], moduleParamNames);
-          }
-          else {
-            let paramType = typeof presetCursor[paramName];
-            if (paramType === "number" || paramType === "string") {
-              if (typeof module[paramName] != "object") {
-                module[paramName] = presetCursor[paramName];
-              } else {
-                module[paramName].value = presetCursor[paramName];
-              }
-            }
-          }
-        });
-      }
-
-      function playNote(eventInfo) {
-        let track = session.project.tracks.find(track => track.id === selectedTrackId);
-        if (track.devices.length == 0) return;
-        track.instrument.triggerAttack(eventInfo.detail.note, Tone.now());
-      }
-
-      function stopNote(eventInfo) {
-        let track = session.project.tracks.find(track => track.id === selectedTrackId);
-        if (track.devices.length == 0) return;
-        track.instrument.triggerRelease(Tone.now());
-      }
-
-      function bind(element, object) {
-        console.log(`Bind ${element.getAttribute("name")} to object ${object.name}`, element, object);
-        let addEventHandler = true;
-
-        let numberParameters = element.querySelectorAll(`:scope > .ModuleParameters > article.Parameter input`);
-        numberParameters.forEach(element => {
-          bindNumberInputElement(element, object, addEventHandler);
-        });
-
-        let optionParameters = element.querySelectorAll(`:scope > .ModuleParameters > article.Parameter select`);
-        optionParameters.forEach(element => {
-          bindOptionSelectElement(element, object, addEventHandler);
-        });
-
-        let partialCountParameters = element.querySelectorAll(":scope > .ModuleParameters > article.Parameter input[name='partialCount']");
-        partialCountParameters.forEach(element => {
-          let oscillatorTypeParameterSelectElement = element.parentElement.parentElement.querySelector(".Parameter select[name='type']");
-          let oscillatorTypeOptionElements = oscillatorTypeParameterSelectElement.querySelectorAll("option");
-          let currentPartialCountSuffix = element.value > 0 ? `${element.value}` : "";
-          element.addEventListener("change", () => {
-            let newPartialCountSuffix = element.value > 0 ? `${element.value}` : "";
-            oscillatorTypeOptionElements.forEach(option => option.innerText = option.innerText.replace(currentPartialCountSuffix, "") + newPartialCountSuffix);
-            currentPartialCountSuffix = newPartialCountSuffix;
-          })
-        });
-
-        let childModules = element.querySelectorAll(`:scope > .ModuleParameters > article.Module`);
-        childModules.forEach(childModuleElement => {
-          bind(childModuleElement, object[childModuleElement.getAttribute("name")]);
-        });
-
-        console.log(`Bind finished ${element.getAttribute("name")} to object ${object.name}`, element, object);
-      }
-
-      function bindNumberInputElement(element, object, addEventHandler) {
-        let namespace = getParameterNamespace(element);
-        let parameterOwner = getParameterOwner(object, namespace);
-        let parameterName = element.name;
-        let isNumberProperty = (typeof parameterOwner[parameterName] === "number");
-        let valueElement = element.parentElement.querySelector(`value[for="${element.name}"]`);
-
-        console.log(`Connecting input event for parameter "${namespace}"`, parameterOwner, parameterOwner[parameterName]);
-
-        element.value = isNumberProperty ? parameterOwner[parameterName] : parameterOwner[parameterName].value;
-        if (valueElement)
-          valueElement.innerHTML = element.value;
-
-        if (addEventHandler) {
-          element.addEventListener("input", () => {
-            let oldValue = isNumberProperty ? parameterOwner[parameterName] : parameterOwner[parameterName].value;
-            if (isNumberProperty)
-              parameterOwner[parameterName] = element.value;
-            else
-              parameterOwner[parameterName].value = element.value;
-            if (valueElement)
-              valueElement.innerHTML = element.value;
-            //console.log(`Updated "${namespace}" from ${oldValue} to ${element.value}`);
-          })
-        }
-      }
-
-      function bindOptionSelectElement(element, object, addEventHandler) {
-        let namespace = getParameterNamespace(element);
-        let parameterOwner = getParameterOwner(object, namespace);
-        let parameterName = element.name;
-
-        //console.log(`Connecting select event for parameter "${namespace}"`, parameterOwner, parameterOwner[parameterName]);
-
-        element.value = parameterOwner[parameterName];
-
-        if (addEventHandler) {
-          element.addEventListener("input", () => {
-            let oldValue = parameterOwner[parameterName];
-            parameterOwner[parameterName] = element.value;
-            //console.log(`Updated "${namespace}" from ${oldValue} to ${element.value}`);
-          });
-        }
-      }
-
-      function getParameterNamespace(element) {
-        let parentName = "";
-        let parentElement = element.parentElement;
-        while (parentElement && !parentName) {
-          if (parentElement.classList.contains("Component") || parentElement.classList.contains("Source")) {
-            parentName = parentElement.getAttribute("name");
-          }
-          else {
-            parentElement = parentElement.parentElement;
-          }
-        }
-
-        let namespace = parentName ? `${parentName}.${element.name}` : element.name;
-
-        return namespace;
-      }
-
-      function getParameterOwner(object, namespace) {
-        let namespaceParts = namespace.split(".");
-        let parameterOwner = object;
-        for (let namespacePartIndex = 0; namespacePartIndex < namespaceParts.length - 1; namespacePartIndex++) {
-          parameterOwner = parameterOwner[namespaceParts[namespacePartIndex]];
-        }
-
-        if (!parameterOwner) {
-          if (namespaceParts.length == 2) {
-            return object;
-          }
-          else
-            throw "Parameter owner object not found for parameter " + namespaceParts[namespaceParts.length - 1];
-        }
-
-        return parameterOwner;
-      }
+      // // document.addEventListener("keydown", async () => {
+      // //   await initialize();
+      // // });
+
+      // async function initialize() {
+      //   if (isInitialized == true)
+      //     return;
+      //   console.log("Initializing");
+
+      //   isInitialized = true;
+      //   await Tone.start();
+
+      //   if (!presets) {
+      //     loadPresets();
+      //     console.log(`Loaded presets to presets-data`, document.getElementById("presets-data"));
+      //   }
+      //   else {
+      //     console.warn("Already loaded presets");
+      //   }
+
+      //   let session = new Session();
+      //   await session.loadProject("project.json");
+      //   // session = {
+      //   //   project: null
+      //   // }        
+      //   //await loadProject(session);
+
+      //   let tracksElement = document.getElementById("tracks");
+
+      //   session.project.tracks.forEach(track => {
+      //     let trackElement = document.createElement("div");
+      //     trackElement.id = track.id;
+      //     trackElement.setAttribute("name", track.name);
+      //     trackElement.setAttribute("data-template", "Track");
+      //     tracksElement.appendChild(trackElement);
+
+      //     track.channel = new Tone.Channel();
+      //     track.channel.send("master", 0);
+
+      //     applyTemplates();
+
+      //     trackElement = document.getElementById(track.id);
+
+      //     bind(trackElement.querySelector(".track-header"), track.channel);
+
+      //     trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']").addEventListener("change", (e) => {
+      //       if (e.target.checked)
+      //         console.log("Activating track " + track.id);
+      //       else
+      //         console.log("Deactivating track " + track.id);
+      //       track.channel.mute = !e.target.checked;
+      //     });
+      //     let trackDevicesElement = trackElement.querySelector("div[name='Devices']");
+
+      //     track.devices.forEach(device => {
+      //       let newDeviceElement = document.createElement("div");
+      //       newDeviceElement.id = `${track.id}-${device.name}`;
+      //       newDeviceElement.setAttribute("name", device.name);
+      //       newDeviceElement.setAttribute("data-template", device.name);
+      //       trackDevicesElement.appendChild(newDeviceElement);
+
+      //       applyTemplates();
+      //       let deviceElement = document.getElementById(newDeviceElement.id);
+      //       bind(deviceElement, device);
+      //       deviceElement.querySelector(".browse-button").addEventListener("click", (e) => showPresetBrowser(device, deviceElement));
+      //     });
+
+      //     let trackDevices = track.devices.filter(device => device.name != "LFO");
+      //     for (let deviceIndex = 0; deviceIndex < trackDevices.length - 1; deviceIndex++) {
+      //       trackDevices[deviceIndex].connect(trackDevices[deviceIndex + 1]);
+      //     }
+      //     track.devices[track.devices.length - 1].connect(track.channel);
+      //   })
+
+      //   initializeToggleButtons();
+
+      //   let armTrackInputs = document.querySelectorAll("input[type='radio'][name='arm-track']");
+      //   armTrackInputs[0].checked = true;
+      //   selectedTrackId = session.project.tracks[0].id;
+      //   armTrackInputs.forEach(armTrackInput => 
+      //     armTrackInput.addEventListener("change", () => selectedTrackId = armTrackInput.value));
+
+      //   document.addEventListener("PlayNoteRequestEvent", (e) => playNote(e));
+      //   document.addEventListener("StopNoteRequestEvent", (e) => stopNote(e));
+
+      //   document.getElementById("tracks").style.opacity = 1;
+
+      //   Tone.getTransport().bpm.value = session.project.tempo;
+
+      //   //session.project.tracks[3].devices[1].connect(session.project.tracks[3].devices[0].filter.detune);
+      //   //session.project.tracks[3].devices[1].start();
+
+      //   let recButton = document.getElementById("rec-button");
+      //   let playButton = document.getElementById("play-button");
+      //   let stopButton = document.getElementById("stop-button");
+      //   stopButton.disabled = true;
+      //   let recorder = null;
+
+      //   recButton.addEventListener("click", () => {
+      //     recButton.disabled = true;
+      //     playButton.disabled = true;
+      //     stopButton.disabled = false;
+
+      //     recorder = new Tone.Recorder();
+      //     session.masterChannel.connect(recorder);
+
+      //     // start recording
+      //     recorder.start();
+
+      //     Tone.getTransport().start();
+      //   });
+
+      //   playButton.addEventListener("click", () => {
+      //     recButton.disabled = true;
+      //     playButton.disabled = true;
+      //     stopButton.disabled = false;
+
+      //     Tone.getTransport().start();
+      //   });
+
+      //   stopButton.addEventListener("click", async () => {
+      //     Tone.getTransport().stop();
+
+      //     if (recorder) {
+      //       // the recorded audio is returned as a blob
+      //       const recording = await recorder.stop();
+      //       // download the recording by creating an anchor element and blob url
+      //       const url = URL.createObjectURL(recording);
+      //       const anchor = document.createElement("a");
+      //       anchor.download = "recording.ogg";
+      //       anchor.href = url;
+      //       anchor.click();
+
+      //       recorder = null;
+      //     }
+
+      //     recButton.disabled = false;
+      //     playButton.disabled = false;
+      //     stopButton.disabled = true;
+      //   });
+
+      //   document.getElementById("loading").style.display = "none";
+      //   console.log("Initialized");
+      // }
+
+      // function loadPresets() {
+      //   fetch('.\\preset-bank.json')
+      //     .then(response => {
+      //       if (!response.ok) {
+      //         throw new Error(`HTTP error! Status: ${response.status}`);
+      //       }
+      //       return response.json();
+      //     })
+      //     .then(data => {
+      //       presets = data;
+      //       let presetBrowser = document.getElementById("PresetBrowser");
+      //       document.getElementById('presets-data').textContent = JSON.stringify(data, null, 2);
+
+      //       let presetPaths = Object.keys(data);
+      //       presetPaths.forEach(presetPath => {
+      //         presetPath = presetPath.replace("effect\\", "").replace("instrument\\", "").replace(".json", "");
+      //         let deviceName = presetPath.split("\\")[0];
+
+      //         let devicePresetSelect = document.getElementById(deviceName + "-presets");
+      //         if (!devicePresetSelect) {
+      //           devicePresetSelect = document.createElement("select");
+      //           devicePresetSelect.id = `${deviceName}-presets`;
+      //           devicePresetSelect.size = 5;
+      //           devicePresetSelect.style.display = "none";
+      //           presetBrowser.appendChild(devicePresetSelect);
+      //         }
+
+      //         let option = document.createElement("option");
+      //         option.innerText = presetPath.split("\\")[1];
+      //         devicePresetSelect.appendChild(option);
+      //       })
+      //     })
+      //     .catch(error => {
+      //       console.error('Error loading JSON:', error);
+      //     });
+      // }
+
+      // function showPresetBrowser(device, deviceElement) {
+      //   let deviceName = deviceElement.getAttribute("name");
+      //   let presetListElement = document.getElementById(`${deviceName}-presets`);
+      //   if (!presetListElement) {
+      //     return;
+      //   }
+      //   let boundingRect = deviceElement.querySelector(".title-bar").getBoundingClientRect();
+      //   presetListElement.style.position = "absolute";
+      //   presetListElement.style.left = `${boundingRect.left}px`;
+      //   presetListElement.style.top = `${boundingRect.top + boundingRect.height}px`;
+      //   presetListElement.style.width = `${boundingRect.width}px`;
+      //   presetListElement.style.display = "inline";
+      //   presetListElement.addEventListener("change", () => applyPreset(device, deviceElement, presetListElement, presetListElement.value));
+      // }
+
+      // function applyPreset(device, deviceElement, presetListElement, presetName) {
+      //   let presetPaths = Object.keys(presets);
+      //   let presetPath = presetPaths.find(presetPath => presetPath.endsWith("\\" + presetName));
+      //   let preset = presets[presetPath];
+
+      //   let presetParameterNames = Object.keys(preset);
+      //   let presetCursor = preset;
+      //   let module = device;
+      //   applyModuleParameters(presetCursor, module, presetParameterNames);
+
+      //   let addEventHandler = false;
+
+      //   let numberParameters = deviceElement.querySelectorAll(".Parameter input");
+      //   numberParameters.forEach(element => {
+      //     bindNumberInputElement(element, device, addEventHandler);
+      //   });
+
+      //   let optionParameters = deviceElement.querySelectorAll(".Parameter select");
+      //   optionParameters.forEach(element => {
+      //     bindOptionSelectElement(element, device, addEventHandler);
+      //   });
+
+      //   presetListElement.style.display = "none";
+      //   console.log(`Preset ${presetName} applied`);
+      // }
+
+      // function applyModuleParameters(presetCursor, module, presetParameterNames) {
+      //   presetParameterNames.forEach(paramName => {
+      //     if (typeof presetCursor[paramName] === "object") {
+      //       let moduleParamNames = Object.keys(presetCursor[paramName]);
+      //       applyModuleParameters(presetCursor[paramName], module[paramName], moduleParamNames);
+      //     }
+      //     else {
+      //       let paramType = typeof presetCursor[paramName];
+      //       if (paramType === "number" || paramType === "string") {
+      //         if (typeof module[paramName] != "object") {
+      //           module[paramName] = presetCursor[paramName];
+      //         } else {
+      //           module[paramName].value = presetCursor[paramName];
+      //         }
+      //       }
+      //     }
+      //   });
+      // }
+
+      // function playNote(eventInfo) {
+      //   let track = session.project.tracks.find(track => track.id === selectedTrackId);
+      //   if (track.devices.length == 0) return;
+      //   track.instrument.triggerAttack(eventInfo.detail.note, Tone.now());
+      // }
+
+      // function stopNote(eventInfo) {
+      //   let track = session.project.tracks.find(track => track.id === selectedTrackId);
+      //   if (track.devices.length == 0) return;
+      //   track.instrument.triggerRelease(Tone.now());
+      // }
+
+      // function bind(element, object) {
+      //   console.log(`Bind ${element.getAttribute("name")} to object ${object.name}`, element, object);
+      //   let addEventHandler = true;
+
+      //   let numberParameters = element.querySelectorAll(`:scope > .ModuleParameters > article.Parameter input`);
+      //   numberParameters.forEach(element => {
+      //     bindNumberInputElement(element, object, addEventHandler);
+      //   });
+
+      //   let optionParameters = element.querySelectorAll(`:scope > .ModuleParameters > article.Parameter select`);
+      //   optionParameters.forEach(element => {
+      //     bindOptionSelectElement(element, object, addEventHandler);
+      //   });
+
+      //   let partialCountParameters = element.querySelectorAll(":scope > .ModuleParameters > article.Parameter input[name='partialCount']");
+      //   partialCountParameters.forEach(element => {
+      //     let oscillatorTypeParameterSelectElement = element.parentElement.parentElement.querySelector(".Parameter select[name='type']");
+      //     let oscillatorTypeOptionElements = oscillatorTypeParameterSelectElement.querySelectorAll("option");
+      //     let currentPartialCountSuffix = element.value > 0 ? `${element.value}` : "";
+      //     element.addEventListener("change", () => {
+      //       let newPartialCountSuffix = element.value > 0 ? `${element.value}` : "";
+      //       oscillatorTypeOptionElements.forEach(option => option.innerText = option.innerText.replace(currentPartialCountSuffix, "") + newPartialCountSuffix);
+      //       currentPartialCountSuffix = newPartialCountSuffix;
+      //     })
+      //   });
+
+      //   let childModules = element.querySelectorAll(`:scope > .ModuleParameters > article.Module`);
+      //   childModules.forEach(childModuleElement => {
+      //     bind(childModuleElement, object[childModuleElement.getAttribute("name")]);
+      //   });
+
+      //   console.log(`Bind finished ${element.getAttribute("name")} to object ${object.name}`, element, object);
+      // }
+
+      // function bindNumberInputElement(element, object, addEventHandler) {
+      //   let namespace = getParameterNamespace(element);
+      //   let parameterOwner = getParameterOwner(object, namespace);
+      //   let parameterName = element.name;
+      //   let isNumberProperty = (typeof parameterOwner[parameterName] === "number");
+      //   let valueElement = element.parentElement.querySelector(`value[for="${element.name}"]`);
+
+      //   console.log(`Connecting input event for parameter "${namespace}"`, parameterOwner, parameterOwner[parameterName]);
+
+      //   element.value = isNumberProperty ? parameterOwner[parameterName] : parameterOwner[parameterName].value;
+      //   if (valueElement)
+      //     valueElement.innerHTML = element.value;
+
+      //   if (addEventHandler) {
+      //     element.addEventListener("input", () => {
+      //       let oldValue = isNumberProperty ? parameterOwner[parameterName] : parameterOwner[parameterName].value;
+      //       if (isNumberProperty)
+      //         parameterOwner[parameterName] = element.value;
+      //       else
+      //         parameterOwner[parameterName].value = element.value;
+      //       if (valueElement)
+      //         valueElement.innerHTML = element.value;
+      //       //console.log(`Updated "${namespace}" from ${oldValue} to ${element.value}`);
+      //     })
+      //   }
+      // }
+
+      // function bindOptionSelectElement(element, object, addEventHandler) {
+      //   let namespace = getParameterNamespace(element);
+      //   let parameterOwner = getParameterOwner(object, namespace);
+      //   let parameterName = element.name;
+
+      //   //console.log(`Connecting select event for parameter "${namespace}"`, parameterOwner, parameterOwner[parameterName]);
+
+      //   element.value = parameterOwner[parameterName];
+
+      //   if (addEventHandler) {
+      //     element.addEventListener("input", () => {
+      //       let oldValue = parameterOwner[parameterName];
+      //       parameterOwner[parameterName] = element.value;
+      //       //console.log(`Updated "${namespace}" from ${oldValue} to ${element.value}`);
+      //     });
+      //   }
+      // }
+
+      // function getParameterNamespace(element) {
+      //   let parentName = "";
+      //   let parentElement = element.parentElement;
+      //   while (parentElement && !parentName) {
+      //     if (parentElement.classList.contains("Component") || parentElement.classList.contains("Source")) {
+      //       parentName = parentElement.getAttribute("name");
+      //     }
+      //     else {
+      //       parentElement = parentElement.parentElement;
+      //     }
+      //   }
+
+      //   let namespace = parentName ? `${parentName}.${element.name}` : element.name;
+
+      //   return namespace;
+      // }
+
+      // function getParameterOwner(object, namespace) {
+      //   let namespaceParts = namespace.split(".");
+      //   let parameterOwner = object;
+      //   for (let namespacePartIndex = 0; namespacePartIndex < namespaceParts.length - 1; namespacePartIndex++) {
+      //     parameterOwner = parameterOwner[namespaceParts[namespacePartIndex]];
+      //   }
+
+      //   if (!parameterOwner) {
+      //     if (namespaceParts.length == 2) {
+      //       return object;
+      //     }
+      //     else
+      //       throw "Parameter owner object not found for parameter " + namespaceParts[namespaceParts.length - 1];
+      //   }
+
+      //   return parameterOwner;
+      // }
     </script>
   </body>
 
