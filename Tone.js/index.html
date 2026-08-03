@@ -838,8 +838,9 @@
 
         session = {
           project: null
-        }        
+        }
         await loadProject(session);
+        Tone.getTransport().bpm.value = session.project.tempo;
 
         let tracksElement = document.getElementById("tracks");
 
@@ -893,15 +894,13 @@
         let armTrackInputs = document.querySelectorAll("input[type='radio'][name='arm-track']");
         armTrackInputs[0].checked = true;
         selectedTrackId = session.project.tracks[0].id;
-        armTrackInputs.forEach(armTrackInput => 
+        armTrackInputs.forEach(armTrackInput =>
           armTrackInput.addEventListener("change", () => selectedTrackId = armTrackInput.value));
 
         document.addEventListener("PlayNoteRequestEvent", (e) => playNote(e));
         document.addEventListener("StopNoteRequestEvent", (e) => stopNote(e));
 
         document.getElementById("tracks").style.opacity = 1;
-
-        Tone.getTransport().bpm.value = session.project.tempo;
 
         //session.project.tracks[3].devices[1].connect(session.project.tracks[3].devices[0].filter.detune);
         //session.project.tracks[3].devices[1].start();
@@ -913,27 +912,26 @@
         let recorder = null;
 
         recButton.addEventListener("click", () => {
-          recButton.disabled = true;
-          playButton.disabled = true;
-          stopButton.disabled = false;
-
           recorder = new Tone.Recorder();
           session.masterChannel.connect(recorder);
 
           // start recording
           recorder.start();
 
-          Tone.getTransport().start();
+          start();
         });
 
         playButton.addEventListener("click", () => {
+          start();
+        });
+
+        function start() {
           recButton.disabled = true;
           playButton.disabled = true;
           stopButton.disabled = false;
 
-          Tone.getTransport().start(Tone.currentTime);
-          Tone.getTransport().stop(Tone.now() + 8);
-        });
+          Tone.getTransport().start();
+        }
 
         stopButton.addEventListener("click", async () => {
           Tone.getTransport().stop();
