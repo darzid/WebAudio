@@ -10,7 +10,7 @@ export class Session {
 
   start(time: Tone.Time) {
     this.project.start(time);
-    Tone.getTransport().start(time);
+    Tone.getTransport().start(time + 0.5);
   }
 
   async loadProject(projectFilePath: string) {
@@ -90,6 +90,7 @@ class Track {
       this.addDevice(deviceName, projectFileDevice[deviceName]!);
     });
 
+    this._generateLoopInstance();
     this._generateAutomations();
   }
 
@@ -110,16 +111,19 @@ class Track {
   get loopNotes() { return this._projectFileTrack.loop.notes; }
   set loopNotes(value) {
     this._projectFileTrack.loop.notes = value;
+    this._generateLoopInstance();
   }
 
   get loopLength() { return this._projectFileTrack.loop.length; }
   set loopLength(value) {
     this._projectFileTrack.loop.length = value;
+    this._generateLoopInstance();
   }
 
   get loopStartTime() { return this._projectFileTrack.loop.startTime; }
   set loopStartTime(value) {
     this._projectFileTrack.loop.startTime = value;
+    this._generateLoopInstance();
   }
 
   get automations() { return this._automations; }
@@ -136,14 +140,22 @@ class Track {
   }
 
   start(time: Tone.Time) {
-    this._generateLoopInstance();
     this.automations.forEach(automation => automation.generate(time));
   }
 
   _generateLoopInstance() {
-    this._loopInstance = new Tone.Loop((time) =>
-      this._loopFunction(time)); //, this._projectFileTrack.loop.length);
+    this._loopInstance = new Tone.Loop((time) => {
+      let adjustedTime = time + 0.1;
+      console.log(`Playing loop on ${this.name} at ${adjustedTime}, now=${Tone.now()}`);
+      this._projectFileTrack.loop.notes.forEach(note => {
+        let noteTime = adjustedTime + (Tone.Time("16n") * note.timeOffset);
+        console.log(`Playing note ${note.note} on ${this.name} at ${noteTime}, now=${Tone.now()}`);
+        this.instrument.triggerAttackRelease(
+          note.note, note.duration, noteTime, note.velocity / 127);
+      });
+    }); //, this._projectFileTrack.loop.length);
     this._loopInstance.start(Tone.now() + Tone.Time(this._projectFileTrack.loop.startTime));
+    //this._loopInstance.start(Tone.now() + Tone.Time(this._projectFileTrack.loop.startTime));
     // this._loopInstance = new Tone.Loop((time: Tone.Time) => {
     //   console.log(`Playing loop on track ${this.name} at ${time}, now=${Tone.now()} `);
     //   this._projectFileTrack.loop.notes.forEach(note => {
@@ -166,31 +178,31 @@ class Track {
     // this._loopInstance.start(Tone.Time(this._projectFileTrack.loop.startTime).toSeconds());
   }
 
-  _loopFunction(time: Tone.Time) {
-    console.log(`Playing loop on ${this.name} at ${time}, now=${Tone.now()}`);
-    this._projectFileTrack.loop.notes.forEach(note => {
-      let noteTime = time + (Tone.Time("16n") * note.timeOffset);
-      console.log(`Playing note ${note.note} on ${this.name} at ${noteTime}, now=${Tone.now()}`);
-      this.instrument.triggerAttackRelease(
-        note.note, note.duration, noteTime, note.velocity / 127);
-    });
-    // console.log(`Playing loop on track ${this.name} at ${time}, now=${Tone.now()} `);
-    // this._projectFileTrack.loop.notes.forEach(note => {
-    //   let noteTime = time + (Tone.Time("16n").toMilliseconds() * note.timeOffset);
-    //   if (noteTime < Tone.now()) {
-    //     console.warn(`Playing note ${note.note} on track ${this.name} at ${noteTime}, now=${Tone.now()}`);
-    //   }
-    //   else {
-    //     console.log(`Playing note ${note.note} on track ${this.name} at ${noteTime}, now=${Tone.now()}`);
-    //   }
-    //   this.instrument.triggerAttackRelease(note.note, note.duration, noteTime, note.velocity / 127);
-    // });
-  }
+_loopFunction(time: Tone.Time) {
+  console.log(`Playing loop on ${this.name} at ${time}, now=${Tone.now()}`);
+  this._projectFileTrack.loop.notes.forEach(note => {
+    let noteTime = time + (Tone.Time("16n") * note.timeOffset);
+    console.log(`Playing note ${note.note} on ${this.name} at ${noteTime}, now=${Tone.now()}`);
+    this.instrument.triggerAttackRelease(
+      note.note, note.duration, noteTime, note.velocity / 127);
+  });
+  // console.log(`Playing loop on track ${this.name} at ${time}, now=${Tone.now()} `);
+  // this._projectFileTrack.loop.notes.forEach(note => {
+  //   let noteTime = time + (Tone.Time("16n").toMilliseconds() * note.timeOffset);
+  //   if (noteTime < Tone.now()) {
+  //     console.warn(`Playing note ${note.note} on track ${this.name} at ${noteTime}, now=${Tone.now()}`);
+  //   }
+  //   else {
+  //     console.log(`Playing note ${note.note} on track ${this.name} at ${noteTime}, now=${Tone.now()}`);
+  //   }
+  //   this.instrument.triggerAttackRelease(note.note, note.duration, noteTime, note.velocity / 127);
+  // });
+}
 
-  _generateAutomations() {
-    this._projectFileTrack.automations.forEach(projectFileAutomation =>
-      this._automations.push(new Automation(this, projectFileAutomation)));
-  }
+_generateAutomations() {
+  this._projectFileTrack.automations.forEach(projectFileAutomation =>
+    this._automations.push(new Automation(this, projectFileAutomation)));
+}
 }
 
 class Automation {
