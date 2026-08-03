@@ -130,7 +130,7 @@ input[type="checkbox"][name="enabled"]:checked {
     value {
       max-width: 2em;
       white-space: nowrap;
-      overflow: hidden;""
+      overflow: hidden;
     }
   }
 

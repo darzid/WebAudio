@@ -771,6 +771,7 @@
 
     <div id="tracks" style="opacity: 0.5">
       <div class="transport-bar">
+        <button id="rec-button">REC</button>
         <button id="play-button">PLAY</button>
         <button id="stop-button">STOP</button>
       </div>
@@ -841,17 +842,17 @@
           track.channel.send("master", track.volume);
 
           applyTemplates();
-          
+
           trackElement = document.getElementById(track.id);
-          
+
           bind(trackElement.querySelector(".track-header"), track.channel);
-          
+
           trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']").addEventListener("change", (e) => {
-              if (e.target.checked)
-                console.log("Activating track " + track.id);
-              else
-                console.log("Deactivating track " + track.id);
-              track.channel.mute = !e.target.checked;
+            if (e.target.checked)
+              console.log("Activating track " + track.id);
+            else
+              console.log("Deactivating track " + track.id);
+            track.channel.mute = !e.target.checked;
           });
           let trackDevicesElement = trackElement.querySelector("div[name='Devices']");
 
@@ -866,13 +867,13 @@
             let deviceElement = document.getElementById(newDeviceElement.id);
             bind(deviceElement, device);
             deviceElement.querySelector(".browse-button").addEventListener("click", (e) => showPresetBrowser(device, deviceElement));
-           /* deviceElement.querySelector("input[type='checkbox'][name='enabled']").addEventListener("change", (e) => {
-              if (track.channel.mute)
-                console.log("Unmuting track " + track.id);
-              else
-                console.log("Muting track " + track.id);
-              track.channel.mute != track.channel.mute;
-            });*/
+            /* deviceElement.querySelector("input[type='checkbox'][name='enabled']").addEventListener("change", (e) => {
+               if (track.channel.mute)
+                 console.log("Unmuting track " + track.id);
+               else
+                 console.log("Muting track " + track.id);
+               track.channel.mute != track.channel.mute;
+             });*/
           });
 
           let trackDevices = track.devices.filter(device => device.name != "LFO");
@@ -897,20 +898,57 @@
         document.getElementById("tracks").style.opacity = 1;
 
         Tone.getTransport().bpm.value = session.tempo;
-        
+
         //session.tracks[3].devices[1].connect(session.tracks[3].devices[0].filter.detune);
         //session.tracks[3].devices[1].start();
 
-        document.getElementById("play-button").addEventListener("click", () => {
-          /*project.tracks.forEach(track => {
-            if (track.sequence && track.sequence.part) {
-              track.sequence.part.start(0);
-            }
-          });*/
+        let recButton = document.getElementById("rec-button");
+        let playButton = document.getElementById("play-button");
+        let stopButton = document.getElementById("stop-button");
+        stopButton.disabled = true;
+        let recorder = null;
+
+        recButton.addEventListener("click", () => {
+          recButton.disabled = true;
+          playButton.disabled = true;
+          stopButton.disabled = false;
+
+          recorder = new Tone.Recorder();
+          session.masterChannel.connect(recorder);
+
+          // start recording
+          recorder.start();
+
           Tone.getTransport().start();
         });
-        document.getElementById("stop-button").addEventListener("click", () => {
+
+        playButton.addEventListener("click", () => {
+          recButton.disabled = true;
+          playButton.disabled = true;
+          stopButton.disabled = false;
+
+          Tone.getTransport().start();
+        });
+
+        stopButton.addEventListener("click", async () => {
           Tone.getTransport().stop();
+
+          if (recorder) {
+            // the recorded audio is returned as a blob
+            const recording = await recorder.stop();
+            // download the recording by creating an anchor element and blob url
+            const url = URL.createObjectURL(recording);
+            const anchor = document.createElement("a");
+            anchor.download = "recording.ogg";
+            anchor.href = url;
+            anchor.click();
+
+            recorder = null;
+          }
+
+          recButton.disabled = false;
+          playButton.disabled = false;
+          stopButton.disabled = true;
         });
 
         document.getElementById("loading").style.display = "none";
@@ -942,7 +980,7 @@
                 volume: track.volume,
                 devices: devices
               };
-              
+
               let loopFunction = (time) => {
                 track.loop.notes.forEach(note => {
                   sessionTrack.devices[0].triggerAttackRelease(note.note, note.duration, time + (Tone.Time("16n") * note.timeOffset), note.velocity / 127);
