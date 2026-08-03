@@ -1,15 +1,15 @@
 
 export class Session {
-  _project: Project | null = null;
+  _project: Project;
 
   constructor() {
-    this._project = null;
+    this._project = new Project();
   }
 
   get project() { return this._project; }
 
   start(time: Tone.Time) {
-    this.project!.start(time);
+    this.project.start(time);
     Tone.getTransport().start(time);
   }
 
@@ -141,41 +141,51 @@ class Track {
   }
 
   _generateLoopInstance() {
-    this._loopInstance = new Tone.Loop((time: Tone.Time) => {
-      console.log(`Playing loop on track ${this.name} at ${time}, now=${Tone.now()} `);
-      this._projectFileTrack.loop.notes.forEach(note => {
-        let noteTime = time + (Tone.Time("16n").toMilliseconds() * note.timeOffset);
-        if (noteTime < Tone.now()) {
-          console.warn(`Playing note ${note.note} on track ${this.name} at ${noteTime} too late, now=${Tone.now()}`);
-        }
-        else {
-          console.log(`Playing note ${note.note} on track ${this.name} at ${noteTime}, now=${Tone.now()}`);
-        }
-        try {
-          this.instrument.triggerAttackRelease(note.note, note.duration, noteTime, note.velocity / 127);
-        }
-        catch (error) {
-          console.warn(`Error ${error} while trying to play note ${note.note} on track ${this.name} at ${noteTime}, now=${Tone.now()}`);
-        }
+    this._loopInstance = new Tone.Loop((time) =>
+      this._loopFunction(Tone.now()), this._projectFileTrack.loop.length);
+    this._loopInstance.start(Tone.now() + Tone.Time(this._projectFileTrack.loop.startTime));
+    // this._loopInstance = new Tone.Loop((time: Tone.Time) => {
+    //   console.log(`Playing loop on track ${this.name} at ${time}, now=${Tone.now()} `);
+    //   this._projectFileTrack.loop.notes.forEach(note => {
+    //     let noteTime = time + (Tone.Time("16n").toMilliseconds() * note.timeOffset);
+    //     if (noteTime < Tone.now()) {
+    //       console.warn(`Playing note ${note.note} on track ${this.name} at ${noteTime} too late, now=${Tone.now()}`);
+    //     }
+    //     else {
+    //       console.log(`Playing note ${note.note} on track ${this.name} at ${noteTime}, now=${Tone.now()}`);
+    //     }
+    //     try {
+    //       this.instrument.triggerAttackRelease(note.note, note.duration, noteTime, note.velocity / 127);
+    //     }
+    //     catch (error) {
+    //       console.warn(`Error ${error} while trying to play note ${note.note} on track ${this.name} at ${noteTime}, now=${Tone.now()}`);
+    //     }
 
-      });
-    }, this._projectFileTrack.loop.length);
-    this._loopInstance.start(Tone.Time(this._projectFileTrack.loop.startTime).toSeconds());
+    //   });
+    // }, this._projectFileTrack.loop.length);
+    // this._loopInstance.start(Tone.Time(this._projectFileTrack.loop.startTime).toSeconds());
   }
 
-  // _loopFunction(time: Tone.Unit.Seconds) {
-  //   console.log(`Playing loop on track ${this.name} at ${time}, now=${Tone.now()} `);
-  //   this._projectFileTrack.loop.notes.forEach(note => {
-  //     let noteTime = time + (Tone.Time("16n").toMilliseconds() * note.timeOffset);
-  //     if (noteTime < Tone.now()) {
-  //       console.warn(`Playing note ${note.note} on track ${this.name} at ${noteTime}, now=${Tone.now()}`);
-  //     }
-  //     else {
-  //       console.log(`Playing note ${note.note} on track ${this.name} at ${noteTime}, now=${Tone.now()}`);
-  //     }
-  //     this.instrument.triggerAttackRelease(note.note, note.duration, noteTime, note.velocity / 127);
-  //   });
-  // }
+  _loopFunction(time: Tone.Unit.Seconds) {
+    console.log(`Playing loop on ${this.name} at ${time}, now=${Tone.now()}`);
+    this._projectFileTrack.loop.notes.forEach(note => {
+      let noteTime = time + (Tone.Time("16n") * note.timeOffset);
+      console.log(`Playing note ${note.note} on ${this.name} at ${noteTime}, now=${Tone.now()}`);
+      this.instrument.triggerAttackRelease(
+        note.note, note.duration, noteTime, note.velocity / 127);
+    });
+    // console.log(`Playing loop on track ${this.name} at ${time}, now=${Tone.now()} `);
+    // this._projectFileTrack.loop.notes.forEach(note => {
+    //   let noteTime = time + (Tone.Time("16n").toMilliseconds() * note.timeOffset);
+    //   if (noteTime < Tone.now()) {
+    //     console.warn(`Playing note ${note.note} on track ${this.name} at ${noteTime}, now=${Tone.now()}`);
+    //   }
+    //   else {
+    //     console.log(`Playing note ${note.note} on track ${this.name} at ${noteTime}, now=${Tone.now()}`);
+    //   }
+    //   this.instrument.triggerAttackRelease(note.note, note.duration, noteTime, note.velocity / 127);
+    // });
+  }
 
   _generateAutomations() {
     this._projectFileTrack.automations.forEach(projectFileAutomation =>

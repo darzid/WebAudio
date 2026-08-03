@@ -89,15 +89,19 @@ class Track {
   }
 
   _generateLoopInstance() {
-    this._loopInstance = new Tone.Loop((time) => 
-      this._loopFunction(time), this._projectFileTrack.loop.length);
-    this._loopInstance.start(Tone.Time(this._projectFileTrack.loop.startTime));
+    this._loopInstance = new Tone.Loop((time) =>
+      this._loopFunction(Tone.now(), this._projectFileTrack.loop.length));
+    this._loopInstance.start(Tone.now() + Tone.Time(this._projectFileTrack.loop.startTime));
   }
 
   _loopFunction(time) {
-    this._projectFileTrack.loop.notes.forEach(note =>
+    console.log(`Playing loop on ${this.name} at ${time}, now=${Tone.now()}`);
+    this._projectFileTrack.loop.notes.forEach(note => {
+      let noteTime = time + (Tone.Time("16n") * note.timeOffset);
+      console.log(`Playing note ${note.note} on ${this.name} at ${noteTime}, now=${Tone.now()}`);
       this.instrument.triggerAttackRelease(
-        note.note, note.duration, time + (Tone.Time("16n") * note.timeOffset), note.velocity / 127))
+        note.note, note.duration, noteTime, note.velocity / 127);
+    });
   }
 
   _generateAutomations() {
