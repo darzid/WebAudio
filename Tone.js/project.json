@@ -49,7 +49,7 @@
         "startTime": "0",
         "length": "4n"
       },
-      "automation": []
+      "automations": []
     },
     {
       "id": "track2",
@@ -115,7 +115,7 @@
         "startTime": "0",
         "length": "4n"
       },
-      "automation": []
+      "automations": []
     },
     {
       "id": "track3",
@@ -174,9 +174,10 @@
         "startTime": "2m",
         "length": "4n"
       },
-      "automation": [
+      "automations": [
         {
-          "target": "Filter.frequency",
+          "deviceIndex": 1,
+          "parameter": "frequency",
           "startTime": "2m",
           "rampTime": "8m",
           "value": 3000
@@ -222,9 +223,10 @@
         "startTime": "2m",
         "length": "4n"
       },
-      "automation": [
+      "automations": [
         {
-          "target": "Filter.frequency",
+          "deviceIndex": 1,
+          "parameter": "frequency",
           "startTime": "2m",
           "rampTime": "8m",
           "value": 3000

@@ -14,6 +14,7 @@
     <script src="http://unpkg.com/tone"></script>
     <script src="..\lib\template-expander\template-expander.js"></script>
     <script src=".\ui-components\toggle-button.js"></script>
+    <script src=".\project.js"></script>
   </head>
 
   <body>
@@ -836,16 +837,13 @@
         }
 
         session = {
-          tracks: [],
-          masterChannel: new Tone.Channel()
-        };
-        session.masterChannel.receive("master", 0);
-        session.masterChannel.toDestination();
+          project: null
+        }        
         await loadProject(session);
 
         let tracksElement = document.getElementById("tracks");
 
-        session.tracks.forEach(track => {
+        session.project.tracks.forEach(track => {
           let trackElement = document.createElement("div");
           trackElement.id = track.id;
           trackElement.setAttribute("name", track.name);
@@ -853,7 +851,7 @@
           tracksElement.appendChild(trackElement);
 
           track.channel = new Tone.Channel();
-          track.channel.send("master", track.volume);
+          track.channel.send("master", 0);
 
           applyTemplates();
 
@@ -881,13 +879,6 @@
             let deviceElement = document.getElementById(newDeviceElement.id);
             bind(deviceElement, device);
             deviceElement.querySelector(".browse-button").addEventListener("click", (e) => showPresetBrowser(device, deviceElement));
-            /* deviceElement.querySelector("input[type='checkbox'][name='enabled']").addEventListener("change", (e) => {
-               if (track.channel.mute)
-                 console.log("Unmuting track " + track.id);
-               else
-                 console.log("Muting track " + track.id);
-               track.channel.mute != track.channel.mute;
-             });*/
           });
 
           let trackDevices = track.devices.filter(device => device.name != "LFO");
@@ -901,20 +892,19 @@
 
         let armTrackInputs = document.querySelectorAll("input[type='radio'][name='arm-track']");
         armTrackInputs[0].checked = true;
-        selectedTrackId = session.tracks[0].id;
-        armTrackInputs.forEach(armTrackInput => {
-          armTrackInput.addEventListener("change", () => selectedTrackId = armTrackInput.value);
-        });
+        selectedTrackId = session.project.tracks[0].id;
+        armTrackInputs.forEach(armTrackInput => 
+          armTrackInput.addEventListener("change", () => selectedTrackId = armTrackInput.value));
 
         document.addEventListener("PlayNoteRequestEvent", (e) => playNote(e));
         document.addEventListener("StopNoteRequestEvent", (e) => stopNote(e));
 
         document.getElementById("tracks").style.opacity = 1;
 
-        Tone.getTransport().bpm.value = session.tempo;
+        Tone.getTransport().bpm.value = session.project.tempo;
 
-        //session.tracks[3].devices[1].connect(session.tracks[3].devices[0].filter.detune);
-        //session.tracks[3].devices[1].start();
+        //session.project.tracks[3].devices[1].connect(session.project.tracks[3].devices[0].filter.detune);
+        //session.project.tracks[3].devices[1].start();
 
         let recButton = document.getElementById("rec-button");
         let playButton = document.getElementById("play-button");
@@ -942,19 +932,6 @@
           stopButton.disabled = false;
 
           Tone.getTransport().start();
-
-          session.tracks.forEach(track => {
-            track.automation.forEach(automation => {
-              let targetPathParts = automation.target.split(".");
-              let deviceName = targetPathParts[0];
-              let targetDevice = track.devices.find(device => device.name === deviceName);
-              let targetParameter = targetDevice;
-              for (let targetPathIndex = 1; targetPathIndex < targetPathParts.length; targetPathIndex++) {
-                targetParameter = targetParameter[targetPathParts[targetPathIndex]];
-              }
-              targetParameter.rampTo(automation.value, Tone.now() + Tone.Time(automation.rampTime), Tone.now() + Tone.Time(automation.startTime));
-            });
-          })
         });
 
         stopButton.addEventListener("click", async () => {
@@ -980,53 +957,6 @@
 
         document.getElementById("loading").style.display = "none";
         console.log("Initialized");
-      }
-
-      async function loadProject(projectSession) {
-        await fetch('.\\project.json')
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then(project => {
-
-            project.tracks.forEach(track => {
-              let devices = [];
-              track.devices.forEach(device => {
-                let deviceName = Object.keys(device)[0];
-                let deviceParams = device[deviceName];
-                let deviceInstance = new Tone[deviceName](deviceParams);
-                devices.push(deviceInstance);
-              });
-
-              let sessionTrack = {
-                id: track.id,
-                name: track.name,
-                volume: track.volume,
-                devices: devices,
-                automation: track.automation
-              };
-
-              let loopFunction = (time) => {
-                track.loop.notes.forEach(note => {
-                  sessionTrack.devices[0].triggerAttackRelease(note.note, note.duration, time + (Tone.Time("16n") * note.timeOffset), note.velocity / 127);
-                })
-              }
-              let trackLoop = new Tone.Loop((time) => loopFunction(time), track.loop.length);
-              trackLoop.start(Tone.Time(track.loop.startTime));
-
-
-              sessionTrack.loop = trackLoop;
-              projectSession.tempo = project.tempo;
-              projectSession.tracks.push(sessionTrack);
-            })
-
-          })
-          .catch(error => {
-            console.error('Error loading JSON:', error);
-          });
       }
 
       function loadPresets() {
@@ -1127,15 +1057,15 @@
       }
 
       function playNote(eventInfo) {
-        let track = session.tracks.find(track => track.id === selectedTrackId);
+        let track = session.project.tracks.find(track => track.id === selectedTrackId);
         if (track.devices.length == 0) return;
-        track.devices[0].triggerAttack(eventInfo.detail.note, Tone.now());
+        track.instrument.triggerAttack(eventInfo.detail.note, Tone.now());
       }
 
       function stopNote(eventInfo) {
-        let track = session.tracks.find(track => track.id === selectedTrackId);
+        let track = session.project.tracks.find(track => track.id === selectedTrackId);
         if (track.devices.length == 0) return;
-        track.devices[0].triggerRelease(Tone.now());
+        track.instrument.triggerRelease(Tone.now());
       }
 
       function bind(element, object) {
