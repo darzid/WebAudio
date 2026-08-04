@@ -959,13 +959,13 @@
       function playNote(eventInfo) {
         let track = session.project.tracks.find(track => track.id === selectedTrackId);
         if (track.devices.length == 0) return;
-        track.instrument.triggerAttack(eventInfo.detail.note, Tone.now());
+        track.instruments.forEach(instrument => instrument.triggerAttack(eventInfo.detail.note, Tone.now()));
       }
 
       function stopNote(eventInfo) {
         let track = session.project.tracks.find(track => track.id === selectedTrackId);
         if (track.devices.length == 0) return;
-        track.instrument.triggerRelease(Tone.now());
+        track.instruments.forEach(instrument => instrument.triggerRelease(Tone.now()));
       }
     </script>
   </body>

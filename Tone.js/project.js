@@ -47,6 +47,8 @@ class Track {
   _projectFileTrack;
   _channel;
   _devices = [];
+  _instruments = [];
+  _effects = [];
   _parts = [];
   _automationDefaults = {};
   _automations = [];
@@ -55,8 +57,8 @@ class Track {
     this._projectFileTrack = projectFileTrack;
     this._channel = new Tone.Channel({ volume: projectFileTrack.volume, pan: projectFileTrack.pan, channelCount: 2 });
     this._channel.send("master", 0);
-    this._projectFileTrack.devices.forEach(projectFileDevice =>
-      this.addDevice(Object.keys(projectFileDevice)[0], projectFileDevice[Object.keys(projectFileDevice)[0]]));
+    this._projectFileTrack.devices.forEach(projectFileDevice => 
+      this.addDevice(projectFileDevice[Object.keys(projectFileDevice)[0]].type, Object.keys(projectFileDevice)[0], projectFileDevice[Object.keys(projectFileDevice)[0]].parameters));
     this._generateClipLoops();
     this._generateAutomationDefaults();
   }
@@ -81,7 +83,8 @@ class Track {
 
   get channel() { return this._channel; }
   get devices() { return this._devices; }
-  get instrument() { return this._devices[0]; }
+  get instruments() { return this._instruments; }
+  get effects() { return this._effects; }
 
   get loopNotes() { return this._projectFileTrack.loop.notes; }
   set loopNotes(value) {
@@ -103,9 +106,17 @@ class Track {
 
   get automations() { return this._projectFileTrack.automations; }
 
-  addDevice(deviceName, deviceParams) {
+  addDevice(deviceType, deviceName, deviceParams) {
     let deviceInstance = new Tone[deviceName](deviceParams);
     this._devices.push(deviceInstance);
+    if (deviceType == "Instrument") {
+      this._instruments.push(deviceInstance);
+    } else if (deviceType == "Effect") {
+      this._effects.push(deviceInstance);
+    }
+    else {
+      throw "Invalid device type " + deviceType;
+    }
   }
 
   start(time) {
@@ -135,7 +146,9 @@ class Track {
       let loopDuration = Tone.Time(clip.length);
       let clipDuration = loopEndTime ? (loopEndTime - loopStartTime) : null;
 
-      const part = new Tone.Part(((time, value) => this.instrument.triggerAttackRelease(value.note, value.duration, time, value.velocity)), clip.notes);
+      const part = new Tone.Part(((time, value) => {
+        this.instruments.forEach(instrument => instrument.triggerAttackRelease(value.note, value.duration, time, value.velocity));
+      }), clip.notes);
       part.loopStart = Tone.Time("0:0:0");
       part.loopEnd = loopDuration;
 
@@ -143,7 +156,7 @@ class Track {
       part.start(loopStartTime);
       if (loopEndTime)
         part.stop(loopEndTime);
-      
+
       this._parts.push(part);
 
       clipIndex++;

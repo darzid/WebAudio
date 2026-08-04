@@ -10,31 +10,40 @@
       "devices": [
         {
           "MembraneSynth": {
-            "detune": -1000,
-            "pitchDecay": 0.05,
-            "octaves": 8,
-            "envelope": {
-              "attack": 0.001,
-              "decay": 1,
-              "sustain": 0.2,
-              "release": 1
+            "type": "Instrument",
+            "parameters": {
+              "detune": -1000,
+              "pitchDecay": 0.05,
+              "octaves": 8,
+              "envelope": {
+                "attack": 0.001,
+                "decay": 1,
+                "sustain": 0.2,
+                "release": 1
+              }
             }
           }
         },
         {
           "Distortion": {
-            "distortion": 0.1,
-            "oversample": "none",
-            "wet": 0.5
+            "type": "Effect",
+            "parameters": {
+              "distortion": 0.1,
+              "oversample": "none",
+              "wet": 0.5
+            }
           }
         },
         {
           "Compressor": {
-            "threshold": -12,
-            "knee": 25,
-            "ratio": 20,
-            "attack": 0.6,
-            "release:": 0.25
+            "type": "Effect",
+            "parameters": {
+              "threshold": -12,
+              "knee": 25,
+              "ratio": 20,
+              "attack": 0.6,
+              "release:": 0.25
+            }
           }
         }
       ],
@@ -105,45 +114,54 @@
       "devices": [
         {
           "MonoSynth": {
-            "volume": -2,
-            "portamento": 0,
-            "oscillator": {
-              "type": "sawtooth"
-            },
-            "filter": {
-              "Q": 0.3,
-              "detune": -1000,
-              "frequency": 0,
-              "gain": 0,
-              "rolloff": -48,
-              "type": "bandpass"
-            },
-            "envelope": {
-              "attack": 0.01,
-              "decay": 0.4,
-              "sustain": 0,
-              "release": 0
-            },
-            "filterEnvelope": {
-              "attack": 0.1,
-              "decay": 1.3,
-              "sustain": 1,
-              "release": 0.7,
-              "releaseCurve": "linear",
-              "baseFrequency": 20,
-              "octaves": 5
+            "type": "Instrument",
+            "parameters": {
+              "volume": -2,
+              "portamento": 0,
+              "oscillator": {
+                "type": "sawtooth"
+              },
+              "filter": {
+                "Q": 0.3,
+                "detune": -1000,
+                "frequency": 0,
+                "gain": 0,
+                "rolloff": -48,
+                "type": "bandpass"
+              },
+              "envelope": {
+                "attack": 0.01,
+                "decay": 0.4,
+                "sustain": 0,
+                "release": 0
+              },
+              "filterEnvelope": {
+                "attack": 0.1,
+                "decay": 1.3,
+                "sustain": 1,
+                "release": 0.7,
+                "releaseCurve": "linear",
+                "baseFrequency": 20,
+                "octaves": 5
+              }
             }
           }
         },
         {
           "Filter": {
-            "type": "lowpass",
-            "frequency": 50,
-            "rolloff": -12
+            "type": "Effect",
+            "parameters": {
+              "type": "lowpass",
+              "frequency": 50,
+              "rolloff": -12
+            }
           }
         },
         {
-          "Compressor": {}
+          "Compressor": {
+            "type": "Effect",
+            "parameters": {}
+          }
         }
       ],
       "clips": [
@@ -364,7 +382,7 @@
               "time": "0:3:3",
               "velocity": 1
             },
-                        {
+            {
               "note": "F1",
               "duration": "0:0:0.5",
               "time": "1:0:1",
@@ -473,23 +491,29 @@
       "devices": [
         {
           "MetalSynth": {
-            "volume": -4,
-            "portamento": 100,
-            "modulationIndex": 1,
-            "octaves": 0,
-            "envelope": {
-              "attack": 0.01,
-              "decay": 1,
-              "sustain": 0.1,
-              "release": 3.4
+            "type": "Instrument",
+            "parameters": {
+              "volume": -4,
+              "portamento": 100,
+              "modulationIndex": 1,
+              "octaves": 0,
+              "envelope": {
+                "attack": 0.01,
+                "decay": 1,
+                "sustain": 0.1,
+                "release": 3.4
+              }
             }
           }
         },
         {
           "Filter": {
-            "type": "lowpass",
-            "frequency": 100,
-            "rolloff": -12
+            "type": "Effect",
+            "parameters": {
+              "type": "lowpass",
+              "frequency": 100,
+              "rolloff": -12
+            }
           }
         }
       ],
@@ -552,23 +576,29 @@
       "devices": [
         {
           "MetalSynth": {
-            "volume": -4,
-            "portamento": 100,
-            "modulationIndex": 1,
-            "octaves": 0,
-            "envelope": {
-              "attack": 0.01,
-              "decay": 1.64,
-              "sustain": 0.01,
-              "release": 0.2
+            "type": "Instrument",
+            "parameters": {
+              "volume": -4,
+              "portamento": 100,
+              "modulationIndex": 1,
+              "octaves": 0,
+              "envelope": {
+                "attack": 0.01,
+                "decay": 1.64,
+                "sustain": 0.01,
+                "release": 0.2
+              }
             }
           }
         },
         {
           "Filter": {
-            "type": "lowpass",
-            "frequency": 100,
-            "rolloff": -12
+            "type": "Effect",
+            "parameters": {
+              "type": "lowpass",
+              "frequency": 100,
+              "rolloff": -12
+            }
           }
         }
       ],
@@ -612,13 +642,19 @@
       "pan": 0,
       "devices": [
         {
-          "MonoSynth": {}
+          "MonoSynth": {
+            "type": "Instrument",
+            "parameters": {}
+          }
         },
         {
           "Distortion": {
-            "distortion": 0.1,
-            "oversample": "none",
-            "wet": 0.5
+            "type": "Effect",
+            "parameters": {
+              "distortion": 0.1,
+              "oversample": "none",
+              "wet": 0.5
+            }
           }
         }
       ],
@@ -647,43 +683,49 @@
       "devices": [
         {
           "FMSynth": {
-            "harmonicity": 0.5,
-            "modulationIndex": 1,
-            "oscillator": {
-              "type": "fmsawtooth",
-              "modulationType": "sine",
-              "modulationIndex": 20,
-              "harmonicity": 3
-            },
-            "envelope": {
-              "attack": 0.02,
-              "decay": 0.02,
-              "sustain": 0.3,
-              "release": 1
-            },
-            "modulation": {
-              "detune": 57,
-              "frequency": 1735,
-              "partialCount": 4,
-              "phase": 127,
-              "type": "fmsawtooth4"
-            },
-            "modulationEnvelope": {
-              "attack": 0.4,
-              "decay": 0.5,
-              "sustain": 0.06,
-              "release": 0.09
+            "type": "Instrument",
+            "parameters": {
+              "harmonicity": 0.5,
+              "modulationIndex": 1,
+              "oscillator": {
+                "type": "fmsawtooth",
+                "modulationType": "sine",
+                "modulationIndex": 20,
+                "harmonicity": 3
+              },
+              "envelope": {
+                "attack": 0.02,
+                "decay": 0.02,
+                "sustain": 0.3,
+                "release": 1
+              },
+              "modulation": {
+                "detune": 57,
+                "frequency": 1735,
+                "partialCount": 4,
+                "phase": 127,
+                "type": "fmsawtooth4"
+              },
+              "modulationEnvelope": {
+                "attack": 0.4,
+                "decay": 0.5,
+                "sustain": 0.06,
+                "release": 0.09
+              }
             }
           }
         },
         {
           "Filter": {
-            "Q": 3.8,
-            "detune": -2400,
-            "frequency": 1600,
-            "gain": 13,
-            "rolloff": -12,
-            "type": "peaking"
+            "type": "Effect",
+            "parameters": {
+              "Q": 3.8,
+              "detune": -2400,
+              "frequency": 1600,
+              "gain": 13,
+              "rolloff": -12,
+              "type": "peaking"
+            }
           }
         }
       ],
