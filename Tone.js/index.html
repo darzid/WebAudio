@@ -914,6 +914,31 @@
               trackFaderValueElement.innerHTML = trackFaderInputElement.value;
             }
           });
+          
+          var doubleTapTimer;
+          trackFaderInputElement.addEventListener("pointerdown", () => {
+            if (doubleTapTimer) {
+              let trackEnabledElement = trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']");
+              trackEnabledElement.checked = !trackEnabledElement.checked;
+              var evnt = trackEnabledElement["onchange"];
+              if (evnt) {
+                evnt.call(trackEnabledElement, new Event("change"));
+                console.log("Fire checkbox changed")
+              }
+              track.channel.mute = !trackEnabledElement.checked;
+              trackFaderInputElement.classList.toggle("disabled");
+              return;
+            }
+            else {
+              doubleTapTimer = setTimeout(() => {
+                if (!doubleTapTimer)
+                  return;
+                //Logger.log(`Stop double tap timer for ${knobInput.name}`);
+                clearTimeout(doubleTapTimer);
+                doubleTapTimer = null;
+              }, 500);
+            }
+          });
 
           trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']").addEventListener("change", (e) => {
             if (e.target.checked)
@@ -921,6 +946,7 @@
             else
               console.log("Deactivating track " + track.id);
             track.channel.mute = !e.target.checked;
+            trackFaderInputElement.classList.toggle("disabled");
           });
 
           let trackDevicesElement = trackElement.querySelector("div[name='Devices']");

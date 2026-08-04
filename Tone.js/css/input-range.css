@@ -70,6 +70,10 @@
     
   }
 
+  input[type="range"].disabled::-webkit-slider-runnable-track {
+    background: rgba(20, 20, 20, 0.5);
+  }
+    
   input[type=range]::-webkit-slider-runnable-track {
     background: rgba(40, 120, 40, 0.5);
     border: 2.2px solid #010101;
@@ -91,6 +95,10 @@
     box-shadow: 1pt 1pt 1pt rgba(0,0,0,0.5);
   }
 
+  input[type=range].disabled::-webkit-slider-thumb {
+    background: #1d5a50;
+  }
+  
   input[type=range]::-moz-range-track {
     background: yellow;
     border: 2.2px solid #010101;

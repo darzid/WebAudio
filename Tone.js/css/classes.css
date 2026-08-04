@@ -109,6 +109,8 @@ input[type="checkbox"][name="enabled"]:checked {
       margin-bottom: 1em;
       height: 30vmin;
     }
+    
+    
 
     value {
       max-width: 4em;
