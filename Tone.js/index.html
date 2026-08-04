@@ -845,186 +845,152 @@
       var session = null;
       let selectedTrackId = null;
 
-      var isInitialized = false;
+      document.addEventListener("DOMContentLoaded", async (event) => { 
+        await createUI();
+      });
+      
       document.addEventListener("mousemove", async () => {
-        await initialize();
+        await Tone.start();
       });
 
-      async function initialize() {
-        if (isInitialized == true)
-          return;
-        console.log("Initializing");
-
-        isInitialized = true;
-        await presetBrowser.loadPresets();
-        await Tone.start();
-
-        //console.log("Tone lookahead: " + Tone.context.lookAhead);
-        //Tone.context.lookAhead = 2;
-
-        
-
-        session = {
-          project: null
-        }
-        await loadProject(session);
-        Tone.getTransport().bpm.value = session.project.tempo;
-
-        let tracksElement = document.getElementById("tracks");
-        let mixerElement = document.getElementById("mixer");
-
-        session.project.tracks.forEach(track => {
-          let trackElement = document.createElement("div");
-          trackElement.id = track.id;
-          trackElement.setAttribute("name", track.name);
-          trackElement.setAttribute("data-template", "Track");
-          tracksElement.appendChild(trackElement);
-
-          let trackFaderElement = document.createElement("div");
-          trackFaderElement.id = `${track.id}-fader`;
-          trackFaderElement.type = "range";
-          trackFaderElement.setAttribute("name", track.name);
-          trackFaderElement.setAttribute("value", track.channel.volume.value);
-          trackFaderElement.setAttribute("data-template", "MixerTrack");
-          mixerElement.appendChild(trackFaderElement);
-
-          applyTemplates();
-
-          trackElement = document.getElementById(track.id);
-          bind(trackElement.querySelector(".track-header"), track.channel);
-
-          trackFaderElement = document.getElementById(`${track.id}-fader`);
-
-          let trackVolumeInputElement = trackElement.querySelector(".TrackChannel input[name='volume']");
-          let trackVolumeValueElement = trackElement.querySelector(".TrackChannel value[for='volume']");
-          let trackFaderInputElement = trackFaderElement.querySelector("input");
-          let trackFaderValueElement = trackFaderElement.querySelector("value");
-          let trackEnabledElement = trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']");
-          
-          document.addEventListener("TrackEnabledChanged", (e) => {
-            if (e.detail.track == track.id) {
-              if (e.detail.enabled != trackEnabledElement.checked)
-                trackEnabledElement.checked = e.detail.enabled;
-              if (e.detail.enabled && trackFaderInputElement.classList.contains("disabled"))
-                trackFaderInputElement.classList.remove("disabled");
-              else if (!e.detail.enabled && !trackFaderInputElement.classList.contains("disabled"))
-                trackFaderInputElement.classList.add("disabled");
-            }
-          });
-          
-          document.addEventListener("TrackVolumeChanged", (e) => {
-            if (e.detail.track == track.id) {
-              trackFaderInputElement.value = e.detail.volume;
-              trackFaderValueElement.innerHTML = e.detail.volume;
-              trackVolumeInputElement.value = e.detail.volume;
-              trackVolumeValueElement.innerHTML = e.detail.volume;
-            }
-          });
-          
-          trackVolumeInputElement.addEventListener("input", () => 
-            track.volume = parseFloat(trackVolumeInputElement.value)
-          );
-
-          trackFaderInputElement.addEventListener("input", () =>
-            track.volume = parseFloat(trackFaderInputElement.value)
-          );
-          
-          /*var doubleTapTimer;
-          trackFaderInputElement.addEventListener("pointerdown", () => {
-            if (doubleTapTimer) {
-              track.enabled = !track.enabled;
-              clearTimeout(doubleTapTimer);
-              doubleTapTimer = null;
-              return;
-            }
-            else {
-              doubleTapTimer = setTimeout(() => {
-                if (!doubleTapTimer)
-                  return;
-                //Logger.log(`Stop double tap timer for ${knobInput.name}`);
-                clearTimeout(doubleTapTimer);
-                doubleTapTimer = null;
-              }, 500);
-            }
-          });
-*/
-          trackEnabledElement.addEventListener("change", (e) => {
-            if (track.enabled != e.target.checked)
-              track.enabled = e.target.checked;
-            /*if (e.target.checked)
-              console.log("Activating track " + track.id);
-            else
-              console.log("Deactivating track " + track.id);
-            track.channel.mute = !e.target.checked;
-            trackFaderInputElement.classList.toggle("disabled");*/
-          });
-
-          let trackDevicesElement = trackElement.querySelector("div[name='Devices']");
-          track.devices.forEach(device => {
-            let newDeviceElement = document.createElement("div");
-            newDeviceElement.id = `${track.id}-${device.name}`;
-            newDeviceElement.setAttribute("name", device.name);
-            newDeviceElement.setAttribute("data-template", device.name);
-            trackDevicesElement.appendChild(newDeviceElement);
-
+        async function createUI() {
+          await presetBrowser.loadPresets();
+          session = {
+            project: null
+          }
+          await loadProject(session);
+          Tone.getTransport().bpm.value = session.project.tempo;
+  
+          let tracksElement = document.getElementById("tracks");
+          let mixerElement = document.getElementById("mixer");
+  
+          session.project.tracks.forEach(track => {
+            let trackElement = document.createElement("div");
+            trackElement.id = track.id;
+            trackElement.setAttribute("name", track.name);
+            trackElement.setAttribute("data-template", "Track");
+            tracksElement.appendChild(trackElement);
+  
+            let trackFaderElement = document.createElement("div");
+            trackFaderElement.id = `${track.id}-fader`;
+            trackFaderElement.type = "range";
+            trackFaderElement.setAttribute("name", track.name);
+            trackFaderElement.setAttribute("value", track.channel.volume.value);
+            trackFaderElement.setAttribute("data-template", "MixerTrack");
+            mixerElement.appendChild(trackFaderElement);
+  
             applyTemplates();
-            let deviceElement = document.getElementById(newDeviceElement.id);
-            bind(deviceElement, device);
-            deviceElement.querySelector(".browse-button").addEventListener("click", (e) => presetBrowser.show(device, deviceElement));
-          });
-
-          let trackDevices = track.devices.filter(device => device.name != "LFO");
-          let instrumentTarget = track.effects.length > 0 ? track.effects[0] : track.channel;
-          for (let instrumentIndex = 0; instrumentIndex < track.instruments.length; instrumentIndex++) {
-            track.instruments[instrumentIndex].connect(instrumentTarget);
-          }
-
-          for (let effectIndex = 0; effectIndex < track.effects.length - 1; effectIndex++) {
-            track.effects[effectIndex].connect(track.effects[effectIndex + 1]);
-          }
-          if (track.effects.length > 0) {
-            track.effects[track.effects.length - 1].connect(track.channel);
-          }
-
-          let trackClipsElement = trackElement.querySelector("div[name='Clips']");
-          track.clips.forEach(clip => {
-            let newClipElement = document.createElement("div");
-            newClipElement.id = `${track.id}-${clip.name}`;
-            newClipElement.setAttribute("name", clip.name);
-            newClipElement.setAttribute("title", clip.name);
-            newClipElement.setAttribute("data-template", "Clip");
-            if (clip.endTime) {
-              let clipDuration = Tone.Time(Tone.Time(clip.endTime) - Tone.Time(clip.startTime));
-              let bars = clipDuration.toBarsBeatsSixteenths().split(":")[0];
-              newClipElement.style.width = `${bars}em`;
-            }
-            else {
-              newClipElement.style.width = `stretch`;
-            }
+  
+            trackElement = document.getElementById(track.id);
+            bind(trackElement.querySelector(".track-header"), track.channel);
+  
+            trackFaderElement = document.getElementById(`${track.id}-fader`);
+  
+            let trackVolumeInputElement = trackElement.querySelector(".TrackChannel input[name='volume']");
+            let trackVolumeValueElement = trackElement.querySelector(".TrackChannel value[for='volume']");
+            let trackFaderInputElement = trackFaderElement.querySelector("input");
+            let trackFaderValueElement = trackFaderElement.querySelector("value");
+            let trackEnabledElement = trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']");
             
-            trackClipsElement.appendChild(newClipElement);
-
-            applyTemplates();
-          });
-        })
-
-        initializeToggleButtons();
-
-        let armTrackInputs = document.querySelectorAll("input[type='radio'][name='arm-track']");
-        armTrackInputs[0].checked = true;
-        selectedTrackId = session.project.tracks[0].id;
-        armTrackInputs.forEach(armTrackInput =>
-          armTrackInput.addEventListener("change", () => selectedTrackId = armTrackInput.value));
-
-        document.addEventListener("PlayNoteRequestEvent", (e) => playNote(e));
-        document.addEventListener("StopNoteRequestEvent", (e) => stopNote(e));
-
-        initializeTransport();
-        document.getElementById("daw").style.opacity = 1;
-        document.getElementById("loading").style.display = "none";
-        console.log("Initialized");
-      }
-
+            document.addEventListener("TrackEnabledChanged", (e) => {
+              if (e.detail.track == track.id) {
+                if (e.detail.enabled != trackEnabledElement.checked)
+                  trackEnabledElement.checked = e.detail.enabled;
+                if (e.detail.enabled && trackFaderInputElement.classList.contains("disabled"))
+                  trackFaderInputElement.classList.remove("disabled");
+                else if (!e.detail.enabled && !trackFaderInputElement.classList.contains("disabled"))
+                  trackFaderInputElement.classList.add("disabled");
+              }
+            });
+            
+            document.addEventListener("TrackVolumeChanged", (e) => {
+              if (e.detail.track == track.id) {
+                trackFaderInputElement.value = e.detail.volume;
+                trackFaderValueElement.innerHTML = e.detail.volume;
+                trackVolumeInputElement.value = e.detail.volume;
+                trackVolumeValueElement.innerHTML = e.detail.volume;
+              }
+            });
+            
+            trackVolumeInputElement.addEventListener("input", () => 
+              track.volume = parseFloat(trackVolumeInputElement.value)
+            );
+  
+            trackFaderInputElement.addEventListener("input", () =>
+              track.volume = parseFloat(trackFaderInputElement.value)
+            );
+            
+            trackEnabledElement.addEventListener("change", (e) => {
+              if (track.enabled != e.target.checked)
+                track.enabled = e.target.checked;
+            });
+  
+            let trackDevicesElement = trackElement.querySelector("div[name='Devices']");
+            track.devices.forEach(device => {
+              let newDeviceElement = document.createElement("div");
+              newDeviceElement.id = `${track.id}-${device.name}`;
+              newDeviceElement.setAttribute("name", device.name);
+              newDeviceElement.setAttribute("data-template", device.name);
+              trackDevicesElement.appendChild(newDeviceElement);
+  
+              applyTemplates();
+              let deviceElement = document.getElementById(newDeviceElement.id);
+              bind(deviceElement, device);
+              deviceElement.querySelector(".browse-button").addEventListener("click", (e) => presetBrowser.show(device, deviceElement));
+            });
+  
+            let trackDevices = track.devices.filter(device => device.name != "LFO");
+            let instrumentTarget = track.effects.length > 0 ? track.effects[0] : track.channel;
+            for (let instrumentIndex = 0; instrumentIndex < track.instruments.length; instrumentIndex++) {
+              track.instruments[instrumentIndex].connect(instrumentTarget);
+            }
+  
+            for (let effectIndex = 0; effectIndex < track.effects.length - 1; effectIndex++) {
+              track.effects[effectIndex].connect(track.effects[effectIndex + 1]);
+            }
+            if (track.effects.length > 0) {
+              track.effects[track.effects.length - 1].connect(track.channel);
+            }
+  
+            let trackClipsElement = trackElement.querySelector("div[name='Clips']");
+            track.clips.forEach(clip => {
+              let newClipElement = document.createElement("div");
+              newClipElement.id = `${track.id}-${clip.name}`;
+              newClipElement.setAttribute("name", clip.name);
+              newClipElement.setAttribute("title", clip.name);
+              newClipElement.setAttribute("data-template", "Clip");
+              if (clip.endTime) {
+                let clipDuration = Tone.Time(Tone.Time(clip.endTime) - Tone.Time(clip.startTime));
+                let bars = clipDuration.toBarsBeatsSixteenths().split(":")[0];
+                newClipElement.style.width = `${bars}em`;
+              }
+              else {
+                newClipElement.style.width = `stretch`;
+              }
+              
+              trackClipsElement.appendChild(newClipElement);
+  
+              applyTemplates();
+            });
+          })
+  
+          initializeToggleButtons();
+  
+          let armTrackInputs = document.querySelectorAll("input[type='radio'][name='arm-track']");
+          armTrackInputs[0].checked = true;
+          selectedTrackId = session.project.tracks[0].id;
+          armTrackInputs.forEach(armTrackInput =>
+            armTrackInput.addEventListener("change", () => selectedTrackId = armTrackInput.value));
+  
+          document.addEventListener("PlayNoteRequestEvent", (e) => playNote(e));
+          document.addEventListener("StopNoteRequestEvent", (e) => stopNote(e));
+  
+          initializeTransport();
+          document.getElementById("daw").style.opacity = 1;
+          document.getElementById("loading").style.display = "none";
+          console.log("Initialized");
+        }
+        
       function playNote(eventInfo) {
         let track = session.project.tracks.find(track => track.id === selectedTrackId);
         if (track.instruments.length == 0) return;
