@@ -68,7 +68,7 @@ class PresetBrowser {
     presetListElement.style.top = `${boundingRect.top + boundingRect.height}px`;
     presetListElement.style.width = `${boundingRect.width}px`;
     presetListElement.style.display = "inline";
-    presetListElement.addEventListener("change", () => applyPreset(device, deviceElement, presetListElement, presetListElement.value));
+    presetListElement.addEventListener("change", () => this.applyPreset(device, deviceElement, presetListElement, presetListElement.value));
     this._visiblePresetListElement = presetListElement;
     this._lastPresetDevice = device;
   }
@@ -81,7 +81,7 @@ class PresetBrowser {
     let presetParameterNames = Object.keys(preset);
     let presetCursor = preset;
     let module = device;
-    applyModuleParameters(presetCursor, module, presetParameterNames);
+    this.applyModuleParameters(presetCursor, module, presetParameterNames);
 
     let addEventHandler = false;
 
@@ -103,7 +103,7 @@ class PresetBrowser {
     presetParameterNames.forEach(paramName => {
       if (typeof presetCursor[paramName] === "object") {
         let moduleParamNames = Object.keys(presetCursor[paramName]);
-        applyModuleParameters(presetCursor[paramName], module[paramName], moduleParamNames);
+        this.applyModuleParameters(presetCursor[paramName], module[paramName], moduleParamNames);
       }
       else {
         let paramType = typeof presetCursor[paramName];
