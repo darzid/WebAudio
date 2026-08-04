@@ -809,6 +809,67 @@
           "value": -1200
         }
       ]
+    },
+    {
+      "id": "track7",
+      "name": "Synth",
+      "volume": -1,
+      "pan": 0,
+      "devices": [
+        {
+          "Synth": {
+            "type": "Instrument",
+            "parameters": {}
+          }
+        },
+        {
+          "Distortion": {
+            "type": "Effect",
+            "parameters": {
+              "distortion": 1,
+              "oversample": "4x",
+              "wet": 1
+            }
+          }
+        },
+        {
+          "PingPongDelay": {
+            "type": "Effect",
+            "parameters": {
+              "delayTime": "8n",
+              "wet": 0.3
+            }
+          }
+        }
+      ],
+      "clips": [
+        {
+          "name": "Synth01",
+          "notes": [
+            {
+              "note": "D#1",
+              "duration": "0:0:1",
+              "time": "0:0:1",
+              "velocity": 1
+            },
+            {
+              "note": "F1",
+              "duration": "0:0:1",
+              "time": "0:0:3",
+              "velocity": 1
+            },
+            {
+              "note": "F2",
+              "duration": "0:0:1",
+              "time": "0:1:2",
+              "velocity": 1
+            }
+          ],
+          "startTime": "40:0:0",
+          "length": "0:2:0"
+        }
+      ],
+      "automations": []
     }
   ]
 }

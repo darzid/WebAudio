@@ -57,7 +57,7 @@ class Track {
     this._projectFileTrack = projectFileTrack;
     this._channel = new Tone.Channel({ volume: projectFileTrack.volume, pan: projectFileTrack.pan, channelCount: 2 });
     this._channel.send("master", 0);
-    this._projectFileTrack.devices.forEach(projectFileDevice => 
+    this._projectFileTrack.devices.forEach(projectFileDevice =>
       this.addDevice(projectFileDevice[Object.keys(projectFileDevice)[0]].type, Object.keys(projectFileDevice)[0], projectFileDevice[Object.keys(projectFileDevice)[0]].parameters));
     this._generateClipLoops();
     this._generateAutomationDefaults();
@@ -147,7 +147,12 @@ class Track {
       let clipDuration = loopEndTime ? (loopEndTime - loopStartTime) : null;
 
       const part = new Tone.Part(((time, value) => {
-        this.instruments.forEach(instrument => instrument.triggerAttackRelease(value.note, value.duration, time, value.velocity));
+        this.instruments.forEach(instrument => {
+          if (value.note) 
+            instrument.triggerAttackRelease(value.note, value.duration, time, value.velocity);
+          else 
+            instrument.triggerAttack(time);
+        });
       }), clip.notes);
       part.loopStart = Tone.Time("0:0:0");
       part.loopEnd = loopDuration;

@@ -857,7 +857,7 @@
         Tone.context.lookAhead = 0.3;
 
         await presetBrowser.loadPresets();
-        
+
 
         session = {
           project: null
@@ -933,10 +933,17 @@
           });
 
           let trackDevices = track.devices.filter(device => device.name != "LFO");
-          for (let deviceIndex = 0; deviceIndex < trackDevices.length - 1; deviceIndex++) {
-            trackDevices[deviceIndex].connect(trackDevices[deviceIndex + 1]);
+          let instrumentTarget = track.effects.length > 0 ? track.effects[0] : track.channel;
+          for (let instrumentIndex = 0; instrumentIndex < track.instruments.length; instrumentIndex++) {
+            track.instruments[instrumentIndex].connect(instrumentTarget);
           }
-          track.devices[track.devices.length - 1].connect(track.channel);
+
+          for (let effectIndex = 0; effectIndex < track.effects.length - 1; effectIndex++) {
+            track.effects[effectIndex].connect(track.effects[effectIndex + 1]);
+          }
+          if (track.effects.length > 0) {
+            track.effects[track.effects.length - 1].connect(track.channel);
+          }
         })
 
         initializeToggleButtons();
@@ -958,13 +965,18 @@
 
       function playNote(eventInfo) {
         let track = session.project.tracks.find(track => track.id === selectedTrackId);
-        if (track.devices.length == 0) return;
-        track.instruments.forEach(instrument => instrument.triggerAttack(eventInfo.detail.note, Tone.now()));
+        if (track.instruments.length == 0) return;
+        track.instruments.forEach(instrument => {
+          if (instrument.name == "NoiseSynth")
+            instrument.triggerAttack(Tone.now());
+          else
+            instrument.triggerAttack(eventInfo.detail.note, Tone.now())
+        });
       }
 
       function stopNote(eventInfo) {
         let track = session.project.tracks.find(track => track.id === selectedTrackId);
-        if (track.devices.length == 0) return;
+        if (track.instruments.length == 0) return;
         track.instruments.forEach(instrument => instrument.triggerRelease(Tone.now()));
       }
     </script>
