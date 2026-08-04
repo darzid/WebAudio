@@ -783,6 +783,12 @@
           </div>
         </template>
 
+        <template id="Clip">
+          <article id="${item.id}" class="Clip">
+            <div class="title-bar">${item.name}</div>
+          </article>
+        </template>
+
         <template id="Track">
           <article id="${item.id}" class="Track">
             <div class="track-header">
@@ -796,28 +802,27 @@
               </div>
               <div name="channel" data-template="TrackChannel"></div>
             </div>
-            <div name="Devices" class="TrackDevices"></div>
+            <div class="track-details">
+              <div name="Clips" class="TrackClips"></div>
+              <div name="Devices" class="TrackDevices"></div>
+            </div>
           </article>
         </template>
 
       </span>
     </span>
 
-    <div id="daw">
+    <div id="daw" style="opacity: 0.5">
       <div id="loading">Loading</div>
-      <div id="tracks" style="opacity: 0.5">
-        <div class="transport-bar">
-          <button id="rec-button">REC</button>
-          <button id="play-button">PLAY</button>
-          <button id="stop-button">STOP</button>
-          <div id="position"></div>
-        </div>
+      <div class="transport-bar">
+        <button id="rec-button">REC</button>
+        <button id="play-button">PLAY</button>
+        <button id="stop-button">STOP</button>
+        <div id="position"></div>
+      </div>
+      <div id="tracks">
       </div>
       <div id="mixer">
-        <!-- <input type="range" orient="vertical" class="mixer">
-        <input type="range" orient="vertical" class="mixer">
-        <input type="range" orient="vertical" class="mixer">
-        <input type="range" orient="vertical" class="mixer"> -->
       </div>
       <div id="PresetBrowser" class="PresetBrowser">
         <div id="presets-data" style="display: none"></div>
@@ -917,8 +922,8 @@
               console.log("Deactivating track " + track.id);
             track.channel.mute = !e.target.checked;
           });
-          let trackDevicesElement = trackElement.querySelector("div[name='Devices']");
 
+          let trackDevicesElement = trackElement.querySelector("div[name='Devices']");
           track.devices.forEach(device => {
             let newDeviceElement = document.createElement("div");
             newDeviceElement.id = `${track.id}-${device.name}`;
@@ -944,6 +949,21 @@
           if (track.effects.length > 0) {
             track.effects[track.effects.length - 1].connect(track.channel);
           }
+
+          let trackClipsElement = trackElement.querySelector("div[name='Clips']");
+          track.clips.forEach(clip => {
+            let newClipElement = document.createElement("div");
+            newClipElement.id = `${track.id}-${clip.name}`;
+            newClipElement.setAttribute("name", clip.name);
+            newClipElement.setAttribute("title", clip.name);
+            newClipElement.setAttribute("data-template", "Clip");
+            let clipDuration = clip.endTime ? Tone.Time(Tone.Time(clip.endTime) - Tone.Time(clip.startTime)) : Tone.Time("32:0:0");
+            let bars = clipDuration.toBarsBeatsSixteenths().split(":")[0];
+            newClipElement.style.width = `${bars}em`;
+            trackClipsElement.appendChild(newClipElement);
+
+            applyTemplates();
+          });
         })
 
         initializeToggleButtons();
@@ -958,7 +978,7 @@
         document.addEventListener("StopNoteRequestEvent", (e) => stopNote(e));
 
         initializeTransport();
-        document.getElementById("tracks").style.opacity = 1;
+        document.getElementById("daw").style.opacity = 1;
         document.getElementById("loading").style.display = "none";
         console.log("Initialized");
       }

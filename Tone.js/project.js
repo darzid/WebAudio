@@ -86,6 +86,8 @@ class Track {
   get instruments() { return this._instruments; }
   get effects() { return this._effects; }
 
+  get clips() { return this._projectFileTrack.clips; }
+  
   get loopNotes() { return this._projectFileTrack.loop.notes; }
   set loopNotes(value) {
     this._projectFileTrack.loop.notes = value;

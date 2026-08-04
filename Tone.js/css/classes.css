@@ -59,9 +59,11 @@ input[type="checkbox"][name="enabled"]:checked {
   background-color: rgb(170, 170, 170);
 }
 
-.transport-bar { 
+.transport-bar {
   display: flex;
   flex-direction: row;
+  margin-top: 1em;
+  margin-left: 1em;
 
   #position {
     margin-left: 1em;
@@ -80,6 +82,7 @@ input[type="checkbox"][name="enabled"]:checked {
   border: 0.1em solid rgba(0, 0, 0, 0.8);
   flex-direction: row;
   height: 30vh;
+  overflow-x: auto;
 
   .MixerChannel {
     border: 0.1em solid rgba(20, 20, 20, 0.5);
@@ -94,6 +97,7 @@ input[type="checkbox"][name="enabled"]:checked {
     margin-left: 0.2em;
     margin-right: 0.2em;
     margin-bottom: 0.1em;
+
     label {
       padding-top: 0.5em;
     }
@@ -212,22 +216,38 @@ input[type="checkbox"][name="enabled"]:checked {
     }
   }
 
-  .TrackDevices {
-    flex-wrap: nowrap;
-    width: 100%;
-    overflow: auto;
-    display: flex;
-    background-color: rgba(100, 100, 100, 0.1);
-    background-image: linear-gradient(to bottom,
-        rgba(100, 100, 100, 0.1),
-        rgba(200, 175, 130, 0.2),
-        rgba(100, 100, 100, 0.1));
+  .track-details {
+    .TrackClips {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
 
-    border: 0.1em solid rgba(0, 0, 0, 0.2);
-    border-radius: 0.3em;
-    margin: 0em;
-    margin-bottom: auto;
-    padding: 0.1em;
+      .Clip {
+        border: 0.2em solid blue;
+        background-color: rgba(0, 100, 255, 0.5);
+        margin: 0.2em;
+        font-size: 0.6rem;
+      }
+    }
+
+    .TrackDevices {
+      flex-wrap: nowrap;
+      width: 100%;
+      overflow: auto;
+      display: flex;
+      background-color: rgba(100, 100, 100, 0.1);
+      background-image: linear-gradient(to bottom,
+          rgba(100, 100, 100, 0.1),
+          rgba(200, 175, 130, 0.2),
+          rgba(100, 100, 100, 0.1));
+
+      border: 0.1em solid rgba(0, 0, 0, 0.2);
+      border-radius: 0.3em;
+      margin: 0em;
+      margin-bottom: auto;
+      padding: 0.1em;
+    }
+
   }
 
   .track-header {
@@ -238,6 +258,8 @@ input[type="checkbox"][name="enabled"]:checked {
     margin: 0rem;
     padding: 0rem;
     width: 10rem;
+    max-width: 8rem;
+    overflow-x: auto;
   }
 }
 
