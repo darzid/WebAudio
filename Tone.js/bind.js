@@ -1,5 +1,5 @@
 function bind(element, object) {
-  console.log(`Bind ${element.getAttribute("name")} to object ${object.name}`, element, object);
+//  console.log(`Bind ${element.getAttribute("name")} to object ${object.name}`, element, object);
   let addEventHandler = true;
 
   let numberParameters = element.querySelectorAll(`:scope > .ModuleParameters > article.Parameter input`);
@@ -29,7 +29,7 @@ function bind(element, object) {
     bind(childModuleElement, object[childModuleElement.getAttribute("name")]);
   });
 
-  console.log(`Bind finished ${element.getAttribute("name")} to object ${object.name}`, element, object);
+//  console.log(`Bind finished ${element.getAttribute("name")} to object ${object.name}`, element, object);
 }
 
 function bindNumberInputElement(element, object, addEventHandler) {
@@ -39,7 +39,7 @@ function bindNumberInputElement(element, object, addEventHandler) {
   let isNumberProperty = (typeof parameterOwner[parameterName] === "number");
   let valueElement = element.parentElement.querySelector(`value[for="${element.name}"]`);
 
-  console.log(`Connecting input event for parameter "${namespace}"`, parameterOwner, parameterOwner[parameterName]);
+  //console.log(`Connecting input event for parameter "${namespace}"`, parameterOwner, parameterOwner[parameterName]);
 
   element.value = isNumberProperty ? parameterOwner[parameterName] : parameterOwner[parameterName].value;
   if (valueElement)

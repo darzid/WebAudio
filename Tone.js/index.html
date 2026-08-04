@@ -837,7 +837,6 @@
       function consoleError(...message) {
         console.error(message);
       }
-      applyTemplates();
 
       let output = document.getElementById("output");
       let presetBrowser = new PresetBrowser();
@@ -846,19 +845,24 @@
       let selectedTrackId = null;
 
       document.addEventListener("DOMContentLoaded", async (event) => { 
-        await createUI();
+       await createUI();
       });
       
       document.addEventListener("mousemove", async () => {
+        Tone.setContext(new Tone.Context({ latencyHint : "playback", lookAhead: 0.15 }))
         await Tone.start();
       });
 
         async function createUI() {
-          await presetBrowser.loadPresets();
+          //applyTemplates();
+          
           session = {
             project: null
           }
           await loadProject(session);
+          
+          await presetBrowser.loadPresets();
+          
           Tone.getTransport().bpm.value = session.project.tempo;
   
           let tracksElement = document.getElementById("tracks");

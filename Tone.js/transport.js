@@ -29,13 +29,32 @@ function initializeTransport() {
     playButton.disabled = true;
     stopButton.disabled = false;
 
-    session.project.start(Tone.now());
+    session.project.start("+0.1");
+    
+    /*var positionUpdateLoop = new Tone.Loop(function(time){
+    	//instead of scheduling visuals inside of here
+    	//schedule a deferred callback with Tone.Draw
+    
+    	Tone.Draw.schedule(function(){
+    		//this callback is invoked from a requestAnimationFrame
+    		//and will be invoked close to AudioContext time
+        let lastIndex = transport.position.indexOf(".");
+        position.innerText = transport.position.substring(0, lastIndex);
+    	}, time) //use AudioContext time of the event
+    }, "16n");
+    
+    positionUpdateLoop.start(0);*/
+    
     let positionTimer = transport.scheduleRepeat((time) => {
-      let lastIndex = transport.position.indexOf(".");
-      position.innerText = transport.position.substring(0, lastIndex);
-    }, "16n", "0");
-    transport.start();
-    transport.stop(Tone.Time(session.project.length));
+      window.requestAnimationFrame(() => {
+        let lastIndex = transport.position.indexOf(".");
+        position.innerText = transport.position.substring(0, lastIndex);
+      });
+      
+    }, "8n", "0");
+    
+    transport.start("+0.1");
+    transport.stop(Tone.Time(Tone.Time("+0.1") + Tone.Time(session.project.length)));
   }
 
   stopButton.addEventListener("click", async () => {
