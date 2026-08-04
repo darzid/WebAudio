@@ -21,7 +21,7 @@ class Project {
 
   constructor(projectFile) {
     this._projectFile = projectFile;
-    this._masterChannel = new Tone.Channel({channelCount: 2});
+    this._masterChannel = new Tone.Channel({ channelCount: 2 });
     this._masterChannel.receive("master", 0);
     this._masterChannel.toDestination();
 
@@ -47,7 +47,7 @@ class Track {
   _projectFileTrack;
   _channel;
   _devices = [];
-  _loopInstance;
+  _parts = [];
   _automationDefaults = {};
   _automations = [];
 
@@ -57,7 +57,7 @@ class Track {
     this._channel.send("master", 0);
     this._projectFileTrack.devices.forEach(projectFileDevice =>
       this.addDevice(Object.keys(projectFileDevice)[0], projectFileDevice[Object.keys(projectFileDevice)[0]]));
-    this._generateLoopInstance();
+    this._generateClipLoops();
     this._generateAutomationDefaults();
   }
 
@@ -121,22 +121,54 @@ class Track {
     return parameter;
   }
 
-  _generateLoopInstance() {
-    this._loopInstance = new Tone.Loop((time) =>
-      this._loopFunction(time), Tone.Time(this._projectFileTrack.loop.length));
-    //this._loopInstance.start(Tone.now() + Tone.Time(this._projectFileTrack.loop.startTime));
-    this._loopInstance.start(Tone.Time(this._projectFileTrack.loop.startTime));
-  }
+  _generateClipLoops() {
+    let clipIndex = 0;
+    let transport = Tone.getTransport();
+    this._projectFileTrack.clips.forEach(clip => {
+      let loopStartTime = Tone.Time(clip.startTime)
+      let loopEndTime = null;
+      if (clip.endTime)
+        loopEndTime = Tone.Time(clip.endTime);
+      else if (clipIndex < this._projectFileTrack.clips.length - 1)
+        loopEndTime = Tone.Time(this._projectFileTrack.clips[clipIndex + 1].startTime);
 
-  _loopFunction(time) {
-    //console.log(`Playing loop on ${this.name} at ${time}, now=${Tone.now()}`);
-    this._projectFileTrack.loop.notes.forEach(note => {
-      let noteTime = (note.timeOffset) ? time + (Tone.Time("16n") * note.timeOffset) : time + Tone.Time(note.time);
-      //console.log(`Playing note ${note.note} on ${this.name} at ${noteTime}, now=${Tone.now()}`);
-      this.instrument.triggerAttackRelease(
-        note.note, note.duration, noteTime, note.velocity / 127);
+      let loopDuration = Tone.Time(clip.length);
+      let clipDuration = loopEndTime ? (loopEndTime - loopStartTime) : null;
+
+      const part = new Tone.Part(((time, value) => this.instrument.triggerAttackRelease(value.note, value.duration, time, value.velocity)), clip.notes);
+      part.loopStart = Tone.Time("0:0:0");
+      part.loopEnd = loopDuration;
+
+      part.loop = true;
+      part.start(loopStartTime);
+      if (loopEndTime)
+        part.stop(loopEndTime);
+      
+      this._parts.push(part);
+
+      clipIndex++;
     });
   }
+
+  _playClip(time, clip) {
+  }
+
+  // _generateLoopInstance() {
+  //   this._loopInstance = new Tone.Loop((time) =>
+  //     this._loopFunction(time), Tone.Time(this._projectFileTrack.loop.length));
+  //   //this._loopInstance.start(Tone.now() + Tone.Time(this._projectFileTrack.loop.startTime));
+  //   this._loopInstance.start(Tone.Time(this._projectFileTrack.loop.startTime));
+  // }
+
+  // _loopFunction(time) {
+  //   //console.log(`Playing loop on ${this.name} at ${time}, now=${Tone.now()}`);
+  //   this._projectFileTrack.loop.notes.forEach(note => {
+  //     let noteTime = (note.timeOffset) ? time + (Tone.Time("16n") * note.timeOffset) : time + Tone.Time(note.time);
+  //     //console.log(`Playing note ${note.note} on ${this.name} at ${noteTime}, now=${Tone.now()}`);
+  //     this.instrument.triggerAttackRelease(
+  //       note.note, note.duration, noteTime, note.velocity / 127);
+  //   });
+  // }
 
   _generateAutomationDefaults() {
     let projectFileAutomations = this._projectFileTrack.automations;
