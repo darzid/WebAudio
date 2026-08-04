@@ -133,8 +133,22 @@ input[type="checkbox"][name="enabled"]:checked {
     width: 100%;
   }
 
+
+  .track-header {
+    /* display: flex; */
+    flex-direction: column;
+    background-color: rgba(120, 120, 120, 0.5);
+    height: auto;
+    margin: 0rem;
+    padding: 0rem;
+    min-width: 8rem;
+    max-width: 8rem;
+    width: 8rem;
+    overflow-x: auto;
+  }
+  
   .track-header>.title-bar>div {
-    width: 4rem;
+    min-width: 4rem;
     max-width: 4rem;
     text-align: left;
     white-space: nowrap;
@@ -146,8 +160,9 @@ input[type="checkbox"][name="enabled"]:checked {
     margin-top: 0.05em;
   }
 
-  .title-bar {
+  .track-header>.title-bar {
     vertical-align: middle;
+    width: 8rem;
 
     input[type="checkbox"][name="enabled"] {
       font-size: 0.5em;
@@ -196,6 +211,7 @@ input[type="checkbox"][name="enabled"]:checked {
       vertical-align: middle;
       margin-bottom: auto;
       height: 100%;
+      
     }
   }
 
@@ -206,7 +222,7 @@ input[type="checkbox"][name="enabled"]:checked {
     }
 
     input[type="range"] {
-      width: 7.5em;
+      min-width: 7.5em;
     }
 
     value {
@@ -217,16 +233,21 @@ input[type="checkbox"][name="enabled"]:checked {
   }
 
   .track-details {
+    width: 100%;
+    overflow: auto;
+      
     .TrackClips {
       display: flex;
-      flex-direction: row;
-      overflow-x: auto;
-
+      width: 100%;
+      overflow: auto;
+      flex-wrap: nowrap;
+      max-width: 100%;
       .Clip {
-        border: 0.2em solid blue;
-        background-color: rgba(0, 100, 255, 0.5);
-        margin: 0.2em;
-        font-size: 0.6rem;
+        border: 0.2em solid #3d7a70;
+        background-color: #5d9a90;
+        color: white;
+        margin: 0.1em;
+        font-size: 0.7rem;
       }
     }
 
@@ -250,17 +271,6 @@ input[type="checkbox"][name="enabled"]:checked {
 
   }
 
-  .track-header {
-    /* display: flex; */
-    flex-direction: column;
-    background-color: rgba(120, 120, 120, 0.5);
-    height: auto;
-    margin: 0rem;
-    padding: 0rem;
-    width: 10rem;
-    max-width: 8rem;
-    overflow-x: auto;
-  }
 }
 
 .Track>.title-bar {
