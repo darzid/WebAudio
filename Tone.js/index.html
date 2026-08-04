@@ -14,11 +14,11 @@
     <script src="http://unpkg.com/tone"></script>
     <script src="..\lib\template-expander\template-expander.js"></script>
     <script src=".\ui-components\toggle-button.js"></script>
+    <script src=".\recorder.js" type="module"></script>
+    <script src=".\preset-browser.js"></script>
     <script src=".\project.js"></script>
     <script src=".\bind.js"></script>
     <script src=".\transport.js"></script>
-    <script src=".\recorder.js" type="module"></script>
-    <script src=".\preset-browser.js"></script>
   </head>
 
   <body>
@@ -835,17 +835,15 @@
       applyTemplates();
 
       let output = document.getElementById("output");
+      let presetBrowser = new PresetBrowser();
       var presets;
       var session = null;
       let selectedTrackId = null;
 
       var isInitialized = false;
-      document.addEventListener("click", async () => {
+      document.addEventListener("mousemove", async () => {
         await initialize();
       });
-      // document.addEventListener("keydown", async () => {
-      //   await initialize();
-      // });
 
       async function initialize() {
         if (isInitialized == true)
@@ -858,13 +856,8 @@
         console.log("Tone lookahead: " + Tone.context.lookAhead);
         Tone.context.lookAhead = 0.3;
 
-        if (!presets) {
-          await loadPresets();
-          console.log(`Loaded presets to presets-data`, document.getElementById("presets-data"));
-        }
-        else {
-          console.warn("Already loaded presets");
-        }
+        await presetBrowser.loadPresets();
+        
 
         session = {
           project: null
@@ -936,7 +929,7 @@
             applyTemplates();
             let deviceElement = document.getElementById(newDeviceElement.id);
             bind(deviceElement, device);
-            deviceElement.querySelector(".browse-button").addEventListener("click", (e) => showPresetBrowser(device, deviceElement));
+            deviceElement.querySelector(".browse-button").addEventListener("click", (e) => presetBrowser.show(device, deviceElement));
           });
 
           let trackDevices = track.devices.filter(device => device.name != "LFO");
