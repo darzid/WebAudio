@@ -957,9 +957,15 @@
             newClipElement.setAttribute("name", clip.name);
             newClipElement.setAttribute("title", clip.name);
             newClipElement.setAttribute("data-template", "Clip");
-            let clipDuration = clip.endTime ? Tone.Time(Tone.Time(clip.endTime) - Tone.Time(clip.startTime)) : Tone.Time("32:0:0");
-            let bars = clipDuration.toBarsBeatsSixteenths().split(":")[0];
-            newClipElement.style.width = `${bars}em`;
+            if (clip.endTime) {
+              let clipDuration = Tone.Time(Tone.Time(clip.endTime) - Tone.Time(clip.startTime));
+              let bars = clipDuration.toBarsBeatsSixteenths().split(":")[0];
+              newClipElement.style.width = `${bars}em`;
+            }
+            else {
+              newClipElement.style.width = `stretch`;
+            }
+            
             trackClipsElement.appendChild(newClipElement);
 
             applyTemplates();

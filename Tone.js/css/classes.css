@@ -72,16 +72,18 @@ input[type="checkbox"][name="enabled"]:checked {
 }
 
 #tracks {
-  flex: 1 1 0;
+  flex: 2 1 0;
   flex-direction: column;
   margin: 0.5em;
+  overflow-y: auto;
+  height: stretch;
 }
 
 #mixer {
   background-color: rgba(100, 100, 100, 1);
   border: 0.1em solid rgba(0, 0, 0, 0.8);
   flex-direction: row;
-  height: 30vh;
+  min-height: 20%;
   overflow-x: auto;
 
   .MixerChannel {
@@ -105,7 +107,7 @@ input[type="checkbox"][name="enabled"]:checked {
     input[type="range"] {
       margin-top: 1em;
       margin-bottom: 1em;
-      height: 150px;
+      height: 30vmin;
     }
 
     value {
@@ -248,11 +250,12 @@ input[type="checkbox"][name="enabled"]:checked {
         color: white;
         margin: 0.1em;
         font-size: 0.7rem;
+        font-size: 100%;
       }
     }
 
     .TrackDevices {
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       width: 100%;
       overflow: auto;
       display: flex;
@@ -327,6 +330,7 @@ input[type="checkbox"][name="enabled"]:checked {
 
   input[name="enabled"] {
     float: right;
+    width: 2em;
   }
 }
 
