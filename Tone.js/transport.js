@@ -34,8 +34,8 @@ function initializeTransport() {
       let lastIndex = transport.position.indexOf(".");
       position.innerText = transport.position.substring(0, lastIndex);
     }, "16n", "0");
-    transport.start(Tone.now(), 0);
-    transport.stop(Tone.now() + Tone.Time(session.project.length));
+    transport.start();
+    transport.stop(Tone.Time(session.project.length));
   }
 
   stopButton.addEventListener("click", async () => {

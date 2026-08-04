@@ -856,13 +856,13 @@
         console.log("Initializing");
 
         isInitialized = true;
+        await presetBrowser.loadPresets();
         await Tone.start();
 
-        console.log("Tone lookahead: " + Tone.context.lookAhead);
-        Tone.context.lookAhead = 0.3;
+        //console.log("Tone lookahead: " + Tone.context.lookAhead);
+        //Tone.context.lookAhead = 2;
 
-        await presetBrowser.loadPresets();
-
+        
 
         session = {
           project: null
@@ -899,34 +899,42 @@
           let trackVolumeValueElement = trackElement.querySelector(".TrackChannel value[for='volume']");
           let trackFaderInputElement = trackFaderElement.querySelector("input");
           let trackFaderValueElement = trackFaderElement.querySelector("value");
-          trackVolumeInputElement.addEventListener("input", () => {
-            if (parseFloat(trackFaderInputElement.value) != parseFloat(trackVolumeInputElement.value)) {
-              trackFaderInputElement.value = trackVolumeInputElement.value;
-              trackFaderValueElement.innerHTML = trackFaderInputElement.value;
-            }
-          })
-
-          trackFaderInputElement.addEventListener("input", () => {
-            if (parseFloat(trackVolumeInputElement.value) != parseFloat(trackFaderInputElement.value)) {
-              trackVolumeInputElement.value = trackFaderInputElement.value;
-              track.channel.volume.value = parseFloat(trackFaderInputElement.value);
-              trackVolumeValueElement.innerHTML = trackFaderInputElement.value;
-              trackFaderValueElement.innerHTML = trackFaderInputElement.value;
+          let trackEnabledElement = trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']");
+          
+          document.addEventListener("TrackEnabledChanged", (e) => {
+            if (e.detail.track == track.id) {
+              if (e.detail.enabled != trackEnabledElement.checked)
+                trackEnabledElement.checked = e.detail.enabled;
+              if (e.detail.enabled && trackFaderInputElement.classList.contains("disabled"))
+                trackFaderInputElement.classList.remove("disabled");
+              else if (!e.detail.enabled && !trackFaderInputElement.classList.contains("disabled"))
+                trackFaderInputElement.classList.add("disabled");
             }
           });
           
-          var doubleTapTimer;
+          document.addEventListener("TrackVolumeChanged", (e) => {
+            if (e.detail.track == track.id) {
+              trackFaderInputElement.value = e.detail.volume;
+              trackFaderValueElement.innerHTML = e.detail.volume;
+              trackVolumeInputElement.value = e.detail.volume;
+              trackVolumeValueElement.innerHTML = e.detail.volume;
+            }
+          });
+          
+          trackVolumeInputElement.addEventListener("input", () => 
+            track.volume = parseFloat(trackVolumeInputElement.value)
+          );
+
+          trackFaderInputElement.addEventListener("input", () =>
+            track.volume = parseFloat(trackFaderInputElement.value)
+          );
+          
+          /*var doubleTapTimer;
           trackFaderInputElement.addEventListener("pointerdown", () => {
             if (doubleTapTimer) {
-              let trackEnabledElement = trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']");
-              trackEnabledElement.checked = !trackEnabledElement.checked;
-              var evnt = trackEnabledElement["onchange"];
-              if (evnt) {
-                evnt.call(trackEnabledElement, new Event("change"));
-                console.log("Fire checkbox changed")
-              }
-              track.channel.mute = !trackEnabledElement.checked;
-              trackFaderInputElement.classList.toggle("disabled");
+              track.enabled = !track.enabled;
+              clearTimeout(doubleTapTimer);
+              doubleTapTimer = null;
               return;
             }
             else {
@@ -939,14 +947,16 @@
               }, 500);
             }
           });
-
-          trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']").addEventListener("change", (e) => {
-            if (e.target.checked)
+*/
+          trackEnabledElement.addEventListener("change", (e) => {
+            if (track.enabled != e.target.checked)
+              track.enabled = e.target.checked;
+            /*if (e.target.checked)
               console.log("Activating track " + track.id);
             else
               console.log("Deactivating track " + track.id);
             track.channel.mute = !e.target.checked;
-            trackFaderInputElement.classList.toggle("disabled");
+            trackFaderInputElement.classList.toggle("disabled");*/
           });
 
           let trackDevicesElement = trackElement.querySelector("div[name='Devices']");

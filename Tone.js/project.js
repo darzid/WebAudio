@@ -73,14 +73,37 @@ class Track {
 
   get volume() { return this._channel.volume.value; }
   set volume(value) {
-    this._channel.volume = value;
+    if (value == this._channel.volume.value)
+      return;
+    this._channel.volume.value = value;
     this._projectFileTrack.volume = value;
+    document.dispatchEvent(
+      new CustomEvent("TrackVolumeChanged", 
+        { detail: 
+          { track: this.id, volume: value } }));
   }
 
   get pan() { return this._channel.pan; }
   set pan(value) {
-    this._channel.pan = value;
+    if (value == this._channel.pan.value)
+      return;
+    this._channel.pan.value = value;
     this._projectFileTrack.pan = value;
+    document.dispatchEvent(
+      new CustomEvent("TrackPanChanged", 
+      { detail: 
+        { track: this.id, pan: value } }));
+  }
+  
+  get enabled() { return !this._channel.mute; }
+  set enabled(value) { 
+    if (value == this.enabled) 
+      return;
+    this._channel.mute = !value; 
+    document.dispatchEvent(
+      new CustomEvent("TrackEnabledChanged", 
+      { detail: 
+        { track: this.id, enabled: this.enabled } }));
   }
 
   get channel() { return this._channel; }
