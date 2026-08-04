@@ -1,11 +1,12 @@
 {
   "name": "My Project",
   "tempo": 146,
+  "length": "48:0:0",
   "tracks": [
     {
       "id": "track1",
       "name": "Kick",
-      "volume": -5,
+      "volume": 0,
       "pan": 0,
       "devices": [
         {
@@ -15,6 +16,7 @@
               "detune": -1000,
               "pitchDecay": 0.05,
               "octaves": 8,
+              "volume": -5,
               "envelope": {
                 "attack": 0.001,
                 "decay": 1,
@@ -109,14 +111,14 @@
     {
       "id": "track2",
       "name": "Bassline",
-      "volume": -5,
+      "volume": 0,
       "pan": 0,
       "devices": [
         {
           "MonoSynth": {
             "type": "Instrument",
             "parameters": {
-              "volume": -2,
+              "volume": -7,
               "portamento": 0,
               "oscillator": {
                 "type": "sawtooth"
@@ -486,14 +488,14 @@
     {
       "id": "track3",
       "name": "ClosedHat",
-      "volume": -14,
+      "volume": 0,
       "pan": -0.1,
       "devices": [
         {
           "MetalSynth": {
             "type": "Instrument",
             "parameters": {
-              "volume": -4,
+              "volume": -18,
               "portamento": 100,
               "modulationIndex": 1,
               "octaves": 0,
@@ -571,14 +573,14 @@
     {
       "id": "track4",
       "name": "OpenHat",
-      "volume": -11,
+      "volume": 0,
       "pan": 0.1,
       "devices": [
         {
           "MetalSynth": {
             "type": "Instrument",
             "parameters": {
-              "volume": -4,
+              "volume": -15,
               "portamento": 100,
               "modulationIndex": 1,
               "octaves": 0,
@@ -638,13 +640,15 @@
     {
       "id": "track5",
       "name": "Lead",
-      "volume": -5,
+      "volume": 0,
       "pan": 0,
       "devices": [
         {
           "MonoSynth": {
             "type": "Instrument",
-            "parameters": {}
+            "parameters": {
+              "volume": -5
+            }
           }
         },
         {
@@ -678,13 +682,14 @@
     {
       "id": "track6",
       "name": "PsyLead",
-      "volume": -14,
+      "volume": 0,
       "pan": 0,
       "devices": [
         {
           "FMSynth": {
             "type": "Instrument",
             "parameters": {
+              "volume": -14,
               "harmonicity": 0.5,
               "modulationIndex": 1,
               "oscillator": {
@@ -813,13 +818,15 @@
     {
       "id": "track7",
       "name": "Synth",
-      "volume": -1,
+      "volume": 0,
       "pan": 0,
       "devices": [
         {
           "Synth": {
             "type": "Instrument",
-            "parameters": {}
+            "parameters": {
+              "volume": -1
+            }
           }
         },
         {
@@ -866,7 +873,7 @@
             }
           ],
           "startTime": "40:0:0",
-          "length": "0:2:0"
+          "length": "0:4:0"
         }
       ],
       "automations": []

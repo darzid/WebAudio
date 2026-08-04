@@ -9,7 +9,7 @@ function initializeTransport() {
   let recorder = null;
   let positionTimer = null;
   let transport = Tone.getTransport();
-
+  transport.on("stop", (time) => stop(time));
   recButton.addEventListener("click", () => {
     recorder = new Tone.Recorder();
     session.project.masterChannel.connect(recorder);
@@ -35,10 +35,14 @@ function initializeTransport() {
       position.innerText = transport.position.substring(0, lastIndex);
     }, "16n", "0");
     transport.start(Tone.now(), 0);
+    transport.stop(Tone.now() + Tone.Time(session.project.length));
   }
 
   stopButton.addEventListener("click", async () => {
     transport.stop();
+  });
+  
+  function stop(time) {
     transport.clear(positionTimer);
 
     if (recorder) {
@@ -48,5 +52,5 @@ function initializeTransport() {
     recButton.disabled = false;
     playButton.disabled = false;
     stopButton.disabled = true;
-  });
+  }
 }

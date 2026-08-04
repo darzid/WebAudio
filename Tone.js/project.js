@@ -34,7 +34,9 @@ class Project {
 
   get tempo() { return this._projectFile.tempo; }
   set tempo(value) { this._projectFile.tempo = value; }
-
+  
+  get length() { return this._projectFile.length; }
+  
   get masterChannel() { return this._masterChannel; }
   get tracks() { return this._tracks; }
 
