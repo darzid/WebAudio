@@ -292,13 +292,7 @@
         </template>
 
 
-        <template id="MixerTrack">
-          <div class="MixerChannel">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="-60" max="0" step="0.1" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
-          </div>
-        </template>
+
 
       </span>
 
@@ -776,19 +770,6 @@
 
       <span id="daw-templates">
 
-        <template id="TrackChannel">
-          <div class="TrackChannel ModuleParameters">
-            <div name="pan" data-template="TrackPan"></div>
-            <div name="volume" data-template="TrackVolume"></div>
-          </div>
-        </template>
-
-        <template id="Clip">
-          <article id="${item.id}" class="Clip">
-            <div class="title-bar">${item.name}</div>
-          </article>
-        </template>
-
         <template id="Track">
           <article id="${item.id}" class="Track">
             <div class="track-header">
@@ -809,6 +790,51 @@
           </article>
         </template>
 
+        <template id="TrackChannel">
+          <div class="TrackChannel ModuleParameters">
+            <div name="pan" data-template="TrackPan"></div>
+            <div name="volume" data-template="TrackVolume"></div>
+          </div>
+        </template>
+
+        <template id="Clip">
+          <article id="${item.id}" class="Clip">
+            <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
+            <div class="expander-content ClipNotes">
+            </div>
+          </article>
+        </template>
+        
+        <template id="ClipNote">
+          <article class="ClipNote">
+            <div class="ClipNoteRow">
+              <div class="ColumnLeft">
+                <div class="Row">
+                  <span class="time">t: ${item.time}</span>
+                  <span class="note ColumnRight">n: ${item.note}</span>
+                </div>
+                 <div class="Row">
+                  <span class="duration">d: ${item.duration}</span>
+                  <span class="velocity ColumnRight">v: ${item.velocity}</span>
+                </div>
+              </div>
+              <div class="VelocityColumn ColumnRight" title="Velocity">
+                <div class="VelocityBar" title="${item.velocity}"></div>
+              </div>
+            </div>
+            <div class="NoteLengthRow Row" title="Note length">
+              <div class="NoteLengthBar" title="${item.duration}"></div>
+            </div>
+          </article>
+        </template>
+        
+        <template id="MixerTrack">
+          <div class="MixerChannel">
+            <label for="${item.name}">${item.name}</label>
+            <input name="${item.name}" type="range" min="-60" max="0" step="0.1" value="${item.value}">
+            <value for="${item.name}">${item.value}</value>
+          </div>
+        </template>
       </span>
     </span>
 
@@ -849,6 +875,7 @@
       });
       
       document.addEventListener("mousemove", async () => {
+        //Tone.setContext( new Tone.Context( { context: new AudioContext( {sampleRate: 32000} ),latencyHint : "playback", lookAhead: 0.15  } ) )
         Tone.setContext(new Tone.Context({ latencyHint : "playback", lookAhead: 0.15 }))
         await Tone.start();
       });
@@ -973,8 +1000,43 @@
               }
               
               trackClipsElement.appendChild(newClipElement);
-  
               applyTemplates();
+              
+              let clipsElement = trackClipsElement.querySelectorAll(".Clip");
+              let clipElement = clipsElement[clipsElement.length - 1];
+              
+              let clipNotesElement = clipElement.querySelector(".ClipNotes");
+              let longestClipNoteDurationInMs = 0;
+              clip.notes.forEach(note => {
+                let noteDurationInMs = Tone.Time(note.duration).toMilliseconds();
+                if (noteDurationInMs > longestClipNoteDurationInMs)
+                  longestClipNoteDurationInMs = noteDurationInMs;
+              });
+              
+              clip.notes.forEach(note => {
+                let newClipNoteElement = document.createElement("div");
+                newClipNoteElement.setAttribute("time", note.time);
+                newClipNoteElement.setAttribute("note", note.note);
+                newClipNoteElement.setAttribute("duration", Tone.Time(note.duration).toNotation());
+                newClipNoteElement.setAttribute("velocity", Math.round(note.velocity * 127, 0));
+                newClipNoteElement.setAttribute("data-template", "ClipNote");
+                
+                
+                
+                console.log(`Velocity ${note.velocity}, height ${note.velocity * 100}%`);
+                
+                clipNotesElement.appendChild(newClipNoteElement);
+                
+                let clipNoteElement = applyTemplate(newClipNoteElement);
+                let velocityBarElement = clipNoteElement.querySelector(".VelocityBar");
+                velocityBarElement.style.height = `${note.velocity * 100}%`;
+                
+                let noteDurationInMs = Tone.Time(note.duration).toMilliseconds();
+                let noteLengthBarElement = clipNoteElement.querySelector(".NoteLengthBar");
+                noteLengthBarElement.style.width = `${noteDurationInMs / longestClipNoteDurationInMs * 100}%`;
+              });
+              
+              
             });
           })
   

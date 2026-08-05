@@ -162,6 +162,7 @@ class Track {
   _generateClipLoops() {
     let clipIndex = 0;
     let transport = Tone.getTransport();
+    
     this._projectFileTrack.clips.forEach(clip => {
       let loopStartTime = Tone.Time(clip.startTime)
       let loopEndTime = null;
