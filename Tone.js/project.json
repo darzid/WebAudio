@@ -692,6 +692,7 @@
               "volume": -14,
               "harmonicity": 0.5,
               "modulationIndex": 1,
+              "portamento": 0,
               "oscillator": {
                 "type": "fmsawtooth",
                 "modulationType": "sine",
@@ -788,7 +789,8 @@
             }
           ],
           "startTime": "12:0:0",
-          "length": "2:0:0"
+          "length": "2:0:0",
+          "endTime": "31:0:0"
         }
       ],
       "automations": [

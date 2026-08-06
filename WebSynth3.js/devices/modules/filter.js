@@ -35,7 +35,7 @@ class Filter extends DeviceModule {
       //consoleLog(`updated ControlVisibility for ${this._moduleClass} on track ${this.device.track.id} based on type ${type}`);
     }
     catch (error) {
-      consoleError("Error while updating control visibilty", error)
+      console.error("Error while updating control visibilty", error)
     }
   }
 

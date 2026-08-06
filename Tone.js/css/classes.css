@@ -13,7 +13,7 @@
 
 .Parameter>label {
   display: inline-block;
-  min-width: 8em;
+  min-width: 6em;
   margin-right: 0.5em;
 }
 
@@ -42,7 +42,7 @@ input[type="checkbox"][name="enabled"]:checked {
 }
 
 .toggle-button {
-  font-size: 1.6em;
+  /* font-size: 1.6em; */
   vertical-align: top;
 }
 
@@ -67,7 +67,7 @@ input[type="checkbox"][name="enabled"]:checked {
 
   #position {
     margin-left: 1em;
-    font-size: 1.5em;
+    /* font-size: 1.5em; */
   }
 }
 
@@ -109,8 +109,8 @@ input[type="checkbox"][name="enabled"]:checked {
       margin-bottom: 1em;
       height: 30vmin;
     }
-    
-    
+
+
 
     value {
       max-width: 4em;
@@ -135,8 +135,8 @@ input[type="checkbox"][name="enabled"]:checked {
   .track-name {
     display: inline-block;
     width: 100%;
+    font-size: larger;
   }
-
 
   .track-header {
     /* display: flex; */
@@ -145,12 +145,12 @@ input[type="checkbox"][name="enabled"]:checked {
     height: auto;
     margin: 0rem;
     padding: 0rem;
-    min-width: 8rem;
+    /* min-width: 8rem;
     max-width: 8rem;
-    width: 8rem;
-    overflow-x: auto;
+    width: 8rem; */
+    /* overflow-x: auto; */
   }
-  
+
   .track-header>.title-bar>div {
     min-width: 4rem;
     max-width: 4rem;
@@ -158,25 +158,47 @@ input[type="checkbox"][name="enabled"]:checked {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1.6em;
-    font-weight: bold;
+    font-weight: 300;
     vertical-align: top;
     margin-top: 0.05em;
   }
 
   .track-header>.title-bar {
     vertical-align: middle;
-    width: 8rem;
+    width: 100%;
 
-    input[type="checkbox"][name="enabled"] {
-      font-size: 0.5em;
-      height: 4em;
+    .custom-radio {
+      display: inline-block;
+      margin-right: 0.5em;
+      padding-top: 0pt;
+      padding-left: 4pt;
+    }
+
+    .custom-radio>input[type="radio"] {
+      display: none;
+    }
+
+    .custom-radio>.checkmark {
+      display: inline-block;
+      width: 1.2em;
+      height: 1.2em;
+      background-color: rgba(255, 0, 0, 0.1);
+      border: 0.1em solid #ccc;
+      border-radius: 0.1em;
+      margin-right: 0em;
+      cursor: pointer;
+    }
+
+    .custom-radio input:checked+.checkmark {
+      background-color: red;
+      box-shadow: 0.0em 0.0em 0.4em rgba(255, 0, 0, 1);
     }
 
     .custom-checkbox {
       /* display: inline-block; */
       float: right;
       margin-right: 0.5em;
+      height: 4em;
     }
 
     .custom-checkbox>input[type="checkbox"] {
@@ -187,7 +209,7 @@ input[type="checkbox"][name="enabled"]:checked {
       display: inline-block;
       width: 1.2em;
       height: 1.2em;
-      background-color: rgba(255, 200, 0, 0.2);
+      background-color: rgba(255, 165, 0, 0.2);
       border: 0.1em solid #ccc;
       border-radius: 0.1em;
       margin-right: 0em;
@@ -199,115 +221,145 @@ input[type="checkbox"][name="enabled"]:checked {
       box-shadow: 0.0em 0.0em 0.4em rgba(255, 165, 0, 1);
     }
 
-    input[type="radio"][name="arm-track"] {
+    /* input[type="radio"][name="arm-track"] {
       font-size: 0.5em;
       height: 4em;
       margin-left: 0em;
-      margin-top: 0.4em;
+      margin-top: 0em;
+      padding-top: 0em;
       margin-right: 0.1em;
     }
 
     input[type="radio"][name="arm-track"]:checked {
       accent-color: var(--device-btn-arm-checked-bg);
-    }
+    } */
 
     label {
       vertical-align: middle;
       margin-bottom: auto;
       height: 100%;
-      
+
     }
   }
 
   .TrackChannel {
-    label {
-      width: 4em;
-      min-width: 4em;
+    display: flex;
+    flex-direction: column;
+
+    .ModuleParameters {
+      height: auto;
+      vertical-align: top;
     }
 
-    input[type="range"] {
-      min-width: 7.5em;
-    }
+    .Parameter {
+      min-width: 30vmin;
+      width: 30vmin;
 
-    value {
-      max-width: 2em;
-      white-space: nowrap;
-      overflow: hidden;
+      label {
+        width: 3rem;
+        min-width: 3rem;
+      }
+
+      input[type="range"] {
+        width: stretch;
+      }
+
+      value {
+        width: 2.5em;
+        max-width: 2.5em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-align: left;
+        vertical-align: middle;
+        font-size: smaller;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+
     }
   }
 
   .track-details {
     width: 100%;
     overflow-x: auto;
-    overflow-y: none;
-    
+    overflow-y: hidden;
+
     .TrackClips {
       display: flex;
       width: 100%;
       overflow-x: auto;
-      overflow-y: none;
+      overflow-y: hidden;
       flex-wrap: nowrap;
       max-width: 100%;
-      
+
       .Clip {
-        border: 0.2em solid #3d7a70;
+        border: 0.1em solid #3d7a70;
         background-color: #5d9a90;
         color: white;
         margin: 0.1em;
-        font-size: 0.7rem;
-        font-size: 100%;
+        /* font-size: 0.7rem;
+        font-size: 100%; */
         height: min-content;
-        
+        box-shadow: 0.1em 0.1em 0.5em rgba(0, 0, 0, 0.4);
+
+
         .ClipNotes {
           display: flex;
           flex-direction: column;
           flex-wrap: wrap;
-          
+          padding-right: 0pt;
+          margin-right: 0pt;
+
           .ClipNote {
-            margin: 1pt;
-            margin-right: 1pt;
-            
-            border: 1px solid rgba(0,0,0,0.2);
+            margin-top: 1pt;
+            margin-left: 2pt;
+            margin-right: 2pt;
+
+            border: 1px solid rgba(0, 0, 0, 0.2);
             border-radius: 2pt;
-            background: rgba(0,0,0,0.1);
+            background: rgba(0, 0, 0, 0.1);
             height: max-content;
-            
             flex-direction: column;
             display: flex;
-            width: 100%;
-            
+            width: 96%;
+            /* height: 100%; */
+
             .ClipNoteRow {
               flex-direction: row;
               display: flex;
               width: 100%;
+              /* height: 100%; */
             }
-            
+
             .ColumnLeft {
               flex-direction: row;
               display: block;
               width: stretch;
+              height: 100%;
             }
-            
+
             .VelocityColumn {
               display: inline-block;
               float: right;
               width: 5px;
               height: 20px;
+              height2: 100%;
               border: 1px solid #80d0d0;
               background-color: #eee;
               position: relative;
               overflow: hidden;
-              
+
               .VelocityBar {
                 display: block;
                 position: absolute;
                 bottom: 0;
                 width: 100%;
                 height: 20%;
+
                 background-color: #4CAF50;
               }
             }
-            
+
             .NoteLengthRow {
               display: inline;
               height: auto;
@@ -317,13 +369,13 @@ input[type="checkbox"][name="enabled"]:checked {
               background-color: #eee;
               position: relative;
               overflow: hidden;
-              
+
               .note {
                 display: block;
                 position: absolute;
-                top2: 2px;
+                /* top2: 2px; */
               }
-              
+
               .NoteLengthBar {
                 display: block;
                 position: absolute;
@@ -333,25 +385,29 @@ input[type="checkbox"][name="enabled"]:checked {
                 background-color: #AF54C0;
               }
             }
-            
+
             .VisualNoteRow {
               display: block;
+              flex-direction: column;
               position: relative;
               overflow: hidden;
               left: 0;
-              width: 0%;
-              height: 12px;
+              width: 100%;
+              height: 25px;
               border: 1px solid #80d0d0;
               background-color: #6F1480;
-              
+              margin-right: 20pt;
+
               .note {
-                display: block;
+                display: inline-block;
                 position: absolute;
-                top2: 2px;
+                height: auto;
+                height: 100pt;
+                /* top2: 2px; */
               }
-              
+
               .VelocityBackground {
-                display: block;
+                /* display: block; */
                 position: absolute;
                 bottom: 0;
                 width: 100%;
@@ -366,7 +422,7 @@ input[type="checkbox"][name="enabled"]:checked {
 
     .TrackDevices {
       flex-wrap: wrap;
-      width: 100%;
+      width: stretch;
       overflow: auto;
       display: flex;
       background-color: rgba(100, 100, 100, 0.1);
@@ -419,10 +475,11 @@ input[type="checkbox"][name="enabled"]:checked {
   }
 
   .ModuleParameters {
-    padding-left: 0.4em;
+    /* padding-left: 0.4em; */
     padding-right: 0.4em;
   }
 }
+
 
 .Instrument,
 .Effect {
@@ -433,9 +490,11 @@ input[type="checkbox"][name="enabled"]:checked {
   background-image: linear-gradient(to bottom,
       rgba(100, 100, 100, 0.1),
       rgba(200, 200, 200, 0.6));
+  box-shadow: 0.1em 0.1em 0.5em rgba(0, 0, 0, 0.4);
+
 
   .toggle-button {
-    font-size: 1.4em;
+    /* font-size: 1.4em; */
   }
 
   input[name="enabled"] {
@@ -449,7 +508,7 @@ input[type="checkbox"][name="enabled"]:checked {
   margin: 0.05em;
 
   .toggle-button {
-    font-size: 1.3em;
+    /* font-size: 1.3em; */
   }
 }
 
@@ -458,7 +517,7 @@ input[type="checkbox"][name="enabled"]:checked {
   margin: 0.05em;
 
   .toggle-button {
-    font-size: 1.4em;
+    /* font-size: 1.4em; */
   }
 }
 

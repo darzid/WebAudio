@@ -9,10 +9,14 @@
     <link rel="stylesheet" href="css/input-range.css">
     <link rel="stylesheet" href="css/toggle-button.css">
     <link rel="stylesheet" href="css/classes.css">
-
-    <script src="//unpkg.com/systemjs@0.19.47/dist/system.js"></script>
-    <script src="http://unpkg.com/tone"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    
+    <!-- <script src="//unpkg.com/systemjs@0.19.47/dist/system.js"></script> -->
+    <script src="https://unpkg.com/tone"></script>
     <script src="..\lib\template-expander\template-expander.js"></script>
+    <script src="..\lib\web-audio\piano-roll.js"></script>
     <script src=".\ui-components\toggle-button.js"></script>
     <script src=".\recorder.js" type="module"></script>
     <script src=".\preset-browser.js"></script>
@@ -28,266 +32,266 @@
       <span id="datatype-templates">
         <template id="NormalRange">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="1" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="1" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="Positive">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="AudioRange">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="-1" max="1" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="-1" max="1" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="Decibels">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="-40" max="0" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="-40" max="0" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="Cents">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="-1200" max="1200" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="-1200" max="1200" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="Frequency">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="22050" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="22050" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="Time">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="TransportTime">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="Ticks">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="Degrees">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="360" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="360" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="Radians">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="6.28318530717959" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="6.28318530717959" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="Gain">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="1" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="1" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="Volume">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="-60" max="0" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="-60" max="0" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="Pan">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="-1" max="1" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="-1" max="1" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="ModulationRange">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="-1000" max="1000" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="-1000" max="1000" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="TrackVolume">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" title="${item.name}" type="range" min="-60" max="0" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" title="${item.name}" type="range" min="-60" max="0" step="0.01" value="${item.value}">
+            <value name="${item.name}" for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="TrackPan">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" title="${item.name}" type="range" min="-1" max="1" step="0.1" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" title="${item.name}" type="range" min="-1" max="1" step="0.1" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
 
         <template id="amplitude">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="1" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="1" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="octaves">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="8" step="1" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="8" step="1" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="outputRange">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="any" max="any" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="any" max="any" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="attack">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="2" step="0.001" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="2" step="0.001" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="decay">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="2" step="0.001" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="2" step="0.001" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="release">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="2" step="0.001" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="2" step="0.001" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="detune">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="-1200" max="1200" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="-1200" max="1200" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="phase">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="360" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="360" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="partialCount">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="32" step="1" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="32" step="1" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="Q">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="-20" max="20" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="-20" max="20" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="FilterDetune">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="-2400" max="2400" step="0.1" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="-2400" max="2400" step="0.1" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="FilterGain">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="-60" max="60" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="-60" max="60" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="knee">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0" max="40" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="40" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="ratio">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="1" max="20" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="1" max="20" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="attackNoise">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="0.1" max="20" step="0.01" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0.1" max="20" step="0.01" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
         <template id="maxPolyphony">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="1" max="20" step="1" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="1" max="20" step="1" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
           </article>
         </template>
 
@@ -300,7 +304,7 @@
       <span id="optionvalue-templates">
         <template id="OscillatorType">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
+            <label for="${item.id}">${item.name}</label>
             <select name="${item.name}" value="${item.value}">
               <option>sine</option>
               <option>square</option>
@@ -326,7 +330,7 @@
 
         <template id="EnvelopeCurve">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
+            <label for="${item.id}">${item.name}</label>
             <select name="${item.name}" value="${item.value}">
               <option>linear</option>
               <option>exponential</option>
@@ -341,7 +345,7 @@
 
         <template id="Rolloff">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
+            <label for="${item.id}">${item.name}</label>
             <select name="${item.name}" value="${item.value}">
               <option>-12</option>
               <option>-24</option>
@@ -353,7 +357,7 @@
 
         <template id="FilterType">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
+            <label for="${item.id}">${item.name}</label>
             <select name="${item.name}" value="${item.value}">
               <option>lowpass</option>
               <option>highpass</option>
@@ -369,7 +373,7 @@
 
         <template id="OversampleType">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
+            <label for="${item.id}">${item.name}</label>
             <select name="${item.name}" value="${item.value}">
               <option>none</option>
               <option>2x</option>
@@ -380,7 +384,7 @@
 
         <template id="NoiseType">
           <article class="Parameter">
-            <label for="${item.name}">${item.name}</label>
+            <label for="${item.id}">${item.name}</label>
             <select name="${item.name}" value="${item.value}">
               <option>pink</option>
               <option>white</option>
@@ -774,10 +778,14 @@
           <article id="${item.id}" class="Track">
             <div class="track-header">
               <div class="title-bar">
-                <input type="radio" id="arm-${item.name}" class="arm-track" name="arm-track" value="${item.id}">
+                <!-- <input type="radio" id="arm-${item.name}" class="arm-track" name="arm-track" value="${item.id}"> -->
+                <label for="arm-${item.name}" class="custom-radio">
+                  <input id="arm-${item.name}" type="radio" class="arm-track" name="arm-track" value="${item.id}">
+                  <span class="checkmark"></span>
+                </label>
                 <div class="track-name">${item.name}</div>
-                <label class="custom-checkbox">
-                  <input type="checkbox" name="enabled" checked>
+                <label for="${item.name}-enabled" class="custom-checkbox">
+                  <input id="${item.name}-enabled" type="checkbox" name="enabled" checked>
                   <span class="checkmark"></span>
                 </label>
               </div>
@@ -792,8 +800,8 @@
 
         <template id="TrackChannel">
           <div class="TrackChannel ModuleParameters">
-            <div name="pan" data-template="TrackPan"></div>
-            <div name="volume" data-template="TrackVolume"></div>
+            <div name="pan" data-template="TrackPan" value="0"></div>
+            <div name="volume" data-template="TrackVolume" value="0"></div>
           </div>
         </template>
 
@@ -804,7 +812,7 @@
             </div>
           </article>
         </template>
-        
+
         <template id="ClipNote">
           <article class="ClipNote">
             <!--
@@ -830,12 +838,12 @@
             </div>
           </article>
         </template>
-        
-        <template id="MixerTrack">
+
+        <template id="MixerChannel">
           <div class="MixerChannel">
-            <label for="${item.name}">${item.name}</label>
-            <input name="${item.name}" type="range" min="-60" max="0" step="0.1" value="${item.value}">
-            <value for="${item.name}">${item.value}</value>
+            <label for="${item.id}-input">${item.name}</label>
+            <input id="${item.id}-input" name="${item.name}" type="range" min="-60" max="0" step="0.1" value="${item.value}">
+            <value for="${item.id}-input">${item.value}</value>
           </div>
         </template>
       </span>
@@ -857,238 +865,249 @@
         <div id="presets-data" style="display: none"></div>
       </div>
     </div>
-    <script src="config.js"></script>
     <script>
-      function consoleLog(...message) {
-        console.log(message);
-      }
-
-      function consoleError(...message) {
-        console.error(message);
-      }
-
       let output = document.getElementById("output");
+      let pianoRoll = null;
       let presetBrowser = new PresetBrowser();
       var presets;
       var session = null;
       let selectedTrackId = null;
-
-      document.addEventListener("DOMContentLoaded", async (event) => { 
-       await createUI();
+      let toneInitialized = false;
+      document.addEventListener("DOMContentLoaded", async (event) => {
+        await createUI();
       });
-      
+
       document.addEventListener("mousemove", async () => {
-        //Tone.setContext( new Tone.Context( { context: new AudioContext( {sampleRate: 32000} ),latencyHint : "playback", lookAhead: 0.15  } ) )
-        Tone.setContext(new Tone.Context({ latencyHint : "playback", lookAhead: 0.15 }))
+        if (toneInitialized) return;
+        toneInitialized = true;
+
+        // Tone.setContext(
+        //   new Tone.Context(
+        //     {
+        //       context: new AudioContext({ sampleRate: 32000 }),
+        //       latencyHint: "playback",
+        //       lookAhead: 0.15
+        //     }));
+
+        // Tone.setContext(new Tone.Context({ latencyHint: "playback", lookAhead: 0.15 }))
         await Tone.start();
       });
 
-        async function createUI() {
-          //applyTemplates();
-          
-          session = {
-            project: null
-          }
-          await loadProject(session);
-          
-          await presetBrowser.loadPresets();
-          
-          Tone.getTransport().bpm.value = session.project.tempo;
-  
-          let tracksElement = document.getElementById("tracks");
-          let mixerElement = document.getElementById("mixer");
-  
-          session.project.tracks.forEach(track => {
-            let trackElement = document.createElement("div");
-            trackElement.id = track.id;
-            trackElement.setAttribute("name", track.name);
-            trackElement.setAttribute("data-template", "Track");
-            tracksElement.appendChild(trackElement);
-  
-            let trackFaderElement = document.createElement("div");
-            trackFaderElement.id = `${track.id}-fader`;
-            trackFaderElement.type = "range";
-            trackFaderElement.setAttribute("name", track.name);
-            trackFaderElement.setAttribute("value", track.channel.volume.value);
-            trackFaderElement.setAttribute("data-template", "MixerTrack");
-            mixerElement.appendChild(trackFaderElement);
-  
-            applyTemplates();
-  
-            trackElement = document.getElementById(track.id);
-            bind(trackElement.querySelector(".track-header"), track.channel);
-  
-            trackFaderElement = document.getElementById(`${track.id}-fader`);
-  
-            let trackVolumeInputElement = trackElement.querySelector(".TrackChannel input[name='volume']");
-            let trackVolumeValueElement = trackElement.querySelector(".TrackChannel value[for='volume']");
-            let trackFaderInputElement = trackFaderElement.querySelector("input");
-            let trackFaderValueElement = trackFaderElement.querySelector("value");
-            let trackEnabledElement = trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']");
-            
-            document.addEventListener("TrackEnabledChanged", (e) => {
-              if (e.detail.track == track.id) {
-                if (e.detail.enabled != trackEnabledElement.checked)
-                  trackEnabledElement.checked = e.detail.enabled;
-                if (e.detail.enabled && trackFaderInputElement.classList.contains("disabled"))
-                  trackFaderInputElement.classList.remove("disabled");
-                else if (!e.detail.enabled && !trackFaderInputElement.classList.contains("disabled"))
-                  trackFaderInputElement.classList.add("disabled");
-              }
-            });
-            
-            document.addEventListener("TrackVolumeChanged", (e) => {
-              if (e.detail.track == track.id) {
-                trackFaderInputElement.value = e.detail.volume;
-                trackFaderValueElement.innerHTML = e.detail.volume;
-                trackVolumeInputElement.value = e.detail.volume;
-                trackVolumeValueElement.innerHTML = e.detail.volume;
-              }
-            });
-            
-            trackVolumeInputElement.addEventListener("input", () => 
-              track.volume = parseFloat(trackVolumeInputElement.value)
-            );
-  
-            trackFaderInputElement.addEventListener("input", () =>
-              track.volume = parseFloat(trackFaderInputElement.value)
-            );
-            
-            trackEnabledElement.addEventListener("change", (e) => {
-              if (track.enabled != e.target.checked)
-                track.enabled = e.target.checked;
-            });
-  
-            let trackDevicesElement = trackElement.querySelector("div[name='Devices']");
-            track.devices.forEach(device => {
-              let newDeviceElement = document.createElement("div");
-              newDeviceElement.id = `${track.id}-${device.name}`;
-              newDeviceElement.setAttribute("name", device.name);
-              newDeviceElement.setAttribute("data-template", device.name);
-              trackDevicesElement.appendChild(newDeviceElement);
-  
-              applyTemplates();
-              let deviceElement = document.getElementById(newDeviceElement.id);
-              bind(deviceElement, device);
-              deviceElement.querySelector(".browse-button").addEventListener("click", (e) => presetBrowser.show(device, deviceElement));
-            });
-  
-            let trackDevices = track.devices.filter(device => device.name != "LFO");
-            let instrumentTarget = track.effects.length > 0 ? track.effects[0] : track.channel;
-            for (let instrumentIndex = 0; instrumentIndex < track.instruments.length; instrumentIndex++) {
-              track.instruments[instrumentIndex].connect(instrumentTarget);
-            }
-  
-            for (let effectIndex = 0; effectIndex < track.effects.length - 1; effectIndex++) {
-              track.effects[effectIndex].connect(track.effects[effectIndex + 1]);
-            }
-            if (track.effects.length > 0) {
-              track.effects[track.effects.length - 1].connect(track.channel);
-            }
-  
-            let trackClipsElement = trackElement.querySelector("div[name='Clips']");
-            track.clips.forEach(clip => {
-              let newClipElement = document.createElement("div");
-              newClipElement.id = `${track.id}-${clip.name}`;
-              newClipElement.setAttribute("name", clip.name);
-              newClipElement.setAttribute("title", clip.name);
-              newClipElement.setAttribute("data-template", "Clip");
-              if (clip.endTime) {
-                let clipDuration = Tone.Time(Tone.Time(clip.endTime) - Tone.Time(clip.startTime));
-                let bars = clipDuration.toBarsBeatsSixteenths().split(":")[0];
-                newClipElement.style.width = `${bars}em`;
-              }
-              else {
-                newClipElement.style.width = `stretch`;
-              }
-              
-              trackClipsElement.appendChild(newClipElement);
-              applyTemplates();
-              
-              let clipsElement = trackClipsElement.querySelectorAll(".Clip");
-              let clipElement = clipsElement[clipsElement.length - 1];
-              
-              let clipNotesElement = clipElement.querySelector(".ClipNotes");
-              let longestClipNoteDurationInMs = 0;
-              clip.notes.forEach(note => {
-                let noteDurationInMs = Tone.Time(note.duration).toMilliseconds();
-                if (noteDurationInMs > longestClipNoteDurationInMs)
-                  longestClipNoteDurationInMs = noteDurationInMs;
-              });
-              
-              clip.notes.forEach(note => {
-                let noteDurationText = Tone.Time(note.duration).toNotation();
-                if (noteDurationText.endsWith("n")) {
-                  noteDurationText = `1/${noteDurationText.substring(0,noteDurationText.length - 1)}`;
-                }
-                let newClipNoteElement = document.createElement("div");
-                newClipNoteElement.setAttribute("time", note.time);
-                newClipNoteElement.setAttribute("note", note.note);
-                newClipNoteElement.setAttribute("duration", noteDurationText);
-                newClipNoteElement.setAttribute("velocity", Math.round(note.velocity * 127, 0));
-                newClipNoteElement.setAttribute("data-template", "ClipNote");
-                
-                console.log(`Velocity ${note.velocity}, height ${note.velocity * 100}%`);
-                
-                clipNotesElement.appendChild(newClipNoteElement);
-                
-                
-                
-                let clipNoteElement = applyTemplate(newClipNoteElement);
-                
-                //let velocityBarElement = clipNoteElement.querySelector(".VelocityBar");
-                //velocityBarElement.style.height = `${note.velocity * 100}%`;
+      async function createUI() {
+        //applyTemplates();
 
-                let noteDurationInMs = Tone.Time(note.duration).toMilliseconds();
-                
-               // let noteLengthBarElement = clipNoteElement.querySelector(".NoteLengthBar");
-                //noteLengthBarElement.style.width = `${noteDurationInMs / longestClipNoteDurationInMs * 100}%`;
-                
-                let visualNoteElement = clipNoteElement.querySelector(".VisualNoteRow");
-                visualNoteElement.style.width = `${noteDurationInMs / longestClipNoteDurationInMs * 100}%`;
-                
-                let velocityBackgroundElement = clipNoteElement.querySelector(".VelocityBackground");
-                velocityBackgroundElement.style.height = `${note.velocity * 100}%`;
-                
-              });
-              
-              
-            });
-          })
-  
-          initializeToggleButtons();
-  
-          let armTrackInputs = document.querySelectorAll("input[type='radio'][name='arm-track']");
-          armTrackInputs[0].checked = true;
-          selectedTrackId = session.project.tracks[0].id;
-          armTrackInputs.forEach(armTrackInput =>
-            armTrackInput.addEventListener("change", () => selectedTrackId = armTrackInput.value));
-  
-          document.addEventListener("PlayNoteRequestEvent", (e) => playNote(e));
-          document.addEventListener("StopNoteRequestEvent", (e) => stopNote(e));
-  
-          initializeTransport();
-          document.getElementById("daw").style.opacity = 1;
-          document.getElementById("loading").style.display = "none";
-          console.log("Initialized");
+        session = {
+          project: null
         }
-        
-      function playNote(eventInfo) {
-        let track = session.project.tracks.find(track => track.id === selectedTrackId);
-        if (track.instruments.length == 0) return;
-        track.instruments.forEach(instrument => {
-          if (instrument.name == "NoiseSynth")
-            instrument.triggerAttack(Tone.now());
-          else
-            instrument.triggerAttack(eventInfo.detail.note, Tone.now())
-        });
+        await loadProject(session);
+
+        await presetBrowser.loadPresets();
+
+        Tone.getTransport().bpm.value = session.project.tempo;
+
+        let tracksElement = document.getElementById("tracks");
+        let mixerElement = document.getElementById("mixer");
+
+        session.project.tracks.forEach(track => {
+          let trackElement = document.createElement("div");
+          trackElement.id = track.id;
+          trackElement.setAttribute("name", track.name);
+          trackElement.setAttribute("data-template", "Track");
+          trackElement.setAttribute("value", track.volume);
+          tracksElement.appendChild(trackElement);
+
+          let trackFaderElement = document.createElement("div");
+          trackFaderElement.id = `${track.id}-fader`;
+          trackFaderElement.type = "range";
+          trackFaderElement.setAttribute("name", track.name);
+          trackFaderElement.setAttribute("value", track.volume);
+          trackFaderElement.setAttribute("data-template", "MixerChannel");
+          mixerElement.appendChild(trackFaderElement);
+
+          applyTemplates();
+
+          trackElement = document.getElementById(track.id);
+          bind(trackElement.querySelector(".track-header"), track.channel);
+
+          trackFaderElement = document.getElementById(`${track.id}-fader`);
+
+          let trackVolumeInputElement = trackElement.querySelector(".TrackChannel input[name='volume']");
+          let trackVolumeValueElement = trackElement.querySelector(`.TrackChannel value[name='volume']`);
+          let trackFaderInputElement = trackFaderElement.querySelector("input");
+          let trackFaderValueElement = trackFaderElement.querySelector("value");
+          trackFaderValueElement.innerHTML = trackFaderInputElement.value;
+          let trackEnabledElement = trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']");
+
+          document.addEventListener("TrackEnabledChanged", (e) => {
+            if (e.detail.track == track.id) {
+              if (e.detail.enabled != trackEnabledElement.checked)
+                trackEnabledElement.checked = e.detail.enabled;
+              if (e.detail.enabled && trackFaderInputElement.classList.contains("disabled"))
+                trackFaderInputElement.classList.remove("disabled");
+              else if (!e.detail.enabled && !trackFaderInputElement.classList.contains("disabled"))
+                trackFaderInputElement.classList.add("disabled");
+            }
+          });
+
+          document.addEventListener("TrackVolumeChanged", (e) => {
+            if (e.detail.track == track.id) {
+              trackFaderInputElement.value = e.detail.volume;
+              trackFaderValueElement.innerHTML = e.detail.volume;
+              trackVolumeInputElement.value = e.detail.volume;
+              trackVolumeValueElement.innerHTML = e.detail.volume;
+            }
+          });
+
+          trackVolumeInputElement.addEventListener("input", () =>
+            track.volume = parseFloat(trackVolumeInputElement.value)
+          );
+
+          trackFaderInputElement.addEventListener("input", () =>
+            track.volume = parseFloat(trackFaderInputElement.value)
+          );
+
+          trackEnabledElement.addEventListener("change", (e) => {
+            if (track.enabled != e.target.checked)
+              track.enabled = e.target.checked;
+          });
+
+          let trackDevicesElement = trackElement.querySelector("div[name='Devices']");
+          track.devices.forEach(device => {
+            let newDeviceElement = document.createElement("div");
+            newDeviceElement.id = `${track.id}-${device.name}`;
+            newDeviceElement.setAttribute("name", device.name);
+            newDeviceElement.setAttribute("data-template", device.name);
+            trackDevicesElement.appendChild(newDeviceElement);
+
+            applyTemplates();
+            let deviceElement = document.getElementById(newDeviceElement.id);
+            bind(deviceElement, device);
+            deviceElement.querySelector(".browse-button").addEventListener("click", (e) => presetBrowser.show(device, deviceElement));
+          });
+
+          let trackDevices = track.devices.filter(device => device.name != "LFO");
+          let instrumentTarget = track.effects.length > 0 ? track.effects[0] : track.channel;
+          for (let instrumentIndex = 0; instrumentIndex < track.instruments.length; instrumentIndex++) {
+            track.instruments[instrumentIndex].connect(instrumentTarget);
+          }
+
+          for (let effectIndex = 0; effectIndex < track.effects.length - 1; effectIndex++) {
+            track.effects[effectIndex].connect(track.effects[effectIndex + 1]);
+          }
+          if (track.effects.length > 0) {
+            track.effects[track.effects.length - 1].connect(track.channel);
+          }
+
+          let trackClipsElement = trackElement.querySelector("div[name='Clips']");
+          track.clips.forEach(clip => {
+            let newClipElement = document.createElement("div");
+            newClipElement.id = `${track.id}-${clip.name}`;
+            newClipElement.setAttribute("name", clip.name);
+            newClipElement.setAttribute("title", clip.name);
+            newClipElement.setAttribute("data-template", "Clip");
+            if (clip.endTime) {
+              let clipDuration = Tone.Time(Tone.Time(clip.endTime) - Tone.Time(clip.startTime));
+              let bars = clipDuration.toBarsBeatsSixteenths().split(":")[0];
+              newClipElement.style.width = `${bars}em`;
+            }
+            else {
+              newClipElement.style.width = `stretch`;
+            }
+
+            trackClipsElement.appendChild(newClipElement);
+            applyTemplates();
+
+            let clipsElement = trackClipsElement.querySelectorAll(".Clip");
+            let clipElement = clipsElement[clipsElement.length - 1];
+
+            let clipNotesElement = clipElement.querySelector(".ClipNotes");
+            let longestClipNoteDurationInMs = 0;
+            clip.notes.forEach(note => {
+              let noteDurationInMs = Tone.Time(note.duration).toMilliseconds();
+              if (noteDurationInMs > longestClipNoteDurationInMs)
+                longestClipNoteDurationInMs = noteDurationInMs;
+            });
+
+            clip.notes.forEach(note => {
+              let noteDurationText = Tone.Time(note.duration).toNotation();
+              if (noteDurationText.endsWith("n")) {
+                noteDurationText = `1/${noteDurationText.substring(0, noteDurationText.length - 1)}`;
+              }
+              let newClipNoteElement = document.createElement("div");
+              newClipNoteElement.id = `${track.id}-${clip.name}-${clip.notes.indexOf(note)}`;
+              newClipNoteElement.setAttribute("time", note.time);
+              newClipNoteElement.setAttribute("note", note.note);
+              newClipNoteElement.setAttribute("duration", noteDurationText);
+              newClipNoteElement.setAttribute("velocity", Math.round(note.velocity * 127, 0));
+              newClipNoteElement.setAttribute("data-template", "ClipNote");
+
+              //console.log(`Velocity ${note.velocity}, height ${note.velocity * 100}%`);
+
+              clipNotesElement.appendChild(newClipNoteElement);
+
+
+
+              let clipNoteElement = applyTemplate(newClipNoteElement);
+
+              //let velocityBarElement = clipNoteElement.querySelector(".VelocityBar");
+              //velocityBarElement.style.height = `${note.velocity * 100}%`;
+
+              let noteDurationInMs = Tone.Time(note.duration).toMilliseconds();
+
+              // let noteLengthBarElement = clipNoteElement.querySelector(".NoteLengthBar");
+              //noteLengthBarElement.style.width = `${noteDurationInMs / longestClipNoteDurationInMs * 100}%`;
+
+              let visualNoteElement = clipNoteElement.querySelector(".VisualNoteRow");
+              visualNoteElement.style.width = `${noteDurationInMs / longestClipNoteDurationInMs * 100}%`;
+
+              let velocityBackgroundElement = clipNoteElement.querySelector(".VelocityBackground");
+              velocityBackgroundElement.style.height = `${note.velocity * 100}%`;
+
+            });
+
+
+          });
+        })
+
+        initializeToggleButtons();
+
+        let armTrackInputs = document.querySelectorAll("input[type='radio'][name='arm-track']");
+        armTrackInputs[0].checked = true;
+        selectedTrackId = session.project.tracks[0].id;
+        armTrackInputs.forEach(armTrackInput =>
+          armTrackInput.addEventListener("change", () => selectedTrackId = armTrackInput.value));
+
+        initializeTransport();
+
+        pianoRoll = new PianoRoll();
+        pianoRoll.init();
+
+        document.addEventListener("PlayNoteRequestEvent", (eventInfo) => playNote(eventInfo));
+        document.addEventListener("StopNoteRequestEvent", (eventInfo) => stopNote(eventInfo));
+
+        function playNote(eventInfo) {
+          let track = session.project.tracks.find(track => track.id === selectedTrackId);
+          if (track.instruments.length == 0) return;
+          track.instruments.forEach(instrument => {
+            if (instrument.name == "NoiseSynth")
+              instrument.triggerAttack(Tone.now());
+            else
+              instrument.triggerAttack(eventInfo.detail.note, Tone.now())
+          });
+        }
+
+        function stopNote(eventInfo) {
+          let track = session.project.tracks.find(track => track.id === selectedTrackId);
+          if (track.instruments.length == 0) return;
+          track.instruments.forEach(instrument => instrument.triggerRelease(Tone.now()));
+        }
+
+
+        document.getElementById("daw").style.opacity = 1;
+        document.getElementById("loading").style.display = "none";
+        console.log("Initialized");
       }
 
-      function stopNote(eventInfo) {
-        let track = session.project.tracks.find(track => track.id === selectedTrackId);
-        if (track.instruments.length == 0) return;
-        track.instruments.forEach(instrument => instrument.triggerRelease(Tone.now()));
-      }
     </script>
   </body>
 

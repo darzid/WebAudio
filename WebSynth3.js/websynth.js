@@ -9,12 +9,6 @@ function consoleLog(message, args) {
   }
 }
 
-function consoleError(message, args) {
-  //if (logging) {
-    console.error(message, args);
- // }
-}
-
 function consoleWarn(message, args) {
   if (logging) {
     console.warn(message, args);
@@ -43,7 +37,7 @@ function initialize() {
 function toggleNextSiblingVisibility(element) {
   let nextElement = element.nextElementSibling;
   if (!nextElement) {
-    consoleError("No sibling found for element", element)
+    console.error("No sibling found for element", element)
   }
   if (nextElement.style.display != "none") {
     nextElement.dataset.previousDisplay = nextElement.style.display;

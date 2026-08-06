@@ -50,7 +50,7 @@ class LevelMeter {
 
   update() {
     if (!this.isVisible()) {
-      // consoleLog("Skipping collapsed meter", this.meterCanvasElement);
+      // console.log("Skipping collapsed meter", this.meterCanvasElement);
       return;
     }
 
@@ -88,7 +88,7 @@ class LevelMeter {
     if (this.meterCanvasElement.offsetParent != null)
       return true;
     else {
-      //consoleLog("not visible", this.meterCanvasElement)
+      //console.log("not visible", this.meterCanvasElement)
       return false;
     }
   }
