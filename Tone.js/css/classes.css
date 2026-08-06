@@ -310,19 +310,52 @@ input[type="checkbox"][name="enabled"]:checked {
             
             .NoteLengthRow {
               display: inline;
-              height: 5px;
+              height: auto;
               width: 95%;
+              height: 12px;
               border: 1px solid #80d0d0;
               background-color: #eee;
               position: relative;
               overflow: hidden;
+              
+              .note {
+                display: block;
+                position: absolute;
+                top2: 2px;
+              }
               
               .NoteLengthBar {
                 display: block;
                 position: absolute;
                 left: 0;
                 width: 0%;
-                height: 5px;
+                height: 100%;
+                background-color: #AF54C0;
+              }
+            }
+            
+            .VisualNoteRow {
+              display: block;
+              position: relative;
+              overflow: hidden;
+              left: 0;
+              width: 0%;
+              height: 12px;
+              border: 1px solid #80d0d0;
+              background-color: #6F1480;
+              
+              .note {
+                display: block;
+                position: absolute;
+                top2: 2px;
+              }
+              
+              .VelocityBackground {
+                display: block;
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                height: 0%;
                 background-color: #AF54C0;
               }
             }

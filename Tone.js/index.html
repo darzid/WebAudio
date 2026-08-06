@@ -807,6 +807,7 @@
         
         <template id="ClipNote">
           <article class="ClipNote">
+            <!--
             <div class="ClipNoteRow">
               <div class="ColumnLeft">
                 <div class="Row">
@@ -818,12 +819,14 @@
                   <span class="velocity ColumnRight">v: ${item.velocity}</span>
                 </div>
               </div>
-              <div class="VelocityColumn ColumnRight" title="Velocity">
-                <div class="VelocityBar" title="${item.velocity}"></div>
-              </div>
             </div>
-            <div class="NoteLengthRow Row" title="Note length">
-              <div class="NoteLengthBar" title="${item.duration}"></div>
+            -->
+            <div class="Row">
+              <span class="time">t: ${item.time}</span>
+            </div>
+            <div class="VisualNoteRow Row" title="${item.velocity} ${item.duration}">
+              <div class="VelocityBackground" title="${item.velocity}"></div>
+              <div class="note">${item.note} ${item.duration}</div>
             </div>
           </article>
         </template>
@@ -1014,26 +1017,39 @@
               });
               
               clip.notes.forEach(note => {
+                let noteDurationText = Tone.Time(note.duration).toNotation();
+                if (noteDurationText.endsWith("n")) {
+                  noteDurationText = `1/${noteDurationText.substring(0,noteDurationText.length - 1)}`;
+                }
                 let newClipNoteElement = document.createElement("div");
                 newClipNoteElement.setAttribute("time", note.time);
                 newClipNoteElement.setAttribute("note", note.note);
-                newClipNoteElement.setAttribute("duration", Tone.Time(note.duration).toNotation());
+                newClipNoteElement.setAttribute("duration", noteDurationText);
                 newClipNoteElement.setAttribute("velocity", Math.round(note.velocity * 127, 0));
                 newClipNoteElement.setAttribute("data-template", "ClipNote");
-                
-                
                 
                 console.log(`Velocity ${note.velocity}, height ${note.velocity * 100}%`);
                 
                 clipNotesElement.appendChild(newClipNoteElement);
                 
-                let clipNoteElement = applyTemplate(newClipNoteElement);
-                let velocityBarElement = clipNoteElement.querySelector(".VelocityBar");
-                velocityBarElement.style.height = `${note.velocity * 100}%`;
                 
+                
+                let clipNoteElement = applyTemplate(newClipNoteElement);
+                
+                //let velocityBarElement = clipNoteElement.querySelector(".VelocityBar");
+                //velocityBarElement.style.height = `${note.velocity * 100}%`;
+
                 let noteDurationInMs = Tone.Time(note.duration).toMilliseconds();
-                let noteLengthBarElement = clipNoteElement.querySelector(".NoteLengthBar");
-                noteLengthBarElement.style.width = `${noteDurationInMs / longestClipNoteDurationInMs * 100}%`;
+                
+               // let noteLengthBarElement = clipNoteElement.querySelector(".NoteLengthBar");
+                //noteLengthBarElement.style.width = `${noteDurationInMs / longestClipNoteDurationInMs * 100}%`;
+                
+                let visualNoteElement = clipNoteElement.querySelector(".VisualNoteRow");
+                visualNoteElement.style.width = `${noteDurationInMs / longestClipNoteDurationInMs * 100}%`;
+                
+                let velocityBackgroundElement = clipNoteElement.querySelector(".VelocityBackground");
+                velocityBackgroundElement.style.height = `${note.velocity * 100}%`;
+                
               });
               
               
