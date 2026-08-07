@@ -9,11 +9,11 @@
     background-color: rgb(170, 170, 220);
   }
   #mixer {
-    min-height: 20%;
+    min-height2: 20%;
     
     .MixerChannel {
       input[type="range"] {
-        height: 30vmin;
+        height2: 30vmin;
       }
     
      /** input[type=range]::-webkit-slider-thumb {

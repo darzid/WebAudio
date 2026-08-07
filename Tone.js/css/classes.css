@@ -4,6 +4,10 @@
   --device-btn-enabled-checked-shadow: rgba(190, 140, 50, 0.8);
 }
 
+.Track {
+  flex-direction: row;
+}
+
 .Clip,
 .Track .Clip {
     display: none;
@@ -11,7 +15,7 @@
 
 #toggle-clips:checked ~ .Clip,
 #toggle-clips:checked ~ .Track .Clip {
-  display: flex;
+  display: inline-block;
 }
 
 .Track .Effect,
@@ -25,7 +29,8 @@
 #toggle-devices:checked~.Effect,
 #toggle-devices:checked ~ .Track .Instrument,
 #toggle-devices:checked ~ .Track .Effect {
-  display: flex;
+  display: block;
+  width: 100%;
 }
 
 .title-bar>label {
@@ -134,8 +139,14 @@ input[type="radio"] {
     input[type="range"] {
       margin-top: 0pt;
       margin-bottom: 0pt;
+      height2: 200px;
     }
 
+    input[type="range"]::-webkit-slider-runnable-track {
+      height2: 200x;
+    }
+
+  
     value {
       max-width: 4em;
       margin-bottom: 0.2em;

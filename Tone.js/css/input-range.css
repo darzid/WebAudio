@@ -59,6 +59,7 @@
 
   input[type=range] {
     width: 10px;
+    height2: 10px;
     /* margin: 13.05px 0; */
     margin-left: 20px;
     margin-right: 20px;
@@ -80,7 +81,7 @@
     background: rgba(40, 120, 40, 0.5);
     border: 2.2px solid #010101;
     border-radius: 3.2px;
-    height: 100%;
+    height2: 80%;
     width: 9.9px;
     cursor: pointer;
   }
@@ -90,8 +91,6 @@
     height: 40px;
 
     margin-left: -7.25px;
-    height: 40px;
-    width: 20px;
     background: #5d9a90;
     border: 1px solid #1d5a50;
     border-radius: 2px;
@@ -109,13 +108,13 @@
     border: 2.2px solid #010101;
     border-radius: 3.2px;
     width: 100%;
-    height: 9.9px;
+    height5: 9.9px;
     cursor: pointer;
   }
 
   input[type=range]::-moz-range-thumb {
     width: 50px;
-    height: 36px;
+    height3: 36px;
     /* background: #3e9ec4; */
     border: 3.2px solid #0bb0ff;
     border-radius: 5px;
@@ -128,13 +127,13 @@
     border-width: 25.65px 0;
     color: transparent;
     width: 100%;
-    height: 9.9px;
+    height2: 9.9px;
     cursor: pointer;
   }
 
   input[type=range]::-ms-thumb {
     width: 50px;
-    height: 36px;
+    height22: 36px;
     background: #3e9ec4;
     border: 3.2px solid #0bb0ff;
     border-radius: 5px;
@@ -143,21 +142,6 @@
     /*Needed to keep the Edge thumb centred*/
   }
 
-  /* input[type=range]:focus::-ms-fill-lower {
-    background: rgba(200, 100, 100, 0.5);
-  }
-
-  input[type=range]:focus::-ms-fill-upper {
-    background: green;
-  }
-
-  input[type="range"]::-moz-range-progress {
-    background-color: green;
-  }
-
-  input[type="range"]::-moz-range-track {
-    background-color: yellow;
-  } */
 
   input[type="range"]::-moz-range-progress {
     background-color: var(--fader-bg-progress);
@@ -178,222 +162,3 @@
   }
 }
 
-/* @media screen and (-webkit-min-device-pixel-ratio:0) {
-    input[type='range'] {
-      overflow: hidden;
-      -webkit-appearance: none;
-
-      background-color: green;
-
-      writing-mode: vertical-lr;
-      direction: rtl;
-      appearance: slider-vertical;
-
-      width: 20px;
-      vertical-align: bottom;
-      margin-left: 20px;
-    }
-
-    input[type=range].mixer::-webkit-slider-thumb {
-      margin-left: -4px;
-      width: 20px;
-      height: 50px;
-      background: yellow;
-      border: 1px solid #0bb0ff;
-      border-radius: 0px;
-      cursor: pointer;
-      -webkit-appearance: none;
-    }
-
-    input[type='range']::-webkit-slider-runnable-track {
-      -webkit-appearance: none;
-
-      height: 10px;
-      width: 10px;
-      color: yellow;
-      background-color: rgba(0, 255, 0, 0.5);
-
-      border: 1px solid #010101;
-      border-radius: 0px;
-    }
-
-    input[type='range']::-webkit-slider-thumb {
-      width: 10px;
-      height: 40px;
-
-      -webkit-appearance: none;
-      cursor: ew-resize;
-      background: green;
-      color: yellow;
-
-      border: 2px solid #0bb0ff;
-      border-radius: 2px;
-      cursor: pointer;
-    }
-
-  }
-
-  input[type=range]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    background: yellow;
-    color: yellow;
-    border: 0px solid #0bb0ff;
-    border-radius: 20px;
-    cursor: pointer;
-  }
-
-  input[type="range"]::-moz-range-progress {
-    background-color: yellow;
-  }
-
-  input[type="range"]::-moz-range-track {
-    background-color: yellow;
-  } */
-
-/* input[type="range"]::-ms-fill-lower {
-    background-color: var(--fader-bg-progress);
-  }
-
-  input[type="range"]::-ms-fill-upper {
-    background-color: var(--fader-bg-off);
-  } */
-
-
-/* input[type=range].mixer {
-    writing-mode: vertical-lr;
-    direction: rtl;
-    appearance: slider-vertical;
-    width: 10px;
-    vertical-align: bottom;
-  }
-
-  @media screen and (-webkit-min-device-pixel-ratio:0) {
-    input[type='range'] {
-      overflow: hidden;
-      width: 100px;
-      -webkit-appearance: none;
-      background-color: var(--fader-bg-track);
-    }
-
-    input[type='range']::-webkit-slider-runnable-track {
-      height: 10px;
-      -webkit-appearance: none;
-      color: #53bba4;
-      margin-top: -1px;
-    }
-
-    input[type='range']::-webkit-slider-thumb {
-      width: 10px;
-      -webkit-appearance: none;
-      height: 10px;
-      cursor: ew-resize;
-      background: var(--fader-fill);
-      box-shadow: -80px 0 0 80px var(--fader-shadow);
-    }
-  }
-
-  input[type='range'] {
-    overflow: hidden;
-    width: 20px;
-    background-color: var(--fader-bg-track);
-  }
-
-  input[type=range].mixer {
-    height: 100%;
-    width: 20px;
-    margin-left: 20px;
-    background-color: transparent;
-    -webkit-appearance: none;
-  }
-
-  input[type=range].mixer:focus {
-    outline: none;
-  }
-
-  input[type=range].mixer::-webkit-slider-runnable-track {
-    background: silver;
-    -webkit-appearance: none;
-    border: 2.2px solid #010101;
-    border-radius: 3.2px;
-    width: 10%;
-    cursor: pointer;
-  }
-
-  input[type=range].mixer::-webkit-slider-thumb {
-    margin-left: -7px;
-    width: 20px;
-    height: 50px;
-    background: #3e9ec4;
-    border: 2px solid #0bb0ff;
-    border-radius: 2px;
-    cursor: pointer;
-    -webkit-appearance: none;
-  }
-
-  input[type=range].mixer:focus::-webkit-slider-runnable-track {
-    background: white;
-  }
-
-  input[type=range].mixer::-moz-range-track {
-    background: red;
-    border: 2.2px solid #010101;
-    border-radius: 3.2px;
-    width: 100%;
-    height: 9.9px;
-    cursor: pointer;
-  }
-
-  input[type=range].mixer::-moz-range-thumb {
-    width: 30px;
-    height: 50px;
-    background: #3e9ec4;
-    border: 3.2px solid #0bb0ff;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  input[type=range].mixer::-ms-track {
-    background: transparent;
-    border-color: transparent;
-    border-width: 25.65px 0;
-    color: transparent;
-    width: 100%;
-    height: 9.9px;
-    cursor: pointer;
-  }
-
-  input[type=range].mixer::-ms-thumb {
-    width: 50px;
-    height: 36px;
-    background: #3e9ec4;
-    border: 3.2px solid #0bb0ff;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 0px;
-  }
-
-  input[type="range"]::-moz-range-progress {
-    background-color: purple;
-  }
-
-  input[type="range"]::-moz-range-track {
-    background-color: blue;
-  }
-
-  input[type=range].mixer::-ms-fill-lower {
-    background: red;
-  }
-
-  input[type=range].mixer::-ms-fill-upper {
-    background: blue;
-  }
-
-  @supports (-ms-ime-align:auto) {
-
-    input[type=range].mixer {
-      margin: 0;
-    }
-  } 
-
-}*/

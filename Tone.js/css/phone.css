@@ -12,11 +12,18 @@
   }
   
   #mixer {
-    min-height: 20%;
+    min-height2: 10%;
   }
   
-  #mixer .MixerChannel > input[type="range"] {
-    height: 35vmin;
+  #mixer input[type="range"] {
+    height: 40vmin;
+  }
+  
+
+  
+  #mixer input[type=range]::-webkit-slider-thumb {
+    width: 20px;
+    height: 40px;
   }
   
   .track-header>.title-bar>div {
@@ -49,24 +56,24 @@
         margin-top: 0pt;
       }
       
-    /*
+    
       input[type=range]::-webkit-slider-thumb {
         width: 20px;
-        height: 40px;
+        height2: 40px;
       }
       
       input[type=range]::-moz-range-thumb {
         width: 50px;
-        height: 30px;
+        height2: 30px;
       }
-      */
+      
       value {
         width2: 2em;
         max-width: 2em;
         
       }
     }
-  }
+  
   .Instrument,
   .Effect,
   .Source,
@@ -91,12 +98,23 @@
   }
   #mixer {
     min-height: 10%;
+    height: 10%;
   }
   
-  #mixer .MixerChannel > input[type="range"] {
-    height: 10vmin;
+  #mixer input[type="range"] {
+    height: 3vmin;
+    min-height: 3vmin;
   }
   
+  #mixer  input[type="range"] {
+    height2: 5vmin;
+  }
+  
+
+  input[type=range]::-webkit-slider-thumb {
+        width: 20px;
+        height2: 40px;
+  }
   .track-header>.title-bar>div {
     min-width: 3rem;
     max-width: 3rem;
@@ -121,19 +139,27 @@
       
       input[type="range"] {
         width: auto;
+        height2: 30vmax;
+        height2: 200px;
       }
+      /*
+        #mixer .MixerChannel > input[type="range"] {
+    height2: 35vmin;
+  }
   
       input[type="range"]::-moz-range-thumb {
         width: 50px;
-        height: 36px;
+        height2: 16px;
       }
       
       value {
         width2: 2em;
         max-width: 2em;
-        
       }
-    }
+    }*/
   }
 }
 }
+}
+
+
