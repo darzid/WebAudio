@@ -26,19 +26,7 @@ option {
   font-style: normal;
 }
 
-@media (orientation: landscape) {
-  body {
-    background-color: lightblue;
-    /* font-size: 10px; */
-  }
-}
 
-@media (orientation: portrait) {
-  body {
-    background-color: red;
-    font-size: 14px;
-  }
-}
 
 
 h1,

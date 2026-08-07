@@ -48,7 +48,14 @@ function initializeTransport() {
     let positionTimer = transport.scheduleRepeat((time) => {
       window.requestAnimationFrame(() => {
         let lastIndex = transport.position.indexOf(".");
-        position.innerText = transport.position.substring(0, lastIndex);
+        let shortPos = transport.position.substring(0, lastIndex);
+        let shortPosParts = shortPos.split(":");
+        let bars = parseInt(shortPosParts[0]) + 1;
+        let beats = parseInt(shortPosParts[1]) + 1;
+        let sixts = parseInt(shortPosParts[2]) + 1;
+        
+        position.innerText = `${bars}:${beats}:${sixts}`;
+        
       });
       
     }, "8n", "0");

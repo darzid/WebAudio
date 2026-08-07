@@ -1,0 +1,55 @@
+@media (orientation: landscape) {
+    @media (min-height: 800px) {
+  body {
+    background-color: lightblue;
+    /* font-size: 10px; */
+  }
+  
+  #daw {
+    background-color: rgb(170, 170, 220);
+  }
+  #mixer {
+    min-height: 20%;
+    
+    .MixerChannel {
+      input[type="range"] {
+        height: 30vmin;
+      }
+    
+     /** input[type=range]::-webkit-slider-thumb {
+        width: 20px;
+        height: 40px;
+      }
+      
+      input[type=range]::-moz-range-thumb {
+        width: 50px;
+        height: 30px;
+      }*/
+    }
+  }
+  
+  .track-header>.title-bar>div {
+    min-width: 4rem;
+    max-width: 4rem;
+  }
+  .track-header {
+    font-size: larger;
+  }
+  
+  .Track .track-name {
+    font-size: larger;
+  }
+  
+  .TrackChannel {
+    .Parameter {
+      min-width: 30vmin;
+      width: 30vmin;
+
+      label {
+        width: 2rem;
+        min-width: 2rem;
+      }
+    }
+  }
+}
+}

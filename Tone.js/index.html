@@ -3,12 +3,14 @@
 
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" ="width=device-width, initial-scale=1">
     <title>DAWSome</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/input-range.css">
     <link rel="stylesheet" href="css/toggle-button.css">
     <link rel="stylesheet" href="css/classes.css">
+    <link rel="stylesheet" href="css/phone.css">
+    <link rel="stylesheet" href="css/laptop.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
@@ -849,16 +851,21 @@
       </span>
     </span>
 
+
+
+
     <div id="daw" style="opacity: 0.5">
-      <div id="loading">Loading</div>
-      <div class="transport-bar">
-        <button id="rec-button">REC</button>
-        <button id="play-button">PLAY</button>
-        <button id="stop-button">STOP</button>
-        <div id="position"></div>
-      </div>
-      <div id="tracks">
-      </div>
+      <div id="loading">Loading</div>      
+        <div class="transport-bar">
+          <button id="rec-button">REC</button>
+          <button id="play-button">PLAY</button>
+          <button id="stop-button">STOP</button>
+          <div id="position"></div>
+        </div>
+        <div id="tracks" style="flex-direction: column">
+          <input type="checkbox" id="toggle-clips" checked>
+          <input type="checkbox" id="toggle-devices" checked>
+        </div>
       <div id="mixer">
       </div>
       <div id="PresetBrowser" class="PresetBrowser">

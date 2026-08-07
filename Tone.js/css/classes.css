@@ -4,6 +4,30 @@
   --device-btn-enabled-checked-shadow: rgba(190, 140, 50, 0.8);
 }
 
+.Clip,
+.Track .Clip {
+    display: none;
+}
+
+#toggle-clips:checked ~ .Clip,
+#toggle-clips:checked ~ .Track .Clip {
+  display: flex;
+}
+
+.Track .Effect,
+.Track .Instrument,
+.Effect,
+.Instrument {
+  display: none;
+}
+
+#toggle-devices:checked~.Instrument,
+#toggle-devices:checked~.Effect,
+#toggle-devices:checked ~ .Track .Instrument,
+#toggle-devices:checked ~ .Track .Effect {
+  display: flex;
+}
+
 .title-bar>label {
   vertical-align: top;
   margin-top: 0.35em;
@@ -32,6 +56,10 @@ input[type="checkbox"] {
 input[type="checkbox"][name="enabled"]:checked {
   accent-color: var(--device-btn-enabled-checked-bg);
   box-shadow: 0.0em 0.0em 1em var(--device-btn-enabled-checked-shadow);
+}
+
+input[type="radio"] {
+  margin-right: 0pt;
 }
 
 .title-bar {
@@ -74,7 +102,7 @@ input[type="checkbox"][name="enabled"]:checked {
 #tracks {
   flex: 2 1 0;
   flex-direction: column;
-  margin: 0.5em;
+  margin: 0.1em;
   overflow-y: auto;
   height: stretch;
 }
@@ -83,7 +111,6 @@ input[type="checkbox"][name="enabled"]:checked {
   background-color: rgba(100, 100, 100, 1);
   border: 0.1em solid rgba(0, 0, 0, 0.8);
   flex-direction: row;
-  min-height: 20%;
   overflow-x: auto;
 
   .MixerChannel {
@@ -105,12 +132,9 @@ input[type="checkbox"][name="enabled"]:checked {
     }
 
     input[type="range"] {
-      margin-top: 1em;
-      margin-bottom: 1em;
-      height: 30vmin;
+      margin-top: 0pt;
+      margin-bottom: 0pt;
     }
-
-
 
     value {
       max-width: 4em;
@@ -122,38 +146,27 @@ input[type="checkbox"][name="enabled"]:checked {
   }
 }
 
-.Track {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-
-  background-color: rgba(180, 180, 180, 1);
-  border: 0.1em solid rgba(0, 0, 0, 0.2);
-  padding: 0.2em;
-  margin: 0.2em;
-
-  .track-name {
-    display: inline-block;
-    width: 100%;
-    font-size: larger;
-  }
+.Track .track-name {
+  display: inline-block;
+  width: 100%;
+  margin-left: 0px;
+}
 
   .track-header {
-    /* display: flex; */
-    flex-direction: column;
-    background-color: rgba(120, 120, 120, 0.5);
-    height: auto;
-    margin: 0rem;
-    padding: 0rem;
+  /* display: flex; */
+  flex-direction: column;
+  background-color: rgba(120, 120, 120, 0.5);
+  height: auto;
+  margin: 0rem;
+  padding: 0rem;
     /* min-width: 8rem;
     max-width: 8rem;
     width: 8rem; */
     /* overflow-x: auto; */
-  }
 
   .track-header>.title-bar>div {
-    min-width: 4rem;
-    max-width: 4rem;
+    min-width2: 3rem;
+    max-width2: 3rem;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
@@ -162,6 +175,20 @@ input[type="checkbox"][name="enabled"]:checked {
     vertical-align: top;
     margin-top: 0.05em;
   }
+}
+
+.Track {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+
+  background-color: rgba(180, 180, 180, 1);
+  border: 0.1em solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.5em;
+  box-shadow: 0.1em 0.1em 0.5em rgba(0, 0, 0, 0.4);
+  
+  padding: 0.2em;
+  margin: 0.1em;
 
   .track-header>.title-bar {
     vertical-align: middle;
@@ -169,8 +196,8 @@ input[type="checkbox"][name="enabled"]:checked {
 
     .custom-radio {
       display: inline-block;
-      margin-right: 0.5em;
-      padding-top: 0pt;
+      margin-right: 0.0em;
+      margin-top: 0.1pt;
       padding-left: 4pt;
     }
 
@@ -180,11 +207,11 @@ input[type="checkbox"][name="enabled"]:checked {
 
     .custom-radio>.checkmark {
       display: inline-block;
-      width: 1.2em;
+      width: 1.0em;
       height: 1.2em;
       background-color: rgba(255, 0, 0, 0.1);
       border: 0.1em solid #ccc;
-      border-radius: 0.1em;
+      border-radius: 0.9em;
       margin-right: 0em;
       cursor: pointer;
     }
@@ -238,7 +265,6 @@ input[type="checkbox"][name="enabled"]:checked {
       vertical-align: middle;
       margin-bottom: auto;
       height: 100%;
-
     }
   }
 
@@ -261,11 +287,11 @@ input[type="checkbox"][name="enabled"]:checked {
       }
 
       input[type="range"] {
-        width: stretch;
+        margin-left: 0;
       }
 
       value {
-        width: 2.5em;
+        width2: 2.5em;
         max-width: 2.5em;
         white-space: nowrap;
         overflow: hidden;
@@ -274,6 +300,8 @@ input[type="checkbox"][name="enabled"]:checked {
         font-size: smaller;
         padding-left: 0.5rem;
         padding-right: 0.5rem;
+        margin-left: 0pt;
+        padding-left: 0pt;
       }
 
     }
@@ -283,16 +311,18 @@ input[type="checkbox"][name="enabled"]:checked {
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
+  }
 
-    .TrackClips {
-      display: flex;
+
+  .TrackClips {
       width: 100%;
       overflow-x: auto;
       overflow-y: hidden;
       flex-wrap: nowrap;
       max-width: 100%;
+  }
 
-      .Clip {
+  .track-details .Clip {
         border: 0.1em solid #3d7a70;
         background-color: #5d9a90;
         color: white;
@@ -301,44 +331,46 @@ input[type="checkbox"][name="enabled"]:checked {
         font-size: 100%; */
         height: min-content;
         box-shadow: 0.1em 0.1em 0.5em rgba(0, 0, 0, 0.4);
+}
 
-
-        .ClipNotes {
-          display: flex;
-          flex-direction: column;
-          flex-wrap: wrap;
-          padding-right: 0pt;
-          margin-right: 0pt;
-
-          .ClipNote {
-            margin-top: 1pt;
-            margin-left: 2pt;
-            margin-right: 2pt;
-
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            border-radius: 2pt;
-            background: rgba(0, 0, 0, 0.1);
-            height: max-content;
-            flex-direction: column;
-            display: flex;
-            width: 96%;
-            /* height: 100%; */
-
-            .ClipNoteRow {
+  .ClipNotes {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding-right: 0pt;
+    margin-right: 0pt;
+  }
+        
+  .ClipNote {
+    margin-top: 1pt;
+    margin-left: 2pt;
+    margin-right: 2pt;
+            
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 2pt;
+    background: rgba(0, 0, 0, 0.1);
+    height: max-content;
+    flex-direction: column;
+    display: flex;
+    width: 96%;
+    /* height: 100%; */
+  }
+            
+  .ClipNoteRow {
               flex-direction: row;
               display: flex;
               width: 100%;
               /* height: 100%; */
             }
-
-            .ColumnLeft {
+            
+  .ClipNote .ColumnLeft {
               flex-direction: row;
               display: block;
               width: stretch;
               height: 100%;
             }
-
-            .VelocityColumn {
+            
+  .ClipNote .VelocityColumn {
               display: inline-block;
               float: right;
               width: 5px;
@@ -348,19 +380,19 @@ input[type="checkbox"][name="enabled"]:checked {
               background-color: #eee;
               position: relative;
               overflow: hidden;
-
+              
               .VelocityBar {
                 display: block;
                 position: absolute;
                 bottom: 0;
                 width: 100%;
                 height: 20%;
-
+                
                 background-color: #4CAF50;
               }
             }
-
-            .NoteLengthRow {
+            
+  .ClipNote .NoteLengthRow {
               display: inline;
               height: auto;
               width: 95%;
@@ -369,13 +401,13 @@ input[type="checkbox"][name="enabled"]:checked {
               background-color: #eee;
               position: relative;
               overflow: hidden;
-
+              
               .note {
                 display: block;
                 position: absolute;
                 /* top2: 2px; */
               }
-
+              
               .NoteLengthBar {
                 display: block;
                 position: absolute;
@@ -385,8 +417,8 @@ input[type="checkbox"][name="enabled"]:checked {
                 background-color: #AF54C0;
               }
             }
-
-            .VisualNoteRow {
+            
+  .ClipNote .VisualNoteRow {
               display: block;
               flex-direction: column;
               position: relative;
@@ -397,7 +429,7 @@ input[type="checkbox"][name="enabled"]:checked {
               border: 1px solid #80d0d0;
               background-color: #6F1480;
               margin-right: 20pt;
-
+              
               .note {
                 display: inline-block;
                 position: absolute;
@@ -405,7 +437,7 @@ input[type="checkbox"][name="enabled"]:checked {
                 height: 100pt;
                 /* top2: 2px; */
               }
-
+              
               .VelocityBackground {
                 /* display: block; */
                 position: absolute;
@@ -415,31 +447,23 @@ input[type="checkbox"][name="enabled"]:checked {
                 background-color: #AF54C0;
               }
             }
-          }
-        }
-      }
-    }
+}
 
-    .TrackDevices {
-      flex-wrap: wrap;
-      width: stretch;
-      overflow: auto;
-      display: flex;
-      background-color: rgba(100, 100, 100, 0.1);
-      background-image: linear-gradient(to bottom,
+.Track .TrackDevices {
+  flex-wrap: wrap;
+  width: stretch;
+  overflow: auto;
+  display: flex;
+  background-color: rgba(100, 100, 100, 0.1);
+  background-image: linear-gradient(to bottom,
           rgba(100, 100, 100, 0.1),
           rgba(200, 175, 130, 0.2),
           rgba(100, 100, 100, 0.1));
-
-      border: 0.1em solid rgba(0, 0, 0, 0.2);
-      border-radius: 0.3em;
-      margin: 0em;
-      margin-bottom: auto;
-      padding: 0.1em;
-    }
-
-  }
-
+  border: 0.1em solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3em;
+  margin: 0em;
+  margin-bottom: auto;
+  padding: 0.1em;
 }
 
 .Track>.title-bar {

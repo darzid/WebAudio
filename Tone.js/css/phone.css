@@ -1,0 +1,139 @@
+@media (orientation: portrait) {
+  body {
+    font-size: 14px;
+  }
+  
+  .toggle-button {
+    font-size: 0.7em; 
+  }
+  
+  #daw {
+    background-color2: rgb(220, 170, 170);
+  }
+  
+  #mixer {
+    min-height: 20%;
+  }
+  
+  #mixer .MixerChannel > input[type="range"] {
+    height: 35vmin;
+  }
+  
+  .track-header>.title-bar>div {
+    min-width: 3rem;
+    max-width: 3rem;
+  }
+
+  .Track .track-name {
+    font-size: small;
+  }
+  
+  .VisualNoteRow {
+    font-size: small;
+  }
+  
+  .TrackChannel {
+    .Parameter {
+      min-width: 45vmin;
+      width: 45vmin;
+
+      label {
+        width: 1rem;
+        min-width: 1rem;
+        margin-right: 0pt;
+        padding-right: 0pt;
+      }
+      
+      input[type="range"] {
+        width: auto;
+        margin-top: 0pt;
+      }
+      
+    /*
+      input[type=range]::-webkit-slider-thumb {
+        width: 20px;
+        height: 40px;
+      }
+      
+      input[type=range]::-moz-range-thumb {
+        width: 50px;
+        height: 30px;
+      }
+      */
+      value {
+        width2: 2em;
+        max-width: 2em;
+        
+      }
+    }
+  }
+  .Instrument,
+  .Effect,
+  .Source,
+  .Component {
+    width: 100%;
+  }
+}
+
+@media (orientation: landscape) {
+  @media (max-height: 800px){
+
+  body {
+    font-size: 10px;
+  }
+  
+  .toggle-button {
+    font-size: 0.7em;
+  }
+
+  #daw {
+    background-color: rgb(170, 220, 170);
+  }
+  #mixer {
+    min-height: 10%;
+  }
+  
+  #mixer .MixerChannel > input[type="range"] {
+    height: 10vmin;
+  }
+  
+  .track-header>.title-bar>div {
+    min-width: 3rem;
+    max-width: 3rem;
+  }
+
+  .Track .track-name {
+    font-size: small;
+  }
+  
+  .TrackChannel {
+    .Parameter {
+      min-width: 45vmin;
+      width: 45vmin;
+
+      label {
+        width: 1rem;
+        min-width: 1rem;
+        background: red;
+        margin-right: 0pt;
+        padding-right: 0pt;
+      }
+      
+      input[type="range"] {
+        width: auto;
+      }
+  
+      input[type="range"]::-moz-range-thumb {
+        width: 50px;
+        height: 36px;
+      }
+      
+      value {
+        width2: 2em;
+        max-width: 2em;
+        
+      }
+    }
+  }
+}
+}
