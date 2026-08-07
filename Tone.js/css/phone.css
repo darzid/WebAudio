@@ -106,7 +106,8 @@
     min-height: 3vmin;
   }
   
-  #mixer  input[type="range"] {
+  #mixerq
+  input[type="range"] {
     height2: 5vmin;
   }
   
