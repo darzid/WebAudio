@@ -275,8 +275,6 @@ function createTrackClips(project, track, trackElement) {
 
               clipNotesElement.appendChild(newClipNoteElement);
 
-
-
               let clipNoteElement = applyTemplate(newClipNoteElement);
 
               //let velocityBarElement = clipNoteElement.querySelector(".VelocityBar");
@@ -288,7 +286,7 @@ function createTrackClips(project, track, trackElement) {
               //noteLengthBarElement.style.width = `${noteDurationInMs / longestClipNoteDurationInMs * 100}%`;
 
               let visualNoteElement = clipNoteElement.querySelector(".VisualNoteRow");
-              visualNoteElement.style.width = `${noteDurationInMs / longestClipNoteDurationInMs * 100}%`;
+             // visualNoteElement.style.width = `${noteDurationInMs / longestClipNoteDurationInMs * 100}%`;
 
               let velocityBackgroundElement = clipNoteElement.querySelector(".VelocityBackground");
               velocityBackgroundElement.style.height = `${note.velocity * 100}%`;

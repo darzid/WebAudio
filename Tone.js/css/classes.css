@@ -393,7 +393,7 @@ input[type="radio"] {
       flex-wrap: nowrap;
       padding-right: 0pt;
       margin-right: 0pt;
-      width: 1000px;
+      
     }
           
     .ClipNote {
@@ -408,7 +408,7 @@ input[type="radio"] {
       height: max-content;
       flex-direction: column;
       display: inline-block;
-      width: 96%;
+      width2: 96%;
       /* height: 100%; */
     }
               
