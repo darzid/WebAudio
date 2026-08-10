@@ -795,7 +795,10 @@
               <div name="channel" data-template="TrackChannel"></div>
             </div>
             <div class="track-details">
-              <div name="Clips" class="TrackClips"></div>
+              <div name="TrackClipsContainer" class="TrackClipsContainer">
+                <div class="TimeBar"></div>
+                <span class="TrackClips"></span>
+              </div>
               <div name="Devices" class="TrackDevices"></div>
             </div>
           </article>
@@ -809,11 +812,11 @@
         </template>
 
         <template id="Clip">
-          <article id="${item.id}" class="Clip">
+          <span id="${item.id}" class="Clip">
             <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
             <div class="expander-content ClipNotes">
             </div>
-          </article>
+          </span>
         </template>
 
         <template id="ClipNote">
@@ -859,12 +862,13 @@
           <button id="play-button">PLAY</button>
           <button id="stop-button">STOP</button>
           <div id="position"></div>
+          <input type="checkbox" id="toggle-mixer" checked >
         </div>
         <div id="tracks" style="flex-direction: column">
           <input type="checkbox" id="toggle-clips" checked>
           <input type="checkbox" id="toggle-devices" checked>
         </div>
-      <div id="mixer">
+      <div id="mixer" class="Mixer">
       </div>
       <div id="PresetBrowser" class="PresetBrowser">
         <div id="presets-data" style="display: none"></div>
