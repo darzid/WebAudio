@@ -255,8 +255,8 @@ function createTrackClips(project, track, trackElement) {
               if (noteDurationInMs > longestClipNoteDurationInMs)
                 longestClipNoteDurationInMs = noteDurationInMs;
             });
-
-          /* clip.notes.forEach(note => {
+/*
+            clip.notes.forEach(note => {
               let clipNoteOffset = (Tone.Time(note.startTime).toMilliseconds() / (clipDurationInMs * 1000));
               
               let noteDurationText = Tone.Time(note.duration).toNotation();
@@ -294,7 +294,6 @@ function createTrackClips(project, track, trackElement) {
               velocityBackgroundElement.style.height = `${note.velocity * 100}%`;
 
             });
-
 */
           });
 }
