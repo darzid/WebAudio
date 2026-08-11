@@ -91,8 +91,8 @@ input[type="radio"] {
 .transport-bar {
   display: flex;
   flex-direction: row;
-  margin-top: 1em;
-  margin-left: 1em;
+  margin-top: 0.2em;
+  margin-left: 0.2em;
 
   #position {
     margin-left: 1em;
@@ -212,7 +212,8 @@ input[type="radio"] {
       display: inline-block;
       margin-right: 0.0em;
       margin-top: 0.1pt;
-      padding-left: 4pt;
+      
+      padding-left: 2pt;
     }
 
     .custom-radio>input[type="radio"] {
@@ -225,8 +226,9 @@ input[type="radio"] {
       height: 1.2em;
       background-color: rgba(255, 0, 0, 0.1);
       border: 0.1em solid #ccc;
-      border-radius: 0.9em;
+      border-radius: 1em;
       margin-right: 0em;
+      margin-left: 0em;
       cursor: pointer;
     }
 
@@ -238,7 +240,8 @@ input[type="radio"] {
     .custom-checkbox {
       /* display: inline-block; */
       float: right;
-      margin-right: 0.5em;
+      margin-right: 0.2em;
+      margin-top: 0.2em;
       height: 4em;
     }
 
@@ -261,19 +264,6 @@ input[type="radio"] {
       background-color: orange;
       box-shadow: 0.0em 0.0em 0.4em rgba(255, 165, 0, 1);
     }
-
-    /* input[type="radio"][name="arm-track"] {
-      font-size: 0.5em;
-      height: 4em;
-      margin-left: 0em;
-      margin-top: 0em;
-      padding-top: 0em;
-      margin-right: 0.1em;
-    }
-
-    input[type="radio"][name="arm-track"]:checked {
-      accent-color: var(--device-btn-arm-checked-bg);
-    } */
 
     label {
       vertical-align: middle;

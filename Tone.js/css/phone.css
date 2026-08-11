@@ -1,7 +1,7 @@
 @media (orientation: portrait) {
   body            { font-size: 14px; }
   .toggle-button  { font-size: 0.7em; }
-  #daw            { background-color: rgb(220, 170, 170); }
+  #daw            { background-color2: rgb(220, 170, 170); }
   #mixer {
     min-height: 10%; 
     input[type="range"] {
@@ -61,7 +61,7 @@
     .toggle-button  { font-size: 0.7em; }
     .MixerChannelLabel { font-size: xx-small; }
     #view-toggles label { font-size: medium; }
-    #daw { background-color: rgb(170, 220, 170); }
+    #daw { background-color2: rgb(170, 220, 170); }
     #mixer {
       input[type=range] {
         width: 10px;
