@@ -39,7 +39,22 @@ let output = document.getElementById("output");
         let tracksElement = document.getElementById("tracks");
         session.project.tracks.forEach(track => createTrack(session.project, tracksElement, track));
 
-        document.getElementById("toggle-mixer").addEventListener("click", ()=> document.getElementById("mixer").classList.toggle("hidden"));
+        let mixerElement = document.getElementById("mixer");
+        let toggleMixerElement = document.getElementById("toggle-mixer");
+        toggleMixerElement.addEventListener("click", () => mixer.style.display = toggleMixerElement.checked ? "flex" : "none");
+        
+        let toggleClipsElement = document.getElementById("toggle-clips");
+        toggleClipsElement.addEventListener("click", () => {
+          let trackClipsElements = document.querySelectorAll(".TrackClipsContainer");
+          trackClipsElements.forEach((trackClipsElement) => trackClipsElement.style.display = toggleClipsElement.checked ? "inline-block" : "none");
+        });
+        
+        let toggleDevicesElement = document.getElementById("toggle-devices");
+        toggleDevicesElement.addEventListener("click", () => {
+          let trackDevicesElements = document.querySelectorAll(".TrackDevices");
+          trackDevicesElements.forEach((trackDevicesElement) => trackDevicesElement.style.display = toggleDevicesElement.checked ? "inline-block" : "none");
+        });
+        
         initializeToggleButtons();
         initializeArmTrackButtons();
         initializeTransport();
@@ -75,8 +90,8 @@ bind(trackElement.querySelector(".track-header"), track.channel);
 
 trackFaderElement = document.getElementById(`${track.id}-fader`);
 
-let trackVolumeInputElement = trackElement.querySelector(".TrackChannel input[name='volume']");
-let trackVolumeValueElement = trackElement.querySelector(`.TrackChannel value[name='volume']`);
+let trackVolumeInputElement = trackElement.querySelector(".TrackLane input[name='volume']");
+let trackVolumeValueElement = trackElement.querySelector(`.TrackLane value[name='volume']`);
 let trackFaderInputElement = trackFaderElement.querySelector("input");
 let trackFaderValueElement = trackFaderElement.querySelector("value");
 trackFaderValueElement.innerHTML = trackFaderInputElement.value;
@@ -189,7 +204,7 @@ function createTrackClips(project, track, trackElement) {
   //trackDetailsElement.style.width = `${projectDurationInMs * msToPixels + 200}px`;
   
   let trackClipsContainerElement = trackElement.querySelector("div[name='TrackClipsContainer']");
-//  trackClipsContainerElement.style.width = `${projectDurationInMs * msToPixels}px`;
+  trackClipsContainerElement.style.width = `${projectDurationInMs * msToPixels}px`;
   let trackClipsElement = trackClipsContainerElement.querySelector(".TrackClips");
   
   let previousClip = null;

@@ -15,6 +15,7 @@
       -webkit-appearance: none;
       appearance: none;
       background-color: var(--fader-bg-track);
+      height: 20px;
     }
 
     input[type='range']::-webkit-slider-runnable-track {
@@ -56,10 +57,11 @@
 }
 
 #mixer {
-
   input[type=range] {
     width: 10px;
-    height2: 10px;
+    /* Defines mixer length */
+   /* height: 40px;*/
+    
     /* margin: 13.05px 0; */
     margin-left: 20px;
     margin-right: 20px;
@@ -162,3 +164,8 @@
   }
 }
 
+@media (orientation: landscape) {
+  @media (max-height: 800px){
+
+  }
+}

@@ -781,7 +781,6 @@
           <article id="${item.id}" class="Track">
             <div class="track-header">
               <div class="title-bar">
-                <!-- <input type="radio" id="arm-${item.name}" class="arm-track" name="arm-track" value="${item.id}"> -->
                 <label for="arm-${item.name}" class="custom-radio">
                   <input id="arm-${item.name}" type="radio" class="arm-track" name="arm-track" value="${item.id}">
                   <span class="checkmark"></span>
@@ -792,20 +791,22 @@
                   <span class="checkmark"></span>
                 </label>
               </div>
-              <div name="channel" data-template="TrackChannel"></div>
+              <div name="TrackLane" data-template="TrackLane"></div>
             </div>
             <div class="track-details">
-              <div name="TrackClipsContainer" class="TrackClipsContainer">
-                <div class="TimeBar"></div>
-                <span class="TrackClips"></span>
+              <div class="TrackClipsScrollView">
+                <div name="TrackClipsContainer" class="TrackClipsContainer">
+                  <div class="TimeBar"></div>
+                  <span class="TrackClips"></span>
+                </div>
               </div>
               <div name="Devices" class="TrackDevices"></div>
             </div>
           </article>
         </template>
 
-        <template id="TrackChannel">
-          <div class="TrackChannel ModuleParameters">
+        <template id="TrackLane">
+          <div class="TrackLane ModuleParameters">
             <div name="pan" data-template="TrackPan" value="0"></div>
             <div name="volume" data-template="TrackVolume" value="0"></div>
           </div>
@@ -821,20 +822,6 @@
 
         <template id="ClipNote">
           <article class="ClipNote">
-            <!--
-            <div class="ClipNoteRow">
-              <div class="ColumnLeft">
-                <div class="Row">
-                  <span class="time">t: ${item.time}</span>
-                  <span class="note ColumnRight">n: ${item.note}</span>
-                </div>
-                 <div class="Row">
-                  <span class="duration">d: ${item.duration}</span>
-                  <span class="velocity ColumnRight">v: ${item.velocity}</span>
-                </div>
-              </div>
-            </div>
-            -->
             <div class="Row">
               <span class="time">t: ${item.time}</span>
             </div>
@@ -847,7 +834,7 @@
 
         <template id="MixerChannel">
           <div class="MixerChannel">
-            <label for="${item.id}-input">${item.name}</label>
+            <label class="MixerChannelLabel" for="${item.id}-input">${item.name}</label>
             <input id="${item.id}-input" name="${item.name}" type="range" min="-60" max="0" step="0.1" value="${item.value}">
             <value for="${item.id}-input">${item.value}</value>
           </div>
@@ -862,11 +849,13 @@
           <button id="play-button">PLAY</button>
           <button id="stop-button">STOP</button>
           <div id="position"></div>
-          <input type="checkbox" id="toggle-mixer" checked >
+          <div id="view-toggles">
+            <label for="toggle-clips"><input type="checkbox" id="toggle-clips" checked>Clips</label>
+            <label for="toggle-devices"><input type="checkbox" id="toggle-devices" checked>Devices</label>
+            <label for="toggle-mixer"><input type="checkbox" id="toggle-mixer" checked>Mixer</label>
+          </div>
         </div>
         <div id="tracks" style="flex-direction: column">
-          <input type="checkbox" id="toggle-clips" checked>
-          <input type="checkbox" id="toggle-devices" checked>
         </div>
       <div id="mixer" class="Mixer">
       </div>

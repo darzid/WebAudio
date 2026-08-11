@@ -1,29 +1,17 @@
 @media (orientation: portrait) {
-  body {
-    font-size: 14px;
-  }
-  
-  .toggle-button {
-    font-size: 0.7em; 
-  }
-  
-  #daw {
-    background-color2: rgb(220, 170, 170);
-  }
-  
+  body            { font-size: 14px; }
+  .toggle-button  { font-size: 0.7em; }
+  #daw            { background-color: rgb(220, 170, 170); }
   #mixer {
-    min-height2: 10%;
-  }
-  
-  #mixer input[type="range"] {
-    height: 40vmin;
-  }
-  
-
-  
-  #mixer input[type=range]::-webkit-slider-thumb {
-    width: 20px;
-    height: 40px;
+    min-height: 10%; 
+    input[type="range"] {
+      height: 40vmin;
+      min-height: 40vmin;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      width: 20px;
+      height: 40px;
+    }
   }
   
   .track-header>.title-bar>div {
@@ -31,15 +19,10 @@
     max-width: 3rem;
   }
 
-  .Track .track-name {
-    font-size: small;
-  }
+  .Track .track-name  { font-size: small; }
+  .VisualNoteRow      { font-size: small; }
   
-  .VisualNoteRow {
-    font-size: small;
-  }
-  
-  .TrackChannel {
+  .TrackLane {
     .Parameter {
       min-width: 45vmin;
       width: 45vmin;
@@ -55,112 +38,69 @@
         width: auto;
         margin-top: 0pt;
       }
-      
-    
-      input[type=range]::-webkit-slider-thumb {
-        width: 20px;
-        height2: 40px;
-      }
-      
-      input[type=range]::-moz-range-thumb {
-        width: 50px;
-        height2: 30px;
-      }
-      
+
       value {
-        width2: 2em;
+        width: 2em;
         max-width: 2em;
-        
       }
     }
-  
-  .Instrument,
-  .Effect,
-  .Source,
-  .Component {
-    width: 100%;
+    
+    .Instrument,
+    .Effect,
+    .Source,
+    .Component {
+      width: 100%;
+    }
   }
 }
 
 @media (orientation: landscape) {
   @media (max-height: 800px){
 
-  body {
-    font-size: 10px;
-  }
-  
-  .toggle-button {
-    font-size: 0.7em;
-  }
-
-  #daw {
-    background-color: rgb(170, 220, 170);
-  }
-  #mixer {
-    min-height: 10%;
-    height: 10%;
-  }
-  
-  #mixer input[type="range"] {
-    height: 3vmin;
-    min-height: 3vmin;
-  }
-  
-  #mixerq
-  input[type="range"] {
-    height2: 5vmin;
-  }
-  
-
-  input[type=range]::-webkit-slider-thumb {
-        width: 20px;
-        height2: 40px;
-  }
-  .track-header>.title-bar>div {
-    min-width: 3rem;
-    max-width: 3rem;
-  }
-
-  .Track .track-name {
-    font-size: small;
-  }
-  
-  .TrackChannel {
-    .Parameter {
-      min-width: 45vmin;
-      width: 45vmin;
-
-      label {
-        width: 1rem;
-        min-width: 1rem;
-        background: red;
-        margin-right: 0pt;
-        padding-right: 0pt;
+    body            { font-size: 10px; }
+    .toggle-button  { font-size: 0.7em; }
+    .MixerChannelLabel { font-size: xx-small; }
+      
+    #daw { background-color: rgb(170, 220, 170); }
+    #mixer {
+      input[type=range] {
+        width: 10px;
+        /* Defines mixer length */
+        height: 80px;
       }
       
-      input[type="range"] {
-        width: auto;
-        height2: 30vmax;
-        height2: 200px;
+      input[type=range]::-webkit-slider-thumb {
+        width: 15px;
+        height: 30px;
+        margin-left: -5.25px;
       }
-      /*
-        #mixer .MixerChannel > input[type="range"] {
-    height2: 35vmin;
-  }
+    }
+    
+    .track-header>.title-bar>div {
+      min-width: 3rem;
+      max-width: 3rem;
+    }
   
-      input[type="range"]::-moz-range-thumb {
-        width: 50px;
-        height2: 16px;
+    .Track .track-name {
+      font-size: small;
+    }
+    
+    .TrackLane {
+      .Parameter {
+        min-width: 45vmin;
+        width: 45vmin;
+  
+        label {
+          width: 1rem;
+          min-width: 1rem;
+          margin-right: 0pt;
+          padding-right: 0pt;
+        }
+        
+        input[type="range"] {
+          width: auto;
+        }
       }
-      
-      value {
-        width2: 2em;
-        max-width: 2em;
-      }
-    }*/
+    }
   }
 }
-}
-}
-
-
