@@ -60,7 +60,7 @@
     body            { font-size: 10px; }
     .toggle-button  { font-size: 0.7em; }
     .MixerChannelLabel { font-size: xx-small; }
-      
+    #view-toggles label { font-size: medium; }
     #daw { background-color: rgb(170, 220, 170); }
     #mixer {
       input[type=range] {
@@ -85,6 +85,9 @@
       font-size: small;
     }
     
+    .TrackDevices {
+      flex-direction: row;
+    }
     .TrackLane {
       .Parameter {
         min-width: 45vmin;
@@ -100,6 +103,14 @@
         input[type="range"] {
           width: auto;
         }
+      }
+      
+      .Instrument,
+      .Effect,
+      .Source,
+      .Component {
+        width2: min-content;
+        display: inline-block;
       }
     }
   }

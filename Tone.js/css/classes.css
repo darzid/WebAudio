@@ -500,7 +500,7 @@ input[type="radio"] {
               }
   }
 }
-.Track .TrackDevices {
+.TrackDevices {
   flex-wrap: wrap;
   width: stretch;
   overflow: auto;
@@ -517,11 +517,6 @@ input[type="radio"] {
   margin: 0em;
   margin-bottom: auto;
   padding: 0.1em;
-}
-
-.TrackDevices {
-  display: flex;
-  flex-direction: column;
 }
 
 .Track>.title-bar {
@@ -566,7 +561,7 @@ input[type="radio"] {
 
 .Instrument,
 .Effect {
-  /* display: inline-block; */
+  display: inline-block;
   vertical-align: top;
   height: 100%;
   background-color: rgba(150, 150, 160, 1);
