@@ -248,7 +248,7 @@ function createTrackClips(project, track, trackElement) {
             
             let newClipElement = document.createElement("span");
             newClipElement.id = `${track.id}-${clip.name}`;
-            newClipElement.setAttribute("name", toOneBased(clip.startTime) + " " + clip.name + " " + toOneBased(clip.endTime ? clip.endTime : project.length));
+            newClipElement.setAttribute("name", toOneBased(clip.startTime) + " > " + clip.name + " > " + toOneBased(clip.endTime ? clip.endTime : project.length));
             newClipElement.setAttribute("title", clip.name);
             newClipElement.setAttribute("data-template", "Clip");
             newClipElement.style.marginLeft = `${clipMarginLeftInPixels}px`;
@@ -280,7 +280,7 @@ function createTrackClips(project, track, trackElement) {
               }
               let newClipNoteElement = document.createElement("div");
               newClipNoteElement.id = `${track.id}-${clip.name}-${clip.notes.indexOf(note)}`;
-              newClipNoteElement.setAttribute("time", note.time);
+              newClipNoteElement.setAttribute("time", toOneBased(note.time));
               newClipNoteElement.setAttribute("note", note.note);
               newClipNoteElement.setAttribute("duration", noteDurationText);
               newClipNoteElement.setAttribute("velocity", Math.round(note.velocity * 127, 0));

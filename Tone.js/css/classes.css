@@ -108,7 +108,6 @@ input[type="radio"] {
   height: stretch;
 }
 
-
 #mixer {
   background-color: rgba(100, 100, 100, 1);
   border: 0.1em solid rgba(0, 0, 0, 0.8);
@@ -364,7 +363,7 @@ input[type="radio"] {
         border-bottom: 0.1em solid #3d7a70;
         background-color: #5d9a90;
         color: white;
-        height: stretch;
+        height: min-content;
         box-shadow: 0.1em 0.1em 0.5em rgba(0, 0, 0, 0.4);
         margin: 0em;
         display: inline-block;
