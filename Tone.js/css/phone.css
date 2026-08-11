@@ -1,17 +1,20 @@
 @media (orientation: portrait) {
   body            { font-size: 14px; }
   .toggle-button  { font-size: 0.7em; }
+  .MixerChannelLabel { font-size: x-small; }
   #daw            { background-color2: rgb(220, 170, 170); }
   #mixer {
     min-height: 10%; 
     input[type="range"] {
-      height: 40vmin;
-      min-height: 40vmin;
+      height: 35vmin;
+      min-height: 35vmin;
     }
     input[type=range]::-webkit-slider-thumb {
       width: 20px;
       height: 40px;
     }
+    
+    value { font-size: xx-small; }
   }
   
   .track-header>.title-bar>div {
@@ -74,6 +77,8 @@
         height: 30px;
         margin-left: -5.25px;
       }
+      
+      value { font-size: xx-small; }
     }
     
     .track-header>.title-bar>div {
