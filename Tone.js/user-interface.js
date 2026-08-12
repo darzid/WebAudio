@@ -196,7 +196,7 @@ function createTrackClips(project, track, trackElement) {
   let projectSeconds = projectDuration.toSeconds();
   let projectDurationInMs = projectDuration.toMilliseconds();
   
-  let msToPixels = 0.05;
+  let msToPixels = 0.2;
   let clipsWidth = projectDurationInMs;
   let barWidth = Tone.Time("1:0:0").toMilliseconds();
   
@@ -235,11 +235,12 @@ function createTrackClips(project, track, trackElement) {
           track.clips.forEach(clip => {
             //if (clip.name != "Kick02")
               //return;
-            let clipStartInMs = Tone.Time(clip.startTime).toMilliseconds();
-            let clipDurationInMs = clip.endTime ? Tone.Time(clip.endTime).toMilliseconds() : null;
-            if (!clipDurationInMs) {
-              clipDurationInMs = projectDurationInMs - clipStartInMs;
-            }
+            let clipStartTime = Tone.Time(clip.startTime);
+            let clipEndTime = clip.endTime ? Tone.Time(clip.endTime) : Tone.Time(project.length);
+            let clipDuration = Tone.Time(clipEndTime - clipStartTime);
+
+            let clipStartInMs = clipStartTime.toMilliseconds();
+            let clipDurationInMs = clipDuration.toMilliseconds();
             
             let clipStartInPixels = clipStartInMs * msToPixels;
             let clipWidthInPixels = clipDurationInMs * msToPixels;
@@ -262,8 +263,87 @@ function createTrackClips(project, track, trackElement) {
             let clipsElement = trackClipsElement.querySelectorAll(".Clip");
             let clipElement = clipsElement[clipsElement.length - 1];
 
-        
-            let clipNotesElement = clipElement.querySelector(".ClipNotes");
+          
+            let clipNotesContainerElement = clipElement.querySelector(".ClipNotesContainer");
+            let clipNotesElement = clipNotesContainerElement.querySelector(".ClipNotes");
+            let timeBarElement = clipNotesContainerElement.querySelector(".TimeBar");
+  
+            let clipParts = clipDuration.toBarsBeatsSixteenths().split(":");
+            let clipBars = parseInt(clipParts[0]);
+            let clipBeats = (clipBars * 4) + parseInt(clipParts[1]);
+            let clipSixteenths = getSixteenths(clipDuration);
+            
+            var prevClipRight = null;
+            let bar = 0;
+            let barBeat = 0;
+            let beatWidth = barWidth / 4;
+            for (let beat = 0; beat < clipBeats; beat++) {
+              let beatLabel = document.createElement("label");
+              beatLabel.class = "BeatLabel";
+              let beatLeft = Tone.Time(`${bar}:${barBeat}:0`).toMilliseconds();
+              if (prevClipRight) {
+                beatLabel.style.marginLeft = `${beatLeft * msToPixels - prevClipRight}px`;
+              }
+              beatLabel.style.width = `${beatWidth * msToPixels}px`;
+              beatLabel.innerText = `${bar+1}:${barBeat+1}:1`;
+              timeBarElement.appendChild(beatLabel);
+              barBeat++;
+              if (beat % 2 == 0) {
+                beatLabel.classList.add("banded");
+              }
+              prevClipRight = beatLeft * msToPixels + beatWidth * msToPixels;
+              if (barBeat == 4) {
+                bar++;
+                barBeat = 0;
+              }
+              //if (track.id === "track1")
+               // console.log(`Bar: ${barLabel.innerText}, left: ${barLeft * msToPixels}, width: ${barWidth}, clipsWidth: ${clipsWidth}`);
+            }
+            
+            
+            let repeat = true;
+            let noteOffset = 0;
+            let clipLength = Tone.Time(clip.length);
+            let clipLengthInPixels = Tone.Time(clip.length).toMilliseconds() * msToPixels;
+            let clipOffset = Tone.Time("0:0:0");
+            let prevNoteEndInPixels = null;
+            while (clipOffset < clipDuration) {
+              clip.notes.forEach(note => {
+                let noteStartTime = Tone.Time(Tone.Time(note.time) + clipOffset);
+                let noteDuration = Tone.Time(note.duration);
+                
+                let noteStartInMs = noteStartTime.toMilliseconds();
+                let noteDurationInMs = noteDuration.toMilliseconds();
+                
+                let noteStartInPixels = noteStartInMs * msToPixels;
+                let noteWidthInPixels = noteDurationInMs * msToPixels;
+                let noteEndInPixels = noteStartInPixels + noteWidthInPixels;
+                let noteMarginLeftInPixels = prevNoteEndInPixels ? noteStartInPixels - prevNoteEndInPixels : noteStartInPixels;
+              
+                let noteDurationText = Tone.Time(note.duration).toNotation();
+                if (noteDurationText.endsWith("n")) {
+                  noteDurationText = `1/${noteDurationText.substring(0, noteDurationText.length - 1)}`;
+                }
+                let newClipNoteElement = document.createElement("span");
+                newClipNoteElement.id = `${track.id}-${clip.name}-${clip.notes.indexOf(note)}`;
+                
+                newClipNoteElement.setAttribute("time", toOneBased(note.time));
+                newClipNoteElement.innerText = note.note;
+                newClipNoteElement.setAttribute("duration", noteDurationText);
+                newClipNoteElement.setAttribute("velocity", Math.round(note.velocity * 127, 0));
+                //newClipNoteElement.setAttribute("data-template", "ClipNote");
+                newClipNoteElement.style.marginLeft = `${noteMarginLeftInPixels}px`;
+                newClipNoteElement.style.width = `${noteWidthInPixels}px`;
+                if (track.id === "track1")
+                  console.log(`note ${note.note}, start: ${noteStartInMs}, left: ${noteStartInMs * msToPixels},  width: ${noteDurationInMs * msToPixels}`, note);
+                prevNoteEndInPixels = noteEndInPixels
+                clipNotesElement.appendChild(newClipNoteElement);
+                //applyTemplates();
+              });
+              clipOffset = Tone.Time(clipOffset + clipLength);
+            }
+            
+            
             let longestClipNoteDurationInMs = 0;
             clip.notes.forEach(note => {
               let noteDurationInMs = Tone.Time(note.duration).toMilliseconds();
@@ -272,6 +352,7 @@ function createTrackClips(project, track, trackElement) {
             });
 
             clip.notes.forEach(note => {
+              /*
               let clipNoteOffset = (Tone.Time(note.startTime).toMilliseconds() / (clipDurationInMs * 1000));
               
               let noteDurationText = Tone.Time(note.duration).toNotation();
@@ -305,7 +386,7 @@ function createTrackClips(project, track, trackElement) {
 
               let velocityBackgroundElement = clipNoteElement.querySelector(".VelocityBackground");
               velocityBackgroundElement.style.height = `${note.velocity * 100}%`;
-
+*/
             });
 
           });

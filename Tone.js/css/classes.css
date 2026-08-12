@@ -387,12 +387,22 @@ input[type="radio"] {
     }
 
     .ClipNotes {
-      display: block;
-      flex-direction: column;
+      display: inline-flex;
+      flex-direction: row;
       flex-wrap: nowrap;
       padding-right: 0pt;
       margin-right: 0pt;
-      
+      padding-left: 0pt;
+      margin-left: 0pt;
+      width: stretch;
+      span {
+        margin: 0pt;
+        background: rgba(0,0,0,0.1);
+        display: inline-flex;
+        font-size: xx-small;
+        padding: 0pt;
+        margin: 0pt;
+      }
     }
           
     .ClipNote {

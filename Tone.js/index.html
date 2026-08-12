@@ -815,11 +815,13 @@
         <template id="Clip">
           <article id="${item.id}" class="Clip">
             <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
-            <div class="expander-content ClipNotes">
+            <div class="expander-content ClipNotesContainer">
+              <div class="TimeBar"></div>
+              <span class="ClipNotes"></span>
             </div>
           </article>
         </template>
-
+        
         <template id="ClipNote">
           <article class="ClipNote">
             <div class="Row">
