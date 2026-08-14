@@ -37,9 +37,9 @@ function bindNumberInputElement(element, object, addEventHandler) {
   let parameterOwner = getParameterOwner(object, namespace);
   let parameterName = element.name;
   let isNumberProperty = (typeof parameterOwner[parameterName] === "number");
-  let valueElement = element.parentElement.querySelector(`value[for="${element.name}"]`);
+  let valueElement = element.parentElement.querySelector(`value[for="${element.id}"]`);
 
-  //console.log(`Connecting input event for parameter "${namespace}"`, parameterOwner, parameterOwner[parameterName]);
+  console.log(`Connecting input event for parameter "${namespace}"`, parameterOwner, parameterOwner[parameterName]);
 
   element.value = isNumberProperty ? parameterOwner[parameterName] : parameterOwner[parameterName].value;
   if (valueElement)
@@ -54,7 +54,7 @@ function bindNumberInputElement(element, object, addEventHandler) {
         parameterOwner[parameterName].value = element.value;
       if (valueElement)
         valueElement.innerHTML = element.value;
-      //console.log(`Updated "${namespace}" from ${oldValue} to ${element.value}`);
+      console.log(`Updated "${namespace}" from ${oldValue} to ${element.value}`);
     })
   }
 }

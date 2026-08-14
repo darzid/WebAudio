@@ -21,7 +21,7 @@ let output = document.getElementById("output");
         //       lookAhead: 0.15
         //     }));
 
-        // Tone.setContext(new Tone.Context({ latencyHint: "playback", lookAhead: 0.15 }))
+        Tone.setContext(new Tone.Context({ latencyHint: "playback", lookAhead: 0.15 }))
         await Tone.start();
       });
 
@@ -75,25 +75,25 @@ trackElement.setAttribute("data-template", "Track");
 trackElement.setAttribute("value", track.volume);
 tracksElement.appendChild(trackElement);
 
-let trackFaderElement = document.createElement("div");
-trackFaderElement.id = `${track.id}-fader`;
-trackFaderElement.type = "range";
-trackFaderElement.setAttribute("name", track.name);
-trackFaderElement.setAttribute("value", track.volume);
-trackFaderElement.setAttribute("data-template", "MixerChannel");
-mixerElement.appendChild(trackFaderElement);
+let trackMixerFaderElement = document.createElement("div");
+trackMixerFaderElement.id = `${track.id}-fader`;
+trackMixerFaderElement.type = "range";
+trackMixerFaderElement.setAttribute("name", track.name);
+trackMixerFaderElement.setAttribute("value", track.volume);
+trackMixerFaderElement.setAttribute("data-template", "MixerChannel");
+mixerElement.appendChild(trackMixerFaderElement);
 
 applyTemplates();
 
 trackElement = document.getElementById(track.id);
 bind(trackElement.querySelector(".track-header"), track.channel);
 
-trackFaderElement = document.getElementById(`${track.id}-fader`);
+trackMixerFaderElement = document.getElementById(`${track.id}-fader`);
 
 let trackVolumeInputElement = trackElement.querySelector(".TrackLane input[name='volume']");
 let trackVolumeValueElement = trackElement.querySelector(`.TrackLane value[name='volume']`);
-let trackFaderInputElement = trackFaderElement.querySelector("input");
-let trackFaderValueElement = trackFaderElement.querySelector("value");
+let trackFaderInputElement = trackMixerFaderElement.querySelector("input");
+let trackFaderValueElement = trackMixerFaderElement.querySelector("value");
 trackFaderValueElement.innerHTML = trackFaderInputElement.value;
 let trackEnabledElement = trackElement.querySelector(".track-header input[type='checkbox'][name='enabled']");
 
@@ -133,6 +133,7 @@ trackEnabledElement.addEventListener("change", (e) => {
 createTrackDevices(track, trackElement);
 createTrackClips(project, track, trackElement);
 }
+
 function toOneBased(time){
   if (typeof time === "string")
     time = Tone.Time(time);
@@ -145,31 +146,31 @@ function toOneBased(time){
 
 function createTrackDevices(track, trackElement) {
   let trackDevicesElement = trackElement.querySelector("div[name='Devices']");
-          track.devices.forEach(device => {
-            let newDeviceElement = document.createElement("div");
-            newDeviceElement.id = `${track.id}-${device.name}`;
-            newDeviceElement.setAttribute("name", device.name);
-            newDeviceElement.setAttribute("data-template", device.name);
-            trackDevicesElement.appendChild(newDeviceElement);
+  track.devices.forEach(device => {
+    let newDeviceElement = document.createElement("div");
+    newDeviceElement.id = `${track.id}-${device.name}`;
+    newDeviceElement.setAttribute("name", device.name);
+    newDeviceElement.setAttribute("data-template", device.name);
+    trackDevicesElement.appendChild(newDeviceElement);
 
-            applyTemplates();
-            let deviceElement = document.getElementById(newDeviceElement.id);
-            bind(deviceElement, device);
-            deviceElement.querySelector(".browse-button").addEventListener("click", (e) => presetBrowser.show(device, deviceElement));
-          });
+    applyTemplates();
+    let deviceElement = document.getElementById(newDeviceElement.id);
+    bind(deviceElement, device);
+    deviceElement.querySelector(".browse-button").addEventListener("click", (e) => presetBrowser.show(device, deviceElement));
+  });
 
-          let trackDevices = track.devices.filter(device => device.name != "LFO");
-          let instrumentTarget = track.effects.length > 0 ? track.effects[0] : track.channel;
-          for (let instrumentIndex = 0; instrumentIndex < track.instruments.length; instrumentIndex++) {
-            track.instruments[instrumentIndex].connect(instrumentTarget);
-          }
+  let trackDevices = track.devices.filter(device => device.name != "LFO");
+  let instrumentTarget = track.effects.length > 0 ? track.effects[0] : track.channel;
+  for (let instrumentIndex = 0; instrumentIndex < track.instruments.length; instrumentIndex++) {
+    track.instruments[instrumentIndex].connect(instrumentTarget);
+  }
 
-          for (let effectIndex = 0; effectIndex < track.effects.length - 1; effectIndex++) {
-            track.effects[effectIndex].connect(track.effects[effectIndex + 1]);
-          }
-          if (track.effects.length > 0) {
-            track.effects[track.effects.length - 1].connect(track.channel);
-          }
+  for (let effectIndex = 0; effectIndex < track.effects.length - 1; effectIndex++) {
+    track.effects[effectIndex].connect(track.effects[effectIndex + 1]);
+  }
+  if (track.effects.length > 0) {
+    track.effects[track.effects.length - 1].connect(track.channel);
+  }
 }
 
 function createTrackClips(project, track, trackElement) {
@@ -232,164 +233,118 @@ function createTrackClips(project, track, trackElement) {
   }
   
   let prevClipEndInPixels = null;
-          track.clips.forEach(clip => {
-            //if (clip.name != "Kick02")
-              //return;
-            let clipStartTime = Tone.Time(clip.startTime);
-            let clipEndTime = clip.endTime ? Tone.Time(clip.endTime) : Tone.Time(project.length);
-            let clipDuration = Tone.Time(clipEndTime - clipStartTime);
+  track.clips.forEach(clip => {
+    //if (clip.name != "Kick02")
+      //return;
+    let clipStartTime = Tone.Time(clip.startTime);
+    let clipEndTime = clip.endTime ? Tone.Time(clip.endTime) : Tone.Time(project.length);
+    let clipDuration = Tone.Time(clipEndTime - clipStartTime);
 
-            let clipStartInMs = clipStartTime.toMilliseconds();
-            let clipDurationInMs = clipDuration.toMilliseconds();
+    let clipStartInMs = clipStartTime.toMilliseconds();
+    let clipDurationInMs = clipDuration.toMilliseconds();
             
-            let clipStartInPixels = clipStartInMs * msToPixels;
-            let clipWidthInPixels = clipDurationInMs * msToPixels;
-            let clipEndInPixels = clipStartInPixels + clipWidthInPixels;
-            let clipMarginLeftInPixels = prevClipEndInPixels ? clipStartInPixels - prevClipEndInPixels : clipStartInPixels;
+    let clipStartInPixels = clipStartInMs * msToPixels;
+    let clipWidthInPixels = clipDurationInMs * msToPixels;
+    let clipEndInPixels = clipStartInPixels + clipWidthInPixels;
+    let clipMarginLeftInPixels = prevClipEndInPixels ? clipStartInPixels - prevClipEndInPixels : clipStartInPixels;
             
-            let newClipElement = document.createElement("span");
-            newClipElement.id = `${track.id}-${clip.name}`;
-            newClipElement.setAttribute("name", toOneBased(clip.startTime) + " > " + clip.name + " > " + toOneBased(clip.endTime ? clip.endTime : project.length));
-            newClipElement.setAttribute("title", clip.name);
-            newClipElement.setAttribute("data-template", "Clip");
-            newClipElement.style.marginLeft = `${clipMarginLeftInPixels}px`;
-            newClipElement.style.width = `${clipWidthInPixels}px`;
-            if (track.id === "track1")
-              console.log(`clip ${clip.name}, left: ${clipStartInMs * msToPixels},  width: ${clipDurationInMs * msToPixels}`);
-            prevClipEndInPixels = clipEndInPixels
-            trackClipsElement.appendChild(newClipElement);
-            applyTemplates();
+    let newClipElement = document.createElement("span");
+    newClipElement.id = `${track.id}-${clip.name}`;
+    newClipElement.setAttribute("name", toOneBased(clip.startTime) + " > " + clip.name + " > " + toOneBased(clip.endTime ? clip.endTime : project.length));
+    newClipElement.setAttribute("title", clip.name);
+    newClipElement.setAttribute("data-template", "Clip");
+    newClipElement.style.marginLeft = `${clipMarginLeftInPixels}px`;
+    newClipElement.style.width = `${clipWidthInPixels}px`;
+    if (track.id === "track1")
+      console.log(`clip ${clip.name}, left: ${clipStartInMs * msToPixels},  width: ${clipDurationInMs * msToPixels}`);
+    prevClipEndInPixels = clipEndInPixels
+    trackClipsElement.appendChild(newClipElement);
+    applyTemplates();
 
-            let clipsElement = trackClipsElement.querySelectorAll(".Clip");
-            let clipElement = clipsElement[clipsElement.length - 1];
-
-          
-            let clipNotesContainerElement = clipElement.querySelector(".ClipNotesContainer");
-            let clipNotesElement = clipNotesContainerElement.querySelector(".ClipNotes");
-            let timeBarElement = clipNotesContainerElement.querySelector(".TimeBar");
+    let clipsElement = trackClipsElement.querySelectorAll(".Clip");
+    let clipElement = clipsElement[clipsElement.length - 1];
+    let clipNotesContainerElement = clipElement.querySelector(".ClipNotesContainer");
+    let clipNotesElement = clipNotesContainerElement.querySelector(".ClipNotes");
+    let timeBarElement = clipNotesContainerElement.querySelector(".TimeBar");
   
-            let clipParts = clipDuration.toBarsBeatsSixteenths().split(":");
-            let clipBars = parseInt(clipParts[0]);
-            let clipBeats = (clipBars * 4) + parseInt(clipParts[1]);
-            let clipSixteenths = getSixteenths(clipDuration);
+    let clipParts = clipDuration.toBarsBeatsSixteenths().split(":");
+    let clipBars = parseInt(clipParts[0]);
+    let clipBeats = (clipBars * 4) + parseInt(clipParts[1]);
+    let clipSixteenths = getSixteenths(clipDuration);
             
-            var prevClipRight = null;
-            let bar = 0;
-            let barBeat = 0;
-            let beatWidth = barWidth / 4;
-            for (let beat = 0; beat < clipBeats; beat++) {
-              let beatLabel = document.createElement("label");
-              beatLabel.class = "BeatLabel";
-              let beatLeft = Tone.Time(`${bar}:${barBeat}:0`).toMilliseconds();
-              if (prevClipRight) {
-                beatLabel.style.marginLeft = `${beatLeft * msToPixels - prevClipRight}px`;
-              }
-              beatLabel.style.width = `${beatWidth * msToPixels}px`;
-              beatLabel.innerText = `${bar+1}:${barBeat+1}:1`;
-              timeBarElement.appendChild(beatLabel);
-              barBeat++;
-              if (beat % 2 == 0) {
-                beatLabel.classList.add("banded");
-              }
-              prevClipRight = beatLeft * msToPixels + beatWidth * msToPixels;
-              if (barBeat == 4) {
-                bar++;
-                barBeat = 0;
-              }
-              //if (track.id === "track1")
-               // console.log(`Bar: ${barLabel.innerText}, left: ${barLeft * msToPixels}, width: ${barWidth}, clipsWidth: ${clipsWidth}`);
-            }
+    var prevClipRight = null;
+    let bar = 0;
+    let barBeat = 0;
+    let beatWidth = barWidth / 4;
+    for (let beat = 0; beat < clipBeats; beat++) {
+      let beatLabel = document.createElement("label");
+      beatLabel.class = "BeatLabel";
+      let beatLeft = Tone.Time(`${bar}:${barBeat}:0`).toMilliseconds();
+      if (prevClipRight) {
+        beatLabel.style.marginLeft = `${beatLeft * msToPixels - prevClipRight}px`;
+      }
+      beatLabel.style.width = `${beatWidth * msToPixels}px`;
+      beatLabel.innerText = `${bar+1}:${barBeat+1}:1`;
+      timeBarElement.appendChild(beatLabel);
+      barBeat++;
+      if (beat % 2 == 0) {
+        beatLabel.classList.add("banded");
+      }
+      prevClipRight = beatLeft * msToPixels + beatWidth * msToPixels;
+      if (barBeat == 4) {
+        bar++;
+        barBeat = 0;
+      }
+      //if (track.id === "track1")
+       // console.log(`Bar: ${barLabel.innerText}, left: ${barLeft * msToPixels}, width: ${barWidth}, clipsWidth: ${clipsWidth}`);
+    }
             
+    let repeat = true;
+    let noteOffset = 0;
+    let clipLength = Tone.Time(clip.length);
+    let clipLengthInPixels = Tone.Time(clip.length).toMilliseconds() * msToPixels;
+    let clipOffset = Tone.Time("0:0:0");
+    let prevNoteEndInPixels = null;
             
-            let repeat = true;
-            let noteOffset = 0;
-            let clipLength = Tone.Time(clip.length);
-            let clipLengthInPixels = Tone.Time(clip.length).toMilliseconds() * msToPixels;
-            let clipOffset = Tone.Time("0:0:0");
-            let prevNoteEndInPixels = null;
-            while (clipOffset < clipDuration) {
-              clip.notes.forEach(note => {
-                let noteStartTime = Tone.Time(Tone.Time(note.time) + clipOffset);
-                let noteDuration = Tone.Time(note.duration);
-                
-                let noteStartInMs = noteStartTime.toMilliseconds();
-                let noteDurationInMs = noteDuration.toMilliseconds();
-                
-                let noteStartInPixels = noteStartInMs * msToPixels;
-                let noteWidthInPixels = noteDurationInMs * msToPixels;
-                let noteEndInPixels = noteStartInPixels + noteWidthInPixels;
-                let noteMarginLeftInPixels = prevNoteEndInPixels ? noteStartInPixels - prevNoteEndInPixels : noteStartInPixels;
+    let clipTime = clipStartTime;
+    let clipRepeats = Math.round(clipDuration / clipLength, 1);
+    if (track.id == "track1") {
+      console.log("clip repeats " + clip.name, clipRepeats, clip)
+    }
+    while (clipOffset < clipDuration) {
+      clip.notes.forEach(note => {
+        let noteStartTime = Tone.Time(Tone.Time(note.time) + clipOffset);
+        let noteDuration = Tone.Time(note.duration);
+        let noteStartInMs = noteStartTime.toMilliseconds();
+        let noteDurationInMs = noteDuration.toMilliseconds();
+        let noteStartInPixels = noteStartInMs * msToPixels;
+        let noteWidthInPixels = noteDurationInMs * msToPixels;
+        let noteEndInPixels = noteStartInPixels + noteWidthInPixels;
+        let noteMarginLeftInPixels = prevNoteEndInPixels ? noteStartInPixels - prevNoteEndInPixels : noteStartInPixels;
               
-                let noteDurationText = Tone.Time(note.duration).toNotation();
-                if (noteDurationText.endsWith("n")) {
-                  noteDurationText = `1/${noteDurationText.substring(0, noteDurationText.length - 1)}`;
-                }
-                let newClipNoteElement = document.createElement("span");
-                newClipNoteElement.id = `${track.id}-${clip.name}-${clip.notes.indexOf(note)}`;
+        let noteDurationText = Tone.Time(note.duration).toNotation();
+        if (noteDurationText.endsWith("n")) {
+          noteDurationText = `1/${noteDurationText.substring(0, noteDurationText.length - 1)}`;
+        }
+        let newClipNoteElement = document.createElement("span");
+        newClipNoteElement.id = `${track.id}-${clip.name}-${clip.notes.indexOf(note)}`;
                 
-                newClipNoteElement.setAttribute("time", toOneBased(note.time));
-                newClipNoteElement.innerText = note.note;
-                newClipNoteElement.setAttribute("duration", noteDurationText);
-                newClipNoteElement.setAttribute("velocity", Math.round(note.velocity * 127, 0));
-                //newClipNoteElement.setAttribute("data-template", "ClipNote");
-                newClipNoteElement.style.marginLeft = `${noteMarginLeftInPixels}px`;
-                newClipNoteElement.style.width = `${noteWidthInPixels}px`;
-                if (track.id === "track1")
-                  console.log(`note ${note.note}, start: ${noteStartInMs}, left: ${noteStartInMs * msToPixels},  width: ${noteDurationInMs * msToPixels}`, note);
-                prevNoteEndInPixels = noteEndInPixels
-                clipNotesElement.appendChild(newClipNoteElement);
-                //applyTemplates();
-              });
-              clipOffset = Tone.Time(clipOffset + clipLength);
-            }
-            
-            
-            let longestClipNoteDurationInMs = 0;
-            clip.notes.forEach(note => {
-              let noteDurationInMs = Tone.Time(note.duration).toMilliseconds();
-              if (noteDurationInMs > longestClipNoteDurationInMs)
-                longestClipNoteDurationInMs = noteDurationInMs;
-            });
-
-            clip.notes.forEach(note => {
-              /*
-              let clipNoteOffset = (Tone.Time(note.startTime).toMilliseconds() / (clipDurationInMs * 1000));
-              
-              let noteDurationText = Tone.Time(note.duration).toNotation();
-              if (noteDurationText.endsWith("n")) {
-                noteDurationText = `1/${noteDurationText.substring(0, noteDurationText.length - 1)}`;
-              }
-              let newClipNoteElement = document.createElement("div");
-              newClipNoteElement.id = `${track.id}-${clip.name}-${clip.notes.indexOf(note)}`;
-              newClipNoteElement.setAttribute("time", toOneBased(note.time));
-              newClipNoteElement.setAttribute("note", note.note);
-              newClipNoteElement.setAttribute("duration", noteDurationText);
-              newClipNoteElement.setAttribute("velocity", Math.round(note.velocity * 127, 0));
-              newClipNoteElement.setAttribute("data-template", "ClipNote");
-              newClipNoteElement.style.left = `${clipNoteOffset * 100}%`;
-              console.log(`Velocity ${note.velocity}, height ${note.velocity * 100}%, time ${note.time}, offset ${newClipNoteElement.style.left}%`);
-
-              clipNotesElement.appendChild(newClipNoteElement);
-
-              let clipNoteElement = applyTemplate(newClipNoteElement);
-
-              //let velocityBarElement = clipNoteElement.querySelector(".VelocityBar");
-              //velocityBarElement.style.height = `${note.velocity * 100}%`;
-
-              let noteDurationInMs = Tone.Time(note.duration).toMilliseconds();
-
-              // let noteLengthBarElement = clipNoteElement.querySelector(".NoteLengthBar");
-              //noteLengthBarElement.style.width = `${noteDurationInMs / longestClipNoteDurationInMs * 100}%`;
-
-              let visualNoteElement = clipNoteElement.querySelector(".VisualNoteRow");
-             // visualNoteElement.style.width = `${noteDurationInMs / longestClipNoteDurationInMs * 100}%`;
-
-              let velocityBackgroundElement = clipNoteElement.querySelector(".VelocityBackground");
-              velocityBackgroundElement.style.height = `${note.velocity * 100}%`;
-*/
-            });
-
-          });
+        newClipNoteElement.setAttribute("time", toOneBased(note.time));
+        newClipNoteElement.innerText = note.note;
+        newClipNoteElement.setAttribute("duration", noteDurationText);
+        newClipNoteElement.setAttribute("velocity", Math.round(note.velocity * 127, 0));
+        //newClipNoteElement.setAttribute("data-template", "ClipNote");
+        newClipNoteElement.style.marginLeft = `${noteMarginLeftInPixels}px`;
+        newClipNoteElement.style.width = `${noteWidthInPixels}px`;
+        //if (track.id === "track1")
+        //  console.log(`note ${note.note}, start: ${noteStartInMs}, left: ${noteStartInMs * msToPixels},  width: ${noteDurationInMs * msToPixels}`, note);
+        prevNoteEndInPixels = noteEndInPixels
+        clipNotesElement.appendChild(newClipNoteElement);
+        //applyTemplates();
+      });
+      clipOffset = Tone.Time(clipOffset + clipLength);
+    }
+  });
 }
 
 function initializeArmTrackButtons(){
@@ -398,32 +353,29 @@ function initializeArmTrackButtons(){
         selectedTrackId = session.project.tracks[0].id;
         armTrackInputs.forEach(armTrackInput =>
           armTrackInput.addEventListener("change", () => selectedTrackId = armTrackInput.value));
-
 }
 
 function initializeComputerKeyboard(){
   pianoRoll = new PianoRoll();
-        
   pianoRoll.init();
 
-        document.addEventListener("PlayNoteRequestEvent", (eventInfo) => playNote(eventInfo));
-        document.addEventListener("StopNoteRequestEvent", (eventInfo) => stopNote(eventInfo));
+  document.addEventListener("PlayNoteRequestEvent", (eventInfo) => playNote(eventInfo));
+  document.addEventListener("StopNoteRequestEvent", (eventInfo) => stopNote(eventInfo));
 
-        function playNote(eventInfo) {
-          let track = session.project.tracks.find(track => track.id === selectedTrackId);
-          if (track.instruments.length == 0) return;
-          track.instruments.forEach(instrument => {
-            if (instrument.name == "NoiseSynth")
-              instrument.triggerAttack(Tone.now());
-            else
-              instrument.triggerAttack(eventInfo.detail.note, Tone.now())
-          });
-        }
+  function playNote(eventInfo) {
+    let track = session.project.tracks.find(track => track.id === selectedTrackId);
+    if (track.instruments.length == 0) return;
+    track.instruments.forEach(instrument => {
+      if (instrument.name == "NoiseSynth")
+        instrument.triggerAttack(Tone.now());
+      else
+        instrument.triggerAttack(eventInfo.detail.note, Tone.now())
+    });
+  }
 
-        function stopNote(eventInfo) {
-          let track = session.project.tracks.find(track => track.id === selectedTrackId);
-          if (track.instruments.length == 0) return;
-          track.instruments.forEach(instrument => instrument.triggerRelease(Tone.now()));
-        }
-
+  function stopNote(eventInfo) {
+    let track = session.project.tracks.find(track => track.id === selectedTrackId);
+    if (track.instruments.length == 0) return;
+      track.instruments.forEach(instrument => instrument.triggerRelease(Tone.now()));
+  }
 }

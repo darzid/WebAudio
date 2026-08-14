@@ -186,6 +186,14 @@
           </article>
         </template>
 
+        <template id="resonance">
+          <article class="Parameter">
+            <label for="${item.id}">${item.name}</label>
+            <input id="${item.id}" name="${item.name}" type="range" min="0" max="7000" step="1" value="${item.value}">
+            <value for="${item.id}">${item.value}</value>
+          </article>
+        </template>
+        
         <template id="outputRange">
           <article class="Parameter">
             <label for="${item.id}">${item.name}</label>
@@ -540,7 +548,7 @@
                 <div name="harmonicity" data-template="NormalRange" value="0"></div>
                 <div name="modulationIndex" data-template="NormalRange" value="0"></div>
                 <div name="octaves" data-template="octaves" value="0"></div>
-                <div name="resonance" data-template="octaves" value="0"></div>
+                <div name="resonance" data-template="resonance" value="0"></div>
                 <div name="envelope" data-template="AmplitudeEnvelope"></div>
               </div>
             </article>
