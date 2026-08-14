@@ -103,7 +103,7 @@
               "velocity": 1
             },
             {
-              "note": "F1",
+              "note": "F#1",
               "duration": "0:0:1",
               "time": "0:0:3",
               "velocity": 0.78
@@ -136,16 +136,6 @@
                 "sustain": 0.1,
                 "release": 3.4
               }
-            }
-          }
-        },
-        {
-          "Filter": {
-            "type": "Effect",
-            "parameters": {
-              "type": "lowpass",
-              "frequency": 4000,
-              "rolloff": -12
             }
           }
         }
@@ -190,13 +180,13 @@
       "id": "track4",
       "name": "OpenHat",
       "volume": 0,
-      "pan": -0.1,
+      "pan": 0.1,
       "devices": [
         {
           "MetalSynth": {
             "type": "Instrument",
             "parameters": {
-              "volume": -6.45,
+              "volume": -7.5,
               "portamento": 0,
               "harmonicity": 0.65,
               "modulationIndex": 1,

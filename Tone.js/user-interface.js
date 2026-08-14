@@ -34,8 +34,10 @@ let output = document.getElementById("output");
         await loadProject(session);
         await presetBrowser.loadPresets();
 
-        Tone.getTransport().bpm.value = session.project.tempo;
-
+        Tone.Transport.bpm.value = session.project.tempo;
+        Tone.Transport.swing = 0.2;
+        Tone.Transport.swingSubdivision = "16n";
+        
         let tracksElement = document.getElementById("tracks");
         session.project.tracks.forEach(track => createTrack(session.project, tracksElement, track));
 
