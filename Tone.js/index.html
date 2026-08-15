@@ -19,13 +19,13 @@
     <script src="https://unpkg.com/tone"></script>
     <script src="..\lib\template-expander\template-expander.js"></script>
     <script src="..\lib\web-audio\piano-roll.js"></script>
-    <script src=".\ui-components\toggle-button.js"></script>
-    <script src=".\recorder.js" type="module"></script>
-    <script src=".\preset-browser.js"></script>
-    <script src=".\project.js"></script>
-    <script src=".\bind.js"></script>
-    <script src=".\transport.js"></script>
-    <script src=".\user-interface.js"></script>
+    <script src=".\js\ui-components\toggle-button.js"></script>
+    <script src=".\js\recorder.js" type="module"></script>
+    <script src=".\js\preset-browser.js"></script>
+    <script src=".\js\project.js"></script>
+    <script src=".\js\bind.js"></script>
+    <script src=".\js\transport.js"></script>
+    <script src=".\js\user-interface.js"></script>
   </head>
 
   <body>
@@ -855,6 +855,8 @@
     <div id="daw" style="opacity: 0.5">
       <div id="loading">Loading</div>      
         <div class="transport-bar">
+          <button id="open-project-button" style="display: none">OPEN</button>
+          <input type="file" id="file-input" style="display:none"/>
           <button id="rec-button"><img src="img/Rec.png"></button>
           <button id="play-button"><img src="img/Play.png"></button>
           <button id="stop-button"><img src="img/Stop.png"></button>

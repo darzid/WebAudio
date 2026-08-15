@@ -1,0 +1,332 @@
+{
+  "name": "My Project",
+  "tempo": 130,
+  "tracks": [
+    {
+      "id": "track1",
+      "name": "Kick",
+      "volume": -5,
+      "devices": [
+        {
+          "MembraneSynth": {
+            "detune": -1000,
+            "pitchDecay": 0.05,
+            "octaves": 8,
+            "envelope": {
+              "attack": 0.001,
+              "decay": 100,
+              "sustain": 1,
+              "release": 40
+            }
+          }
+        },
+        {
+          "Distortion": {
+            "distortion": 0.1,
+            "oversample": "none",
+            "wet": 0.5
+          }
+        },
+        {
+          "Compressor": {
+            "threshold": -12,
+            "knee": 25,
+            "ratio": 20,
+            "attack": 0.6,
+            "release:": 0.25
+          }
+        }
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "C2",
+            "duration": "8n",
+            "timeOffset": "0",
+            "velocity": 127
+          }
+        ],
+        "startTime": "8m",
+        "length": "4n"
+      }
+    },
+    {
+      "id": "track2",
+      "name": "Bassline",
+      "volume": -5,
+      "devices": [
+        {
+          "MonoSynth": {
+            "volume": -2,
+            "oscillator": {
+              "type": "sawtooth"
+            },
+            "filter": {
+              "Q": 0.3,
+              "detune": -1000,
+              "frequency": 0,
+              "gain": 0,
+              "rolloff": -48,
+              "type": "bandpass"
+            },
+            "envelope": {
+              "attack": 0.01,
+              "decay": 0.4,
+              "sustain": 0,
+              "release": 0
+            },
+            "filterEnvelope": {
+              "attack": 0.1,
+              "decay": 1.3,
+              "sustain": 1,
+              "release": 0.7,
+              "releaseCurve": "linear",
+              "baseFrequency": 20,
+              "octaves": 5
+            }
+          }
+        },
+        {
+          "Compressor": {}
+        }
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "F1",
+            "duration": "16n",
+            "timeOffset": "1",
+            "velocity": 127
+          },
+          {
+            "note": "G1",
+            "duration": "16n",
+            "timeOffset": "2",
+            "velocity": 127
+          },
+          {
+            "note": "F1",
+            "duration": "16n",
+            "timeOffset": "3",
+            "velocity": 127
+          }
+        ],
+        "startTime": "4m",
+        "length": "4n"
+      }
+    },
+    {
+      "id": "track3",
+      "name": "Track 3 with a long name",
+      "volume": -5,
+      "devices": [
+        {
+          "DuoSynth": {
+            "volume": -20
+          }
+        },
+        {
+          "AutoFilter": {}
+        },
+        {
+          "PingPongDelay": {}
+        },
+        {
+          "JCReverb": {}
+        }
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "G3",
+            "duration": "16n",
+            "timeOffset": "1",
+            "velocity": 127
+          },
+          {
+            "note": "G#3",
+            "duration": "16n",
+            "timeOffset": "2",
+            "velocity": 127
+          },
+          {
+            "note": "G2",
+            "duration": "16n",
+            "timeOffset": "3",
+            "velocity": 127
+          }
+        ],
+        "startTime": "0",
+        "length": "1n"
+      }
+    },
+    {
+      "id": "track4",
+      "name": "Track 4",
+      "volume": -5,
+      "devices": [
+        {
+          "MonoSynth": {
+            "volume": -20,
+            "filter": {
+              "Q": 2.3,
+              "rolloff": -48
+            }
+          }
+        },
+        {
+          "LFO": {
+            "type": "sawtooth",
+            "frequency": 0.05,
+            "min": -1000,
+            "max": 400,
+            "phase": 180,
+            "amplitude": 1
+          }
+        },
+        {
+          "JCReverb": {}
+        }
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "G1",
+            "duration": "1n",
+            "timeOffset": "2",
+            "velocity": 127
+          }
+        ],
+        "startTime": "0",
+        "length": "1n"
+      }
+    },
+    {
+      "id": "track5",
+      "name": "Hihat",
+      "volume": -5,
+      "devices": [
+        {
+          "MetalSynth": {
+            "volume": -4,
+            "octaves": 0,
+            "envelope": { 
+              "decay": 0.3
+            }
+          }
+        }
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "G3",
+            "duration": "32n",
+            "timeOffset": "1",
+            "velocity": 40
+          },
+          {
+            "note": "G2",
+            "duration": "8n",
+            "timeOffset": "2",
+            "velocity": 80
+          },
+          {
+            "note": "G3",
+            "duration": "32n",
+            "timeOffset": "3",
+            "velocity": 40
+          }
+        ],
+        "startTime": "12m",
+        "length": "4n"
+      }
+    },
+    {
+      "id": "track6",
+      "name": "Track 6",
+      "volume": -5,
+      "devices": [
+        {
+          "PluckSynth": {
+            "volume": -20,
+            "attackNoise": 7,
+            "release": 3,
+            "dampening": 4700
+          }
+        },
+        {
+          "JCReverb": {}
+        }
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "G1",
+            "duration": "2n",
+            "timeOffset": "2",
+            "velocity": 127
+          },
+          {
+            "note": "G1",
+            "duration": "1n",
+            "timeOffset": "6",
+            "velocity": 127
+          }
+        ],
+        "startTime": "0",
+        "length": "1m"
+      }
+    },
+    {
+      "id": "track7",
+      "name": "Track 7",
+      "volume": -5,
+      "devices": [
+        {
+          "AMSynth": {
+            "volume": 0,
+            "harmonicity": 2,
+            "oscillator": {
+              "type": "amsine2",
+              "modulationType": "sine",
+              "harmonicity": 1.01
+            },
+            "envelope": {
+              "attack": 0.006,
+              "decay": 4,
+              "sustain": 0.04,
+              "release": 1.2
+            },
+            "modulation": {
+              "volume": 13,
+              "type": "amsine2",
+              "modulationType": "sine",
+              "harmonicity": 12
+            },
+            "modulationEnvelope": {
+              "attack": 0.006,
+              "decay": 0.2,
+              "sustain": 0.2,
+              "release": 0.4
+            }
+          }
+        },
+        {
+          "JCReverb": {}
+        }
+      ],
+      "loop": {
+        "notes": [
+          {
+            "note": "G1",
+            "duration": "4n",
+            "timeOffset": "2",
+            "velocity": 127
+          }
+        ],
+        "startTime": "0",
+        "length": "1m"
+      }
+    }
+  ]
+}

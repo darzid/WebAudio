@@ -1,0 +1,110 @@
+{
+  "ToneDataTypes": {
+    "NormalRange": {
+      "min": 0,
+      "max": 1,
+      "description": "Normalized modulation range"
+    },
+    "AudioRange": {
+      "min": -1,
+      "max": 1,
+      "description": "Audio-rate signal range"
+    },
+    "Decibels": {
+      "min": -100,
+      "max": 0,
+      "description": "Gain in decibels"
+    },
+    "Cents": {
+      "min": -1200,
+      "max": 1200,
+      "description": "Pitch offset in cents"
+    },
+    "Frequency": {
+      "min": 0,
+      "max": 22050,
+      "description": "Frequency in Hz or note name"
+    },
+    "Time": {
+      "min": 0,
+      "max": "Infinity",
+      "description": "Seconds or musical time"
+    },
+    "TransportTime": {
+      "min": 0,
+      "max": "Infinity",
+      "description": "Bars:Beats:Sixteenths"
+    },
+    "Ticks": {
+      "min": 0,
+      "max": "Infinity",
+      "description": "Transport ticks"
+    },
+    "Degrees": {
+      "min": 0,
+      "max": 360,
+      "description": "Phase or panning angle"
+    },
+    "Radians": {
+      "min": 0,
+      "max": 6.283185307179586,
+      "description": "Phase or panning angle in radians"
+    },
+    "Gain": {
+      "min": 0,
+      "max": 1,
+      "canExceedOne": true,
+      "description": "Linear gain"
+    },
+    "Volume": {
+      "min": -60,
+      "max": 0,
+      "description": "Volume in decibels"
+    },
+    "Pan": {
+      "min": -1,
+      "max": 1,
+      "description": "Stereo panning"
+    },
+    "amplitude": {
+      "min": 0,
+      "max": 1
+    },
+    "outputRange": {
+      "min": "any",
+      "max": "any"
+    },
+    "attack": {
+      "min": 0,
+      "max": "Infinity"
+    },
+    "decay": {
+      "min": 0,
+      "max": "Infinity"
+    },
+    "release": {
+      "min": 0,
+      "max": "Infinity"
+    },
+    "detune": {
+      "min": -1200,
+      "max": 1200
+    },
+    "phase": {
+      "min": 0,
+      "max": 360
+    },
+    "partialCount": {
+      "min": 0,
+      "max": "Infinity"
+    },
+    "Q": {
+      "min": 0,
+      "max": "Infinity"
+    },
+    "gain": {
+      "min": "-Infinity",
+      "max": "Infinity"
+    }
+  }
+}

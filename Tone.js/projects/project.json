@@ -1,0 +1,48 @@
+{
+  "name": "My Project",
+  "tempo": 146,
+  "length": "48:0:0",
+  "tracks": [
+    {
+      "id": "track1",
+      "name": "Kick",
+      "volume": 0,
+      "pan": 0,
+      "devices": [
+        {
+          "MembraneSynth": {
+            "type": "Instrument",
+            "parameters": {
+              "detune": -1000,
+              "pitchDecay": 0.05,
+              "octaves": 8,
+              "volume": -5,
+              "envelope": {
+                "attack": 0.001,
+                "decay": 1,
+                "sustain": 0.2,
+                "release": 1
+              }
+            }
+          }
+        }
+      ],
+      "clips": [
+        {
+          "name": "Kick01",
+          "notes": [
+            {
+              "note": "C2",
+              "duration": "16n",
+              "time": "0:0:0",
+              "velocity": 1
+            }
+          ],
+          "startTime": "0:0:0",
+          "length": "0:1:0"
+        }
+      ],
+      "automations": []
+    }
+  ]
+}
