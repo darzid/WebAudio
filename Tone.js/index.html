@@ -33,281 +33,141 @@
 
       <!-- Auto-generated Value type templates -->
       <span id="datatype-templates">
-        <template id="NormalRange">
+        <template id="RangeParameter">
           <article class="Parameter">
             <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="1" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="Positive">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="AudioRange">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="-1" max="1" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="Decibels">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="-40" max="0" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="Cents">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="-1200" max="1200" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="Frequency">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="22050" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="Time">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="TransportTime">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="Ticks">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="Infinity" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="Degrees">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="360" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="Radians">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="6.28318530717959" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="Gain">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="1" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="Volume">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="-60" max="0" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="Pan">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="-1" max="1" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="ModulationRange">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="-1000" max="1000" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="TrackVolume">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" title="${item.name}" type="range" min="-60" max="0" step="0.01" value="${item.value}">
-            <value name="${item.name}" for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="TrackPan">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" title="${item.name}" type="range" min="-1" max="1" step="0.1" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-
-        <template id="amplitude">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="1" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="octaves">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="8" step="1" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="resonance">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="7000" step="1" value="${item.value}">
+            <input id="${item.id}" name="${item.name}" type="range" min="${item.min}" max="${item.max}" step="${item.step}" value="${item.value}">
             <value for="${item.id}">${item.value}</value>
           </article>
         </template>
         
+        <template id="NormalRange">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="1" step="0.01" value="${item.value}"/>
+        </template>
+
+        <template id="Positive">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="Infinity" step="0.01" value="${item.value}"/>
+        </template>
+
+        <template id="AudioRange">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-1" max="1" step="0.01" value="${item.value}"/>
+        </template>
+
+        <template id="Decibels">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-40" max="0" step="0.01" value="${item.value}"/>
+        </template>
+
+        <template id="Cents">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-1200" max="1200" step="0.01" value="${item.value}"/>
+        </template>
+
+        <template id="Frequency">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="22500" step="0.01" value="${item.value}"/>
+        </template>
+
+        <template id="Time">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="Infinity" step="0.01" value="${item.value}"/>
+        </template>
+
+        <template id="TransportTime">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="Infinity" step="0.01" value="${item.value}"/>
+        </template>
+
+        <template id="Ticks">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="Infinity" step="0.01" value="${item.value}"/>
+        </template>
+
+        <template id="Degrees">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="360" step="0.01" value="${item.value}"/>
+        </template>
+
+        <template id="Radians">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="6.28318530717959" step="0.01" value="${item.value}"/>
+        </template>
+
+        <template id="Gain">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="1" step="0.01" value="${item.value}"/>
+        </template>
+
+        <template id="Volume">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-60" max="0" step="0.01" value="${item.value}" />
+        </template>
+
+        <template id="Pan">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-1" max="1" step="0.01" value="${item.value}" />
+        </template>
+
+        <template id="ModulationRange">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-1000" max="1000" step="0.01" value="${item.value}" />
+        </template>
+
+        <template id="TrackVolume">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-60" max="0" step="0.01" value="${item.value}" />
+        </template>
+
+        <template id="TrackPan">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-1" max="1" step="0.01" value="${item.value}" />
+        </template>
+
+        <template id="amplitude">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="1" step="0.01" value="${item.value}" />
+        </template>
+
+        <template id="octaves">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="8" step="1" value="${item.value}" />
+        </template>
+
+        <template id="resonance">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="7000" step="0.01" value="${item.value}" />
+        </template>
+        
         <template id="outputRange">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="any" max="any" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="any" max="any" step="0.01" value="${item.value}" />
         </template>
 
-        <template id="attack">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="2" step="0.001" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="decay">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="2" step="0.001" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-
-        <template id="release">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="2" step="0.001" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
+        <template id="adr">
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="2" step="0.001" value="${item.value}" />
         </template>
 
         <template id="detune">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="-1200" max="1200" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-1200" max="1200" step="0.01" value="${item.value}" />
         </template>
 
         <template id="phase">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="360" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="360" step="0.01" value="${item.value}" />
         </template>
 
         <template id="partialCount">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="32" step="1" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="32" step="1" value="${item.value}" />
         </template>
 
         <template id="Q">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="-20" max="20" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-20" max="20" step="0.01" value="${item.value}" />
         </template>
 
         <template id="FilterDetune">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="-2400" max="2400" step="0.1" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-2400" max="2400" step="0.1" value="${item.value}" />
         </template>
 
         <template id="FilterGain">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="-60" max="60" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-60" max="60" step="0.01" value="${item.value}" />
         </template>
 
         <template id="knee">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0" max="40" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="40" step="0.1" value="${item.value}" />
         </template>
 
         <template id="ratio">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="1" max="20" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="1" max="20" step="0.01" value="${item.value}" />
         </template>
 
         <template id="attackNoise">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="0.1" max="20" step="0.01" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0.1" max="20" step="0.01" value="${item.value}" />
         </template>
 
         <template id="maxPolyphony">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="1" max="20" step="1" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
+          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="1" max="20" step="1" value="${item.value}" />
         </template>
-
-
-
 
       </span>
 
@@ -409,12 +269,12 @@
       <span id="component-templates">
         <template id="EnvelopeBase">
           <span>
-            <div name="attack" data-template="attack" value="0.1"></div>
+            <div name="attack" data-template="adr" value="0.1"></div>
             <div name="attackCurve" data-template="EnvelopeCurve" value="exponential"></div>
-            <div name="decay" data-template="decay" value="0.2"></div>
+            <div name="decay" data-template="adr" value="0.2"></div>
             <div name="decayCurve" data-template="EnvelopeCurve" value="exponential"></div>
             <div name="sustain" data-template="NormalRange" value="1.0"></div>
-            <div name="release" data-template="release" value="0.8"></div>
+            <div name="release" data-template="adr" value="0.8"></div>
             <div name="releaseCurve" data-template="EnvelopeCurve" value="exponential"></div>
           </span>
         </template>

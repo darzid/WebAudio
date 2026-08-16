@@ -67,14 +67,16 @@ class Track {
     try {
       
     
-    this._projectFileTrack = projectFileTrack;
-    this._channel = new Tone.Channel({ volume: projectFileTrack.volume, pan: projectFileTrack.pan, channelCount: 2 });
-    this._channel.send("master", 0);
-    //this._channel.toDestination()
-    this._projectFileTrack.devices.forEach(projectFileDevice =>
-      this.addDevice(projectFileDevice[Object.keys(projectFileDevice)[0]].type, Object.keys(projectFileDevice)[0], projectFileDevice[Object.keys(projectFileDevice)[0]].parameters));
-    this._generateClipLoops();
-    this._generateAutomationDefaults();
+      this._projectFileTrack = projectFileTrack;
+      this._channel = new Tone.Channel({ volume: projectFileTrack.volume, pan: projectFileTrack.pan, channelCount: 2 });
+      this._channel.send("master", 0);
+      //this._channel.toDestination()
+      this._projectFileTrack.devices.forEach(projectFileDevice =>
+        this.addDevice(projectFileDevice[Object.keys(projectFileDevice)[0]].type, Object.keys(projectFileDevice)[0], projectFileDevice[Object.keys(projectFileDevice)[0]].parameters));
+      this._generateClipLoops();
+      this._generateAutomationDefaults();
+      if (this.id == "track5")
+        console.log("Track5", this)
     }
     catch (error) {
       console.error("Failed to create track", error)
