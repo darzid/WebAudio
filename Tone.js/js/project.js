@@ -22,16 +22,16 @@ class Project {
 
   constructor(projectFile) {
     console.log("project create");
-    
+
     this._projectFile = projectFile;
-    
+
     let masterChannel = new Tone.Channel({ channelCount: 2 });
     masterChannel.receive("master", 0);
     masterChannel.toDestination();
     this._masterChannel = masterChannel;
-    
+
     console.log("creating tracks")
-    
+
     this._projectFile.tracks.forEach(projectFileTrack =>
       this._tracks.push(new Track(projectFileTrack)));
     console.log("tracks created")
@@ -42,16 +42,16 @@ class Project {
 
   get tempo() { return this._projectFile.tempo; }
   set tempo(value) { this._projectFile.tempo = value; }
-  
+
   get length() { return this._projectFile.length; }
-  
+
   get masterChannel() { return this._masterChannel; }
   get tracks() { return this._tracks; }
 
   start(time) {
     this.tracks.forEach(track => track.start(time));
   }
-  
+
   save() {
     this._projectFile.tracks = [];
     this.tracks.forEach(track => this._projectFile.tracks.push(track.toProjectFileTrack()));
@@ -99,9 +99,11 @@ class Track {
     this._channel.volume.value = value;
     this._projectFileTrack.volume = value;
     document.dispatchEvent(
-      new CustomEvent("TrackVolumeChanged", 
-        { detail: 
-          { track: this.id, volume: value } }));
+      new CustomEvent("TrackVolumeChanged",
+        {
+          detail:
+            { track: this.id, volume: value }
+        }));
   }
 
   get pan() { return this._channel.pan; }
@@ -111,20 +113,24 @@ class Track {
     this._channel.pan.value = value;
     this._projectFileTrack.pan = value;
     document.dispatchEvent(
-      new CustomEvent("TrackPanChanged", 
-      { detail: 
-        { track: this.id, pan: value } }));
+      new CustomEvent("TrackPanChanged",
+        {
+          detail:
+            { track: this.id, pan: value }
+        }));
   }
-  
+
   get enabled() { return !this._channel.mute; }
-  set enabled(value) { 
-    if (value == this.enabled) 
+  set enabled(value) {
+    if (value == this.enabled)
       return;
-    this._channel.mute = !value; 
+    this._channel.mute = !value;
     document.dispatchEvent(
-      new CustomEvent("TrackEnabledChanged", 
-      { detail: 
-        { track: this.id, enabled: this.enabled } }));
+      new CustomEvent("TrackEnabledChanged",
+        {
+          detail:
+            { track: this.id, enabled: this.enabled }
+        }));
   }
 
   get channel() { return this._channel; }
@@ -133,7 +139,7 @@ class Track {
   get effects() { return this._effects; }
 
   get clips() { return this._projectFileTrack.clips; }
-  
+
   get loopNotes() { return this._projectFileTrack.loop.notes; }
   set loopNotes(value) {
     this._projectFileTrack.loop.notes = value;
@@ -182,31 +188,51 @@ class Track {
 
   toProjectFileTrack() {
     this._projectFileTrack.devices = [];
-    
-    document.getElementById(this.id).querySelectorAll(".Instrument").forEach(instrument => {
-      
-      let projectFileTrackDevice = {
-        `"${instrument.name}"`: {
-          "type": "Instrument",
-          "parameters": {}
+
+    document.getElementById(this.id).querySelectorAll(".Instrument").forEach(instrumentElement => {
+
+      let projectFileTrackDeviceParameters = {};
+
+      let deviceParameters = instrumentElement.querySelectorAll(".Parameter");
+      deviceParameters.forEach(parameterArticleElement => {
+        let parameterElement = parameterArticleElement.querySelector("input");
+        if (!parameterElement) 
+          parameterElement = parameterArticleElement.querySelector("select");
+        if (!parameterElement) throw "No parameter input found for Parameter Article";
+        
+        let parameterName = parameterElement.getAttribute("name");
+        if (!parameterName) throw "Parameter doesn't have a name";
+
+        let parameterValue = parameterElement.value;
+
+        let moduleElement = parameterArticleElement.closest(".Module");
+        let moduleName = moduleElement.getAttribute("name");
+        if (!moduleName) throw "Module doesn't have a name";
+
+        if (moduleElement === instrumentElement) {
+          projectFileTrackDeviceParameters[parameterName] = parameterValue;
+        } else {
+
+          if (!projectFileTrackDeviceParameters[moduleName]) {
+            projectFileTrackDeviceParameters[moduleName] = {}
+          }
+          projectFileTrackDeviceParameters[moduleName][parameterName] = parameterValue;
         }
-      );
-      
-      let deviceParameters = instrument.querySelectorAll(".Parameter");
-      deviceParameters.forEach(parameter => {
-        projectFileTrack[parameter.id] = parameter.value;
-        let module = parameter.closest(".Module");
-        console.log("toProjectFileTrack", parameter, module)
       });
-      
+
+      let projectFileTrackDevice = {};
+      projectFileTrackDevice[instrumentElement.getAttribute("name")] = {
+        "type": "Instrument",
+        "parameters": projectFileTrackDeviceParameters
+      };
       this._projectFileTrack.devices.push(projectFileTrackDevice);
     });
   }
-  
+
   _generateClipLoops() {
     let clipIndex = 0;
     let transport = Tone.getTransport();
-    
+
     this._projectFileTrack.clips.forEach(clip => {
       let loopStartTime = Tone.Time(clip.startTime)
       let loopEndTime = null;
@@ -220,9 +246,9 @@ class Track {
 
       const part = new Tone.Part(((time, value) => {
         this.instruments.forEach(instrument => {
-          if (value.note) 
+          if (value.note)
             instrument.triggerAttackRelease(value.note, value.duration, time, value.velocity);
-          else 
+          else
             instrument.triggerAttack(time);
         });
       }), clip.notes);

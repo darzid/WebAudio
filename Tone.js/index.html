@@ -3,7 +3,7 @@
 
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" ="width=device-width, initial-scale=1">
+    <meta name="viewport"="width=device-width, initial-scale=1">
     <title>DAWSome</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/input-range.css">
@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-    
+
     <!-- <script src="//unpkg.com/systemjs@0.19.47/dist/system.js"></script> -->
     <script src="https://unpkg.com/tone"></script>
     <script src="..\lib\template-expander\template-expander.js"></script>
@@ -24,158 +24,156 @@
     <script src=".\js\preset-browser.js"></script>
     <script src=".\js\project.js"></script>
     <script src=".\js\bind.js"></script>
+    <script src=".\js\tone-helper.js"></script>
     <script src=".\js\transport.js"></script>
+    <script src=".\js\file-io.js"></script>
     <script src=".\js\user-interface.js"></script>
   </head>
 
   <body>
     <span id="templates">
 
-      <!-- Auto-generated Value type templates -->
-      <!--
+      <template id="RangeParameter">
+        <article class="Parameter">
+          <label for="${item.id}">${item.name}</label>
+          <input id="${item.id}" name="${item.name}" type="range" min="${item.min}" max="${item.max}" step="${item.step}" value="${item.value}">
+          <value for="${item.id}">${item.value}</value>
+        </article>
+      </template>
+
       <span id="datatype-templates">
-        
-        <template id="RangeParameter">
-          <article class="Parameter">
-            <label for="${item.id}">${item.name}</label>
-            <input id="${item.id}" name="${item.name}" type="range" min="${item.min}" max="${item.max}" step="${item.step}" value="${item.value}">
-            <value for="${item.id}">${item.value}</value>
-          </article>
-        </template>
-        
+
+
         <template id="NormalRange">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="1" step="0.01" value="${item.value}"/>
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="1" step="0.01" value="${item.value}" />
         </template>
 
         <template id="Positive">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="Infinity" step="0.01" value="${item.value}"/>
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="Infinity" step="0.01" value="${item.value}" />
         </template>
 
         <template id="AudioRange">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-1" max="1" step="0.01" value="${item.value}"/>
+          <div data-template="RangeParameter" name="${item.name}" min="-1" max="1" step="0.01" value="${item.value}" />
         </template>
 
         <template id="Decibels">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-40" max="0" step="0.01" value="${item.value}"/>
+          <div data-template="RangeParameter" name="${item.name}" min="-40" max="0" step="0.01" value="${item.value}" />
         </template>
 
         <template id="Cents">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-1200" max="1200" step="0.01" value="${item.value}"/>
+          <div data-template="RangeParameter" name="${item.name}" min="-1200" max="1200" step="0.01" value="${item.value}" />
         </template>
 
         <template id="Frequency">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="22500" step="0.01" value="${item.value}"/>
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="22500" step="0.01" value="${item.value}" />
         </template>
 
         <template id="Time">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="Infinity" step="0.01" value="${item.value}"/>
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="Infinity" step="0.01" value="${item.value}" />
         </template>
 
         <template id="TransportTime">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="Infinity" step="0.01" value="${item.value}"/>
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="Infinity" step="0.01" value="${item.value}" />
         </template>
 
         <template id="Ticks">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="Infinity" step="0.01" value="${item.value}"/>
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="Infinity" step="0.01" value="${item.value}" />
         </template>
 
         <template id="Degrees">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="360" step="0.01" value="${item.value}"/>
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="360" step="0.01" value="${item.value}" />
         </template>
 
         <template id="Radians">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="6.28318530717959" step="0.01" value="${item.value}"/>
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="6.28318530717959" step="0.01" value="${item.value}" />
         </template>
 
         <template id="Gain">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="1" step="0.01" value="${item.value}"/>
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="1" step="0.01" value="${item.value}" />
         </template>
 
         <template id="Volume">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-60" max="0" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="-60" max="0" step="0.01" value="${item.value}" />
         </template>
 
         <template id="Pan">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-1" max="1" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="-1" max="1" step="0.01" value="${item.value}" />
         </template>
 
         <template id="ModulationRange">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-1000" max="1000" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="-1000" max="1000" step="0.01" value="${item.value}" />
         </template>
 
         <template id="TrackVolume">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-60" max="0" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="-60" max="0" step="0.01" value="${item.value}" />
         </template>
 
         <template id="TrackPan">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-1" max="1" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="-1" max="1" step="0.01" value="${item.value}" />
         </template>
 
         <template id="amplitude">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="1" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="1" step="0.01" value="${item.value}" />
         </template>
 
         <template id="octaves">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="8" step="1" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="8" step="1" value="${item.value}" />
         </template>
 
         <template id="resonance">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="7000" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="7000" step="0.01" value="${item.value}" />
         </template>
-        
+
         <template id="outputRange">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="any" max="any" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="any" max="any" step="0.01" value="${item.value}" />
         </template>
 
         <template id="adr">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="2" step="0.001" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="2" step="0.001" value="${item.value}" />
         </template>
 
         <template id="detune">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-1200" max="1200" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="-1200" max="1200" step="0.01" value="${item.value}" />
         </template>
 
         <template id="phase">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="360" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="360" step="0.01" value="${item.value}" />
         </template>
 
         <template id="partialCount">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="32" step="1" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="32" step="1" value="${item.value}" />
         </template>
 
         <template id="Q">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-20" max="20" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="-20" max="20" step="0.01" value="${item.value}" />
         </template>
 
         <template id="FilterDetune">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-2400" max="2400" step="0.1" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="-2400" max="2400" step="0.1" value="${item.value}" />
         </template>
 
         <template id="FilterGain">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="-60" max="60" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="-60" max="60" step="0.01" value="${item.value}" />
         </template>
 
         <template id="knee">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0" max="40" step="0.1" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="0" max="40" step="0.1" value="${item.value}" />
         </template>
 
         <template id="ratio">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="1" max="20" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="1" max="20" step="0.01" value="${item.value}" />
         </template>
 
         <template id="attackNoise">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="0.1" max="20" step="0.01" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="0.1" max="20" step="0.01" value="${item.value}" />
         </template>
 
         <template id="maxPolyphony">
-          <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="1" max="20" step="1" value="${item.value}" />
+          <div data-template="RangeParameter" name="${item.name}" min="1" max="20" step="1" value="${item.value}" />
         </template>
 
-      </span>-->
+      </span>
 
-      <!-- Option Value templates -->
-      
-      <!--
       <span id="optionvalue-templates">
         <template id="OscillatorType">
           <article class="Parameter">
@@ -267,14 +265,11 @@
             </select>
           </article>
         </template>
-      
-      </span>
-      -->
 
-      <!-- Components -->
-      <!--
+      </span>
+
       <span id="component-templates">
-      
+
         <template id="EnvelopeBase">
           <span>
             <div name="attack" data-template="adr" value="0.1"></div>
@@ -322,9 +317,6 @@
           </article>
         </template>
 
--->
-        <!-- Sources -->
-        <!--
         <span id="source-templates">
           <template id="OmniOscillator">
             <article name="${item.name}" class="Source Module">
@@ -335,17 +327,14 @@
                 <div name="partialCount" data-template="partialCount" value="1"></div>
                 <div name="phase" data-template="Degrees" value="0"></div>
                 <div name="type" data-template="OscillatorType" value="square"></div>
-                -->
-                <!-- <div name="volume" data-template="Decibels" value="0"></div> -->
-          <!--    </div>
+              </div>
             </article>
           </template>
-          
-        </span>-->
 
-        <!-- Instruments -->
-      <!--  <span id="instrument-templates">-->
-<!--
+        </span>
+
+        <span id="instrument-templates">
+
           <template id="AMSynth">
             <article name="${item.name}" class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
@@ -488,11 +477,10 @@
             </article>
           </template>
 
-        </span>-->
+        </span>
 
-        <!-- Effects -->
-  <!--      <span id="effect-templates">-->
-<!--
+        <span id="effect-templates">
+
           <template id="AutoFilter">
             <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
@@ -653,12 +641,11 @@
 
         </span>
 
-      </span>-->
+      </span>
 
-  <!--    <span id="daw-templates">-->
-<!--
+      <span id="daw-templates">
         <template id="Track">
-          
+
           <article id="${item.id}" class="Track">
             <div class="track-header">
               <div class="title-bar">
@@ -684,7 +671,7 @@
               <div name="Devices" class="TrackDevices"></div>
             </div>
           </article>
-        
+
         </template>
 
         <template id="TrackLane">
@@ -703,7 +690,7 @@
             </div>
           </article>
         </template>
-        
+
         <template id="ClipNote">
           <article class="ClipNote">
             <div class="Row">
@@ -723,44 +710,42 @@
             <value for="${item.id}-input">${item.value}</value>
           </div>
         </template>
-        
-        
+
+
       </span>
-    </span>-->
+    </span>
 
     <div id="daw" style="opacity: 0.5">
-      <div id="loading">Loading</div>      
-      <!--
+      <div id="loading">Loading</div>
       <div id="title-bar">
         <input type="text" id="project-name" style="display: none">
         <button id="open-project-button" style="display: none"><img src="img/Open.png"></button>
         <button id="save-project-button" style="display: none"><img src="img/Save.png"></button>
       </div>
       <div id="save-bar">
-        <input type="file" id="file-input" style="display:none"/>
+        <input type="file" id="file-input" style="display:none" />
       </div>
       <div class="transport-bar">
-          <button id="rec-button"><img src="img/Rec.png"></button>
-          <button id="play-button"><img src="img/Play.png"></button>
-          <button id="stop-button"><img src="img/Stop.png"></button>
-          <div id="position"></div>
-          <span id="view-toggles">
-            <label for="toggle-clips"><input type="checkbox" id="toggle-clips" checked>Clips</label>
-            <label for="toggle-devices"><input type="checkbox" id="toggle-devices" checked>Devices</label>
-            <label for="toggle-mixer"><input type="checkbox" id="toggle-mixer" checked>Mixer</label>
-          </span>
-        </div>
+        <button id="rec-button"><img src="img/Rec.png"></button>
+        <button id="play-button"><img src="img/Play.png"></button>
+        <button id="stop-button"><img src="img/Stop.png"></button>
+        <div id="position"></div>
+        <span id="view-toggles">
+          <label for="toggle-clips"><input type="checkbox" id="toggle-clips" checked>Clips</label>
+          <label for="toggle-devices"><input type="checkbox" id="toggle-devices" checked>Devices</label>
+          <label for="toggle-mixer"><input type="checkbox" id="toggle-mixer" checked>Mixer</label>
+        </span>
+      </div>
 
-        <div id="tracks" style="flex-direction: column">
-        </div>
+      <div id="tracks" style="flex-direction: column">
+      </div>
       <div id="mixer" class="Mixer">
       </div>
       <div id="PresetBrowser" class="PresetBrowser">
         <div id="presets-data" style="display: none"></div>
       </div>
-      -->
     </div>
-    
+
   </body>
 
 </html>
