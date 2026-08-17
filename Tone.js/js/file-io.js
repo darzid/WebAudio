@@ -1,8 +1,13 @@
+var openProjectButton;
+var fileInput;
+var saveProjectButton;
+var projectNameInput;
+
 function initializeLoadSaveCommands(session) {
-  let openProjectButton = document.getElementById("open-project-button");
-  let fileInput = document.getElementById("file-input");
-  let saveProjectButton = document.getElementById("save-project-button");
-  let projectNameInput = document.getElementById("project-name");
+  openProjectButton = document.getElementById("open-project-button");
+  fileInput = document.getElementById("file-input");
+  saveProjectButton = document.getElementById("save-project-button");
+  projectNameInput = document.getElementById("project-name");
 
   openProjectButton.style.display = "block";
   fileInput = document.getElementById("file-input");
@@ -50,24 +55,41 @@ function initializeLoadSaveCommands(session) {
 
     reader.readAsText(file);
   }
+}
 
-  function createProjectUI(session) {
-    projectNameInput.value = session.project.name;
+async function loadDefaultProject(session) {
+  await fetch('.\\project.json')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(projectFile => {
+      session.project = new Project(projectFile);
+      createProjectUI(session);
+    })
+    .catch(error => {
+      console.error('Error loading JSON:', error);
+    });
+}
 
-    tracksElement = document.getElementById("tracks");
-    tracksElement.innerHTML = "";
+function createProjectUI(session) {
+  projectNameInput.value = session.project.name;
 
-    mixerElement = document.getElementById("mixer");
-    mixerElement.innerHTML = "";
+  tracksElement = document.getElementById("tracks");
+  tracksElement.innerHTML = "";
 
-    session.project.tracks.forEach(track => renderTrack(session.project, tracksElement, track));
-    initializeToggleButtons();
-    initializeArmTrackButtons();
+  mixerElement = document.getElementById("mixer");
+  mixerElement.innerHTML = "";
 
-    Tone.Transport.bpm.value = session.project.tempo;
-    Tone.Transport.swing = 0.2;
-    Tone.Transport.swingSubdivision = "16n";
-  }
+  session.project.tracks.forEach(track => renderTrack(session.project, tracksElement, track));
+  initializeToggleButtons();
+  initializeArmTrackButtons();
+
+  Tone.Transport.bpm.value = session.project.tempo;
+  Tone.Transport.swing = 0.2;
+  Tone.Transport.swingSubdivision = "16n";
 
   function initializeArmTrackButtons() {
     let armTrackInputs = document.querySelectorAll("input[type='radio'][name='arm-track']");
@@ -76,7 +98,4 @@ function initializeLoadSaveCommands(session) {
     armTrackInputs.forEach(armTrackInput =>
       armTrackInput.addEventListener("change", () => selectedTrackId = armTrackInput.value));
   }
-
-
 }
-

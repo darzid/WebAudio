@@ -1,19 +1,6 @@
 // const { Tone } = require("tone/build/esm/core/Tone");
 
 
-async function loadProject(session) {
-  await fetch('.\\projects\\project.json')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(projectFile => session.project = new Project(projectFile))
-    .catch(error => {
-      console.error('Error loading JSON:', error);
-    });
-}
 
 class Project {
   _projectFile;
@@ -62,7 +49,6 @@ class Project {
       console.log("Project saved", { "json": content});
       return;
     }
-    
     
     var a = document.createElement("a");
     var file = new Blob([content], { type: "text/plain" });

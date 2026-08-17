@@ -16,6 +16,8 @@ session = {
 
 document.addEventListener("DOMContentLoaded", async (event) => {
   await createBasicUI();
+  initializeLoadSaveCommands(session);
+  await loadDefaultProject(session);
 });
 
 document.addEventListener("mousemove", async () => {
@@ -32,7 +34,7 @@ document.addEventListener("mousemove", async () => {
 
   //Tone.setContext(new Tone.Context({ latencyHint: "playback", lookAhead: 0.15 }))
   await Tone.start();
-  initializeLoadSaveCommands(session);
+  
 });
 
 async function createBasicUI() {
