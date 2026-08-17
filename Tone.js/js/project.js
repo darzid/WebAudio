@@ -55,6 +55,14 @@ class Project {
   save() {
     this._projectFile.tracks = [];
     this.tracks.forEach(track => this._projectFile.tracks.push(track.toProjectFileTrack()));
+
+    let content = JSON.stringify(this._projectFile);
+
+    var a = document.createElement("a");
+    var file = new Blob([content], { type: "text/plain" });
+    a.href = URL.createObjectURL(file);
+    a.download = `${this.name}.json`;
+    a.click();
   }
 }
 
@@ -196,10 +204,10 @@ class Track {
       let deviceParameters = instrumentElement.querySelectorAll(".Parameter");
       deviceParameters.forEach(parameterArticleElement => {
         let parameterElement = parameterArticleElement.querySelector("input");
-        if (!parameterElement) 
+        if (!parameterElement)
           parameterElement = parameterArticleElement.querySelector("select");
         if (!parameterElement) throw "No parameter input found for Parameter Article";
-        
+
         let parameterName = parameterElement.getAttribute("name");
         if (!parameterName) throw "Parameter doesn't have a name";
 
@@ -227,6 +235,7 @@ class Track {
       };
       this._projectFileTrack.devices.push(projectFileTrackDevice);
     });
+    return this._projectFileTrack;
   }
 
   _generateClipLoops() {
