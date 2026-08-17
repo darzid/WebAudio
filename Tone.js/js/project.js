@@ -51,6 +51,11 @@ class Project {
   start(time) {
     this.tracks.forEach(track => track.start(time));
   }
+  
+  save() {
+    this._projectFile.tracks = [];
+    this.tracks.forEach(track => this._projectFile.tracks.push(track.toProjectFileTrack()));
+  }
 }
 
 class Track {
@@ -65,8 +70,6 @@ class Track {
 
   constructor(projectFileTrack) {
     try {
-      
-    
       this._projectFileTrack = projectFileTrack;
       this._channel = new Tone.Channel({ volume: projectFileTrack.volume, pan: projectFileTrack.pan, channelCount: 2 });
       this._channel.send("master", 0);
@@ -177,6 +180,29 @@ class Track {
     return parameter;
   }
 
+  toProjectFileTrack() {
+    this._projectFileTrack.devices = [];
+    
+    document.getElementById(this.id).querySelectorAll(".Instrument").forEach(instrument => {
+      
+      let projectFileTrackDevice = {
+        `"${instrument.name}"`: {
+          "type": "Instrument",
+          "parameters": {}
+        }
+      );
+      
+      let deviceParameters = instrument.querySelectorAll(".Parameter");
+      deviceParameters.forEach(parameter => {
+        projectFileTrack[parameter.id] = parameter.value;
+        let module = parameter.closest(".Module");
+        console.log("toProjectFileTrack", parameter, module)
+      });
+      
+      this._projectFileTrack.devices.push(projectFileTrackDevice);
+    });
+  }
+  
   _generateClipLoops() {
     let clipIndex = 0;
     let transport = Tone.getTransport();
