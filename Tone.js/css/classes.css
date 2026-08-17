@@ -4,6 +4,27 @@
   --device-btn-enabled-checked-shadow: rgba(190, 140, 50, 0.8);
 }
 
+#title-bar, #save-bar {
+  padding: 0.2em;
+  input {
+    width: 100%;
+    text-align: center;
+    background: transparent;
+  }
+  
+  button {
+    background: transparent;
+    border: 0pt solid black;
+    padding: 0pt;
+    margin-left: 0.15em;
+    margin-right: 0.15em;
+  }
+  button > img { 
+    width: 2em; 
+  }
+}
+
+
 .tracks {
   display: block;
 }
