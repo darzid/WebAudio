@@ -1,5 +1,6 @@
 
 let output = document.getElementById("output");
+/*
       let pianoRoll = null;
       let presetBrowser = new PresetBrowser();
       var presets;
@@ -8,10 +9,11 @@ let output = document.getElementById("output");
       let toneInitialized = false;
       let openProjectButton = document.getElementById("open-project-button");
       let fileInput = document.getElementById("file-input");
-
-let tracksElement = document.getElementById("tracks");
-        //session.project.tracks.forEach(track => createTrack(session.project, tracksElement, track));
-        let mixerElement = document.getElementById("mixer");
+      let saveProjectButton = document.getElementById("save-project-button");
+      let tracksElement = document.getElementById("tracks");
+        
+      //session.project.tracks.forEach(track => createTrack(session.project, tracksElement, track));
+      let mixerElement = document.getElementById("mixer");
         
       session = {
           project: null
@@ -32,14 +34,16 @@ function readSingleFile(e, session) {
     var reader = new FileReader();
     reader.addEventListener("load", (e) => {
       try {
-        
-        
         var contents = e.target.result;
         let projectFile = JSON.parse(contents);
         console.log("reader load", e.target, projectFile)
         //console.log("open file", contents);
         
         session.project = new Project(projectFile);
+        let projectNameInput = document.getElementById("project-name");
+        projectNameInput.value = session.project.name;
+        projectNameInput.addEventListener("change", () => session.project.name = projectNameInput.value);
+        
         tracksElement = document.getElementById("tracks");
         //session.project.tracks.forEach(track => createTrack(session.project, tracksElement, track));
         mixerElement = document.getElementById("mixer");
@@ -84,6 +88,7 @@ function readSingleFile(e, session) {
 
         //Tone.setContext(new Tone.Context({ latencyHint: "playback", lookAhead: 0.15 }))
         await Tone.start();
+        
         openProjectButton = document.getElementById("open-project-button");
         openProjectButton.style.display = "block";
         fileInput = document.getElementById("file-input");
@@ -91,13 +96,16 @@ function readSingleFile(e, session) {
           fileInput.style.display = "block";
           fileInput.addEventListener('change', (e) => readSingleFile(e, session), false);
         });
+        
+        saveProjectButton = document.getElementById("save-project-button");
+        saveProjectButton.style.display = "block";
+        projectNameInput = document.getElementById("project-name");
+        projectNameInput.style.display = "inline";
+        saveProjectButton.addEventListener("click", () => session.project.save(), false);
       });
-
 
       async function createUI() {
         //applyTemplates();
-
-        
         //await loadProject(session);
         await presetBrowser.loadPresets();
 
@@ -457,3 +465,5 @@ function initializeComputerKeyboard(){
       track.instruments.forEach(instrument => instrument.triggerRelease(Tone.now()));
   }
 }
+
+*/

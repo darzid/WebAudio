@@ -32,7 +32,9 @@
     <span id="templates">
 
       <!-- Auto-generated Value type templates -->
+      <!--
       <span id="datatype-templates">
+        
         <template id="RangeParameter">
           <article class="Parameter">
             <label for="${item.id}">${item.name}</label>
@@ -169,9 +171,11 @@
           <div data-template="RangeParameter" id="${item.id}" name="${item.name}" min="1" max="20" step="1" value="${item.value}" />
         </template>
 
-      </span>
+      </span>-->
 
       <!-- Option Value templates -->
+      
+      <!--
       <span id="optionvalue-templates">
         <template id="OscillatorType">
           <article class="Parameter">
@@ -263,10 +267,14 @@
             </select>
           </article>
         </template>
+      
       </span>
+      -->
 
       <!-- Components -->
+      <!--
       <span id="component-templates">
+      
         <template id="EnvelopeBase">
           <span>
             <div name="attack" data-template="adr" value="0.1"></div>
@@ -280,28 +288,28 @@
         </template>
 
         <template id="AmplitudeEnvelope">
-          <article class="Component Module">
+          <article name="${item.name}" class="Component Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
-            <div class="expander-content ModuleParameters" data-template="EnvelopeBase"></div>
+            <div class="expander-content ModuleParameters" name="${item.name}" data-template="EnvelopeBase"></div>
           </article>
         </template>
 
         <template id="ModulationEnvelope">
-          <article class="Component Module">
+          <article name="${item.name}" class="Component Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
-            <div class="expander-content ModuleParameters" data-template="EnvelopeBase"></div>
+            <div class="expander-content ModuleParameters" name="${item.name}" data-template="EnvelopeBase"></div>
           </article>
         </template>
 
         <template id="FrequencyEnvelope">
-          <article class="Component Module">
+          <article name="${item.name}" class="Component Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
-            <div class="expander-content ModuleParameters" data-template="EnvelopeBase"></div>
+            <div class="expander-content ModuleParameters" name="${item.name}" data-template="EnvelopeBase"></div>
           </article>
         </template>
 
         <template id="FilterComponent">
-          <article class="Component Module">
+          <article name="${item.name}" class="Component Module">
             <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
             <div class="expander-content ModuleParameters">
               <div name="Q" data-template="Q" value="1"></div>
@@ -314,10 +322,12 @@
           </article>
         </template>
 
+-->
         <!-- Sources -->
+        <!--
         <span id="source-templates">
           <template id="OmniOscillator">
-            <article class="Source Module">
+            <article name="${item.name}" class="Source Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button></div>
               <div class="expander-content ModuleParameters">
                 <div name="detune" data-template="Cents" class="${item.class}" value="0"></div>
@@ -325,17 +335,19 @@
                 <div name="partialCount" data-template="partialCount" value="1"></div>
                 <div name="phase" data-template="Degrees" value="0"></div>
                 <div name="type" data-template="OscillatorType" value="square"></div>
+                -->
                 <!-- <div name="volume" data-template="Decibels" value="0"></div> -->
-              </div>
+          <!--    </div>
             </article>
           </template>
-        </span>
+          
+        </span>-->
 
         <!-- Instruments -->
-        <span id="instrument-templates">
-
+      <!--  <span id="instrument-templates">-->
+<!--
           <template id="AMSynth">
-            <article class="Instrument Module">
+            <article name="${item.name}" class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="detune" data-template="Cents" value="0"></div>
@@ -351,7 +363,7 @@
           </template>
 
           <template id="DuoSynth">
-            <article class="Instrument Module">
+            <article name="${item.name}" class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="detune" data-template="Cents" value="0"></div>
@@ -367,7 +379,7 @@
           </template>
 
           <template id="FMSynth">
-            <article class="Instrument Module">
+            <article name="${item.name}" class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="detune" data-template="Cents" value="0"></div>
@@ -384,7 +396,7 @@
           </template>
 
           <template id="MembraneSynth">
-            <article class="Instrument Module">
+            <article name="${item.name}" class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="detune" data-template="Cents" value="0"></div>
@@ -399,7 +411,7 @@
           </template>
 
           <template id="MetalSynth">
-            <article class="Instrument Module">
+            <article name="${item.name}" class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="detune" data-template="Cents" value="0"></div>
@@ -415,7 +427,7 @@
           </template>
 
           <template id="MonoSynth">
-            <article class="Instrument Module">
+            <article name="${item.name}" class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="detune" data-template="Cents" value="0"></div>
@@ -430,7 +442,7 @@
           </template>
 
           <template id="NoiseSynth">
-            <article class="Instrument Module">
+            <article name="${item.name}" class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="volume" data-template="Decibels" value="0"></div>
@@ -441,7 +453,7 @@
           </template>
 
           <template id="PluckSynth">
-            <article class="Instrument Module">
+            <article name="${item.name}" class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="volume" data-template="Decibels" value="0"></div>
@@ -454,7 +466,7 @@
           </template>
 
           <template id="PolySynth">
-            <article class="Instrument Module">
+            <article name="${item.name}" class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="volume" data-template="Decibels" value="0"></div>
@@ -464,7 +476,7 @@
           </template>
 
           <template id="Synth">
-            <article class="Instrument Module">
+            <article name="${item.name}" class="Instrument Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="detune" data-template="Cents" value="0"></div>
@@ -476,13 +488,13 @@
             </article>
           </template>
 
-        </span>
+        </span>-->
 
         <!-- Effects -->
-        <span id="effect-templates">
-
+  <!--      <span id="effect-templates">-->
+<!--
           <template id="AutoFilter">
-            <article class="Effect Module">
+            <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="type" data-template="OscillatorType" value="lowpass"></div>
@@ -496,7 +508,7 @@
           </template>
 
           <template id="AutoPanner">
-            <article class="Effect Module">
+            <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="depth" data-template="NormalRange" value="0"></div>
@@ -508,7 +520,7 @@
           </template>
 
           <template id="AutoWah">
-            <article class="Effect Module">
+            <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="Q" data-template="Positive" value="0"></div>
@@ -523,7 +535,7 @@
           </template>
 
           <template id="Compressor">
-            <article class="Effect Module">
+            <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="threshold" data-template="Decibels" value="1"></div>
@@ -536,7 +548,7 @@
           </template>
 
           <template id="Distortion">
-            <article class="Effect Module">
+            <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="distortion" data-template="NormalRange" value="1"></div>
@@ -547,7 +559,7 @@
           </template>
 
           <template id="Filter">
-            <article class="Effect Module">
+            <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="Q" data-template="Q" value="1"></div>
@@ -561,7 +573,7 @@
           </template>
 
           <template id="Freeverb">
-            <article class="Effect Module">
+            <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="roomSize" data-template="NormalRange" value="0"></div>
@@ -571,7 +583,7 @@
           </template>
 
           <template id="JCReverb">
-            <article class="Effect Module">
+            <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="roomSize" data-template="NormalRange" value="0"></div>
@@ -581,7 +593,7 @@
           </template>
 
           <template id="LFO">
-            <article class="Effect Module">
+            <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="type" data-template="OscillatorType" value="lowpass"></div>
@@ -595,7 +607,7 @@
           </template>
 
           <template id="Phaser">
-            <article class="Effect Module">
+            <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="frequency" data-template="Time" value="0"></div>
@@ -608,7 +620,7 @@
           </template>
 
           <template id="PingPongDelay">
-            <article class="Effect Module">
+            <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="delayTime" data-template="Time" value="0"></div>
@@ -619,7 +631,7 @@
           </template>
 
           <template id="Reverb">
-            <article class="Effect Module">
+            <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="decay" data-template="Time" value="0"></div>
@@ -630,7 +642,7 @@
           </template>
 
           <template id="StereoWidener">
-            <article class="Effect Module">
+            <article name="${item.name}" class="Effect Module">
               <div class="title-bar"><button class="toggle-button">${item.name}</button><button class="browse-button"><img src="img/browse.png"></button><input type="checkbox" name="enabled" checked></div>
               <div class="expander-content ModuleParameters">
                 <div name="width" data-template="NormalRange" value="0"></div>
@@ -641,11 +653,12 @@
 
         </span>
 
-      </span>
+      </span>-->
 
-      <span id="daw-templates">
-
+  <!--    <span id="daw-templates">-->
+<!--
         <template id="Track">
+          
           <article id="${item.id}" class="Track">
             <div class="track-header">
               <div class="title-bar">
@@ -671,6 +684,7 @@
               <div name="Devices" class="TrackDevices"></div>
             </div>
           </article>
+        
         </template>
 
         <template id="TrackLane">
@@ -709,14 +723,23 @@
             <value for="${item.id}-input">${item.value}</value>
           </div>
         </template>
+        
+        
       </span>
-    </span>
+    </span>-->
 
     <div id="daw" style="opacity: 0.5">
       <div id="loading">Loading</div>      
-        <div class="transport-bar">
-          <button id="open-project-button" style="display: none">OPEN</button>
-          <input type="file" id="file-input" style="display:none"/>
+      <!--
+      <div id="title-bar">
+        <input type="text" id="project-name" style="display: none">
+        <button id="open-project-button" style="display: none"><img src="img/Open.png"></button>
+        <button id="save-project-button" style="display: none"><img src="img/Save.png"></button>
+      </div>
+      <div id="save-bar">
+        <input type="file" id="file-input" style="display:none"/>
+      </div>
+      <div class="transport-bar">
           <button id="rec-button"><img src="img/Rec.png"></button>
           <button id="play-button"><img src="img/Play.png"></button>
           <button id="stop-button"><img src="img/Stop.png"></button>
@@ -727,6 +750,7 @@
             <label for="toggle-mixer"><input type="checkbox" id="toggle-mixer" checked>Mixer</label>
           </span>
         </div>
+
         <div id="tracks" style="flex-direction: column">
         </div>
       <div id="mixer" class="Mixer">
@@ -734,7 +758,9 @@
       <div id="PresetBrowser" class="PresetBrowser">
         <div id="presets-data" style="display: none"></div>
       </div>
+      -->
     </div>
+    
   </body>
 
 </html>
