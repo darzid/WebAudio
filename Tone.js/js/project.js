@@ -57,7 +57,13 @@ class Project {
     this.tracks.forEach(track => this._projectFile.tracks.push(track.toProjectFileTrack()));
 
     let content = JSON.stringify(this._projectFile);
-
+    
+    if (window.navigator.userAgent.toString().startsWith("Mozilla/5.0 (Linux; Android 16; SM-A556B")) {
+      console.log("Project saved", { "json": content});
+      return;
+    }
+    
+    
     var a = document.createElement("a");
     var file = new Blob([content], { type: "text/plain" });
     a.href = URL.createObjectURL(file);
