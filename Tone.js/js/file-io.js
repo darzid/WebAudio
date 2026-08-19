@@ -13,7 +13,7 @@ function initializeLoadSaveCommands(session) {
   fileInput = document.getElementById("file-input");
 
   openProjectButton.addEventListener("click", () => {
-    fileInput.style.display = "block";
+    fileInput.parentElement.style.display = "block";
     fileInput.addEventListener('change', (e) => loadProject(e, session), false);
   });
 
@@ -49,7 +49,7 @@ function initializeLoadSaveCommands(session) {
         console.error("Error while loading project", error)
       }
       finally {
-        fileInput.style.display = "none";
+        fileInput.parentElement.style.display = "none";
       }
     });
 

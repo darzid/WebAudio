@@ -107,32 +107,70 @@ input[type="radio"] {
   background-color: rgb(170, 170, 170);
 }
 
-.transport-bar {
-  display: flex;
-  flex-direction: row;
-  margin-top: 0.2em;
-  margin-left: 0.2em; 
-  vertical-align: middle;
-  
-  button {
-    background: transparent;
-    border: 0pt solid black;
-    padding: 0pt;
-    margin-left: 0.15em;
-    margin-right: 0.15em;
-  }
-  button > img { 
-    width: 2em; 
-  }
-  #position {
-    margin-left: 0.2em;
-    margin-right: 0.2em;
-    width: 3em;
-    margin-top: 0.1em;
-    /* font-size: 1.5em; */
-  }
+#project-name {
+  border-radius: 0.3em;
 }
 
+#save-bar {
+  display: none;
+}
+
+#lower-bar {
+  background: rgba(0,0,0,0.1);
+  padding: 0.2em;
+
+  #transport-bar {
+    display: flex;
+    flex-direction: row;
+    margin-top: 0em;
+    margin-left: 0.1em; 
+    
+    button {
+      background: transparent;
+      padding: 0pt;
+      margin-left: 0.15em;
+      margin-right: 0.15em;
+      padding-top: 0.2em;
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      vertical-align: middle;
+      border: 0.1em solid rgba(0,0,0,0.3);
+      border-radius: 0.3em;
+    }
+    
+    button > img { 
+      width: 2em; 
+      margin: 0pt;
+      padding: 0pt;
+    }
+    #position {
+      margin-left: 0.2em;
+      margin-right: 0.2em;
+      width: 4em;
+      padding: 0pt;
+      padding-top: 0.3em;
+      border: 0.1em solid rgba(0,0,0,0.2);
+      border-radius: 0.3em;
+      text-align: center;
+    }
+  }
+  #view-toggles {
+    margin-right: 0;
+    margin-top: 0.5em;
+    margin-left: auto;
+    
+    label, input {
+      margin: 0pt;
+      margin-right: 0.2em;
+      padding: 0pt;
+    }
+    
+    input {
+      margin-top: 0.25em;
+      
+    }
+  }
+}
 
 #tracks {
   flex: 2 1 0;

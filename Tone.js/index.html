@@ -723,20 +723,21 @@
         <button id="save-project-button" style="display: none"><img src="img/Save.png"></button>
       </div>
       <div id="save-bar">
-        <input type="file" id="file-input" style="display:none" />
+        <input type="file" id="file-input"  />
       </div>
-      <div class="transport-bar">
-        <button id="rec-button"><img src="img/Rec.png"></button>
-        <button id="play-button"><img src="img/Play.png"></button>
-        <button id="stop-button"><img src="img/Stop.png"></button>
-        <div id="position"></div>
-        <span id="view-toggles">
+      <span id="lower-bar">
+        <div id="transport-bar">
+          <button id="rec-button"><img src="img/Rec.png"></button>
+          <button id="play-button"><img src="img/Play.png"></button>
+          <button id="stop-button"><img src="img/Stop.png"></button>
+          <div id="position">1:1:1</div>
+        </div>
+        <div id="view-toggles">
           <label for="toggle-clips"><input type="checkbox" id="toggle-clips" checked>Clips</label>
           <label for="toggle-devices"><input type="checkbox" id="toggle-devices" checked>Devices</label>
           <label for="toggle-mixer"><input type="checkbox" id="toggle-mixer" checked>Mixer</label>
-        </span>
-      </div>
-
+        </div>
+      </span>
       <div id="tracks" style="flex-direction: column">
       </div>
       <div id="mixer" class="Mixer">
