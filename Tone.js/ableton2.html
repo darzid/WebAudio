@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <style>
+:root {
+  --color-bg: rgb(115,115,120);
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  
+  --control-bg: rgb(140,140,145);
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0em;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0em;
+  background-color: var(--color-bg);
+}
+
+body, input {
+  font-family: var(--font-ui);
+  font-size: 14px;
+}
+
+.control {
+  margin: 0;
+  padding: 0;
+  border: 0pt;
+  background-color: var(--control-bg);
+  border-radius: 1px;
+  vertical-align: top;
+}
+
+input[type="number"] {
+  background-color: white;
+  background-image: linear-gradient(to right, #00b7b7 0%, #00b7b7 0%, white 0%, white 100%);
+  text-align: center;
+}
+
+.image-button {
+  height: 18px;
+  padding: 1px;
+  
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.active {
+  background-color: #f8d200;
+}
+.transport-button {
+  background-color: transparent;
+}
+
+.margin-left {
+  margin-left: 8px;
+}
+.margin-right {
+  margin-right: 8px;
+}
+
+#app {
+  background-color: 
+  height: 100%;
+}
+
+#app-buttons {
+  background: transparent;
+}
+
+#project-header {
+  width: 100%;
+  display: flex;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-left: 3px;
+  
+  input {
+    width: stretch;
+    text-align: center;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+  
+  button {
+    background-color: transparent;
+  }
+}
+
+#play.active > img {
+  content: url(img/play-green.png);
+}
+
+#rec.active > img {
+  content: url(img/rec-red.png);
+}
+
+.time {
+  width: 4em;
+  text-align: center;
+}
+
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div id="project-header" class="margins">
+      <button class="control image-button"><img src="img/upload-black.png"></button>
+      <input id="project-name" class="control" type="text" value="My project">
+      <button class="control image-button margin-right"><img src="img/download-black.png"></button>
+    </div>
+    <div id="app-buttons">
+
+      <button id="play" class="control image-button transport-button margin-left"><img src="img/play-black.png"></button>
+      <button id="stop" class="control image-button transport-button"><img src="img/stop-black.png"></button>
+      <button id="rec" class="control image-button transport-button toggle-button"><img src="img/rec-black.png"></button>
+      <input id="position" class="control time" type="text" value="1:1:1" readonly>
+
+      <input id="project-length" class="control time margin-left" type="text" value="8:0:0">
+      <button class="control image-button toggle-button active"><img src="img/loop.png"></button>
+      
+      <button class="control image-button toggle-button active margin-left"><img src="img/clip.png"></button>
+      <button class="control image-button toggle-button active "><img src="img/audio-device.png"></button>
+      <button class="control image-button toggle-button"><img src="img/mixer.png"></button>
+      
+      <input class="control" type="number" min="0" max="100" value="20">
+    </div>
+  </div>
+  <script>
+Number.prototype.clamp = function(min, max) {
+  return Math.min(Math.max(this, min), max);
+};
+
+document.querySelectorAll(".toggle-button").forEach((button) => button.addEventListener("click", () => button.classList.toggle("active")));
+
+let playButton = document.getElementById("play");
+let stopButton = document.getElementById("stop");
+let recButton = document.getElementById("rec");
+
+playButton.onclick = () => {
+  if (playButton.classList.contains("active")) return;
+  playButton.classList.add("active");
+}
+
+stopButton.onclick = () => {
+  if (!playButton.classList.contains("active")) return;
+  playButton.classList.remove("active");
+  if (recButton.classList.contains("active")) {
+    recButton.classList.remove("active");
+  }
+}
+
+let numberInputs = document.querySelectorAll("input[type=number]");
+numberInputs.forEach((input) => {
+  updateNumberProgress(input);
+  let pointerDown = false;
+  input.addEventListener("pointerdown", (e) => pointerDown = true );
+  input.addEventListener("pointerup", (e) => pointerDown = false);
+  input.addEventListener("pointermove", (e) => {
+    if (!pointerDown) return;
+    
+    let movement = (Math.abs(e.movementY) > Math.abs(e.movementX)) ? -e.movementY : e.movementX;
+    
+    let value = (parseFloat(input.value) + movement).clamp(input.min, input.max);
+    input.value = value;
+    updateNumberProgress(input);
+  });
+  input.addEventListener("input", () => updateNumberProgress(input));
+});
+
+function updateNumberProgress(input) {
+  let progress = 100* ((input.value - input.min) / (input.max - input.min));
+  //console.log("value progress", input.value, progress)
+  input.style.backgroundImage = `linear-gradient(to right, #00b7b7 0%, #00b7b7 ${progress}%, white ${progress}%, white 100%)`;
+}
+  </script>
+</body>
+
+</html>
