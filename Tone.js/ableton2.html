@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title></title>
+  <script src=".\js\Number.js"></script>
+  <script src=".\js\ui-components\number-input.js"></script>
   <style>
 :root {
   --color-bg: rgb(115,115,120);
@@ -29,6 +31,11 @@ body, input {
   font-size: 14px;
 }
 
+.panel {
+  margin: 8px;
+  display: flex;
+}
+
 .control {
   margin: 0;
   padding: 0;
@@ -42,6 +49,14 @@ input[type="number"] {
   background-color: white;
   background-image: linear-gradient(to right, #00b7b7 0%, #00b7b7 0%, white 0%, white 100%);
   text-align: center;
+}
+
+label.number-label {
+  display: flex;
+  flex-direction: column;
+  width: min-content;
+  text-align: center;
+  margin: 4px;
 }
 
 .image-button {
@@ -132,17 +147,21 @@ input[type="number"] {
       <button class="control image-button toggle-button active margin-left"><img src="img/clip.png"></button>
       <button class="control image-button toggle-button active "><img src="img/audio-device.png"></button>
       <button class="control image-button toggle-button"><img src="img/mixer.png"></button>
-      
-      <input class="control" type="number" min="0" max="100" value="20">
+    </div>
+    
+    <div class="panel">
+      <label class="control-label number-label">Velocity
+        <input class="control" type="number" min="0" max="127" value="20">
+      </label>
+      <label class="control-label number-label">Q
+        <input class="control" type="number" min="0" max="1" step="0.01" value="0.2">
+      </label>
     </div>
   </div>
   <script>
-Number.prototype.clamp = function(min, max) {
-  return Math.min(Math.max(this, min), max);
-};
 
 document.querySelectorAll(".toggle-button").forEach((button) => button.addEventListener("click", () => button.classList.toggle("active")));
-
+initializeNumberInputs();
 let playButton = document.getElementById("play");
 let stopButton = document.getElementById("stop");
 let recButton = document.getElementById("rec");
@@ -158,30 +177,6 @@ stopButton.onclick = () => {
   if (recButton.classList.contains("active")) {
     recButton.classList.remove("active");
   }
-}
-
-let numberInputs = document.querySelectorAll("input[type=number]");
-numberInputs.forEach((input) => {
-  updateNumberProgress(input);
-  let pointerDown = false;
-  input.addEventListener("pointerdown", (e) => pointerDown = true );
-  input.addEventListener("pointerup", (e) => pointerDown = false);
-  input.addEventListener("pointermove", (e) => {
-    if (!pointerDown) return;
-    
-    let movement = (Math.abs(e.movementY) > Math.abs(e.movementX)) ? -e.movementY : e.movementX;
-    
-    let value = (parseFloat(input.value) + movement).clamp(input.min, input.max);
-    input.value = value;
-    updateNumberProgress(input);
-  });
-  input.addEventListener("input", () => updateNumberProgress(input));
-});
-
-function updateNumberProgress(input) {
-  let progress = 100* ((input.value - input.min) / (input.max - input.min));
-  //console.log("value progress", input.value, progress)
-  input.style.backgroundImage = `linear-gradient(to right, #00b7b7 0%, #00b7b7 ${progress}%, white ${progress}%, white 100%)`;
 }
   </script>
 </body>
