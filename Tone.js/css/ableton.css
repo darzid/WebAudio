@@ -1,148 +1,221 @@
-/* Ableton Live–style base theme */
 :root {
-  /* Neutrals */
-  --color-bg: #1b1b1b;
-  --color-bg-panel: #262626;
-  --color-bg-panel-alt: #2f2f2f;
-  --color-bg-editor: #202020;
-  --color-border: #3a3a3a;
-  --color-border-light: #505050;
-
-  /* Text */
-  --color-text: #f0f0f0;
-  --color-text-muted: #b0b0b0;
-  --color-text-strong: #ffffff;
-
-  /* Accents (approx. Ableton Live 12) */
-  --color-accent-main: #f5d200;   /* yellow */
-  --color-accent-blue: #4fb3ff;
-  --color-accent-green: #8fd15a;
-  --color-accent-orange: #f39c12;
-  --color-accent-red: #e74c3c;
-
-  /* Utility */
-  --radius-small: 2px;
-  --radius-medium: 4px;
-
-  --border-thin: 1px;
-  --border-medium: 2px;
-
-  --pad-xxs: 2px;
-  --pad-xs: 4px;
-  --pad-sm: 6px;
-  --pad-md: 8px;
-  --pad-lg: 12px;
-
+  --color-bg: rgb(115,115,120);
   --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  
+  --control-bg: rgb(140,140,145);
 }
 
-/* Global */
 body {
-  margin: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0em;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0em;
   background-color: var(--color-bg);
-  color: var(--color-text);
+}
+
+body, input {
   font-family: var(--font-ui);
-  font-size: 12px;
+  font-size: 14px;
 }
 
-/* Panels */
 .panel {
-  background-color: var(--color-bg-panel);
-  border: var(--border-thin) solid var(--color-border);
-  padding: var(--pad-sm);
-  border-radius: var(--radius-small);
-}
-
-.panel--alt {
-  background-color: var(--color-bg-panel-alt);
-}
-
-/* Headers / labels */
-.panel-header {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--color-text-muted);
-  padding-bottom: var(--pad-xs);
-  border-bottom: var(--border-thin) solid var(--color-border-light);
-}
-
-/* Controls */
-.control-row {
+  margin: 3px;
   display: flex;
-  align-items: center;
-  gap: var(--pad-xs);
-  padding: var(--pad-xs) 0;
 }
 
-.control-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
+.control {
+  margin: 0;
+  padding: 0;
+  border: 0pt;
+  background-color: var(--control-bg);
+  border-radius: 1px;
+  vertical-align: top;
 }
 
-.knob,
-.slider,
-.button {
-  border-radius: var(--radius-small);
-  border: var(--border-thin) solid var(--color-border-light);
-  padding: var(--pad-xxs) var(--pad-xs);
-  background-color: var(--color-bg-editor);
-  color: var(--color-text);
+input[type="number"] {
+  text-align: center;
+  width: 4em;
 }
 
-/* Accent states */
-.button--primary,
-.knob--active,
-.slider--active {
-  border-color: var(--color-accent-main);
-  color: var(--color-accent-main);
+input.time {
+  width: 4em;
+  text-align: center;
 }
 
-.button--blue {
-  border-color: var(--color-accent-blue);
-  color: var(--color-accent-blue);
+label.number-label {
+  display: flex;
+  flex-direction: column;
+  width: min-content;
+  text-align: center;
+  margin: 4px;
+  
+  input[type="number"] {
+    background-color: white;
+    background-image: linear-gradient(to right, 
+      #00b7b7 0%, 
+      #00b7b7 0%, 
+      white 0%, 
+      white 100%);
+  }
 }
 
-.button--green {
-  border-color: var(--color-accent-green);
-  color: var(--color-accent-green);
+.image-button {
+  height: 18px;
+  padding: 1px;
+  
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
 
-/* Piano roll / editor */
-.editor {
-  background-color: var(--color-bg-editor);
-  border: var(--border-thin) solid var(--color-border);
-  padding: var(--pad-sm);
+.active {
+  background-color: #f8d200;
+}
+.transport-button {
+  background-color: transparent;
 }
 
-.editor-grid {
-  border-top: var(--border-thin) solid var(--color-border-light);
+.margin-left {
+  margin-left: 8px;
+}
+.margin-right {
+  margin-right: 8px;
 }
 
-/* Meter / compressor */
-.meter {
-  background-color: #151515;
-  border: var(--border-thin) solid var(--color-border);
-  padding: var(--pad-xs);
+#app {
+  height: 100%;
 }
 
-.meter-bar {
-  height: 6px;
-  border-radius: var(--radius-small);
-  background: linear-gradient(
-    to top,
-    var(--color-accent-green),
-    var(--color-accent-yellow),
-    var(--color-accent-red)
-  );
+#app-buttons {
+  background: transparent;
+  margin-left: 3px;
 }
 
-/* Utility spacing */
-.pad-xs { padding: var(--pad-xs); }
-.pad-sm { padding: var(--pad-sm); }
-.pad-md { padding: var(--pad-md); }
+#project-header {
+  width: 100%;
+  display: flex;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-left: 3px;
+  
+  input {
+    width: stretch;
+    text-align: center;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+  
+  button {
+    background-color: transparent;
+  }
+}
 
-.border-thin { border-width: var(--border-thin); }
-.border-medium { border-width: var(--border-medium); }
+#play.active > img {
+  content: url(img/play-green.png);
+}
+
+#rec.active > img {
+  content: url(img/rec-red.png);
+}
+
+#tracks {
+  display: grid;
+  width: 100%;
+  overflow-x: auto;
+  grid-template-areas:
+    'gridheader timeline'
+    'header clips';
+}
+
+.gridheader {
+  grid-area: 'gridheader';
+  width: 100px;
+}
+
+.timeline {
+  grid-area: 'timeline';
+  display: flex;
+  
+  div {
+    width: 60px;
+    border: 1pt solid red;
+    display: inline;
+  }
+}
+.track-header {
+  grid-area: 'header';
+  display: flex;
+  
+}
+
+.track-clips {
+  grid-area: 'clips';
+}
+.track {
+  border: 1pt solid black;
+}
+
+input.medium-width {
+  width: 70px;
+}
+.enabled-button {
+  background-color2: orange;
+  width: 14px;
+  height: 14px;
+  margin: 3px;
+}
+
+#tracks-table-container {
+  width: stretch;
+  overflow-x: scroll;
+  margin-left: 7em;
+  overflow-y: visible;
+  padding: 0;
+  
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-top: 1px solid grey;
+  }
+  
+  td,
+  th {
+    margin: 0;
+    border: 1px solid grey;
+    white-space: nowrap;
+    border-top-width: 0px;
+  }
+  
+  td div {
+    display: inline-block;
+    width: 50px;
+  }
+  
+  td.timeline-col {
+    width: auto;
+  }
+  .headcol {
+    position: absolute;
+    width: max-content;
+    left: 0;
+    top: auto;
+    border-top-width: 1px;
+    /*only relevant for first row*/
+    margin-top: -1px;
+    /*compensate for top border*/
+  }
+  
+  #Track1-Clip1 {
+    position: relative;
+    left: 0px;
+  }
+  
+  #Track1-Clip2 {
+    position: relative;
+    left: 160px;
+  }
+}

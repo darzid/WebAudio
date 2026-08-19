@@ -5,124 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title></title>
+  <link rel="stylesheet" href="css/ableton.css">
   <script src=".\js\Number.js"></script>
   <script src=".\js\ui-components\number-input.js"></script>
   <style>
-:root {
-  --color-bg: rgb(115,115,120);
-  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  
-  --control-bg: rgb(140,140,145);
-}
-
-body {
-  width: 100%;
-  height: 100%;
-  margin: 0em;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0em;
-  background-color: var(--color-bg);
-}
-
-body, input {
-  font-family: var(--font-ui);
-  font-size: 14px;
-}
-
-.panel {
-  margin: 8px;
-  display: flex;
-}
-
-.control {
-  margin: 0;
-  padding: 0;
-  border: 0pt;
-  background-color: var(--control-bg);
-  border-radius: 1px;
-  vertical-align: top;
-}
-
-input[type="number"] {
-  background-color: white;
-  background-image: linear-gradient(to right, #00b7b7 0%, #00b7b7 0%, white 0%, white 100%);
-  text-align: center;
-}
-
-label.number-label {
-  display: flex;
-  flex-direction: column;
-  width: min-content;
-  text-align: center;
-  margin: 4px;
-}
-
-.image-button {
-  height: 18px;
-  padding: 1px;
-  
-  img {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.active {
-  background-color: #f8d200;
-}
-.transport-button {
-  background-color: transparent;
-}
-
-.margin-left {
-  margin-left: 8px;
-}
-.margin-right {
-  margin-right: 8px;
-}
-
-#app {
-  background-color: 
-  height: 100%;
-}
-
-#app-buttons {
-  background: transparent;
-}
-
-#project-header {
-  width: 100%;
-  display: flex;
-  margin-top: 3px;
-  margin-bottom: 3px;
-  margin-left: 3px;
-  
-  input {
-    width: stretch;
-    text-align: center;
-    margin-left: 2px;
-    margin-right: 2px;
-  }
-  
-  button {
-    background-color: transparent;
-  }
-}
-
-#play.active > img {
-  content: url(img/play-green.png);
-}
-
-#rec.active > img {
-  content: url(img/rec-red.png);
-}
-
-.time {
-  width: 4em;
-  text-align: center;
-}
 
   </style>
 </head>
@@ -135,11 +21,13 @@ label.number-label {
       <button class="control image-button margin-right"><img src="img/download-black.png"></button>
     </div>
     <div id="app-buttons">
-
+      <input id="tempo" class="control" type="number" value="120">
+      
       <button id="play" class="control image-button transport-button margin-left"><img src="img/play-black.png"></button>
       <button id="stop" class="control image-button transport-button"><img src="img/stop-black.png"></button>
       <button id="rec" class="control image-button transport-button toggle-button"><img src="img/rec-black.png"></button>
-      <input id="position" class="control time" type="text" value="1:1:1" readonly>
+      
+      <input id="position" class="control time margin-left" type="text" value="1:1:1" readonly>
 
       <input id="project-length" class="control time margin-left" type="text" value="8:0:0">
       <button class="control image-button toggle-button active"><img src="img/loop.png"></button>
@@ -150,18 +38,77 @@ label.number-label {
     </div>
     
     <div class="panel">
-      <label class="control-label number-label">Velocity
+      <label class="number-label">Velocity
         <input class="control" type="number" min="0" max="127" value="20">
       </label>
-      <label class="control-label number-label">Q
+      <label class="number-label">Q
         <input class="control" type="number" min="0" max="1" step="0.01" value="0.2">
       </label>
+    </div>
+    
+    <div id="tracks-table-container">
+      <table>
+        <tr>
+          <th class="headcol"></th>
+          <td class="timeline-col">        
+            <div>1:1:1</div><div>1:1:2</div><div>1:1:3</div><div>1:1:4</div>
+            <div>1:2:1</div><div>1:2:2</div><div>1:2:3</div><div>1:2:4</div>
+            <div>1:3:1</div><div>1:3:2</div><div>1:3:3</div><div>1:3:4</div>
+          </td>
+        </tr>
+        <tr>
+          <th class="headcol">
+            <div>
+              <button class="control toggle-button enabled-button"></button>
+              <label><input name="track-name" class="control medium-width" type="text" value="Track 1"></label>
+            </div>       
+          </th>
+          <td>        
+            <div id="Track1-Clip1">Clip 1</div>
+            <div id="Track1-Clip2">Clip 2</div>
+          </td>
+        </tr>
+        <tr>
+          <th class="headcol">
+            <div>
+              <button class="control toggle-button enabled-button"></button>
+              <label><input name="track-name" class="control medium-width" type="text" value="Track 1"></label>
+            </div>
+          </th>
+          <td>Clip 1</td>
+        </tr>
+      </table>
+    </div>
+    
+    <div id="tracks" style="display: none">
+      <div class="gridheader">Header</div>
+      <div class="timeline">
+        <div>1:1:1</div><div>1:1:2</div><div>1:1:3</div><div>1:1:4</div>
+        <div>1:2:1</div><div>1:2:2</div><div>1:2:3</div><div>1:2:4</div>
+        <div>1:3:1</div><div>1:3:2</div><div>1:3:3</div><div>1:3:4</div>
+      </div>
+      <div class="track-header">
+        <button class="control toggle-button enabled-button"></button>
+        <label><input name="track-name" class="control medium-width" type="text" value="Track 1"></label>
+      </div>
+      <div class="track-clips">
+        clip1
+      </div>
+      <div class="track-header">
+        <button class="control toggle-button enabled-button"></button>
+        <label><input name="track-name" class="control medium-width" type="text" value="Track 2"></label>
+      </div>
+      <div class="track-clips">
+        <div>Clip 1</div>
+        <div>Clip 2</div>
+      </div>
     </div>
   </div>
   <script>
 
 document.querySelectorAll(".toggle-button").forEach((button) => button.addEventListener("click", () => button.classList.toggle("active")));
 initializeNumberInputs();
+
 let playButton = document.getElementById("play");
 let stopButton = document.getElementById("stop");
 let recButton = document.getElementById("rec");
