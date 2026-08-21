@@ -46,20 +46,20 @@
       </label>
     </div>
     
-    <input id="zoom" type="range" min="100" max="200" value="100">
+    <input id="zoom" type="range" min="50" max="200" value="100">
     
     <div id="tracks-table-container">
       <table id="tracks-table">
         <tr>
-          <th class="headcol top-row"></th>
+          <th class="headcol top-row control"></th>
           <td id="timeline" class="timeline-col">        
           </td>
         </tr>
         
         <tr class="track-row">
-          <th class="headcol">
+          <th class="headcol control">
             <div>
-              <button class="control toggle-button enabled-button"></button>
+              <button class="control toggle-button enabled-button active"></button>
               <label><input name="track-name" class="control medium-width" type="text" value="Track 1"></label>
             </div>       
           </th>
@@ -67,9 +67,9 @@
           </td>
         </tr>
         <tr class="track-row">
-          <th class="headcol">
+          <th class="headcol control">
             <div>
-              <button class="control toggle-button enabled-button"></button>
+              <button class="control toggle-button enabled-button active"></button>
               <label><input name="track-name" class="control medium-width" type="text" value="Track 2"></label>
             </div>
           </th>
@@ -113,6 +113,7 @@ for (bar = 1; bar <= 4; bar++) {
       let className = (sixteenth > 1) ? "sixteenth" : (beat > 1) ? "beat" : "bar";
       let timelineElement = document.createElement("div");
       timelineElement.className = className;
+      
       timelineElement.innerText = `${bar}:${beat}:${sixteenth}`;
       timelineElement.title = `${bar}:${beat}:${sixteenth}`;
       timelineElement.style.width = "50px";
