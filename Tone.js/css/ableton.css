@@ -13,6 +13,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   padding: 0em;
+  overflow-y: hidden;
   background-color: var(--color-bg);
 }
 
@@ -43,6 +44,14 @@ input[type="number"] {
 input.time {
   width: 4em;
   text-align: center;
+}
+
+label.range-label {
+  display: flex;
+  flex-direction: row;
+  width: min-content;
+  text-align: center;
+  margin: 4px;
 }
 
 label.number-label {
@@ -121,59 +130,98 @@ label.number-label {
 #rec.active > img {
   content: url(img/rec-red.png);
 }
-/*
-#tracks {
-  display: grid;
-  width: 100%;
-  overflow-x: auto;
-  grid-template-areas:
-    'gridheader timeline'
-    'header clips';
-}
 
-.gridheader {
-  grid-area: 'gridheader';
-  width: 100px;
-}
-
-.timeline {
-  grid-area: 'timeline';
-  display: flex;
-  
-  div {
-    width: 60px;
-    border: 1pt solid red;
-    display: inline;
-  }
-}
-.track-header {
-  grid-area: 'header';
-  display: flex;
-  
-}
-
-.track-clips {
-  grid-area: 'clips';
-}
-.track {
-  border: 1pt solid black;
-}
-*/
 input.medium-width {
   width: 70px;
 }
 
+.zoom-label {
+  width: 100%;
+  
+  label {
+    margin-left: auto;
+    margin-right: 0pt;
+  }
+}
+
+.selected {
+  background: rgba(0,150,150,0.5);
+}
+
+#tracks-table-outer-container {
+  overflow-y: scroll;
+  height: 300px;
+}
 #tracks-table-container {
   width: stretch;
+  
   overflow-x: scroll;
-  margin-left: 7em;
-  overflow-y: visible;
+  margin-left: 7.1em;
+  margin-top: 2em;
+  
   padding: 0;
   
   table {
     border-collapse: separate;
     border-spacing: 0;
     border-top: 1px solid grey;
+    
+  }
+  /*
+  thead th {
+    position: sticky;
+    top: 0;
+    background: #f2f2f2;
+    z-index: 2;
+  }
+
+  tbody td:first-child,
+  thead th:first-child {
+      position: sticky;
+      left: 0;
+      background: #f2f2f2;
+  }
+  */
+  #top-row {
+    position: absolute;
+    margin-top: -2em;
+  }
+  
+  .headcol {
+    position: absolute;
+    width: max-content;
+    left: 0;
+    top: auto;
+    border-top-width: 1px;
+    /*only relevant for first row*/
+    margin-top: -1px;
+    /*compensate for top border*/
+    padding-top: 1px;
+    margin-left: 2px;
+    
+    .enabled-button {
+      width: 14px;
+      height: 14px;
+      margin: 4px;
+      
+      border: 1px solid darkgray;
+    }
+
+    input {
+      font-size: small;
+      vertical-align: middle;
+      overflow: hidden;
+      padding-top: 4px;
+      background: white;
+    }
+    
+    input:read-only {
+      background: transparent;
+    }
+  }
+  
+  tr.selected th {
+    background: rgba(50,150,150,0.2);
   }
   
   td,
@@ -185,6 +233,9 @@ input.medium-width {
     height: 25px;
   }
   
+  th.top-row {
+    border: transparent;
+  }
   td div {
     display: inline-block;
     width: 50px;
@@ -218,32 +269,7 @@ input.medium-width {
     }
   }
   
-  .headcol {
-    position: absolute;
-    width: max-content;
-    left: 0;
-    top: auto;
-    border-top-width: 1px;
-    /*only relevant for first row*/
-    margin-top: -1px;
-    /*compensate for top border*/
-    padding-top: 1px;
-    
-    .enabled-button {
-      width: 14px;
-      height: 14px;
-      margin: 4px;
-      
-      border: 1px solid darkgray;
-    }
 
-    input {
-      font-size: small;
-      vertical-align: middle;
-      overflow: hidden;
-      padding-top: 4px;
-    }
-  }
   
   .Clip {
     background-color: #00b7b7;
@@ -267,6 +293,28 @@ input.medium-width {
   }
 }
 
-#zoom {
-  margin-left: 20px;
+/*
+.table-container {
+    max-height: 400px;
+    max-width: 800px;
+    overflow: auto;
+    border: 1px solid #ccc;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    background: white;
+    min-width: 120px;
+}
+
+
+thead th:first-child {
+    z-index: 3;
+}
+*/

@@ -18,9 +18,14 @@ function initializeNumberInputs() {
         .clamp(input.min, input.max);
       
       input.value = value;
+      var evnt = input["oninput"];
+      if (evnt)
+        evnt.call(input);
       updateNumberBackground(input);
     });
+    
     input.addEventListener("change", () => updateNumberBackground(input));
+    //, { capture: false, passive: false });
   });
   
   function updateNumberBackground(input) {
