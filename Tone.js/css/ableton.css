@@ -190,7 +190,6 @@ input.medium-width {
     border-top-width: 0px;
   }
   
-  
   td div {
     display: inline-block;
     width: 50px;
@@ -203,7 +202,8 @@ input.medium-width {
     padding: 0pt;
     
     div {
-      border: 1pt solid transparent;
+      border: 1px solid transparent;
+      width: 50px;
     }
     
     div.bar {
@@ -211,7 +211,7 @@ input.medium-width {
     }
     
     div.beat {
-      border-left: 1px solid silver;
+      border-left: 1px solid darkgray;
     }
     
     div.sixteenth {
@@ -254,4 +254,8 @@ input.medium-width {
   #Track3-Clip2 {
     left: 0px;
   }
+}
+
+#zoom {
+  margin-left: 20px;
 }
