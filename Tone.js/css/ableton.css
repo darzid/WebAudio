@@ -190,6 +190,7 @@ input.medium-width {
     border-top-width: 0px;
   }
   
+  
   td div {
     display: inline-block;
     width: 50px;
@@ -197,7 +198,27 @@ input.medium-width {
   
   td.timeline-col {
     width: auto;
+    background-color: var(--control-bg);
+    margin: 0pt;
+    padding: 0pt;
+    
+    div {
+      border: 1pt solid transparent;
+    }
+    
+    div.bar {
+      border-left: 1px solid black;
+    }
+    
+    div.beat {
+      border-left: 1px solid silver;
+    }
+    
+    div.sixteenth {
+      border-left: 1px solid gray;
+    }
   }
+  
   .headcol {
     position: absolute;
     width: max-content;
@@ -207,15 +228,30 @@ input.medium-width {
     /*only relevant for first row*/
     margin-top: -1px;
     /*compensate for top border*/
+    margin-bottom: auto;
+    
+    input {
+      font-size: small;
+      vertical-align: middle;
+    }
+    
+  }
+  
+  .Clip {
+    background-color: #00b7b7;
+    border: 1pt solid black;
+    position: relative;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: smaller;
+    margin: 0;
+    padding: 0;
   }
   
   #Track1-Clip1 {
-    position: relative;
     left: 0px;
   }
-  
-  #Track1-Clip2 {
-    position: relative;
-    left: 160px;
+  #Track3-Clip2 {
+    left: 0px;
   }
 }
