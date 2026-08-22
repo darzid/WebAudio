@@ -433,7 +433,7 @@ tracks.forEach(track => {
         
         let clip = track.clips.find(clip => clip.position.startsWith(clipPosition));
         if (clip) {
-          let columnWidth = columnElement.getBoundingClientRect().width;
+          
           
           let clipElement = document.createElement("div");
           clipElement.id = `${track.name}-Clip${clipIndex}`;
@@ -448,9 +448,13 @@ tracks.forEach(track => {
           
           if (clip.position.indexOf(".")) {
             let clipOffset = parseFloat(`0.${clip.position.split(".")[1]}`);
+            clipElement.classList.add("clip-with-offset");
+            clipElement.dataset.offset = clipOffset;
             
-            clipElement.style.marginLeft = `${columnWidth * clipOffset}px`;
-            console.log(clipElement.style.marginLeft, columnWidth);
+            applyClipOffset(clipElement);
+            //let columnWidth = clipElement.parentElement.getBoundingClientRect().width;
+            //clipElement.style.marginLeft = `${columnWidth * clipOffset}px`;
+            //console.log(clipElement.style.marginLeft, columnWidth);
           }
           
           clipIndex++;
@@ -468,6 +472,11 @@ function getSixteenths(time) {
   return sixteenths;
 }
 
+function applyClipOffset(clipElement) {
+  let columnWidth = clipElement.parentElement.getBoundingClientRect().width;
+  clipElement.style.marginLeft = `${columnWidth * clipElement.dataset.offset}px`;
+  console.log(clipElement.style.marginLeft, columnWidth);
+}
 
 let trackNameElements = document.querySelectorAll("input[name='track-name']");
 trackNameElements.forEach(element => {
@@ -479,6 +488,7 @@ trackNameElements.forEach(element => {
 let selectedTrackRow = null;
 let trackRowHeaders = tracksTable.querySelectorAll("tr.track-row td div");
 trackRowHeaders.forEach(header => header.onclick = () => {
+  
   let trackRow = header.closest("tr");
   if (selectedTrackRow)
     selectedTrackRow.classList.remove("selected");
@@ -490,12 +500,12 @@ trackRowHeaders.forEach(header => header.onclick = () => {
 let zoomElement = document.getElementById("zoom");
 let positionColumns = tracksTable.querySelectorAll(".position-column");
 let clipColumns = tracksTable.querySelectorAll(".clip-column");
+let clipsWithOffset = tracksTable.querySelectorAll(".clip-with-offset");
 
 let zoomFactor = zoomElement.value / 100;
 let tableHead = tracksTable.querySelector("thead");
 var style = window.getComputedStyle(tableHead, null).getPropertyValue('font-size');
 tableHead.dataset.fontSize = parseFloat(style); 
-console.log(tableHead.dataset.fontSize)
 clipColumns.forEach(column => {
   column.dataset.width = column.getBoundingClientRect().width;
 });
@@ -510,6 +520,9 @@ zoomElement.oninput = () => {
     column.style.maxWidth = (column.dataset.width * zoomFactor) + "px";
     column.style.minWidth = (column.dataset.width * zoomFactor) + "px";
   });
+  clipsWithOffset.forEach(clip => {
+    applyClipOffset(clip);
+  })
   positionColumns.forEach(column => {
     column.style.maxWidth = (column.dataset.width * zoomFactor) + "px";
     column.style.minWidth = (column.dataset.width * zoomFactor) + "px";
