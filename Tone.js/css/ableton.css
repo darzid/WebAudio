@@ -154,17 +154,21 @@ input.medium-width {
 
 .table-container {
   max-width: stretch;
-  max-height: 400px;
+  max-height: 408px;
   overflow: auto;
   
   table {
     border-collapse: collapse;
     width: 100%;
+    border: 1px solid var(--color-bg);
+    background: transparent;
   }
 
   thead th:first-child {
     z-index: 4;
     width: 100px;
+    background: var(--control-bg);
+    border: 1px solid var(--color-bg);
   }
   
   tbody td:first-child,
@@ -186,22 +190,44 @@ input.medium-width {
     z-index: 2;
   }
   th, td {
-    border: 1px solid gray ;
+    border: 1px solid transparent ;
   }
   
+  .position-column {
+    font-weight: normal;
+    background: var(--control-bg);
+    min-width: 50px;
+    max-width: 50px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+    
+  .bar {
+    border-left: 1px solid black;
+    font-weight: normal;
+  }
+    
+  .beat {
+    border-left: 1px solid darkgray;
+  }
+    
+  .sixteenth {
+    border-left: 1px solid rgb(100,100,100);
+    font-size: xx-small;
+  }
+    
   td.clip-column {
     height: 25px;
     max-width: 50px;
-    min-width: 50px;
+    min-width: 25px;
     margin: 0px;
-    padding: 0px;
+    padding: 0.01em;
     
     .Clip {
-      max-width2: 50px;
-      width: 97%;
-      height: 95%;
+      width: stretch;
+      height: stretch;
       display: inline-block;
-      margin: 0px;
       padding: 0px;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -211,6 +237,7 @@ input.medium-width {
       border: 1px solid black;
     }
   }
+  
   tbody td:first-child {
     max-width: 100px;
   }
@@ -218,10 +245,9 @@ input.medium-width {
   tbody td,
   thead th {
     margin: 0;
-    border: 1px solid grey;
+    border: 1px solid transparent;
     white-space: nowrap;
-    border-top-width: 1px;
-    height2: 25px;
+    border-top-width: 0px;
   }
 }
 
@@ -229,63 +255,6 @@ input.medium-width {
     background: rgba(50,150,150,0.2);
   }
   
-  th.timeline-col {
-    display: flex;
-  }
-  
-  .position-column {
-      font-weight: normal;
-      background: var(--control-bg);
-      width: 100px;
-    }
-    
-    .bar {
-      border-left: 1px solid black;
-      font-weight: normal;
-    }
-    
-    .beat {
-      border-left: 1px solid darkgray;
-    }
-    
-    .sixteenth {
-      border-left: 1px solid rgb(100,100,100);
-      font-size2: xx-small;
-    }
-    
-    /*
-  #timeline {
-    display: flex;
-    
-    
-    div {
-      position: relative;
-    
-      display: inline-block;
-      border: 1px solid transparent;
-      width: 50px;
-      overflow: hidden;
-      height: 25px;
-      font-size: smaller;
-      margin: 0px;
-      padding: 0px;
-    }
-    
-
-  }
-  
-  th.timeline-col {
-    width: auto;
-    background-color: var(--control-bg);
-    margin: 0pt;
-    padding: 0pt;
-    display: block;
-  }
-
-  td.track-clips {
-    display: flex;
-  }
-  */
   .track-header {
     width: max-content;
     z-index: 4;
@@ -309,18 +278,4 @@ input.medium-width {
       margin: 4px;
       border: 1px solid darkgray;
     }
-  .Clip2 {
-    background-color: #00b7b7;
-    border: 1pt solid black;
-    position: relative;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    font-size: smaller;
-    margin: 0;
-    padding: 0;
-    height: 25px;
-    
-    vertical-align: middle;
-  }
   
