@@ -202,6 +202,13 @@ let tracks = [
           
           volume: -2,
         }
+      },
+      {
+        name: "Distortion",
+        parameters: {
+          amount: 20,
+          oversample: 2,
+        }
       }
     ],
     clips: [
@@ -329,6 +336,15 @@ let tracks = [
   },
   {
     name: "OpenHat",
+    devices: [
+      {
+        name: "MetalSynth",
+        parameters: {
+          detune: 20,
+          harmonics: 2,
+        }
+      }
+    ],
     clips: [
       {
         name: "OH",

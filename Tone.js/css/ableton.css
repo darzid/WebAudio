@@ -371,13 +371,14 @@ input.medium-width {
       display: block;
       flex-direction: column;
   
-      min-width: min-content;
-      max-width: min-content;
+      min-width2: max-content;
+      max-width: max-content;
       
       height: 90%;
       
       margin-top: 2px;
       margin-left: 2px;
+      margin-right2: 5px;
       
       
       border: 1px solid var(--panel-border-color-dark);
@@ -394,7 +395,9 @@ input.medium-width {
         font-size: smaller;
       }
       .panel-header {
-        padding: 2px;
+        padding: 4px;
+        padding-right: 3px;
+        width: 100%;
       }
       
       .panel-content {
@@ -403,7 +406,8 @@ input.medium-width {
         display: flex;
         flex-flow: column wrap;
         height: 74%;
-        width: max-content;
+        align-items: center;
+        width: 100%;
         background: var(--device-bg);
         overflow: auto;
         
@@ -425,6 +429,6 @@ input.medium-width {
     height: 15vmax;
     display: flex;
     flex-direction: row;
-    gap: 5px;
+    gap: 10px;
   }
   
