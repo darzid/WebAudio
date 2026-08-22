@@ -6,8 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title></title>
   <link rel="stylesheet" href="css/ableton.css">
-  <script src=".\js\Number.js"></script>
-  <script src=".\js\ui-components\number-input.js"></script>
+  <script src="./js/Number.js"></script>
+  <script src="./js/ui-components/number-input.js"></script>
+  <script src="./js/ui-components/table.js"></script>
+  <script src="./js/ui-components/table-zoom.js"></script>
+  <script src="./data/tracks.js"></script>
+  <script src="./js/tracks-table.js"></script>
   <style>
 
   </style>
@@ -36,16 +40,6 @@
       <button class="control image-button toggle-button active "><img src="img/audio-device.png"></button>
       <button class="control image-button toggle-button"><img src="img/mixer.png"></button>
     </div>
-    <!--
-    <div class="panel">
-      <label class="number-label">Velocity
-        <input class="control" type="number" min="0" max="127" value="20">
-      </label>
-      <label class="number-label">Q
-        <input class="control" type="number" min="0" max="1" step="0.01" value="0.2">
-      </label>
-    </div>
-    -->
     <div class="zoom-label">
       <label class="range-label small">Zoom
         <input id="zoom" type="range" min="50" max="200" value="100">
@@ -68,12 +62,9 @@
       Devices
     </div>
     <div class="panel-content">
-      
     </div>
   </div>
   <script>
-
-
 let playButton = document.getElementById("play");
 let stopButton = document.getElementById("stop");
 let recButton = document.getElementById("rec");
@@ -92,480 +83,22 @@ stopButton.onclick = () => {
 }
 
 let tracksTable = document.getElementById("tracks-table");
-let tracksTableHeaderRow = tracksTable.querySelector(".header-row");
-let leftTopHeader = document.createElement("th");
-leftTopHeader.innerText = "";
-
-tracksTableHeaderRow.appendChild(leftTopHeader);
-
-for (bar = 1; bar <= 4; bar++) {
-  for (beat = 1; beat <= 4; beat++) {
-    for (sixteenth = 1; sixteenth <= 4; sixteenth++) {
-      let className = (sixteenth > 1) ? "sixteenth" : (beat > 1) ? "beat" : "bar";
-      let timelineElement = document.createElement("th");
-      timelineElement.className = className;
-      timelineElement.classList.add("position-column");
-      
-      timelineElement.innerText = `${bar}:${beat}:${sixteenth}`;
-      timelineElement.title = `${bar}:${beat}:${sixteenth}`;
-      tracksTableHeaderRow.appendChild(timelineElement);
-    }
-  }
-}
-
-let tracks = [
-  {
-    name: "Kick",
-    devices: [
-      {
-        name: "MembraneSynth",
-        parameters: {
-          detune: 0,
-          portamento: 0,
-          
-          attack: 0.1,
-          decay: 0.5,
-          sustain: 0,
-          release: 0.2,
-          
-          volume: -2,
-        }
-      },
-      {
-        name: "Compressor",
-        parameters: {
-          threshold: 50,
-          ratio: 20,
-          attack: 0.1,
-          release: 0.2,
-          knee: 30,
-          output: 2
-        }
-      }
-    ],
-    clips: [
-      {
-        name: "Kick",
-        position: "1:1:1",
-        duration: "0:0:1" 
-      },
-      {
-        name: "Kick",
-        position: "1:2:1",
-        duration: "0:0:1" 
-      },
-      {
-        name: "Kick",
-        position: "1:3:1",
-        duration: "0:0:1"
-      },
-      {
-        name: "Kick",
-        position: "1:4:1",
-        duration: "0:0:1"
-      },
-      {
-        name: "Kick",
-        position: "2:1:1",
-        duration: "0:0:1"
-      },
-      {
-        name: "Kick",
-        position: "2:2:1",
-        duration: "0:0:1"
-      },
-      {
-        name: "Kick",
-        position: "2:3:1",
-        duration: "0:0:1"
-      },
-      {
-        name: "Kick",
-        position: "2:4:1",
-        duration: "0:0:1"
-      },
-    ]
-  },
-  {
-    name: "Bassline",
-    devices: [
-      {
-        name: "MonoSynth",
-        parameters: {
-          detune: 0,
-          portamento: 0,
-          
-          attack: 0.1,
-          decay: 0.5,
-          sustain: 0,
-          release: 0.2,
-          
-          volume: -2,
-        }
-      },
-      {
-        name: "Distortion",
-        parameters: {
-          amount: 20,
-          oversample: 2,
-        }
-      }
-    ],
-    clips: [
-      {
-        name: "Bassline01",
-        position: "1:1:2",
-        duration: "0:0:1" 
-      },
-      {
-        name: "Bassline02",
-        position: "1:1:3",
-        duration: "0:0:1" 
-      },
-      {
-        name: "Bassline03",
-        position: "1:1:4",
-        duration: "0:0:1" 
-      },
-      {
-        name: "Bassline01",
-        position: "1:2:2",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline02",
-        position: "1:2:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline03",
-        position: "1:2:4",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline01",
-        position: "1:3:2",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline02",
-        position: "1:3:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline03",
-        position: "1:3:4",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline01",
-        position: "1:4:2",
-        duration: "0:0:1" 
-      },
-      {
-        name: "Bassline02",
-        position: "1:4:3",
-        duration: "0:0:1" 
-      },
-      {
-        name: "Bassline03",
-        position: "1:4:4",
-        duration: "0:0:1" 
-      },
-      {
-        name: "Bassline01",
-        position: "2:1:2",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline02",
-        position: "2:1:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline03",
-        position: "2:1:4",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline01",
-        position: "2:2:2",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline02",
-        position: "2:2:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline03",
-        position: "2:2:4",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline01",
-        position: "2:3:2",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline02",
-        position: "2:3:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline03",
-        position: "2:3:4",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline01",
-        position: "2:4:2",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline02",
-        position: "2:4:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline03",
-        position: "2:4:4",
-        duration: "0:0:1"
-      }
-    ]
-  },
-  {
-    name: "OpenHat",
-    devices: [
-      {
-        name: "MetalSynth",
-        parameters: {
-          detune: 20,
-          harmonics: 2,
-        }
-      }
-    ],
-    clips: [
-      {
-        name: "OH",
-        position: "1:1:3",
-        duration: "0:0:1" 
-      },
-      {
-        name: "OH",
-        position: "1:2:3",
-        duration: "0:0:1" 
-      },
-      {
-        name: "OH",
-        position: "1:3:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "OH",
-        position: "1:4:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "OH",
-        position: "2:1:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "OH",
-        position: "2:2:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "OH",
-        position: "2:3:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "OH",
-        position: "2:4:3",
-        duration: "0:0:1"
-      },
-    ]
-  },
-  {
-    name: "Track4",
-    clips: [
-      {
-        name: "Lead01",
-        position: "1:2:1.5",
-        duration: "0:1:0"
-      }
-    ]
-  },
-  {
-    name: "Track5",
-    clips: []
-  },
-  {
-    name: "Track6",
-    clips: []
-  },
-  {
-    name: "Track7",
-    clips: []
-  },
-  {
-    name: "Track8",
-    clips: []
-  },
-  {
-    name: "Track9",
-    clips: []
-  },
-  {
-    name: "Track10",
-    clips: []
-  },
-  {
-    name: "Track11",
-    clips: []
-  },
-  {
-    name: "Track12",
-    clips: []
-  },
-  {
-    name: "Track13",
-    clips: []
-  },
-  {
-    name: "Track14",
-    clips: []
-  },
-  {
-    name: "Track15",
-    clips: []
-  },
-  {
-    name: "Track16",
-    clips: []
-  },
-  {
-    name: "Track17",
-    clips: []
-  },
-  {
-    name: "Track18",
-    clips: []
-  },
-  {
-    name: "Track19",
-    clips: []
-  },
-  {
-    name: "Track20",
-    clips: []
-  },
-];
-
-let tracksTableBody = tracksTable.querySelector("tbody");
-
-tracks.forEach(track => {
-  let trackIndex = tracks.indexOf(track);
-  
-  let trackRow = document.createElement("tr");
-  trackRow.id = track.name + "-row";
-  trackRow.className = "track-row";
-  tracksTableBody.appendChild(trackRow);
-  
-  let trackHeaderColumn = document.createElement("td");
-  trackHeaderColumn.classList.add("track-header");
-  trackHeaderColumn.classList.add("control");
-  trackRow.appendChild(trackHeaderColumn);
-  
-  let trackHeaderDiv = document.createElement("div");
-  trackHeaderColumn.appendChild(trackHeaderDiv);
-  
-  trackHeaderDiv.innerHTML = `<button class="control toggle-button enabled-button active"></button>
-              <label><input name="track-name" class="control medium-width" type="text" value="${track.name}" readonly></label>`;
-  
-  let clipIndex = 1;
-  for (bar = 1; bar <= 4; bar++) {
-    for (beat = 1; beat <= 4; beat++) {
-      for (sixteenth = 1; sixteenth <= 4; sixteenth++) {
-        let columnElement = document.createElement("td");
-        columnElement.className = "clip-column";
-        if (beat % 2 == 0) 
-          columnElement.classList.add("banded");
-        trackRow.appendChild(columnElement);
-        
-        let clipPosition = `${bar}:${beat}:${sixteenth}`;
-        
-        let clip = track.clips.find(clip => clip.position.startsWith(clipPosition));
-        if (clip) {
-          
-          
-          let clipElement = document.createElement("div");
-          clipElement.id = `${track.name}-Clip${clipIndex}`;
-          clipElement.className = "Clip";
-          clipElement.innerText = clip.name;
-          
-          let clipDurationInSixteenths = getSixteenths(clip.duration);
-          
-          clipElement.style.width = `${clipDurationInSixteenths * 100}%`;
-          
-          columnElement.appendChild(clipElement);
-          
-          if (clip.position.indexOf(".")) {
-            let clipOffset = parseFloat(`0.${clip.position.split(".")[1]}`);
-            clipElement.classList.add("clip-with-offset");
-            clipElement.dataset.offset = clipOffset;
-            
-            applyClipOffset(clipElement);
-            //let columnWidth = clipElement.parentElement.getBoundingClientRect().width;
-            //clipElement.style.marginLeft = `${columnWidth * clipOffset}px`;
-            //console.log(clipElement.style.marginLeft, columnWidth);
-          }
-          
-          clipIndex++;
-        }
-      }
-    }
-  }
-});
-
-function getSixteenths(time) {
-  let parts = time.split(":");
-  let bars = parseInt(parts[0]);
-  let beats = (bars * 4) + parseInt(parts[1]);
-  let sixteenths = (beats * 4) + parseFloat(parts[2]);
-  return sixteenths;
-}
-
-function applyClipOffset(clipElement) {
-  let columnWidth = clipElement.parentElement.getBoundingClientRect().width;
-  clipElement.style.marginLeft = `${columnWidth * clipElement.dataset.offset}px`;
-  console.log(clipElement.style.marginLeft, columnWidth);
-}
-
-let trackNameElements = document.querySelectorAll("input[name='track-name']");
-trackNameElements.forEach(element => {
-  element.ondblclick = () => element.readOnly ? element.readOnly = "" : element.readOnly = "true";
-  element.onblur = () =>  element.readOnly = "true";
-});
-
+fillTracksTable(tracksTable, tracks);
 
 let selectedTrackRow = null;
-let trackRowHeaders = tracksTable.querySelectorAll("tr.track-row td div");
-trackRowHeaders.forEach(header => header.onclick = () => {
+  let trackRowHeaders = tracksTable.querySelectorAll("tr.track-row td div");
+  trackRowHeaders.forEach(header => header.onclick = () => {
+    
+    let trackRow = header.closest("tr");
+    if (selectedTrackRow)
+      selectedTrackRow.classList.remove("selected");
+    trackRow.classList.add("selected");
+    selectedTrackRow = trackRow;
+    showTrackDevices(trackRow.id.split("-row")[0]);
+  });
   
-  let trackRow = header.closest("tr");
-  if (selectedTrackRow)
-    selectedTrackRow.classList.remove("selected");
-  trackRow.classList.add("selected");
-  selectedTrackRow = trackRow;
-  showTrackDevices(trackRow.id.split("-row")[0]);
-});
-
 let devicesPanelHeader = document.querySelector("#track-devices-panel .panel-header");
 let devicesPanelContent = document.querySelector("#track-devices-panel .panel-content");
-
 
 function showTrackDevices(trackId) {
   let track = tracks.find(track => track.name == trackId);
@@ -599,48 +132,18 @@ function showTrackDevices(trackId) {
     initializeToggleButtons(deviceElement);
     deviceIndex++;
   })
-  
 }
-let zoomElement = document.getElementById("zoom");
-let positionColumns = tracksTable.querySelectorAll(".position-column");
-let clipColumns = tracksTable.querySelectorAll(".clip-column");
-let clipsWithOffset = tracksTable.querySelectorAll(".clip-with-offset");
-
-let zoomFactor = zoomElement.value / 100;
-let tableHead = tracksTable.querySelector("thead");
-var style = window.getComputedStyle(tableHead, null).getPropertyValue('font-size');
-tableHead.dataset.fontSize = parseFloat(style); 
-clipColumns.forEach(column => {
-  column.dataset.width = column.getBoundingClientRect().width;
-});
-positionColumns.forEach(column => {
-  column.dataset.width = column.getBoundingClientRect().width;
-});
-
-zoomElement.oninput = () => {
-  let zoomFactor = zoomElement.value / 100;
-  //tableHead.style.fontSize = (tableHead.dataset.fontSize * zoomFactor) + "px";
-  clipColumns.forEach(column => {
-    column.style.maxWidth = (column.dataset.width * zoomFactor) + "px";
-    column.style.minWidth = (column.dataset.width * zoomFactor) + "px";
-  });
-  clipsWithOffset.forEach(clip => {
-    applyClipOffset(clip);
-  })
-  positionColumns.forEach(column => {
-    column.style.maxWidth = (column.dataset.width * zoomFactor) + "px";
-    column.style.minWidth = (column.dataset.width * zoomFactor) + "px";
-  });
-};
-
-initializeNumberInputs(document);
 
 function initializeToggleButtons(parentElement) {
   parentElement.querySelectorAll(".toggle-button")
   .forEach((button) => button.addEventListener("click", () => button.classList.toggle("active")));
 }
+
+initializeNumberInputs(document);
 initializeToggleButtons(document);
+initializeTableZoom(tracksTable, document.getElementById("zoom"));
   </script>
+
 </body>
 
 </html>
