@@ -47,7 +47,7 @@
     </div>
     -->
     <div class="zoom-label">
-      <label class="range-label">Zoom
+      <label class="range-label small">Zoom
         <input id="zoom" type="range" min="50" max="200" value="100">
       </label>
     </div>
@@ -63,10 +63,16 @@
       </table>
     </div>
   </div>
+  <div id="track-devices-panel" class="panel">
+    <div class="panel-header">
+      Devices
+    </div>
+    <div class="panel-content">
+      
+    </div>
+  </div>
   <script>
 
-
-initializeNumberInputs();
 
 let playButton = document.getElementById("play");
 let stopButton = document.getElementById("stop");
@@ -110,6 +116,33 @@ for (bar = 1; bar <= 4; bar++) {
 let tracks = [
   {
     name: "Kick",
+    devices: [
+      {
+        name: "MembraneSynth",
+        parameters: {
+          detune: 0,
+          portamento: 0,
+          
+          attack: 0.1,
+          decay: 0.5,
+          sustain: 0,
+          release: 0.2,
+          
+          volume: -2,
+        }
+      },
+      {
+        name: "Compressor",
+        parameters: {
+          threshold: 50,
+          ratio: 20,
+          attack: 0.1,
+          release: 0.2,
+          knee: 30,
+          output: 2
+        }
+      }
+    ],
     clips: [
       {
         name: "Kick",
@@ -155,6 +188,22 @@ let tracks = [
   },
   {
     name: "Bassline",
+    devices: [
+      {
+        name: "MonoSynth",
+        parameters: {
+          detune: 0,
+          portamento: 0,
+          
+          attack: 0.1,
+          decay: 0.5,
+          sustain: 0,
+          release: 0.2,
+          
+          volume: -2,
+        }
+      }
+    ],
     clips: [
       {
         name: "Bassline01",
@@ -426,7 +475,8 @@ tracks.forEach(track => {
       for (sixteenth = 1; sixteenth <= 4; sixteenth++) {
         let columnElement = document.createElement("td");
         columnElement.className = "clip-column";
-        
+        if (beat % 2 == 0) 
+          columnElement.classList.add("banded");
         trackRow.appendChild(columnElement);
         
         let clipPosition = `${bar}:${beat}:${sixteenth}`;
@@ -494,9 +544,47 @@ trackRowHeaders.forEach(header => header.onclick = () => {
     selectedTrackRow.classList.remove("selected");
   trackRow.classList.add("selected");
   selectedTrackRow = trackRow;
+  showTrackDevices(trackRow.id.split("-row")[0]);
 });
 
+let devicesPanelHeader = document.querySelector("#track-devices-panel .panel-header");
+let devicesPanelContent = document.querySelector("#track-devices-panel .panel-content");
 
+
+function showTrackDevices(trackId) {
+  let track = tracks.find(track => track.name == trackId);
+  console.log(trackId, track.devices);
+  devicesPanelHeader.innerText = `Devices - ${trackId}`;
+  devicesPanelContent.innerHTML = "";
+  
+  let deviceIndex = 1;
+  track.devices.forEach(device => {
+    let deviceElement = document.createElement("div");
+    deviceElement.className = "device panel";
+    deviceElement.id = `${trackId}-Device${deviceIndex}`;
+    devicesPanelContent.appendChild(deviceElement);
+    
+    let deviceHeaderElement = document.createElement("div");
+    deviceHeaderElement.className = "panel-header";
+    deviceHeaderElement.innerHTML = `<button class="control toggle-button enabled-button active"></button>${device.name}`;
+    deviceElement.appendChild(deviceHeaderElement);
+    
+    let deviceContentElement = document.createElement("div");
+    deviceContentElement.className = "panel-content";
+    deviceElement.appendChild(deviceContentElement);
+    
+    Object.keys(device.parameters).forEach(parameterName => {
+      let parameterLabelElement = document.createElement("label");
+      parameterLabelElement.className = "number-label";
+      parameterLabelElement.innerHTML = `${parameterName}<input class="control" type="number" min="0" max="127" value="${device.parameters[parameterName]}">`;
+      deviceContentElement.appendChild(parameterLabelElement);
+    })
+    initializeNumberInputs(deviceElement);
+    initializeToggleButtons(deviceElement);
+    deviceIndex++;
+  })
+  
+}
 let zoomElement = document.getElementById("zoom");
 let positionColumns = tracksTable.querySelectorAll(".position-column");
 let clipColumns = tracksTable.querySelectorAll(".clip-column");
@@ -529,8 +617,13 @@ zoomElement.oninput = () => {
   });
 };
 
-document.querySelectorAll(".toggle-button")
+initializeNumberInputs(document);
+
+function initializeToggleButtons(parentElement) {
+  parentElement.querySelectorAll(".toggle-button")
   .forEach((button) => button.addEventListener("click", () => button.classList.toggle("active")));
+}
+initializeToggleButtons(document);
   </script>
 </body>
 

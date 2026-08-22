@@ -1,5 +1,5 @@
-function initializeNumberInputs() {
-  let numberInputs = document.querySelectorAll("input[type=number]");
+function initializeNumberInputs(parentElement) {
+  let numberInputs = parentElement.querySelectorAll("input[type=number]");
   numberInputs.forEach((input) => {
     updateNumberBackground(input);
     

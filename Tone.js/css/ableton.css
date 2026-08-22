@@ -11,9 +11,17 @@
   --button-border-color: darkgray;
   --active-button-bg: #f8d200;
   
+  --panel-header-bg: rgb(120,120,130);
+  --panel-header-border-color: rgb(40,40,40);
+  --panel-border-color: rgb(80,80,80);
+  --panel-border-color-dark: rgb(40,40,40);
+  --panel-bg: rgb(40,40,40);
+  
+  --shadow-color: rgba(50,50,50,0.5);
+  
   --input-bg: white;
   
-  --tracktable-height: 418px;
+  --tracktable-height: 495px;
   --tracktable-trackdetails-width: 100px;
   
   --timeline-bar-border-color: black;
@@ -29,6 +37,11 @@
   --clip-border-color: black;
   --clip-column-height: 25px;
   --clip-column-min-width: 25px;
+  --clip-column-bg: rgba(80,80,90, 0.5);
+  --clip-column-banded-bg: rgba(90,90,100,0.5);
+  
+  --devices-bg: rgb(80,80,80);
+  --device-bg: rgb(105,105,110);
 }
 
 body {
@@ -47,8 +60,13 @@ body, input {
 }
 
 .panel {
-  margin: 3px;
-  display: flex;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border-color);
+  
+  .panel-header {
+    background: var(--panel-header-bg);
+    border-bottom: 1px solid var(--panel-header-border-color);
+  }
 }
 
 .control {
@@ -78,14 +96,19 @@ label.range-label {
   margin: 4px;
 }
 
+.small {
+  font-size: small;
+}
 label.number-label {
   display: flex;
   flex-direction: column;
   width: min-content;
   text-align: center;
   margin: 4px;
-  
+  justify-content2: center;
+  align-items: center;
   input[type="number"] {
+    justify-content: center;
     background-color: var(--number-bg);
     background-image: linear-gradient(to right, 
       var(--number-value-bg) 0%, 
@@ -105,9 +128,7 @@ label.number-label {
   }
 }
 
-.active {
-  background-color: var(--active-button-bg);
-}
+
 .transport-button {
   background-color: transparent;
 }
@@ -119,8 +140,12 @@ label.number-label {
   margin-right: 8px;
 }
 
+
 #app {
-  height: 100%;
+  height: stretch;
+  min-height: 100%;
+  position: relative;
+  
 }
 
 #app-buttons {
@@ -180,26 +205,27 @@ input.medium-width {
   max-width: stretch;
   max-height: var(--tracktable-height);
   overflow: auto;
+  box-shadow: 1px 1px 2px var(--shadow-color);
   
   table {
     border-collapse: collapse;
     width: 100%;
-    border: 1px solid var(--color-bg);
+    border: 0px solid var(--color-bg);
     background: var(--session-bg);
   }
 
   thead th:first-child {
     z-index: 4;
     width: var(--tracktable-trackdetails-width);
-    background: var(--control-bg);
-    border: 1px solid var(--color-bg);
+    background: var(--color-bg);
+    border: 0px solid var(--color-bg);
   }
   
   tbody td:first-child,
   thead th:first-child {
     position: sticky;
     left: 0;
-    background: var(--control-bg);
+    
   }
   
   thead th {
@@ -214,6 +240,7 @@ input.medium-width {
 
   tbody td:first-child {
     z-index: 2;
+    background: var(--control-bg);
   }
   
   th, td {
@@ -255,11 +282,14 @@ input.medium-width {
     margin: 0px;
     padding: 0.01em;
     
+    background-color: var(--clip-column-bg);
+    
     .Clip {
       width: stretch;
       height: stretch;
       display: inline-block;
       padding: 0px;
+      padding-top: 3px;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -268,7 +298,13 @@ input.medium-width {
       font-size: 80%;
       background-color: var(--clip-bg);
       border: 1px solid var(--clip-border-color);
+      box-shadow: 1px 1px 2px var(--shadow-color);
     }
+  }
+  
+  td.banded {
+    background-color: var(--clip-column-banded-bg);
+    
   }
   
   tbody td:first-child {
@@ -305,10 +341,90 @@ input.medium-width {
       background: transparent;
     }
   }
+  
+  button.active {
+  background-color: var(--active-button-bg);
+  box-shadow: 0px 0px 3px var(--active-button-bg);
+}
     .enabled-button {
       width: 14px;
       height: 14px;
       margin: 4px;
       border: 1px solid var(--button-border-color);
+      
     }
+  
+
+  #track-devices-panel {
+    position: absolute;
+    bottom: 5px;
+    width: stretch;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 5;
+    
+    background: var(--devices-bg);
+    border: 1px solid var(--panel-border-color);
+    
+    .device {
+      display: block;
+      flex-direction: column;
+  
+      min-width: min-content;
+      max-width: min-content;
+      
+      height: 90%;
+      
+      margin-top: 2px;
+      margin-left: 2px;
+      
+      
+      border: 1px solid var(--panel-border-color-dark);
+      box-shadow: 1px 1px 2px var(--shadow-color);
+      font-size: smaller;
+    
+      .enabled-button {
+        width: 12px;
+        height: 12px;
+        margin: 1px;
+        margin-right: 3px;
+      }
+      input {
+        font-size: smaller;
+      }
+      .panel-header {
+        padding: 2px;
+      }
+      
+      .panel-content {
+        padding: 2px;
+        padding-left: 5px;
+        display: flex;
+        flex-flow: column wrap;
+        height: 74%;
+        width: max-content;
+        background: var(--device-bg);
+        overflow: auto;
+        
+        label {
+          
+          min-width: 40px;
+          max-width: 40px;
+          font-size: xx-small;
+          
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          
+        }
+      }
+    }
+  }
+  
+  #track-devices-panel > .panel-content {
+    height: 15vmax;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+  }
   
