@@ -85,8 +85,6 @@ stopButton.onclick = () => {
   }
 }
 
-
-
 let tracksTable = document.getElementById("tracks-table");
 let tracksTableHeaderRow = tracksTable.querySelector(".header-row");
 let leftTopHeader = document.createElement("th");
@@ -327,7 +325,13 @@ let tracks = [
   },
   {
     name: "Track4",
-    clips: []
+    clips: [
+      {
+        name: "Lead01",
+        position: "1:2:1.5",
+        duration: "0:1:0"
+      }
+    ]
   },
   {
     name: "Track5",
@@ -363,6 +367,34 @@ let tracks = [
   },
   {
     name: "Track13",
+    clips: []
+  },
+  {
+    name: "Track14",
+    clips: []
+  },
+  {
+    name: "Track15",
+    clips: []
+  },
+  {
+    name: "Track16",
+    clips: []
+  },
+  {
+    name: "Track17",
+    clips: []
+  },
+  {
+    name: "Track18",
+    clips: []
+  },
+  {
+    name: "Track19",
+    clips: []
+  },
+  {
+    name: "Track20",
     clips: []
   },
 ];
@@ -401,17 +433,41 @@ tracks.forEach(track => {
         
         let clip = track.clips.find(clip => clip.position.startsWith(clipPosition));
         if (clip) {
+          let columnWidth = columnElement.getBoundingClientRect().width;
+          
           let clipElement = document.createElement("div");
           clipElement.id = `${track.name}-Clip${clipIndex}`;
           clipElement.className = "Clip";
           clipElement.innerText = clip.name;
+          
+          let clipDurationInSixteenths = getSixteenths(clip.duration);
+          
+          clipElement.style.width = `${clipDurationInSixteenths * 100}%`;
+          
           columnElement.appendChild(clipElement);
+          
+          if (clip.position.indexOf(".")) {
+            let clipOffset = parseFloat(`0.${clip.position.split(".")[1]}`);
+            
+            clipElement.style.marginLeft = `${columnWidth * clipOffset}px`;
+            console.log(clipElement.style.marginLeft, columnWidth);
+          }
+          
           clipIndex++;
         }
       }
     }
   }
 });
+
+function getSixteenths(time) {
+  let parts = time.split(":");
+  let bars = parseInt(parts[0]);
+  let beats = (bars * 4) + parseInt(parts[1]);
+  let sixteenths = (beats * 4) + parseFloat(parts[2]);
+  return sixteenths;
+}
+
 
 let trackNameElements = document.querySelectorAll("input[name='track-name']");
 trackNameElements.forEach(element => {
@@ -436,7 +492,10 @@ let positionColumns = tracksTable.querySelectorAll(".position-column");
 let clipColumns = tracksTable.querySelectorAll(".clip-column");
 
 let zoomFactor = zoomElement.value / 100;
-
+let tableHead = tracksTable.querySelector("thead");
+var style = window.getComputedStyle(tableHead, null).getPropertyValue('font-size');
+tableHead.dataset.fontSize = parseFloat(style); 
+console.log(tableHead.dataset.fontSize)
 clipColumns.forEach(column => {
   column.dataset.width = column.getBoundingClientRect().width;
 });
@@ -446,6 +505,7 @@ positionColumns.forEach(column => {
 
 zoomElement.oninput = () => {
   let zoomFactor = zoomElement.value / 100;
+  //tableHead.style.fontSize = (tableHead.dataset.fontSize * zoomFactor) + "px";
   clipColumns.forEach(column => {
     column.style.maxWidth = (column.dataset.width * zoomFactor) + "px";
     column.style.minWidth = (column.dataset.width * zoomFactor) + "px";
