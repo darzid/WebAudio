@@ -8,12 +8,12 @@
 
 body {
   width: 100%;
-  height: 100%;
+  height2: 100%;
   margin: 0em;
   margin-left: auto;
   margin-right: auto;
   padding: 0em;
-  overflow-y: hidden;
+  overflow-y2: hidden;
   background-color: var(--color-bg);
 }
 
@@ -96,7 +96,7 @@ label.number-label {
 }
 
 #app {
-  height: 100%;
+  height2: 100%;
 }
 
 #app-buttons {
@@ -148,65 +148,149 @@ input.medium-width {
   background: rgba(0,150,150,0.5);
 }
 
-#tracks-table-outer-container {
-  overflow-y: scroll;
-  height: 300px;
+.large {
+  font-size: xx-large;
 }
-#tracks-table-container {
-  width: stretch;
-  
-  overflow-x: scroll;
-  margin-left: 7.1em;
-  margin-top: 2em;
-  
-  padding: 0;
+
+.table-container {
+  max-width: stretch;
+  max-height: 400px;
+  overflow: auto;
   
   table {
-    border-collapse: separate;
-    border-spacing: 0;
-    border-top: 1px solid grey;
-    
+    border-collapse: collapse;
+    width: 100%;
   }
-  /*
+
+  thead th:first-child {
+    z-index: 4;
+    width: 100px;
+  }
+  
+  tbody td:first-child,
+  thead th:first-child {
+    position: sticky;
+    left: 0;
+    background: var(--control-bg);
+  }
+  
   thead th {
     position: sticky;
     top: 0;
-    background: #f2f2f2;
+    z-index: 3;
+    width: 100px;
+    max-width: 100px;
+  }
+
+  tbody td:first-child {
     z-index: 2;
   }
-
-  tbody td:first-child,
-  thead th:first-child {
-      position: sticky;
-      left: 0;
-      background: #f2f2f2;
-  }
-  */
-  #top-row {
-    position: absolute;
-    margin-top: -2em;
+  th, td {
+    border: 1px solid gray ;
   }
   
-  .headcol {
-    position: absolute;
-    width: max-content;
-    left: 0;
-    top: auto;
-    border-top-width: 1px;
-    /*only relevant for first row*/
-    margin-top: -1px;
-    /*compensate for top border*/
-    padding-top: 1px;
-    margin-left: 2px;
+  td.clip-column {
+    height: 25px;
+    max-width: 50px;
+    min-width: 50px;
+    margin: 0px;
+    padding: 0px;
     
-    .enabled-button {
-      width: 14px;
-      height: 14px;
-      margin: 4px;
-      
-      border: 1px solid darkgray;
+    .Clip {
+      max-width2: 50px;
+      width: 97%;
+      height: 95%;
+      display: inline-block;
+      margin: 0px;
+      padding: 0px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-size: smaller;
+      background-color: #00b7b7;
+      border: 1px solid black;
     }
+  }
+  tbody td:first-child {
+    max-width: 100px;
+  }
+  
+  tbody td,
+  thead th {
+    margin: 0;
+    border: 1px solid grey;
+    white-space: nowrap;
+    border-top-width: 1px;
+    height2: 25px;
+  }
+}
 
+  tr.selected td {
+    background: rgba(50,150,150,0.2);
+  }
+  
+  th.timeline-col {
+    display: flex;
+  }
+  
+  .position-column {
+      font-weight: normal;
+      background: var(--control-bg);
+      width: 100px;
+    }
+    
+    .bar {
+      border-left: 1px solid black;
+      font-weight: normal;
+    }
+    
+    .beat {
+      border-left: 1px solid darkgray;
+    }
+    
+    .sixteenth {
+      border-left: 1px solid rgb(100,100,100);
+      font-size2: xx-small;
+    }
+    
+    /*
+  #timeline {
+    display: flex;
+    
+    
+    div {
+      position: relative;
+    
+      display: inline-block;
+      border: 1px solid transparent;
+      width: 50px;
+      overflow: hidden;
+      height: 25px;
+      font-size: smaller;
+      margin: 0px;
+      padding: 0px;
+    }
+    
+
+  }
+  
+  th.timeline-col {
+    width: auto;
+    background-color: var(--control-bg);
+    margin: 0pt;
+    padding: 0pt;
+    display: block;
+  }
+
+  td.track-clips {
+    display: flex;
+  }
+  */
+  .track-header {
+    width: max-content;
+    z-index: 4;
+    border: 1px solid var(--control-bg);
+    
     input {
       font-size: small;
       vertical-align: middle;
@@ -219,59 +303,13 @@ input.medium-width {
       background: transparent;
     }
   }
-  
-  tr.selected th {
-    background: rgba(50,150,150,0.2);
-  }
-  
-  td,
-  th {
-    margin: 0;
-    border: 1px solid grey;
-    white-space: nowrap;
-    border-top-width: 0px;
-    height: 25px;
-  }
-  
-  th.top-row {
-    border: transparent;
-  }
-  td div {
-    display: inline-block;
-    width: 50px;
-  }
-  
-  td.timeline-col {
-    width: auto;
-    background-color: var(--control-bg);
-    margin: 0pt;
-    padding: 0pt;
-    
-    div {
-      border: 1px solid transparent;
-      width: 50px;
-      overflow: hidden;
-      height: 25px;
-      font-size: smaller;
+    .enabled-button {
+      width: 14px;
+      height: 14px;
+      margin: 4px;
+      border: 1px solid darkgray;
     }
-    
-    div.bar {
-      border-left: 1px solid black;
-    }
-    
-    div.beat {
-      border-left: 1px solid darkgray;
-    }
-    
-    div.sixteenth {
-      border-left: 1px solid rgb(100,100,100);
-      font-size: xx-small;
-    }
-  }
-  
-
-  
-  .Clip {
+  .Clip2 {
     background-color: #00b7b7;
     border: 1pt solid black;
     position: relative;
@@ -281,40 +319,8 @@ input.medium-width {
     font-size: smaller;
     margin: 0;
     padding: 0;
-    height: 100%;
+    height: 25px;
+    
     vertical-align: middle;
   }
   
-  #Track1-Clip1 {
-    left: 0px;
-  }
-  #Track3-Clip2 {
-    left: 0px;
-  }
-}
-
-/*
-.table-container {
-    max-height: 400px;
-    max-width: 800px;
-    overflow: auto;
-    border: 1px solid #ccc;
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    background: white;
-    min-width: 120px;
-}
-
-
-thead th:first-child {
-    z-index: 3;
-}
-*/

@@ -51,42 +51,220 @@
         <input id="zoom" type="range" min="60" max="200" value="100">
       </label>
     </div>
-    <div id="tracks-table-container">
+    <!--
+    <div class="table-container large">
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Jan</th>
+                <th>Feb</th>
+                <th>Mar</th>
+                <th>Apr</th>
+                <th>May</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Product A</td>
+                <td>10</td>
+                <td>20</td>
+                <td>30</td>
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>Product B</td>
+                <td>15</td>
+                <td>25</td>
+                <td>35</td>
+                <td>45</td>
+                <td>55</td>
+            </tr>
+            <tr>
+                <td>Product C</td>
+                <td>12</td>
+                <td>22</td>
+                <td>32</td>
+                <td>42</td>
+                <td>52</td>
+            </tr>
+            <tr>
+              <td>Product A</td>
+              <td>10</td>
+              <td>20</td>
+              <td>30</td>
+              <td>40</td>
+              <td>50</td>
+            </tr>
+            <tr>
+              <td>Product B</td>
+              <td>15</td>
+              <td>25</td>
+              <td>35</td>
+              <td>45</td>
+              <td>55</td>
+            </tr>
+            <tr>
+              <td>Product C</td>
+              <td>12</td>
+              <td>22</td>
+              <td>32</td>
+              <td>42</td>
+              <td>52</td>
+            </tr>
+            <tr>
+              <td>Product A</td>
+              <td>10</td>
+              <td>20</td>
+              <td>30</td>
+              <td>40</td>
+              <td>50</td>
+            </tr>
+            <tr>
+              <td>Product B</td>
+              <td>15</td>
+              <td>25</td>
+              <td>35</td>
+              <td>45</td>
+              <td>55</td>
+            </tr>
+            <tr>
+              <td>Product C</td>
+              <td>12</td>
+              <td>22</td>
+              <td>32</td>
+              <td>42</td>
+              <td>52</td>
+            </tr>
+            <tr>
+              <td>Product A</td>
+              <td>10</td>
+              <td>20</td>
+              <td>30</td>
+              <td>40</td>
+              <td>50</td>
+            </tr>
+            <tr>
+              <td>Product B</td>
+              <td>15</td>
+              <td>25</td>
+              <td>35</td>
+              <td>45</td>
+              <td>55</td>
+            </tr>
+            <tr>
+              <td>Product C</td>
+              <td>12</td>
+              <td>22</td>
+              <td>32</td>
+              <td>42</td>
+              <td>52</td>
+            </tr>
+            <tr>
+              <td>Product A</td>
+              <td>10</td>
+              <td>20</td>
+              <td>30</td>
+              <td>40</td>
+              <td>50</td>
+            </tr>
+            <tr>
+              <td>Product B</td>
+              <td>15</td>
+              <td>25</td>
+              <td>35</td>
+              <td>45</td>
+              <td>55</td>
+            </tr>
+            <tr>
+              <td>Product C</td>
+              <td>12</td>
+              <td>22</td>
+              <td>32</td>
+              <td>42</td>
+              <td>52</td>
+            </tr>
+            <tr>
+                <td>Product A</td>
+                <td>10</td>
+                <td>20</td>
+                <td>30</td>
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>Product B</td>
+                <td>15</td>
+                <td>25</td>
+                <td>35</td>
+                <td>45</td>
+                <td>55</td>
+            </tr>
+            <tr>
+                <td>Product C</td>
+                <td>12</td>
+                <td>22</td>
+                <td>32</td>
+                <td>42</td>
+                <td>52</td>
+            </tr>
+            <tr>
+                <td>Product A</td>
+                <td>10</td>
+                <td>20</td>
+                <td>30</td>
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>Product B</td>
+                <td>15</td>
+                <td>25</td>
+                <td>35</td>
+                <td>45</td>
+                <td>55</td>
+            </tr>
+            <tr>
+                <td>Product C</td>
+                <td>12</td>
+                <td>22</td>
+                <td>32</td>
+                <td>42</td>
+                <td>52</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+-->
+    <div id="tracks-table-container2" class="table-container">
+      <table id="tracks-table2">
+        <thead>
+          <tr class="header-row">
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    
+    <div id="tracks-table-container" class="table-container">
       <table id="tracks-table">
         <thead>
           <tr id="top-row">
-            <th class="headcol top-row control"></th>
-            <td id="timeline" class="timeline-col"></td>
+            <th id="firstcol" class="top-row control"></th>
+            <th id="timeline" class="timeline-col"></th>
           </tr>
         </thead>
-        <!--
-        <tr class="track-row" id="Track1-row">
-          <th class="headcol control">
-            <div>
-              <button class="control toggle-button enabled-button active"></button>
-              <label><input name="track-name" class="control medium-width" type="text" value="Track 1" readonly></label>
-            </div>       
-          </th>
-          <td class="track-clips">        
-          </td>
-        </tr>
-        <tr class="track-row" id="Track2-row">
-          <th class="headcol control">
-            <div>
-              <button class="control toggle-button enabled-button active"></button>
-              <label><input name="track-name" class="control medium-width" type="text" value="Track 2" readonly></label>
-            </div>
-          </th>
-          <td class="track-clips">
-          </td>
-        </tr>-->
+        <tbody>
+        </tbody>
       </table>
     </div>
   </div>
   </div>
   <script>
 
-document.querySelectorAll(".toggle-button").forEach((button) => button.addEventListener("click", () => button.classList.toggle("active")));
+
 initializeNumberInputs();
 
 let playButton = document.getElementById("play");
@@ -107,7 +285,161 @@ stopButton.onclick = () => {
 }
 
 
+
+let tracksTable2 = document.getElementById("tracks-table2");
+let tracksTable2HeaderRow = tracksTable2.querySelector(".header-row");
+let leftTopHeader = document.createElement("th");
+leftTopHeader.innerText = "";
+
+tracksTable2HeaderRow.appendChild(leftTopHeader);
+
+for (bar = 1; bar <= 4; bar++) {
+  for (beat = 1; beat <= 4; beat++) {
+    for (sixteenth = 1; sixteenth <= 4; sixteenth++) {
+      let className = (sixteenth > 1) ? "sixteenth" : (beat > 1) ? "beat" : "bar";
+      let timelineElement = document.createElement("th");
+      timelineElement.className = className;
+      timelineElement.classList.add("position-column");
+      
+      timelineElement.innerText = `${bar}:${beat}:${sixteenth}`;
+      timelineElement.title = `${bar}:${beat}:${sixteenth}`;
+      tracksTable2HeaderRow.appendChild(timelineElement);
+    }
+  }
+}
+
+let trackClips = {
+  "Kick": {
+    "1:1:1": "Kick",
+    "1:2:1": "Kick",
+  },
+  "Bass": {
+    "1:1:3": "Bass01",
+  },
+  "OpenHat": {
+    "1:1:3": "OH",
+  },
+  "Track4": {},
+  "Track5": {},
+  "Track6": {},
+  "Track7": {},
+  "Track8": {},
+  "Track9": {},
+  "Track10": {},
+  "Track11": {},
+  "Track12": {},
+  "Track13": {},
+  "Track14": {},
+  "Track15": {},
+  "Track16": {},
+  "Track17": {},
+  "Track18": {},
+  "Track19": {},
+  "Track20": {},
+  "Track21": {},
+  "Track22": {},
+  "Track23": {},
+  "Track24": {}
+};
+
+let tracksTableBody = tracksTable2.querySelector("tbody");
+
+Object.keys(trackClips).forEach(track => {
+  let trackRow = document.createElement("tr");
+  trackRow.id = track + "-row";
+  trackRow.className = "track-row";
+  tracksTableBody.appendChild(trackRow);
+  
+  let trackHeaderColumn = document.createElement("td");
+  trackHeaderColumn.classList.add("track-header");
+  trackHeaderColumn.classList.add("control");
+  trackRow.appendChild(trackHeaderColumn);
+  
+  let trackHeaderDiv = document.createElement("div");
+  trackHeaderColumn.appendChild(trackHeaderDiv);
+  
+  trackHeaderDiv.innerHTML = `<button class="control toggle-button enabled-button active"></button>
+              <label><input name="track-name" class="control medium-width" type="text" value="${track}" readonly></label>`;
+              
+  for (bar = 1; bar <= 4; bar++) {
+    for (beat = 1; beat <= 4; beat++) {
+      for (sixteenth = 1; sixteenth <= 4; sixteenth++) {
+        let columnElement = document.createElement("td");
+        columnElement.className = "clip-column";
+        
+        trackRow.appendChild(columnElement);
+        
+        let clipPosition = `${bar}:${beat}:${sixteenth}`;
+        let clip = trackClips[track][clipPosition];
+        if (clip) {
+          let clipElement = document.createElement("div");
+          clipElement.className = "Clip";
+          clipElement.innerText = trackClips[track][clipPosition];
+          columnElement.appendChild(clipElement);
+          
+        }
+      }
+    }
+  }
+});
+              
+  //let trackClipsColumn = document.createElement("td");
+  //trackClipsColumn.classList.add("track-clips");
+  //trackRow.appendChild(trackClipsColumn);
+  
+  //let trackClipsElement = document.querySelector(`#${track}-row td.track-clips`);
+  
+  /*
+  for (bar = 1; bar <= 4; bar++) {
+    for (beat = 1; beat <= 4; beat++) {
+      for (sixteenth = 1; sixteenth <= 4; sixteenth++) {
+        let columnElement = document.createElement("td");
+        let position = `${bar}:${beat}:${sixteenth}`;
+        trackRow.appendChild(columnElement);
+        
+        let clip = trackClips[track][position];
+        if (clip) {
+          let clipElement = document.createElement("div");
+          clipElement.className = "Clip";
+          clipElement.innerText = trackClips[track][clipPosition];
+          columnElement.appendChild(clipElement);
+          console.log
+        }
+      }
+    }
+  }
+});*/
+ /* Object.keys(trackClips[track]).forEach(clipPosition => {
+    let timelineElement = timeline.querySelector(`div[title='${clipPosition}']`);
+    let clipSixteenthIndex = timelineElement.dataset.index;
+   
+    let clipElement = document.createElement("td");
+    clipElement.className = "Clip";
+    clipElement.innerText = trackClips[track][clipPosition];
+    clipElement.title = clipPosition;*/
+    //clipElement.style.width = (sixteenthWidth - 2) + "px";
+    
+   // let timelineElement = timeline.querySelector(`div[title='${clipPosition}']`);
+   // let clipSixteenthIndex = timelineElement.dataset.index;
+  /*
+    let previousClip = trackClipsElement.lastChild;
+    let previousClipTimelineElement = previousClip ? timeline.querySelector(`div[title='${previousClip.title}']`) : null;
+    let previousClipSixteenthIndex = previousClipTimelineElement ? previousClipTimelineElement.dataset.index : null;
+    
+    let indexGap = previousClipSixteenthIndex ? clipSixteenthIndex - (previousClipSixteenthIndex + 1) : clipSixteenthIndex;
+    let clipLeft = indexGap * sixteenthWidth;
+    clipElement.style.left = `${clipLeft - 1}px`;
+    console.log(track + "-" + clipElement.innerText, clipSixteenthIndex);
+    trackClipsElement.appendChild(clipElement);
+  })
+});
+*/
+/*
+
 let timeline = document.getElementById("timeline");
+
+let left = 0;
+let index = 0;
 for (bar = 1; bar <= 4; bar++) {
   for (beat = 1; beat <= 4; beat++) {
     for (sixteenth = 1; sixteenth <= 4; sixteenth++) {
@@ -118,12 +450,18 @@ for (bar = 1; bar <= 4; bar++) {
       timelineElement.innerText = `${bar}:${beat}:${sixteenth}`;
       timelineElement.title = `${bar}:${beat}:${sixteenth}`;
       timelineElement.style.width = "50px";
+      timelineElement.style.left = left + "px"
+      timelineElement.dataset.index = index;
       timeline.appendChild(timelineElement);
+      
+      left += 0;
+      index++;
     }
   }
 }
 
-let trackClips = {
+
+let trackClips2 = {
   "Kick": {
     "1:1:1": "Kick",
     "1:2:1": "Kick",
@@ -170,349 +508,62 @@ let trackClips = {
     "2:3:3": "OH",
     "2:4:3": "OH",
   },
-  "Kick2": {
-    "1:1:1": "Kick",
-    "1:2:1": "Kick",
-    "1:3:1": "Kick",
-    "1:4:1": "Kick",
-    "2:1:1": "Kick",
-    "2:2:1": "Kick",
-    "2:3:1": "Kick",
-    "2:4:1": "Kick"
-  },
-  "Bass2": {
-    "1:1:2": "Bass01",
-    "1:1:3": "Bass02",
-    "1:1:4": "Bass03",
-    "1:2:2": "Bass01",
-    "1:2:3": "Bass02",
-    "1:2:4": "Bass03",
-    "1:3:2": "Bass01",
-    "1:3:3": "Bass02",
-    "1:3:4": "Bass03",
-    "1:4:2": "Bass01",
-    "1:4:3": "Bass02",
-    "1:4:4": "Bass03",
-    "2:1:2": "Bass01",
-    "2:1:3": "Bass02",
-    "2:1:4": "Bass03",
-    "2:2:2": "Bass01",
-    "2:2:3": "Bass02",
-    "2:2:4": "Bass03",
-    "2:3:2": "Bass01",
-    "2:3:3": "Bass02",
-    "2:3:4": "Bass03",
-    "2:4:2": "Bass01",
-    "2:4:3": "Bass02",
-    "2:4:4": "Bass03"
-  },
-  "OpenHat2": {
-    "1:1:3": "OH",
-    "1:2:3": "OH",
-    "1:3:3": "OH",
-    "1:4:3": "OH",
-    "2:1:3": "OH",
-    "2:2:3": "OH",
-    "2:3:3": "OH",
-    "2:4:3": "OH",
-  },
-  "Kick3": {
-    "1:1:1": "Kick",
-    "1:2:1": "Kick",
-    "1:3:1": "Kick",
-    "1:4:1": "Kick",
-    "2:1:1": "Kick",
-    "2:2:1": "Kick",
-    "2:3:1": "Kick",
-    "2:4:1": "Kick"
-  },
-  "Bass3": {
-    "1:1:2": "Bass01",
-    "1:1:3": "Bass02",
-    "1:1:4": "Bass03",
-    "1:2:2": "Bass01",
-    "1:2:3": "Bass02",
-    "1:2:4": "Bass03",
-    "1:3:2": "Bass01",
-    "1:3:3": "Bass02",
-    "1:3:4": "Bass03",
-    "1:4:2": "Bass01",
-    "1:4:3": "Bass02",
-    "1:4:4": "Bass03",
-    "2:1:2": "Bass01",
-    "2:1:3": "Bass02",
-    "2:1:4": "Bass03",
-    "2:2:2": "Bass01",
-    "2:2:3": "Bass02",
-    "2:2:4": "Bass03",
-    "2:3:2": "Bass01",
-    "2:3:3": "Bass02",
-    "2:3:4": "Bass03",
-    "2:4:2": "Bass01",
-    "2:4:3": "Bass02",
-    "2:4:4": "Bass03"
-  },
-  "OpenHat3": {
-    "1:1:3": "OH",
-    "1:2:3": "OH",
-    "1:3:3": "OH",
-    "1:4:3": "OH",
-    "2:1:3": "OH",
-    "2:2:3": "OH",
-    "2:3:3": "OH",
-    "2:4:3": "OH",
-  },
-  "Kick4": {
-    "1:1:1": "Kick",
-    "1:2:1": "Kick",
-    "1:3:1": "Kick",
-    "1:4:1": "Kick",
-    "2:1:1": "Kick",
-    "2:2:1": "Kick",
-    "2:3:1": "Kick",
-    "2:4:1": "Kick"
-  },
-  "Bass4": {
-    "1:1:2": "Bass01",
-    "1:1:3": "Bass02",
-    "1:1:4": "Bass03",
-    "1:2:2": "Bass01",
-    "1:2:3": "Bass02",
-    "1:2:4": "Bass03",
-    "1:3:2": "Bass01",
-    "1:3:3": "Bass02",
-    "1:3:4": "Bass03",
-    "1:4:2": "Bass01",
-    "1:4:3": "Bass02",
-    "1:4:4": "Bass03",
-    "2:1:2": "Bass01",
-    "2:1:3": "Bass02",
-    "2:1:4": "Bass03",
-    "2:2:2": "Bass01",
-    "2:2:3": "Bass02",
-    "2:2:4": "Bass03",
-    "2:3:2": "Bass01",
-    "2:3:3": "Bass02",
-    "2:3:4": "Bass03",
-    "2:4:2": "Bass01",
-    "2:4:3": "Bass02",
-    "2:4:4": "Bass03"
-  },
-  "OpenHat4": {
-    "1:1:3": "OH",
-    "1:2:3": "OH",
-    "1:3:3": "OH",
-    "1:4:3": "OH",
-    "2:1:3": "OH",
-    "2:2:3": "OH",
-    "2:3:3": "OH",
-    "2:4:3": "OH",
-  },
-  "Kick5": {
-    "1:1:1": "Kick",
-    "1:2:1": "Kick",
-    "1:3:1": "Kick",
-    "1:4:1": "Kick",
-    "2:1:1": "Kick",
-    "2:2:1": "Kick",
-    "2:3:1": "Kick",
-    "2:4:1": "Kick"
-  },
-  "Bass5": {
-    "1:1:2": "Bass01",
-    "1:1:3": "Bass02",
-    "1:1:4": "Bass03",
-    "1:2:2": "Bass01",
-    "1:2:3": "Bass02",
-    "1:2:4": "Bass03",
-    "1:3:2": "Bass01",
-    "1:3:3": "Bass02",
-    "1:3:4": "Bass03",
-    "1:4:2": "Bass01",
-    "1:4:3": "Bass02",
-    "1:4:4": "Bass03",
-    "2:1:2": "Bass01",
-    "2:1:3": "Bass02",
-    "2:1:4": "Bass03",
-    "2:2:2": "Bass01",
-    "2:2:3": "Bass02",
-    "2:2:4": "Bass03",
-    "2:3:2": "Bass01",
-    "2:3:3": "Bass02",
-    "2:3:4": "Bass03",
-    "2:4:2": "Bass01",
-    "2:4:3": "Bass02",
-    "2:4:4": "Bass03"
-  },
-  "OpenHat5": {
-    "1:1:3": "OH",
-    "1:2:3": "OH",
-    "1:3:3": "OH",
-    "1:4:3": "OH",
-    "2:1:3": "OH",
-    "2:2:3": "OH",
-    "2:3:3": "OH",
-    "2:4:3": "OH",
-  },
-  "Kick6": {
-    "1:1:1": "Kick",
-    "1:2:1": "Kick",
-    "1:3:1": "Kick",
-    "1:4:1": "Kick",
-    "2:1:1": "Kick",
-    "2:2:1": "Kick",
-    "2:3:1": "Kick",
-    "2:4:1": "Kick"
-  },
-  "Bass6": {
-    "1:1:2": "Bass01",
-    "1:1:3": "Bass02",
-    "1:1:4": "Bass03",
-    "1:2:2": "Bass01",
-    "1:2:3": "Bass02",
-    "1:2:4": "Bass03",
-    "1:3:2": "Bass01",
-    "1:3:3": "Bass02",
-    "1:3:4": "Bass03",
-    "1:4:2": "Bass01",
-    "1:4:3": "Bass02",
-    "1:4:4": "Bass03",
-    "2:1:2": "Bass01",
-    "2:1:3": "Bass02",
-    "2:1:4": "Bass03",
-    "2:2:2": "Bass01",
-    "2:2:3": "Bass02",
-    "2:2:4": "Bass03",
-    "2:3:2": "Bass01",
-    "2:3:3": "Bass02",
-    "2:3:4": "Bass03",
-    "2:4:2": "Bass01",
-    "2:4:3": "Bass02",
-    "2:4:4": "Bass03"
-  },
-  "OpenHat6": {
-    "1:1:3": "OH",
-    "1:2:3": "OH",
-    "1:3:3": "OH",
-    "1:4:3": "OH",
-    "2:1:3": "OH",
-    "2:2:3": "OH",
-    "2:3:3": "OH",
-    "2:4:3": "OH",
-  },
-  "Kick7": {
-    "1:1:1": "Kick",
-    "1:2:1": "Kick",
-    "1:3:1": "Kick",
-    "1:4:1": "Kick",
-    "2:1:1": "Kick",
-    "2:2:1": "Kick",
-    "2:3:1": "Kick",
-    "2:4:1": "Kick"
-  },
-  "Bass7": {
-    "1:1:2": "Bass01",
-    "1:1:3": "Bass02",
-    "1:1:4": "Bass03",
-    "1:2:2": "Bass01",
-    "1:2:3": "Bass02",
-    "1:2:4": "Bass03",
-    "1:3:2": "Bass01",
-    "1:3:3": "Bass02",
-    "1:3:4": "Bass03",
-    "1:4:2": "Bass01",
-    "1:4:3": "Bass02",
-    "1:4:4": "Bass03",
-    "2:1:2": "Bass01",
-    "2:1:3": "Bass02",
-    "2:1:4": "Bass03",
-    "2:2:2": "Bass01",
-    "2:2:3": "Bass02",
-    "2:2:4": "Bass03",
-    "2:3:2": "Bass01",
-    "2:3:3": "Bass02",
-    "2:3:4": "Bass03",
-    "2:4:2": "Bass01",
-    "2:4:3": "Bass02",
-    "2:4:4": "Bass03"
-  },
-  "OpenHat7": {
-    "1:1:3": "OH",
-    "1:2:3": "OH",
-    "1:3:3": "OH",
-    "1:4:3": "OH",
-    "2:1:3": "OH",
-    "2:2:3": "OH",
-    "2:3:3": "OH",
-    "2:4:3": "OH",
-  },
-  "Kick8": {
-    "1:1:1": "Kick",
-    "1:2:1": "Kick",
-    "1:3:1": "Kick",
-    "1:4:1": "Kick",
-    "2:1:1": "Kick",
-    "2:2:1": "Kick",
-    "2:3:1": "Kick",
-    "2:4:1": "Kick"
-  },
-  "Bass8": {
-    "1:1:2": "Bass01",
-    "1:1:3": "Bass02",
-    "1:1:4": "Bass03",
-    "1:2:2": "Bass01",
-    "1:2:3": "Bass02",
-    "1:2:4": "Bass03",
-    "1:3:2": "Bass01",
-    "1:3:3": "Bass02",
-    "1:3:4": "Bass03",
-    "1:4:2": "Bass01",
-    "1:4:3": "Bass02",
-    "1:4:4": "Bass03",
-    "2:1:2": "Bass01",
-    "2:1:3": "Bass02",
-    "2:1:4": "Bass03",
-    "2:2:2": "Bass01",
-    "2:2:3": "Bass02",
-    "2:2:4": "Bass03",
-    "2:3:2": "Bass01",
-    "2:3:3": "Bass02",
-    "2:3:4": "Bass03",
-    "2:4:2": "Bass01",
-    "2:4:3": "Bass02",
-    "2:4:4": "Bass03"
-  },
-  "OpenHat8": {
-    "1:1:3": "OH",
-    "1:2:3": "OH",
-    "1:3:3": "OH",
-    "1:4:3": "OH",
-    "2:1:3": "OH",
-    "2:2:3": "OH",
-    "2:3:3": "OH",
-    "2:4:3": "OH",
-  },
+  "Track4": {},
+  "Track5": {},
+  "Track6": {},
+  "Track7": {},
+  "Track8": {},
   "Track9": {},
   "Track10": {}
 };
 
-let firstTimelineElement = timeline.querySelector(`div[title='1:1:1']`);
-let firstTimelineElementRect = firstTimelineElement.getBoundingClientRect();
-let secondTimelineElement = timeline.querySelector(`div[title='1:1:2']`);
-let secondTimelineElementRect = secondTimelineElement.getBoundingClientRect();
+let trackClips = {
+  "Kick": {
+    "1:1:1": "Kick",
+    "1:2:1": "Kick",
+  },
+  "Bass": {
+    "1:1:3": "Bass01",
+  },
+  "OpenHat": {
+    "1:1:3": "OH",
+  },
+  "Track4": {},
+  "Track5": {},
+  "Track6": {},
+  "Track7": {},
+  "Track8": {},
+  "Track9": {},
+  "Track10": {},
+  "Track11": {},
+  "Track12": {},
+  "Track13": {},
+  "Track14": {},
+  "Track15": {},
+  "Track16": {},
+  "Track17": {},
+  "Track18": {},
+  "Track19": {},
+  "Track20": {},
+  "Track21": {},
+  "Track22": {},
+  "Track23": {},
+  "Track24": {}
+};
 
-let timelineLeft = firstTimelineElementRect.left;
-let timelineElementWidth = firstTimelineElementRect.width - 1.25;
+let sixteenthWidth = document.querySelector("#timeline div[title='1:1:1']").getBoundingClientRect().width;
 
 let tracksTable = document.getElementById("tracks-table");
+let tracksTableBody = tracksTable.querySelector("tbody");
+
 Object.keys(trackClips).forEach(track => {
   let trackRow = document.createElement("tr");
   trackRow.id = track + "-row";
   trackRow.className = "track-row";
-  tracksTable.appendChild(trackRow);
+  tracksTableBody.appendChild(trackRow);
   
-  let trackHeaderColumn = document.createElement("th");
-  trackHeaderColumn.classList.add("headcol");
+  let trackHeaderColumn = document.createElement("td");
+  trackHeaderColumn.classList.add("track-header");
   trackHeaderColumn.classList.add("control");
   trackRow.appendChild(trackHeaderColumn);
   
@@ -533,21 +584,23 @@ Object.keys(trackClips).forEach(track => {
     clipElement.className = "Clip";
     clipElement.innerText = trackClips[track][clipPosition];
     clipElement.title = clipPosition;
-    clipElement.style.width = timelineElementWidth + "px";
+    clipElement.style.width = (sixteenthWidth - 2) + "px";
     
     let timelineElement = timeline.querySelector(`div[title='${clipPosition}']`);
-    let timelineElementLeft = timelineElement.getBoundingClientRect().left - timelineLeft;
+    let clipSixteenthIndex = timelineElement.dataset.index;
     
     let previousClip = trackClipsElement.lastChild;
     let previousClipTimelineElement = previousClip ? timeline.querySelector(`div[title='${previousClip.title}']`) : null;
-    let previousClipTimelineElementRight = previousClipTimelineElement ? previousClipTimelineElement.getBoundingClientRect().right - timelineLeft : 0;
-    let clipLeft = timelineElementLeft - previousClipTimelineElementRight;
+    let previousClipSixteenthIndex = previousClipTimelineElement ? previousClipTimelineElement.dataset.index : null;
     
-    clipElement.style.marginLeft = `${clipLeft - 1}px`;
-    //console.log(track + "-" + clipElement.innerText, timelineElement.title, timelineElement.getBoundingClientRect().left - timelineLeft);
+    let indexGap = previousClipSixteenthIndex ? clipSixteenthIndex - (previousClipSixteenthIndex + 1) : clipSixteenthIndex;
+    let clipLeft = indexGap * sixteenthWidth;
+    clipElement.style.left = `${clipLeft - 1}px`;
+    console.log(track + "-" + clipElement.innerText, clipSixteenthIndex);
     trackClipsElement.appendChild(clipElement);
   })
 });
+*/
 
 let trackNameElements = document.querySelectorAll("input[name='track-name']");
 trackNameElements.forEach(element => {
@@ -557,7 +610,7 @@ trackNameElements.forEach(element => {
 
 
 let selectedTrackRow = null;
-let trackRowHeaders = tracksTable.querySelectorAll("tr.track-row th div");
+let trackRowHeaders = tracksTable2.querySelectorAll("tr.track-row td div");
 trackRowHeaders.forEach(header => header.onclick = () => {
   let trackRow = header.closest("tr");
   if (selectedTrackRow)
@@ -568,7 +621,7 @@ trackRowHeaders.forEach(header => header.onclick = () => {
 
 
 let zoomElement = document.getElementById("zoom");
-let columns = tracksTable.querySelectorAll("td div");
+let columns = tracksTable2.querySelectorAll("td div");
 //console.log("columns", columns, columns[0].style.width);
 columns.forEach(column => {
   column.dataset.width = column.getBoundingClientRect().width;
@@ -583,7 +636,7 @@ columns.forEach(column => {
 });
 
 zoomElement.oninput = () => {
-  let columns = tracksTable.querySelectorAll("td div");
+  let columns = tracksTable2.querySelectorAll("td div");
   
   columns.forEach(column => {
     let zoomFactor = zoomElement.value / 100;
@@ -599,6 +652,9 @@ zoomElement.oninput = () => {
     }
   });
 };
+
+document.querySelectorAll(".toggle-button")
+  .forEach((button) => button.addEventListener("click", () => button.classList.toggle("active")));
   </script>
 </body>
 
