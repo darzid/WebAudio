@@ -12,9 +12,8 @@
   <script src="./js/ui-components/table-zoom.js"></script>
   <script src="./data/tracks.js"></script>
   <script src="./js/tracks-table.js"></script>
-  <style>
-
-  </style>
+  <script src="./js/device-panel.js"></script>
+  <script src="./ableton2.js"></script>
 </head>
 
 <body>
@@ -65,83 +64,7 @@
     </div>
   </div>
   <script>
-let playButton = document.getElementById("play");
-let stopButton = document.getElementById("stop");
-let recButton = document.getElementById("rec");
-
-playButton.onclick = () => {
-  if (playButton.classList.contains("active")) return;
-  playButton.classList.add("active");
-}
-
-stopButton.onclick = () => {
-  if (!playButton.classList.contains("active")) return;
-  playButton.classList.remove("active");
-  if (recButton.classList.contains("active")) {
-    recButton.classList.remove("active");
-  }
-}
-
-let tracksTable = document.getElementById("tracks-table");
-fillTracksTable(tracksTable, tracks);
-
-let selectedTrackRow = null;
-  let trackRowHeaders = tracksTable.querySelectorAll("tr.track-row td div");
-  trackRowHeaders.forEach(header => header.onclick = () => {
-    
-    let trackRow = header.closest("tr");
-    if (selectedTrackRow)
-      selectedTrackRow.classList.remove("selected");
-    trackRow.classList.add("selected");
-    selectedTrackRow = trackRow;
-    showTrackDevices(trackRow.id.split("-row")[0]);
-  });
-  
-let devicesPanelHeader = document.querySelector("#track-devices-panel .panel-header");
-let devicesPanelContent = document.querySelector("#track-devices-panel .panel-content");
-
-function showTrackDevices(trackId) {
-  let track = tracks.find(track => track.name == trackId);
-  console.log(trackId, track.devices);
-  devicesPanelHeader.innerText = `Devices - ${trackId}`;
-  devicesPanelContent.innerHTML = "";
-  
-  let deviceIndex = 1;
-  track.devices.forEach(device => {
-    let deviceElement = document.createElement("div");
-    deviceElement.className = "device panel";
-    deviceElement.id = `${trackId}-Device${deviceIndex}`;
-    devicesPanelContent.appendChild(deviceElement);
-    
-    let deviceHeaderElement = document.createElement("div");
-    deviceHeaderElement.className = "panel-header";
-    deviceHeaderElement.innerHTML = `<button class="control toggle-button enabled-button active"></button>${device.name}`;
-    deviceElement.appendChild(deviceHeaderElement);
-    
-    let deviceContentElement = document.createElement("div");
-    deviceContentElement.className = "panel-content";
-    deviceElement.appendChild(deviceContentElement);
-    
-    Object.keys(device.parameters).forEach(parameterName => {
-      let parameterLabelElement = document.createElement("label");
-      parameterLabelElement.className = "number-label";
-      parameterLabelElement.innerHTML = `${parameterName}<input class="control" type="number" min="0" max="127" value="${device.parameters[parameterName]}">`;
-      deviceContentElement.appendChild(parameterLabelElement);
-    })
-    initializeNumberInputs(deviceElement);
-    initializeToggleButtons(deviceElement);
-    deviceIndex++;
-  })
-}
-
-function initializeToggleButtons(parentElement) {
-  parentElement.querySelectorAll(".toggle-button")
-  .forEach((button) => button.addEventListener("click", () => button.classList.toggle("active")));
-}
-
-initializeNumberInputs(document);
-initializeToggleButtons(document);
-initializeTableZoom(tracksTable, document.getElementById("zoom"));
+initialize();
   </script>
 
 </body>

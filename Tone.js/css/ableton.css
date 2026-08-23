@@ -11,7 +11,7 @@
   --button-border-color: darkgray;
   --active-button-bg: #f8d200;
   
-  --panel-header-bg: rgb(120,120,130);
+  --panel-header-bg: rgb(140,140,145);
   --panel-header-border-color: rgb(40,40,40);
   --panel-border-color: rgb(80,80,80);
   --panel-border-color-dark: rgb(40,40,40);
@@ -41,7 +41,7 @@
   --clip-column-banded-bg: rgba(90,90,100,0.5);
   
   --devices-bg: rgb(80,80,80);
-  --device-bg: rgb(105,105,110);
+  --device-bg: rgb(130,130,135);
 }
 
 body {
@@ -225,7 +225,6 @@ input.medium-width {
   thead th:first-child {
     position: sticky;
     left: 0;
-    
   }
   
   thead th {
@@ -303,7 +302,6 @@ input.medium-width {
   
   td.banded {
     background-color: var(--clip-column-banded-bg);
-    
   }
   
   tbody td:first-child {
@@ -377,10 +375,8 @@ input.medium-width {
       
       margin-top: 2px;
       margin-left: 2px;
-      margin-right2: 5px;
       
-      
-      border: 1px solid var(--panel-border-color-dark);
+      border-radius: 2px;
       box-shadow: 1px 1px 2px var(--shadow-color);
       font-size: smaller;
     
@@ -395,12 +391,14 @@ input.medium-width {
       }
       .panel-header {
         padding: 4px;
-        padding-right: 3px;
+        padding-right: 2px;
         width: 100%;
+        border: 1px solid var(--panel-border-color-dark);
+        border-radius: 2px 2px 0px 0px;
       }
       
       .panel-content {
-        padding: 2px;
+        padding: 1px;
         padding-left: 5px;
         display: flex;
         flex-flow: column wrap;
@@ -408,6 +406,9 @@ input.medium-width {
         align-items: center;
         width: 100%;
         background: var(--device-bg);
+        border-left: 1px solid var(--panel-border-color-dark);
+        border-right: 1px solid var(--panel-border-color-dark);
+        border-bottom: 1px solid var(--panel-border-color-dark);
         overflow: auto;
         
         label {

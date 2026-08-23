@@ -85,13 +85,23 @@ function fillTracksTable(tracksTable, tracks)
     }
   });
   
+  let selectedTrackRow = null;
+  let trackRowHeaders = tracksTable.querySelectorAll("tr.track-row td div");
+  trackRowHeaders.forEach(header => header.onclick = () => {
+    
+    let trackRow = header.closest("tr");
+    if (selectedTrackRow)
+      selectedTrackRow.classList.remove("selected");
+    trackRow.classList.add("selected");
+    selectedTrackRow = trackRow;
+    showTrackDevices(trackRow.id.split("-row")[0]);
+  });
+  
   let trackNameElements = document.querySelectorAll("input[name='track-name']");
   trackNameElements.forEach(element => {
     element.ondblclick = () => element.readOnly ? element.readOnly = "" : element.readOnly = "true";
     element.onblur = () =>  element.readOnly = "true";
   });
-  
-  
 }
 
 function getSixteenths(time) {
