@@ -37,7 +37,7 @@ let tracks = [
     ],
     clips: [
       {
-        name: "VeryLongKick",
+        name: "Kick",
         start: "1:1:1",
         duration: "0:0:1",
         end: "1:2:1"

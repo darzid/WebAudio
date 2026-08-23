@@ -21,7 +21,7 @@
   
   --input-bg: rgb(240,240,230);
   
-  --tracktable-height: 495px;
+  --tracktable-height: 510px;
   --tracktable-trackdetails-width: 100px;
   
   --timeline-bar-border-color: black;
@@ -108,8 +108,10 @@ label.number-label {
   margin: 4px;
   justify-content2: center;
   align-items: center;
+  font-size: xx-small;
   input[type="number"] {
     justify-content: center;
+    font-size: xx-small;
     background-color: var(--number-bg);
     background-image: linear-gradient(to right, 
       var(--number-value-bg) 0%, 
@@ -141,6 +143,11 @@ label.number-label {
   margin-right: 8px;
 }
 
+button.active {
+      background-color: var(--active-button-bg);
+      box-shadow: 0px 0px 3px var(--active-button-bg);
+    }
+    
 
 #app {
   height: stretch;
@@ -171,6 +178,8 @@ label.number-label {
   button {
     background-color: transparent;
   }
+  
+  
 }
 
 #play.active > img {
@@ -236,6 +245,7 @@ input.medium-width {
     max-width: 100px;
     height: 25px;
     font-size: 1em;
+    border: 1px solid var(--color-bg);
   }
 
   tbody td:first-child {
@@ -294,8 +304,6 @@ input.medium-width {
       padding: 0px;
       margin: 0px;
       
-      
-      
       border-top: 1px solid var(--clip-border-color);
       border-bottom: 1px solid var(--clip-border-color);
       box-shadow: 1px 1px 2px var(--shadow-color);
@@ -351,6 +359,7 @@ input.medium-width {
     z-index: 4;
     border: 1px solid var(--control-bg);
     
+    
     input {
       font-size: small;
       vertical-align: middle;
@@ -363,21 +372,22 @@ input.medium-width {
       background: transparent;
     }
   }
-  
-  button.active {
-  background-color: var(--active-button-bg);
-  box-shadow: 0px 0px 3px var(--active-button-bg);
-}
-    .enabled-button {
-      width: 14px;
-      height: 14px;
-      margin: 4px;
-      border: 1px solid var(--button-border-color);
-      
-    }
-  
 
-  #track-devices-panel {
+.panel-header {
+        width: 100%;
+        border: 1px solid var(--panel-border-color-dark);
+        border-radius: 2px 2px 0px 0px;
+        font-size: smaller;
+        font-weight: bolder;
+        
+}
+
+
+
+#track-devices-panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border-color);
+    
     position: absolute;
     bottom: 5px;
     width: 100%;
@@ -388,100 +398,70 @@ input.medium-width {
     
     background: var(--devices-bg);
     border: 1px solid var(--panel-border-color);
+    
+    .panel-header {
+      background: var(--panel-header-bg);
+      border-bottom: 1px solid var(--panel-header-border-color);
+      font-size2: smaller;
+      
+    }
+}
 
-    
-    .device {
-      display: inline-block;
-      flex-direction: column;
+.device {
+  display: flex;
+  flex-direction: column;
+  margin: 3px;
   
-      min-width2: max-content;
-      max-width: max-content;
-      
-      height: 90%;
-      
-      margin-top: 2px;
-      margin-left: 2px;
-      
-      border-radius: 2px;
-      box-shadow: 1px 1px 2px var(--shadow-color);
-      font-size: smaller;
-    
-      .enabled-button {
-        width: 12px;
-        height: 12px;
-        margin: 1px;
-        margin-right: 3px;
-      }
-      input {
-        font-size: smaller;
-      }
-      .panel-header {
-        padding: 4px;
-        padding-right: 2px;
-        width: 100%;
-        border: 1px solid var(--panel-border-color-dark);
-        border-radius: 2px 2px 0px 0px;
-      }
-      
-      .panel-content {
-        padding: 1px;
-        padding-left: 5px;
-        display: flex;
-        flex-flow: column wrap;
-        height: 74%;
-        width: 100%;
-        background: var(--device-bg);
-        border-left: 1px solid var(--panel-border-color-dark);
-        border-right: 1px solid var(--panel-border-color-dark);
-        border-bottom: 1px solid var(--panel-border-color-dark);
-        overflow: auto;
-        
-        .parameter-group {
-          display: flex;
-          flex-flow: row nowrap;
-          flex-shrink: 2;
-          
-          background: rgba(0,0,0,0.1);
-          border: 1px solid var(--panel-border-color);
-          border-radius: 2px;
-          margin: 1px;
-          margin-right: 5px;
-          
-          .group-name {
-            min-width: 35px;
-            max-width: 35px;
-            font-size: 6px;
-          }
-        }
-        
-        label {
-          min-width: 40px;
-          max-width: 40px;
-          font-size: xx-small;
-          
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          
-        }
-      }
+  border-radius: 2px;
+  border: 1px solid var(--panel-border-color-dark);
+  
+  box-shadow: 1px 1px 2px var(--shadow-color);
+  background: var(--device-bg);
+  
+  .panel-header {
+    width2: 100%;
+    font-size: x-small;
+    padding-top: 2px;
+    border: 0px solid var(--panel-border-color-dark);
+    .enabled-button {
+      width: 12px;
+      height: 12px;
+      margin: 3px;
+      margin-top: 0px;
     }
   }
   
+  .panel-content {
+    display: flex;
+    flex-flow: column wrap;
+    height: 74%;
+    width: 100%;
+    
+    overflow: auto;
+  }
+}
+.enabled-button {
+      width: 14px;
+      height: 14px;
+      margin: 4px;
+      border: 1px solid var(--button-border-color);
+      
+    }
+
   .scroll {
     display: flex;
     overflow: auto;
     width: 100%;
-    height: 15vmax;
+    height: 12vmax;
   }
   
   #track-devices-panel > .scroll > .panel-content {
+    min-width: 1000px;
+    max-width: 2000px;
     height: 100%;
     
     display: flex;
     flex-direction: row;
     flex-grow: 1;
-    gap: 10px;
-    min-width: 1000px;
-    max-width: 2000px;
+    
   }
-  

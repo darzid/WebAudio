@@ -9,9 +9,11 @@ function showTrackDevices(trackId) {
   
   let deviceIndex = 1;
   track.devices.forEach(device => {
+    let deviceId = `${trackId}-Device${deviceIndex}`;
+    
     let deviceElement = document.createElement("div");
-    deviceElement.className = "device panel";
-    deviceElement.id = `${trackId}-Device${deviceIndex}`;
+    deviceElement.className = "device";
+    deviceElement.id = deviceId;
     devicesPanelContent.appendChild(deviceElement);
     
     let deviceHeaderElement = document.createElement("div");
@@ -23,34 +25,35 @@ function showTrackDevices(trackId) {
     deviceContentElement.className = "panel-content";
     deviceElement.appendChild(deviceContentElement);
     
+    let tabstripElement = document.createElement("div");
+    tabstripElement.className = "tab";
+    deviceContentElement.appendChild(tabstripElement);
+    
     if (device.parameterGroups) {
       Object.keys(device.parameterGroups).forEach(parameterGroupName => {
-        let parameterGroupElement = document.createElement("div");
-        parameterGroupElement.className = "parameter-group";
-        deviceContentElement.appendChild(parameterGroupElement);
+        let tabButton = document.createElement("button");
+        tabButton.className = "tablinks";
+        tabButton.onclick = (e) => openTab(e.currentTarget, deviceElement, parameterGroupName);
+        tabButton.innerText = parameterGroupName;
+        tabButton.dataset.deviceId = deviceId;
+        tabstripElement.appendChild(tabButton);
+      });
+      
+      Object.keys(device.parameterGroups).forEach(parameterGroupName => {
+        let tabContent = document.createElement("div");
+        tabContent.className = "tabcontent";
+        tabContent.id = parameterGroupName;
+        deviceContentElement.appendChild(tabContent);
         
-        let groupNameElement = document.createElement("span");
-        groupNameElement.className = "group-name";
-        groupNameElement.innerText = parameterGroupName;
-        parameterGroupElement.appendChild(groupNameElement);
         Object.keys(device.parameterGroups[parameterGroupName]).forEach(parameterName => {
           let parameterLabelElement = document.createElement("label");
           parameterLabelElement.className = "number-label";
           parameterLabelElement.innerHTML =
             `${parameterName}<input class="control" type="number" min="0" max="127" value="${device.parameterGroups[parameterGroupName][parameterName]}">`;
-          parameterGroupElement.appendChild(parameterLabelElement);
+          tabContent.appendChild(parameterLabelElement);
         })
-        
-      })
-    }
-    else {
-      Object.keys(device.parameters).forEach(parameterName => {
-        let parameterLabelElement = document.createElement("label");
-        parameterLabelElement.className = "number-label";
-        parameterLabelElement.innerHTML =
-          `${parameterName}<input class="control" type="number" min="0" max="127" value="${device.parameters[parameterName]}">`;
-        deviceContentElement.appendChild(parameterLabelElement);
-      })
+      });
+      openTab(tabstripElement.childNodes[0], deviceElement, tabstripElement.childNodes[0].innerText);
     }
     
     initializeNumberInputs(deviceElement);
