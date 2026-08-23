@@ -53,6 +53,7 @@ function fillTracksTable(tracksTable, tracks)
     let trackRow = addTrackRow(newTrack);
     trackRow.scrollIntoView();
     selectTrack(trackRow);
+    sizeTracksTableContainer();
   }
 
   function addTrackRow(track) {
@@ -172,8 +173,6 @@ function fillTracksTable(tracksTable, tracks)
     element.ondblclick = () => element.readOnly ? element.readOnly = "" : element.readOnly = "true";
     element.onblur = () =>  element.readOnly = "true";
   });
-  
-  
 }
 
 function getSixteenths(time) {

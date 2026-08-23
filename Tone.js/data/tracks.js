@@ -366,12 +366,4 @@ let tracks = [
     name: "Track22",
     clips: []
   },
-  {
-    name: "Track23",
-    clips: []
-  },
-  {
-    name: "Track24",
-    clips: []
-  },
 ];
