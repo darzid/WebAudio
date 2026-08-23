@@ -4,69 +4,80 @@ let tracks = [
     devices: [
       {
         name: "MembraneSynth",
-        parameters: {
-          detune: 0,
-          portamento: 0,
-          
-          attack: 0.1,
-          decay: 0.5,
-          sustain: 0,
-          release: 0.2,
-          
-          volume: -2,
-        }
+        parameterGroups: {
+          general: {
+            detune: 0,
+            portamento: 0,
+            volume: -2,
+          },
+          envelope: {
+            attack: 0.1,
+            decay: 0.5,
+            sustain: 0,
+            release: 0.2,
+          },
+        },
       },
       {
         name: "Compressor",
-        parameters: {
-          threshold: 50,
-          ratio: 20,
-          attack: 0.1,
-          release: 0.2,
-          knee: 30,
-          output: 2
+        parameterGroups: {
+          general: {
+            threshold: 50,
+            knee: 30,
+            ratio: 20,
+            output: 2
+          },
+          envelope: {
+            attack: 0.1,
+            release: 0.2,
+            
+          }
         }
       }
     ],
     clips: [
       {
-        name: "Kick",
-        position: "1:1:1",
-        duration: "0:0:1" 
+        name: "VeryLongKick",
+        start: "1:1:1",
+        duration: "0:0:1",
+        end: "1:2:1"
       },
       {
         name: "Kick",
-        position: "1:2:1",
-        duration: "0:0:1" 
+        start: "1:2:1",
+        duration: "0:0:1",
+        end: "1:3:1"
       },
       {
         name: "Kick",
-        position: "1:3:1",
+        start: "1:3:1",
+        duration: "0:0:1",
+        end: "1:4:1"
+      },
+      {
+        name: "Kick",
+        start: "1:4:1",
+        duration: "0:0:1",
+        end: "2:1:1"
+      },
+      {
+        name: "Kick",
+        start: "2:1:1",
         duration: "0:0:1"
       },
       {
         name: "Kick",
-        position: "1:4:1",
+        start: "2:2:1",
         duration: "0:0:1"
       },
       {
         name: "Kick",
-        position: "2:1:1",
+        start: "2:3:1",
         duration: "0:0:1"
       },
       {
         name: "Kick",
-        position: "2:2:1",
-        duration: "0:0:1"
-      },
-      {
-        name: "Kick",
-        position: "2:3:1",
-        duration: "0:0:1"
-      },
-      {
-        name: "Kick",
-        position: "2:4:1",
+        start: "2:4:1",
         duration: "0:0:1"
       },
     ]
@@ -99,122 +110,122 @@ let tracks = [
     clips: [
       {
         name: "Bassline01",
-        position: "1:1:2",
+        start: "1:1:2",
         duration: "0:0:1" 
       },
       {
         name: "Bassline02",
-        position: "1:1:3",
+        start: "1:1:3",
         duration: "0:0:1" 
       },
       {
         name: "Bassline03",
-        position: "1:1:4",
+        start: "1:1:4",
         duration: "0:0:1" 
       },
       {
         name: "Bassline01",
-        position: "1:2:2",
+        start: "1:2:2",
         duration: "0:0:1"
       },
       {
         name: "Bassline02",
-        position: "1:2:3",
+        start: "1:2:3",
         duration: "0:0:1"
       },
       {
         name: "Bassline03",
-        position: "1:2:4",
+        start: "1:2:4",
         duration: "0:0:1"
       },
       {
         name: "Bassline01",
-        position: "1:3:2",
+        start: "1:3:2",
         duration: "0:0:1"
       },
       {
         name: "Bassline02",
-        position: "1:3:3",
+        start: "1:3:3",
         duration: "0:0:1"
       },
       {
         name: "Bassline03",
-        position: "1:3:4",
+        start: "1:3:4",
         duration: "0:0:1"
       },
       {
         name: "Bassline01",
-        position: "1:4:2",
+        start: "1:4:2",
         duration: "0:0:1" 
       },
       {
         name: "Bassline02",
-        position: "1:4:3",
+        start: "1:4:3",
         duration: "0:0:1" 
       },
       {
         name: "Bassline03",
-        position: "1:4:4",
+        start: "1:4:4",
         duration: "0:0:1" 
       },
       {
         name: "Bassline01",
-        position: "2:1:2",
+        start: "2:1:2",
         duration: "0:0:1"
       },
       {
         name: "Bassline02",
-        position: "2:1:3",
+        start: "2:1:3",
         duration: "0:0:1"
       },
       {
         name: "Bassline03",
-        position: "2:1:4",
+        start: "2:1:4",
         duration: "0:0:1"
       },
       {
         name: "Bassline01",
-        position: "2:2:2",
+        start: "2:2:2",
         duration: "0:0:1"
       },
       {
         name: "Bassline02",
-        position: "2:2:3",
+        start: "2:2:3",
         duration: "0:0:1"
       },
       {
         name: "Bassline03",
-        position: "2:2:4",
+        start: "2:2:4",
         duration: "0:0:1"
       },
       {
         name: "Bassline01",
-        position: "2:3:2",
+        start: "2:3:2",
         duration: "0:0:1"
       },
       {
         name: "Bassline02",
-        position: "2:3:3",
+        start: "2:3:3",
         duration: "0:0:1"
       },
       {
         name: "Bassline03",
-        position: "2:3:4",
+        start: "2:3:4",
         duration: "0:0:1"
       },
       {
         name: "Bassline01",
-        position: "2:4:2",
+        start: "2:4:2",
         duration: "0:0:1"
       },
       {
         name: "Bassline02",
-        position: "2:4:3",
+        start: "2:4:3",
         duration: "0:0:1"
       },
       {
         name: "Bassline03",
-        position: "2:4:4",
+        start: "2:4:4",
         duration: "0:0:1"
       }
     ]
@@ -233,42 +244,42 @@ let tracks = [
     clips: [
       {
         name: "OH",
-        position: "1:1:3",
+        start: "1:1:3",
         duration: "0:0:1" 
       },
       {
         name: "OH",
-        position: "1:2:3",
+        start: "1:2:3",
         duration: "0:0:1" 
       },
       {
         name: "OH",
-        position: "1:3:3",
+        start: "1:3:3",
         duration: "0:0:1"
       },
       {
         name: "OH",
-        position: "1:4:3",
+        start: "1:4:3",
         duration: "0:0:1"
       },
       {
         name: "OH",
-        position: "2:1:3",
+        start: "2:1:3",
         duration: "0:0:1"
       },
       {
         name: "OH",
-        position: "2:2:3",
+        start: "2:2:3",
         duration: "0:0:1"
       },
       {
         name: "OH",
-        position: "2:3:3",
+        start: "2:3:3",
         duration: "0:0:1"
       },
       {
         name: "OH",
-        position: "2:4:3",
+        start: "2:4:3",
         duration: "0:0:1"
       },
     ]
@@ -278,7 +289,7 @@ let tracks = [
     clips: [
       {
         name: "Lead01",
-        position: "1:2:1.5",
+        start: "1:2:1.5",
         duration: "0:1:0"
       }
     ]

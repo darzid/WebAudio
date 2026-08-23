@@ -44,6 +44,8 @@ function fillTracksTable(tracksTable, tracks)
                 <label><input name="track-name" class="control medium-width" type="text" value="${track.name}" readonly></label>`;
     
     let clipIndex = 1;
+    let repeatingClip = null; 
+    let repeatCounter = 0;
     for (bar = 1; bar <= 4; bar++) {
       for (beat = 1; beat <= 4; beat++) {
         for (sixteenth = 1; sixteenth <= 4; sixteenth++) {
@@ -55,30 +57,68 @@ function fillTracksTable(tracksTable, tracks)
           
           let clipPosition = `${bar}:${beat}:${sixteenth}`;
           
-          let clip = track.clips.find(clip => clip.position.startsWith(clipPosition));
+          let clip = track.clips.find(clip => clip.start.startsWith(clipPosition));
           if (clip) {
-            
+            repeatingClip = null;
             
             let clipElement = document.createElement("div");
             clipElement.id = `${track.name}-Clip${clipIndex}`;
             clipElement.className = "Clip";
+            
             clipElement.innerText = clip.name;
             
             let clipDurationInSixteenths = getSixteenths(clip.duration);
-            
             clipElement.style.width = `${clipDurationInSixteenths * 100}%`;
             
             columnElement.appendChild(clipElement);
             
-            if (clip.position.indexOf(".")) {
-              let clipOffset = parseFloat(`0.${clip.position.split(".")[1]}`);
+            if (clip.start.indexOf(".")) {
+              let clipOffset = parseFloat(`0.${clip.start.split(".")[1]}`);
               clipElement.classList.add("clip-with-offset");
               clipElement.dataset.offset = clipOffset;
               
               applyClipOffset(clipElement);
             }
             
+            if (clip.end) {
+              let clipStartInSixteenths = getSixteenths(clip.start);
+              let clipEndInSixteenths = getSixteenths(clip.end);
+              if (clipEndInSixteenths - clipStartInSixteenths > 1) {
+                repeatingClip = clip;
+                repeatCounter = clipEndInSixteenths - clipStartInSixteenths - 1;
+                clipElement.classList.add("Repeat");
+              }
+            }
+            
+            if (!repeatingClip) {
+              clipElement.classList.add("ClipEnd");
+            }
             clipIndex++;
+          }
+          else if (repeatingClip) {
+            let clipElement = document.createElement("div");
+            clipElement.id = `${track.name}-Clip${clipIndex}`;
+            clipElement.className = "RepeatingClip";
+           // clipElement.innerText = clip.name;
+            
+            let clipDurationInSixteenths = getSixteenths(repeatingClip.duration);
+            clipElement.style.width = `${clipDurationInSixteenths * 100}%`;
+            
+            columnElement.appendChild(clipElement);
+            
+            if (repeatingClip.start.indexOf(".")) {
+              let clipOffset = parseFloat(`0.${repeatingClip.start.split(".")[1]}`);
+              clipElement.classList.add("clip-with-offset");
+              clipElement.dataset.offset = clipOffset;
+              
+              applyClipOffset(clipElement);
+            }
+            
+            repeatCounter--;
+            if (repeatCounter == 0) {
+              repeatingClip = null;
+              clipElement.classList.add("ClipEnd")
+            }
           }
         }
       }

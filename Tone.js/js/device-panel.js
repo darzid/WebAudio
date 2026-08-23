@@ -23,13 +23,36 @@ function showTrackDevices(trackId) {
     deviceContentElement.className = "panel-content";
     deviceElement.appendChild(deviceContentElement);
     
-    Object.keys(device.parameters).forEach(parameterName => {
-      let parameterLabelElement = document.createElement("label");
-      parameterLabelElement.className = "number-label";
-      parameterLabelElement.innerHTML =
-        `${parameterName}<input class="control" type="number" min="0" max="127" value="${device.parameters[parameterName]}">`;
-      deviceContentElement.appendChild(parameterLabelElement);
-    })
+    if (device.parameterGroups) {
+      Object.keys(device.parameterGroups).forEach(parameterGroupName => {
+        let parameterGroupElement = document.createElement("div");
+        parameterGroupElement.className = "parameter-group";
+        deviceContentElement.appendChild(parameterGroupElement);
+        
+        let groupNameElement = document.createElement("span");
+        groupNameElement.className = "group-name";
+        groupNameElement.innerText = parameterGroupName;
+        parameterGroupElement.appendChild(groupNameElement);
+        Object.keys(device.parameterGroups[parameterGroupName]).forEach(parameterName => {
+          let parameterLabelElement = document.createElement("label");
+          parameterLabelElement.className = "number-label";
+          parameterLabelElement.innerHTML =
+            `${parameterName}<input class="control" type="number" min="0" max="127" value="${device.parameterGroups[parameterGroupName][parameterName]}">`;
+          parameterGroupElement.appendChild(parameterLabelElement);
+        })
+        
+      })
+    }
+    else {
+      Object.keys(device.parameters).forEach(parameterName => {
+        let parameterLabelElement = document.createElement("label");
+        parameterLabelElement.className = "number-label";
+        parameterLabelElement.innerHTML =
+          `${parameterName}<input class="control" type="number" min="0" max="127" value="${device.parameters[parameterName]}">`;
+        deviceContentElement.appendChild(parameterLabelElement);
+      })
+    }
+    
     initializeNumberInputs(deviceElement);
     initializeToggleButtons(deviceElement);
     deviceIndex++;
