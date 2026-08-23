@@ -197,19 +197,13 @@ function sizeTracksTableContainer() {
   let tracksTableHeight = tracksTable.getBoundingClientRect().height;
   let tracksTableTop = tracksTable.getBoundingClientRect().y;
   
-  let yDelta = 0;
   if (!tracksTable.dataset.initialY) {
     tracksTable.dataset.initialY = tracksTableTop;
     console.log("top", tracksTableTop);
   } 
-  else {
-    yDelta = tracksTable.dataset.initialY - tracksTableTop;
-    console.log("yDelta", yDelta);
-  }
-  let tracksTableBottom = tracksTableTop + tracksTableHeight;
   
-  let availableHeight = devicesPanelTop - tracksTableTop;
-  let overflow = availableHeight - (tracksTableHeight + yDelta);
+  let availableHeight = devicesPanelTop - tracksTable.dataset.initialY;
+  let overflow = availableHeight - (tracksTableHeight);
   console.log("overflow", overflow, tracksTable.getBoundingClientRect());
   
   if (overflow < 0) {
