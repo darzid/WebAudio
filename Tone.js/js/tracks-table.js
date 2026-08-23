@@ -1,10 +1,18 @@
 function fillTracksTable(tracksTable, tracks)
 {
+  let tracksTableBody = tracksTable.querySelector("tbody");
   let tracksTableHeaderRow = tracksTable.querySelector(".header-row");
   let leftTopHeader = document.createElement("th");
-  leftTopHeader.innerText = "";
+  let addTrackButton = document.createElement("button");
+  addTrackButton.classList.add("control");
+  addTrackButton.classList.add("image-button");
+  addTrackButton.id ="add-track";
+  leftTopHeader.appendChild(addTrackButton);
+  addTrackButton.innerHTML = '<img src="img/addtrack.png">';
   
   tracksTableHeaderRow.appendChild(leftTopHeader);
+  
+  addTrackButton.onclick = () => addTrack();
   
   for (bar = 1; bar <= 4; bar++) {
     for (beat = 1; beat <= 4; beat++) {
@@ -21,12 +29,35 @@ function fillTracksTable(tracksTable, tracks)
     }
   }
   
-  
-  let tracksTableBody = tracksTable.querySelector("tbody");
-  
   tracks.forEach(track => {
+    addTrackRow(track);
+  });
+  sizeTracksTableContainer();
+  
+  let selectedTrackRow = null;
+  
+  function selectTrack(trackRow) {
+    if (selectedTrackRow)
+      selectedTrackRow.classList.remove("selected");
+    trackRow.classList.add("selected");
+    selectedTrackRow = trackRow;
+    showTrackDevices(trackRow.id.split("-row")[0]);
+  }
+  
+  function addTrack() {
+    let newTrack = {
+      name: "Track" + (tracks.length + 1),
+      clips: []
+    }
+    tracks.push(newTrack);
+    let trackRow = addTrackRow(newTrack);
+    trackRow.scrollIntoView();
+    selectTrack(trackRow);
+  }
+
+  function addTrackRow(track) {
     let trackIndex = tracks.indexOf(track);
-    
+
     let trackRow = document.createElement("tr");
     trackRow.id = track.name + "-row";
     trackRow.className = "track-row";
@@ -41,21 +72,22 @@ function fillTracksTable(tracksTable, tracks)
     trackHeaderColumn.appendChild(trackHeaderDiv);
     
     trackHeaderDiv.innerHTML = `<button class="control toggle-button enabled-button active"></button>
-                <label><input name="track-name" class="control medium-width" type="text" value="${track.name}" readonly></label>`;
+                    <label><input name="track-name" class="control medium-width" type="text" value="${track.name}" readonly></label>`;
     
     let clipIndex = 1;
-    let repeatingClip = null; 
+    let repeatingClip = null;
     let repeatCounter = 0;
     for (bar = 1; bar <= 4; bar++) {
       for (beat = 1; beat <= 4; beat++) {
         for (sixteenth = 1; sixteenth <= 4; sixteenth++) {
           let columnElement = document.createElement("td");
           columnElement.className = "clip-column";
-          if (beat % 2 == 0) 
+          if (beat % 2 == 0)
             columnElement.classList.add("banded");
           trackRow.appendChild(columnElement);
           
           let clipPosition = `${bar}:${beat}:${sixteenth}`;
+          
           
           let clip = track.clips.find(clip => clip.start.startsWith(clipPosition));
           if (clip) {
@@ -99,7 +131,7 @@ function fillTracksTable(tracksTable, tracks)
             let clipElement = document.createElement("div");
             clipElement.id = `${track.name}-Clip${clipIndex}`;
             clipElement.className = "RepeatingClip";
-           // clipElement.innerText = clip.name;
+            // clipElement.innerText = clip.name;
             
             let clipDurationInSixteenths = getSixteenths(repeatingClip.duration);
             clipElement.style.width = `${clipDurationInSixteenths * 100}%`;
@@ -123,18 +155,16 @@ function fillTracksTable(tracksTable, tracks)
         }
       }
     }
-  });
-  
-  let selectedTrackRow = null;
+    
+    trackRow.querySelectorAll("td div").forEach(header => {
+      header.onclick = () => selectTrack(header.closest("tr"));
+    });
+    return trackRow;
+  }
+
   let trackRowHeaders = tracksTable.querySelectorAll("tr.track-row td div");
   trackRowHeaders.forEach(header => header.onclick = () => {
-    
-    let trackRow = header.closest("tr");
-    if (selectedTrackRow)
-      selectedTrackRow.classList.remove("selected");
-    trackRow.classList.add("selected");
-    selectedTrackRow = trackRow;
-    showTrackDevices(trackRow.id.split("-row")[0]);
+    selectTrack(header.closest("tr"));
   });
   
   let trackNameElements = document.querySelectorAll("input[name='track-name']");
@@ -142,6 +172,8 @@ function fillTracksTable(tracksTable, tracks)
     element.ondblclick = () => element.readOnly ? element.readOnly = "" : element.readOnly = "true";
     element.onblur = () =>  element.readOnly = "true";
   });
+  
+  
 }
 
 function getSixteenths(time) {
@@ -150,4 +182,46 @@ function getSixteenths(time) {
   let beats = (bars * 4) + parseInt(parts[1]);
   let sixteenths = (beats * 4) + parseFloat(parts[2]);
   return sixteenths;
+}
+
+
+function sizeTracksTableContainer() {
+  let tracksTable = document.getElementById("tracks-table");
+  let devicesPanel = document.getElementById("track-devices-panel");
+  
+  let pageHeight = window.innerHeight;
+    
+  let devicesPanelHeight = devicesPanel.getBoundingClientRect().height;
+  let devicesPanelTop = devicesPanelHeight > 0 ? devicesPanel.getBoundingClientRect().y : pageHeight;
+  
+  
+  let tracksTableHeight = tracksTable.getBoundingClientRect().height;
+  let tracksTableTop = tracksTable.getBoundingClientRect().y;
+  
+  let yDelta = 0;
+  if (!tracksTable.dataset.initialY) {
+    tracksTable.dataset.initialY = tracksTableTop;
+    console.log("top", tracksTableTop);
+  } 
+  else {
+    yDelta = tracksTable.dataset.initialY - tracksTableTop;
+    console.log("yDelta", yDelta);
+  }
+  let tracksTableBottom = tracksTableTop + tracksTableHeight;
+  
+  let availableHeight = devicesPanelTop - tracksTableTop;
+  let overflow = availableHeight - (tracksTableHeight + yDelta);
+  console.log("overflow", overflow, tracksTable.getBoundingClientRect());
+  
+  if (overflow < 0) {
+    console.log("overflow fix", overflow);
+    tracksTable.parentElement.style.maxHeight = `${tracksTableHeight + overflow}px`;
+    tracksTable.parentElement.style.height = tracksTable.parentElement.style.maxHeight;
+  }
+  else
+  {
+    console.log("no overflow", overflow);
+    tracksTable.parentElement.style.maxHeight = `${tracksTableHeight}px`;
+    tracksTable.parentElement.style.height = tracksTable.parentElement.style.maxHeight;
+  }
 }
