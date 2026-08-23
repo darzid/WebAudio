@@ -30,6 +30,6 @@ function initializeNumberInputs(parentElement) {
   
   function updateNumberBackground(input) {
     let progress = 100 * ((input.value - input.min) / (input.max - input.min));
-    input.style.backgroundImage = `linear-gradient(to right, #00b7b7 0%, #00b7b7 ${progress}%, white ${progress}%, white 100%)`;
+    input.style.backgroundImage = `linear-gradient(to right, var(--number-value-bg) 0%, var(--number-value-bg) ${progress}%, var(--number-bg) ${progress}%, var(--number-bg) 100%)`;
   }
 }

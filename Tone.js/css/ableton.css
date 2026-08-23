@@ -5,7 +5,7 @@
   
   --control-bg: rgb(140,140,145);
   
-  --number-bg: white;
+  --number-bg: rgb(240,240,230);
   --number-value-bg: #00b7b7;
   
   --button-border-color: darkgray;
@@ -19,7 +19,7 @@
   
   --shadow-color: rgba(50,50,50,0.5);
   
-  --input-bg: white;
+  --input-bg: rgb(240,240,230);
   
   --tracktable-height: 495px;
   --tracktable-trackdetails-width: 100px;
@@ -441,9 +441,11 @@ input.medium-width {
           flex-flow: row nowrap;
           flex-shrink: 2;
           
+          background: rgba(0,0,0,0.1);
           border: 1px solid var(--panel-border-color);
           border-radius: 2px;
           margin: 1px;
+          margin-right: 5px;
           
           .group-name {
             min-width: 35px;
