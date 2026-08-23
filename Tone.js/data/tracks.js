@@ -358,4 +358,20 @@ let tracks = [
     name: "Track20",
     clips: []
   },
+  {
+    name: "Track21",
+    clips: []
+  },
+  {
+    name: "Track22",
+    clips: []
+  },
+  {
+    name: "Track23",
+    clips: []
+  },
+  {
+    name: "Track24",
+    clips: []
+  },
 ];
