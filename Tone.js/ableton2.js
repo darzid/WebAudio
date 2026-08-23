@@ -18,6 +18,7 @@ function initialize() {
   
   let tracksTable = document.getElementById("tracks-table");
   let devicesPanel = document.getElementById("track-devices-panel");
+  let clipEditPanel = document.getElementById("clip-editor-panel");
   
   fillTracksTable(tracksTable, tracks);
   
@@ -27,8 +28,12 @@ function initialize() {
   
   let toggleDevicesButton = document.getElementById("toggle-devices");
   toggleDevicesButton.onclick = () => {
-    
     devicesPanel.style.display = (toggleDevicesButton.classList.contains("active")) ? "flex" : "none";
+    sizeTracksTableContainer();
+  }
+  let toggleClipEditButton = document.getElementById("toggle-clipview");
+  toggleClipEditButton.onclick = () => {
+    clipEditPanel.style.display = (toggleClipEditButton.classList.contains("active")) ? "flex" : "none";
     sizeTracksTableContainer();
   }
   let toggleMixerButton = document.getElementById("toggle-mixer");
@@ -39,3 +44,10 @@ function initializeToggleButtons(parentElement) {
     .forEach((button) => button.addEventListener("click", () => button.classList.toggle("active")));
 }
 
+function pianorollScrollX() {
+  document.getElementById("piano-roll").xoffset = document.getElementById("pianoroll-scroll-x").value;
+}
+
+function pianorollScrollY() {
+  document.getElementById("piano-roll").yoffset = document.getElementById("pianoroll-scroll-y").value;
+}

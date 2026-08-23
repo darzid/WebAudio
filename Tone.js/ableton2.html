@@ -15,7 +15,7 @@
   <script src="./data/tracks.js"></script>
   <script src="./js/tracks-table.js"></script>
   <script src="./js/device-panel.js"></script>
-
+  <script src="https://g200kg.github.io/webaudio-pianoroll/webaudio-pianoroll.js"></script>
   <script src="./ableton2.js"></script>
 </head>
 
@@ -39,6 +39,7 @@
       <button class="control image-button toggle-button active"><img src="img/loop.png"></button>
       
       <button id="toggle-devices" class="control image-button toggle-button active margin-left"><img src="img/audio-device.png"></button>
+      <button id="toggle-clipview" class="control image-button toggle-button"><img src="img/clip.png"></button>
       <button id="toggle-mixer" class="control image-button toggle-button"><img src="img/mixer.png"></button>
     </div>
     <div class="zoom-label">
@@ -65,6 +66,19 @@
     <div class="scroll">
       <div class="panel-content"></div>
     </div>
+  </div>
+  <div id="clip-editor-panel" class="clip-editor-panel">
+    <div class="panel-header">
+      Edit clip
+    </div>
+    <div class="scroll panel-content">
+      <div style="display: flex; flex-direction: row">
+        <webaudio-pianoroll id="piano-roll" width="360" height="300"></webaudio-pianoroll>
+        <input type="range" id="pianoroll-scroll-y" oninput="pianorollScrollY()" value=0>
+      </div>
+      <input type="range" id="pianoroll-scroll-x" oninput="pianorollScrollX()" value=0>
+      </div>
+    
   </div>
   <script>
 initialize();

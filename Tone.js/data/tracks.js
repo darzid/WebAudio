@@ -87,23 +87,27 @@ let tracks = [
     devices: [
       {
         name: "MonoSynth",
-        parameters: {
-          detune: 0,
-          portamento: 0,
-          
-          attack: 0.1,
-          decay: 0.5,
-          sustain: 0,
-          release: 0.2,
-          
-          volume: -2,
+        parameterGroups: {
+          general: {
+            detune: 0,
+            portamento: 0,
+            volume: -2,
+          },
+          envelope: {
+            attack: 0.1,
+            decay: 0.5,
+            sustain: 0,
+            release: 0.2,
+          }
         }
       },
       {
         name: "Distortion",
-        parameters: {
-          amount: 20,
-          oversample: 2,
+        parameterGroups: {
+          general: {
+            amount: 20,
+            oversample: 2,
+          }
         }
       }
     ],
@@ -235,9 +239,12 @@ let tracks = [
     devices: [
       {
         name: "MetalSynth",
-        parameters: {
-          detune: 20,
-          harmonics: 2,
+        parameterGroups: {
+          general: {
+            detune: 20,
+            harmonics: 2,
+            volume: 0
+          }
         }
       }
     ],

@@ -384,7 +384,7 @@ input.medium-width {
 
 
 
-#track-devices-panel {
+#track-devices-panel, #clip-editor-panel {
     background: var(--panel-bg);
     border: 1px solid var(--panel-border-color);
     
@@ -406,6 +406,22 @@ input.medium-width {
       
     }
 }
+
+#track-devices-panel .add-device {
+  margin: 2px;
+  border-radius: 20px;
+}
+
+#track-devices-panel .add-device-small {
+  margin: 0px;
+  border-radius: 20px;
+  float: right;
+  img {
+    width: 10px;
+    height: 10px;
+  }
+}
+
 
 .device {
   display: flex;
@@ -447,11 +463,12 @@ input.medium-width {
       border: 1px solid var(--button-border-color);
       
     }
-
-  .scroll {
+.scroll {
     display: flex;
     overflow: auto;
     width: 100%;
+  }
+#track-devices-panel > .scroll {
     height: 12vmax;
   }
   
@@ -465,3 +482,23 @@ input.medium-width {
     flex-grow: 1;
     
   }
+  
+#clip-editor-panel {
+  display: none;
+  .scroll {
+    height: 49vmax;
+    display: block;
+    overflow: auto;
+    width: stretch;
+  }
+  
+  #pianoroll-scroll-x {
+    width: 95%;
+  }
+  
+  #pianoroll-scroll-y {
+    writing-mode: vertical-lr;
+    direction: rtl;
+    height: 300px;
+  }
+}
