@@ -17,7 +17,9 @@ function initializeTableZoom(tracksTable, zoomElement) {
   
   zoomElement.oninput = () => {
     let zoomFactor = zoomElement.value / 100;
-    //tableHead.style.fontSize = (tableHead.dataset.fontSize * zoomFactor) + "px";
+    let fontSize = zoomFactor < 1 ? tableHead.dataset.fontSize * zoomFactor : tableHead.dataset.fontSize;
+    
+    tableHead.style.fontSize = fontSize + "px";
     clipColumns.forEach(column => {
       column.style.maxWidth = (column.dataset.width * zoomFactor) + "px";
       column.style.minWidth = (column.dataset.width * zoomFactor) + "px";
