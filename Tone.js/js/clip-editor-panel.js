@@ -1,7 +1,9 @@
 var pianoRoll;
 
+
 function initializeClipEditor() {
   pianoRoll = document.getElementById("piano-roll");
+  
   pianoRoll.xoffset = document.getElementById("pianoroll-scroll-x").value;
   pianoRoll.yoffset = document.getElementById("pianoroll-scroll-y").value;
   pianoRoll.xrange = document.getElementById("pianoroll-zoom-x").value;
@@ -9,14 +11,12 @@ function initializeClipEditor() {
 }
 
 function showClip() {
+  let sequence = [];
   if (selectedClip)
   {
-    pianoRoll.sequence = [];
     console.log("show clip", selectedClip);
     if (selectedClip.notes)
     {
-      let sequence = [];
-      
       selectedClip.notes.forEach(clipNote => {
         let midiNote = Tone.Midi(clipNote.note).toMidi();
         let noteOn = Tone.Ticks(clipNote.start).toTicks();
@@ -27,12 +27,20 @@ function showClip() {
           g: noteDuration,
           n: midiNote});
       });
-      
-      pianoRoll.sequence = sequence;
-      //(mmlString);
     }
+    pianoRoll.sequence = sequence;
+    pianoRoll.redraw();
+  } 
+  else {
+    if (pianoRoll.sequence.length > 0) {
+      console.log("clear", pianoRoll.sequence)
+      pianoRoll.sequence.splice(0, pianoRoll.sequence.length);
+      pianoRoll.redraw();
+    }
+    //  pianoRoll.sequence = sequence;
   }
-  pianoRoll.redraw();
+  
+  sizeTracksTableContainer();
 }
 
 function pianorollScrollX() {

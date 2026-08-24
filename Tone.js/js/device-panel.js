@@ -2,13 +2,11 @@ function showTrackDevices() {
   let trackId = selectedTrackId;
   let devicesPanelHeader = document.querySelector("#devices-panel .panel-header");
   let devicesPanelContent = document.querySelector("#devices-panel .panel-content");
-
+  devicesPanelContent.style.display = selectedTrackId ? "block" : "none";
   let track = tracks.find(track => track.name == trackId);
-  console.log("show track devices", trackId, track.devices);
-  devicesPanelHeader.innerText = `Devices - ${trackId}`;
   devicesPanelContent.innerHTML = "";
   
-  if (track.devices && track.devices.length > 0){
+  if (track && track.devices && track.devices.length > 0){
     let deviceIndex = 1;
     track.devices.forEach(device => {
       let deviceId = `${trackId}-Device${deviceIndex}`;
@@ -76,5 +74,7 @@ function showTrackDevices() {
     devicesPanelContent.appendChild(addDeviceButton);
     addDeviceButton.onclick = () => addDevice(trackId, 0);
   }
+  
+  sizeTracksTableContainer();
 }
 

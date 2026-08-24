@@ -19,13 +19,6 @@ function clickTab(tabButton) {
     tabButton.classList.add("active-tab");
   //}
   
-  if (tabButton.innerText == "Devices") {
-    showTrackDevices();
-  } else if (tabButton.innerText == "Clip editor") {
-    showClip();
-  }
   sizeTracksTableContainer();
-  
-  
 }
 

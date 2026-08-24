@@ -193,6 +193,7 @@ function getSixteenths(time) {
 }
 
 function sizeTracksTableContainer() {
+  console.log("size")
   let tracksTable = document.getElementById("tracks-table");
   //let devicesPanel = document.getElementById("track-devices-panel");
   //let pianoRollPanel = document.getElementById("clip-editor-panel");
