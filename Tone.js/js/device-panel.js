@@ -1,9 +1,10 @@
-function showTrackDevices(trackId) {
-  let devicesPanelHeader = document.querySelector("#track-devices-panel .panel-header");
-  let devicesPanelContent = document.querySelector("#track-devices-panel .panel-content");
+function showTrackDevices() {
+  let trackId = selectedTrackId;
+  let devicesPanelHeader = document.querySelector("#devices-panel .panel-header");
+  let devicesPanelContent = document.querySelector("#devices-panel .panel-content");
 
   let track = tracks.find(track => track.name == trackId);
-  console.log(trackId, track.devices);
+  console.log("show track devices", trackId, track.devices);
   devicesPanelHeader.innerText = `Devices - ${trackId}`;
   devicesPanelContent.innerHTML = "";
   
@@ -23,8 +24,8 @@ function showTrackDevices(trackId) {
       deviceElement.appendChild(deviceHeaderElement);
       
       let addDeviceButton = document.createElement("button");
-      addDeviceButton.className = "add-device-small image-button control";
-      addDeviceButton.innerHTML = '<img src="img/plus-black.png">';
+      addDeviceButton.className = "add-device";
+      addDeviceButton.innerText = "Add";
       deviceHeaderElement.appendChild(addDeviceButton);
       
     addDeviceButton.onclick = () => addDevice(trackId, 0);
@@ -40,7 +41,7 @@ function showTrackDevices(trackId) {
         Object.keys(device.parameterGroups).forEach(parameterGroupName => {
           let tabButton = document.createElement("button");
           tabButton.className = "tablinks";
-          tabButton.onclick = (e) => openTab(e.currentTarget, deviceElement, parameterGroupName);
+          tabButton.onclick = (e) => openTab(e.currentTarget, deviceElement);
           tabButton.innerText = parameterGroupName;
           tabButton.dataset.deviceId = deviceId;
           tabstripElement.appendChild(tabButton);
@@ -76,3 +77,4 @@ function showTrackDevices(trackId) {
     addDeviceButton.onclick = () => addDevice(trackId, 0);
   }
 }
+

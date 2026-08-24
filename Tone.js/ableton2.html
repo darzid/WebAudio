@@ -5,8 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title></title>
-  <link rel="stylesheet" href="css/ableton.css">
-  <link rel="stylesheet" href="css/tabs.css">
+  <link rel="stylesheet" href="css/dawsome-main.css">
+  <link rel="stylesheet" href="css/dawsome-button-bar.css">
+  <link rel="stylesheet" href="css/dawsome-project-header.css">
+  <link rel="stylesheet" href="css/dawsome-transport-bar.css">
+  <link rel="stylesheet" href="css/dawsome-tracks-table.css">
+  <link rel="stylesheet" href="css/dawsome-bottom-panels.css">
+  <link rel="stylesheet" href="css/dawsome-device-panel.css">
+  <link rel="stylesheet" href="css/dawsome-clip-editor-panel.css">
+  
+  <script src="https://unpkg.com/tone"></script>
   <script src="./js/Number.js"></script>
   <script src="./js/ui-components/number-input.js"></script>
   <script src="./js/ui-components/table.js"></script>
@@ -14,19 +22,24 @@
   <script src="./js/ui-components/tabs.js"></script>
   <script src="./data/tracks.js"></script>
   <script src="./js/tracks-table.js"></script>
+  <script src="./js/bottom-panel.js"></script>
   <script src="./js/device-panel.js"></script>
+  <script src="./js/clip-editor-panel.js"></script>
   <script src="https://g200kg.github.io/webaudio-pianoroll/webaudio-pianoroll.js"></script>
   <script src="./ableton2.js"></script>
 </head>
 
 <body>
-  <div id="app">
-    <div id="project-header" class="margins">
+  
+  <div id="app-content">
+    
+    <div id="project-header" class="margins button-bar">
       <button class="control image-button"><img src="img/upload-black.png"></button>
       <input id="project-name" class="control" type="text" value="My project">
       <button class="control image-button margin-right"><img src="img/download-black.png"></button>
     </div>
-    <div id="app-buttons">
+    
+    <div id="app-buttons" class="button-bar">
       <input id="tempo" class="control" type="number" value="120">
       
       <button id="play" class="control image-button transport-button margin-left"><img src="img/play-black.png"></button>
@@ -38,10 +51,11 @@
       <input id="project-length" class="control time margin-left" type="text" value="8:0:0">
       <button class="control image-button toggle-button active"><img src="img/loop.png"></button>
       
-      <button id="toggle-devices" class="control image-button toggle-button active margin-left"><img src="img/audio-device.png"></button>
-      <button id="toggle-clipview" class="control image-button toggle-button"><img src="img/clip.png"></button>
+   <!--   <button id="toggle-devices" class="control image-button toggle-button active margin-left"><img src="img/audio-device.png"></button>
+      <button id="toggle-clipview" class="control image-button toggle-button"><img src="img/clip.png"></button>-->
       <button id="toggle-mixer" class="control image-button toggle-button"><img src="img/mixer.png"></button>
     </div>
+    
     <div class="zoom-label">
       <label class="range-label small">Zoom
         <input id="zoom" type="range" min="50" max="200" value="100">
@@ -58,30 +72,72 @@
         </tbody>
       </table>
     </div>
-  </div>
-  <div id="track-devices-panel" class="devices-panel">
-    <div class="panel-header">
-      Devices
-    </div>
-    <div class="scroll">
-      <div class="panel-content"></div>
-    </div>
-  </div>
-  <div id="clip-editor-panel" class="clip-editor-panel">
-    <div class="panel-header">
-      Edit clip
-    </div>
-    <div class="scroll panel-content">
-      <input type="range" id="pianoroll-scroll-x" oninput="pianorollScrollX()" value=0>
-      <div style="display: flex; flex-direction: row">
-        <input type="range" id="pianoroll-scroll-y" oninput="pianorollScrollY()" value=60>
-        <webaudio-pianoroll id="piano-roll" width="345" height="300"></webaudio-pianoroll>
-        <input type="range" id="pianoroll-zoom-y" oninput="pianorollZoomY()" value=16 min=1 max=64>
-      </div>
-      <input type="range" id="pianoroll-zoom-x" oninput="pianorollZoomX()" value=16 min=1 max=64> 
-      </div>
     
   </div>
+  
+  <div id="bottom-panel" class="tab-control">
+    
+    <div id="devices-panel" name="Devices" class="tab-panel">
+      <div class="panel-header">Devices</div>
+      <div class="scroll">
+        <div class="panel-content">
+          
+        </div>
+      </div>
+    </div>
+    
+    <div id="clip-editor-panel" name="Clip editor" class="tab-panel">
+      <div class="panel-header">Clip editor</div>
+      <div class="panel-content">
+        
+        <input type="range" id="pianoroll-scroll-x" oninput="pianorollScrollX()" value=0>
+        <div style="display: flex; flex-direction: row">
+          <input type="range" id="pianoroll-scroll-y" oninput="pianorollScrollY()" value=30>
+          <webaudio-pianoroll id="piano-roll" width="345" height="300" timebase=12></webaudio-pianoroll>
+          <input type="range" id="pianoroll-zoom-y" oninput="pianorollZoomY()" value=64 min=1 max=640>
+        </div>
+        <input type="range" id="pianoroll-zoom-x" oninput="pianorollZoomX()" value=220 min=1 max=640> 
+        
+      </div>
+    </div>
+    
+    <div class="tab-strip">
+      <button id="devices-tab-button" class="tab-button" onclick="clickTab(window.event.currentTarget)">Devices</button>
+      <button id="clip-editor-tab-button" class="tab-button" onclick="clickTab(window.event.currentTarget)">Clip editor</button>
+    </div>
+    
+  </div>
+  
+  <!--
+  <div id="bottom-panel">
+    <div id="track-devices-panel" class="devices-panel tabcontent">
+      <div class="panel-header">
+        Devices
+      </div>
+      <div class="scroll">
+        <div class="panel-content"></div>
+      </div>
+    </div>
+    <div id="clip-editor-panel" class="clip-editor-panel tabcontent">
+      <div class="panel-header">
+        Edit clip
+      </div>
+      <div class="scroll panel-content">
+        <input type="range" id="pianoroll-scroll-x" oninput="pianorollScrollX()" value=0>
+        <div style="display: flex; flex-direction: row">
+          <input type="range" id="pianoroll-scroll-y" oninput="pianorollScrollY()" value=60>
+          <webaudio-pianoroll id="piano-roll" width="345" height="300"></webaudio-pianoroll>
+          <input type="range" id="pianoroll-zoom-y" oninput="pianorollZoomY()" value=16 min=1 max=64>
+        </div>
+        <input type="range" id="pianoroll-zoom-x" oninput="pianorollZoomX()" value=16 min=1 max=64> 
+      </div>
+    </div>
+    <div id="bottom-panel-tabs">
+      <button id="toggle-devices">Devices</button>
+      <button id="toggle-clipview">Clip editor</button>
+    </div>
+  </div>
+  -->
   <script>
 initialize();
   </script>

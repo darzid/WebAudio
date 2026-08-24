@@ -1,0 +1,114 @@
+#devices-panel {
+  .scroll {
+    display: flex;
+    
+    overflow: auto;
+    width: 100%;
+  }
+
+  .add-device {
+    margin: 2px;
+    border-radius: 20px;
+  }
+  
+  .device {
+    display: flex;
+    flex-direction: column;
+    margin: 3px;
+      
+    border-radius: 2px;
+    border: 1px solid var(--panel-border-color-dark);
+      
+    box-shadow: 1px 1px 2px var(--shadow-color);
+    background: var(--device-bg);
+    
+    .panel-header {
+      width: 100%;
+      font-size: x-small;
+      padding-top: 2px;
+      border: 0px solid var(--panel-border-color-dark);
+      background: var(--panel-header-bg);
+      border-bottom: 1px solid var(--panel-header-border-color);
+      
+      .add-device {
+        
+        margin: 0px;
+        margin-right: 2px;
+        float: right;
+        background: transparent;
+        border: 1px solid black;
+        border-radius: 0px;
+        font-size: xx-small;
+        img {
+          width: 10px;
+          height: 10px;
+        }
+      }
+
+      .enabled-button {
+        width: 12px;
+        height: 12px;
+        margin: 3px;
+        margin-top: 0px;
+      }
+    }
+      
+    .panel-content {
+      display: flex;
+      flex-flow: column wrap;
+      height: 74%;
+      width: 100%;
+        
+      overflow: auto;
+      
+      /* Style the tab */
+      .tab {
+        overflow: hidden;
+        border-bottom: 1px solid #ccc;
+        background-color: #909090;
+        margin-left: -4px;
+      }
+      
+      /* Style the buttons that are used to open the tab content */
+      .tab button {
+        background-color: rgba(255,255,255,0.2);
+        float: left;
+        border: 1px solid rgb(80,80,80);
+        border-radius: 2px 2px 0px 0px;
+        border-bottom: 0px;
+        outline: none;
+        cursor: pointer;
+        padding: 0px 6px;
+        transition: 0.3s;
+        font-size: xx-small;
+        margin-right: 1px;
+      }
+      
+      /* Change background color of buttons on hover */
+      .tab button:hover {
+        background-color: #ddd;
+      }
+      
+      /* Create an active/current tablink class */
+      .tab button.active-tab {
+        background-color: #ccc;
+      }
+      
+      /* Style the tab content */
+      .tabcontent {
+        display: none;
+        flex-direction: row;
+        padding: 0px 0px;
+        border: 1px solid #808080;
+        border-top: none;
+      }
+
+    }
+  }
+}
+
+#devices-panel > .scroll > .panel-content {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}

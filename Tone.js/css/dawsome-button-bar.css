@@ -1,0 +1,25 @@
+.button-bar {
+  background: transparent;
+  margin-left: 3px;
+}
+
+.button-bar .transport-button {
+  background-color: transparent;
+}
+
+.button-bar .image-button {
+  width: 18px;
+  height: 18px;
+  padding: 1px;
+}
+
+.button-bar 
+
+.button-bar .margin-left {
+  margin-left: 8px;
+}
+
+.button-bar .margin-right {
+  margin-right: 8px;
+}
+

@@ -1,0 +1,18 @@
+#project-header {
+  width: 100%;
+  display: flex;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-left: 3px;
+  
+  input {
+    width: stretch;
+    text-align: center;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+  
+  button {
+    background-color: transparent;
+  }
+}

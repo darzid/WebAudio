@@ -1,3 +1,6 @@
+var selectedTrackId;
+var selectedClip;
+
 function fillTracksTable(tracksTable, tracks)
 {
   let tracksTableBody = tracksTable.querySelector("tbody");
@@ -40,8 +43,10 @@ function fillTracksTable(tracksTable, tracks)
     if (selectedTrackRow)
       selectedTrackRow.classList.remove("selected");
     trackRow.classList.add("selected");
+    if (selectedTrackRow != trackRow)
+      selectedClip = null;
     selectedTrackRow = trackRow;
-    showTrackDevices(trackRow.id.split("-row")[0]);
+    selectedTrackId = trackRow.id.split("-row")[0];
   }
   
   function addTrack() {
@@ -56,7 +61,7 @@ function fillTracksTable(tracksTable, tracks)
     sizeTracksTableContainer();
   }
 
-  let selectedClip = null;
+  let selectedClipElement = null;
   function addTrackRow(track) {
     let trackIndex = tracks.indexOf(track);
 
@@ -74,7 +79,7 @@ function fillTracksTable(tracksTable, tracks)
     trackHeaderColumn.appendChild(trackHeaderDiv);
     
     trackHeaderDiv.innerHTML = `<button class="control toggle-button enabled-button active"></button>
-                    <label><input name="track-name" class="control medium-width" type="text" value="${track.name}" readonly></label>`;
+                    <label><input name="track-name" class="control" type="text" value="${track.name}" readonly></label>`;
     
     let clipIndex = 1;
     let repeatingClip = null;
@@ -89,8 +94,6 @@ function fillTracksTable(tracksTable, tracks)
           trackRow.appendChild(columnElement);
           
           let clipPosition = `${bar}:${beat}:${sixteenth}`;
-          
-          
           let clip = track.clips.find(clip => clip.start.startsWith(clipPosition));
           if (clip) {
             repeatingClip = null;
@@ -106,11 +109,12 @@ function fillTracksTable(tracksTable, tracks)
             columnElement.appendChild(clipElement);
             
             clipElement.addEventListener("click", () => {
-              if (selectedClip)
-                selectedClip.classList.remove("selected");
+              if (selectedClipElement)
+                selectedClipElement.classList.remove("selected");
               clipElement.classList.add("selected");
-              selectedClip = clipElement;
-              console.log("clip selected")
+              selectedClipElement = clipElement;
+              selectedClip = clip;
+              showClip();
             });
             
             if (clip.start.indexOf(".")) {
@@ -141,12 +145,9 @@ function fillTracksTable(tracksTable, tracks)
             clipElement.id = `${track.name}-Clip${clipIndex}`;
             clipElement.className = "RepeatingClip";
             // clipElement.innerText = clip.name;
-            
             let clipDurationInSixteenths = getSixteenths(repeatingClip.duration);
             clipElement.style.width = `${clipDurationInSixteenths * 100}%`;
-            
             columnElement.appendChild(clipElement);
-            
             
             if (repeatingClip.start.indexOf(".")) {
               let clipOffset = parseFloat(`0.${repeatingClip.start.split(".")[1]}`);
@@ -166,20 +167,16 @@ function fillTracksTable(tracksTable, tracks)
       }
     }
     
-    trackRow.querySelectorAll("td div").forEach(header => {
-      header.onclick = (e) => {
-        selectTrack(header.closest("tr"));
-        
-      }
-    });
+    trackRow.querySelectorAll("td div").forEach(header => header.addEventListener("click", () => selectTrack(header.closest("tr"))));
     return trackRow;
   }
 
   let trackRowHeaders = tracksTable.querySelectorAll("tr.track-row td div");
-  trackRowHeaders.forEach(header => header.onclick = () => {
-    selectTrack(header.closest("tr"));
-  });
+  trackRowHeaders.forEach(header => header.onclick = () => selectTrack(header.closest("tr")));
   
+  tracksTable.querySelectorAll("tr.track-row td.track-header div").forEach(header => header.onclick = (e) => clickTab(document.getElementById("devices-tab-button")));
+  tracksTable.querySelectorAll("tr.track-row .Clip").forEach(header => header.onclick = (e) => clickTab(document.getElementById("clip-editor-tab-button")));
+    
   let trackNameElements = document.querySelectorAll("input[name='track-name']");
   trackNameElements.forEach(element => {
     element.ondblclick = () => element.readOnly ? element.readOnly = "" : element.readOnly = "true";
@@ -195,15 +192,14 @@ function getSixteenths(time) {
   return sixteenths;
 }
 
-
 function sizeTracksTableContainer() {
   let tracksTable = document.getElementById("tracks-table");
-  let devicesPanel = document.getElementById("track-devices-panel");
-  let pianoRollPanel = document.getElementById("clip-editor-panel");
-  
+  //let devicesPanel = document.getElementById("track-devices-panel");
+  //let pianoRollPanel = document.getElementById("clip-editor-panel");
+  let bottomPanel = document.getElementById("bottom-panel");
   let pageHeight = window.innerHeight;
   
-  let bottomPanel = pianoRollPanel.style.display != "none" ? pianoRollPanel : devicesPanel;
+  //let bottomPanel = pianoRollPanel.style.display != "none" ? pianoRollPanel : devicesPanel;
   
   let bottomPanelHeight = bottomPanel.getBoundingClientRect().height;
   let bottomPanelTop = bottomPanelHeight > 0 ? bottomPanel.getBoundingClientRect().y : pageHeight;
@@ -213,21 +209,21 @@ function sizeTracksTableContainer() {
   
   if (!tracksTable.dataset.initialY) {
     tracksTable.dataset.initialY = tracksTableTop;
-    console.log("top", tracksTableTop);
+    //console.log("top", tracksTableTop);
   } 
   
   let availableHeight = bottomPanelTop - tracksTable.dataset.initialY;
   let overflow = availableHeight - (tracksTableHeight);
-  console.log("overflow", overflow, tracksTable.getBoundingClientRect());
+  //console.log("overflow", overflow, tracksTable.getBoundingClientRect());
   
   if (overflow < 0) {
-    console.log("overflow fix", overflow);
+    //console.log("overflow fix", overflow);
     tracksTable.parentElement.style.maxHeight = `${tracksTableHeight + overflow}px`;
     tracksTable.parentElement.style.height = tracksTable.parentElement.style.maxHeight;
   }
   else
   {
-    console.log("no overflow", overflow);
+   // console.log("no overflow", overflow);
     tracksTable.parentElement.style.maxHeight = `${tracksTableHeight}px`;
     tracksTable.parentElement.style.height = tracksTable.parentElement.style.maxHeight;
   }

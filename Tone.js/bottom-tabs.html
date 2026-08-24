@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <style>
+body {
+  width: 100%;
+  height: 100vh;
+  
+  margin: 0px;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+#app-content {
+  height: 100%;
+  overflow-y: hidden;
+  
+  background: blue;
+  border: 3px solid yellow;
+}
+
+#bottom-panel {
+  width: stretch;
+  margin-top: auto;
+  
+  margin: 0px;
+  padding: 0px;
+  
+  background: #909090;
+  
+  .tab-strip {
+    margin: 0px;
+    padding: 0px;
+  }
+  
+  .tab-button {
+    border: 1px solid rgba(0,0,0,0.5);
+    background-color: #c0c0c9;
+  }
+  
+  .tab-button.active-tab {
+    background-color: #f0f0f0;
+  }
+  
+  .tab-panel {
+    display: none;
+    flex-direction: column;
+    
+    border: 1px solid rgba(0,0,0,0.5);
+    border-bottom: 0px;
+    border-radius: 2px;
+    
+    .panel-header {
+      background-color: darkgray;
+      border-bottom: 1px solid rgba(0,0,0,0.5);
+    }
+    
+    .panel-content {
+      padding: 2px;
+      
+      background-color: #808089;
+    }
+  }
+}
+  </style>
+</head>
+
+<body>
+  <div id="app-content">
+            Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+Line of text<br>
+Line of text<br>
+Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+                Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+  </div>
+  
+  <div id="bottom-panel" class="tab-control">
+    
+    <div name="Devices" class="devices-panel tab-panel">
+      <div class="panel-header">Devices</div>
+      <div>
+        <div class="panel-content">Device content</div>
+      </div>
+    </div>
+    
+    <div name="Clip editor" class="clip-editor-panel tab-panel">
+      <div class="panel-header">Clip editor</div>
+      <div class="panel-content">
+        
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+        Line of text<br>
+Line of text<br>
+Line of text<br>
+Line of text<br>
+<!--
+        <input type="range" id="pianoroll-scroll-x" oninput="pianorollScrollX()" value=0>
+        <div style="display: flex; flex-direction: row">
+          <input type="range" id="pianoroll-scroll-y" oninput="pianorollScrollY()" value=60>
+          <webaudio-pianoroll id="piano-roll" width="345" height="300"></webaudio-pianoroll>
+          <input type="range" id="pianoroll-zoom-y" oninput="pianorollZoomY()" value=16 min=1 max=64>
+        </div>
+        <input type="range" id="pianoroll-zoom-x" oninput="pianorollZoomX()" value=16 min=1 max=64> 
+        -->
+      </div>
+    </div>
+    
+    <div class="tab-strip">
+      <button class="tab-button" onclick="clickTab(window.event.currentTarget)">Devices</button>
+      <button class="tab-button" onclick="clickTab(window.event.currentTarget)">Clip editor</button>
+    </div>
+    
+  </div>
+  <script>
+function clickTab(tabButton) {
+  // Declare all variables
+  var tabControl;
+  tabControl = tabButton.closest(".tab-control");
+  
+  // Get all elements with class="tabcontent" and hide them
+  tabControl.querySelectorAll(".tab-panel")
+    .forEach(panel => panel.style.display = "none");
+  
+  let openTab = !tabButton.classList.contains("active-tab");
+  
+  // Get all elements with class="tablinks" and remove the class "active"
+  tabControl.querySelectorAll(`.tab-button`)
+    .forEach(button => button.classList.remove("active-tab"));
+
+  if (openTab) {
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    tabControl.querySelector(`.tab-panel[name="${tabButton.innerText}"]`).style.display = "flex";
+    tabButton.classList.add("active-tab");
+  }
+}
+  </script>
+</body>
+
+</html>

@@ -1,383 +1,5 @@
-:root {
-  --color-bg: rgb(115,115,120);
-  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  
-  --control-bg: rgb(140,140,145);
-  
-  --number-bg: rgb(240,240,230);
-  --number-value-bg: #00b7b7;
-  
-  --button-border-color: darkgray;
-  --active-button-bg: #f8d200;
-  
-  --panel-header-bg: rgb(140,140,145);
-  --panel-header-border-color: rgb(40,40,40);
-  --panel-border-color: rgb(80,80,80);
-  --panel-border-color-dark: rgb(40,40,40);
-  --panel-bg: rgb(40,40,40);
-  
-  --shadow-color: rgba(50,50,50,0.5);
-  
-  --input-bg: rgb(240,240,230);
-  
-  --tracktable-height: 510px;
-  --tracktable-trackdetails-width: 100px;
-  
-  --timeline-bar-border-color: black;
-  --timeline-beat-border-color: darkgray;
-  --timeline-sixteenth-border-color: rgb(100,100,100);
-  --timeline-column-width: 50px;
-  
-  --session-bg: rgb(80,80,90);
-  
-  --selected-track-bg: rgba(0,150,150,0.2);
-  
-  --clip-bg: #00b7b7;
-  --clip-selected-bg: #80c7f7;
-  --clip-border-color: black;
-  --clip-column-height: 25px;
-  --clip-column-min-width: 25px;
-  --clip-column-bg: rgba(80,80,90, 0.5);
-  --clip-column-banded-bg: rgba(90,90,100,0.5);
-  
-  --repeating-clip-bg: #00a7a7;
-  --devices-bg: rgb(80,80,80);
-  --device-bg: rgb(130,130,135);
-}
 
-body {
-  width: 100%;
-  height: 100%;
-  margin: 0em;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0em;
-  background-color: var(--color-bg);
-}
-
-body, input {
-  font-family: var(--font-ui);
-  font-size2: 14px;
-}
-
-.panel {
-  background: var(--panel-bg);
-  border: 1px solid var(--panel-border-color);
-  
-  .panel-header {
-    background: var(--panel-header-bg);
-    border-bottom: 1px solid var(--panel-header-border-color);
-  }
-}
-
-.control {
-  margin: 0;
-  padding: 0;
-  border: 0pt;
-  background-color: var(--control-bg);
-  border-radius: 1px;
-  vertical-align: top;
-}
-
-input[type="number"] {
-  text-align: center;
-  width: 4em;
-}
-
-input.time {
-  width: 4em;
-  text-align: center;
-}
-
-label.range-label {
-  display: flex;
-  flex-direction: row;
-  width: min-content;
-  text-align: center;
-  margin: 4px;
-}
-
-.small {
-  font-size: small;
-}
-label.number-label {
-  display: flex;
-  flex-direction: column;
-  width: min-content;
-  text-align: center;
-  margin: 4px;
-  justify-content2: center;
-  align-items: center;
-  font-size: xx-small;
-  input[type="number"] {
-    justify-content: center;
-    font-size: xx-small;
-    background-color: var(--number-bg);
-    background-image: linear-gradient(to right, 
-      var(--number-value-bg) 0%, 
-      var(--number-value-bg) 0%, 
-      var(--number-bg) 0%, 
-      var(--number-bg) 100%);
-  }
-}
-
-.image-button {
-  height: 18px;
-  padding: 1px;
-  
-  img {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-
-.transport-button {
-  background-color: transparent;
-}
-
-.margin-left {
-  margin-left: 8px;
-}
-.margin-right {
-  margin-right: 8px;
-}
-
-button.active {
-      background-color: var(--active-button-bg);
-      box-shadow: 0px 0px 3px var(--active-button-bg);
-    }
-    
-
-#app {
-  height: stretch;
-  min-height: 100%;
-  position: relative;
-  
-}
-
-#app-buttons {
-  background: transparent;
-  margin-left: 3px;
-}
-
-#project-header {
-  width: 100%;
-  display: flex;
-  margin-top: 3px;
-  margin-bottom: 3px;
-  margin-left: 3px;
-  
-  input {
-    width: stretch;
-    text-align: center;
-    margin-left: 2px;
-    margin-right: 2px;
-  }
-  
-  button {
-    background-color: transparent;
-  }
-  
-  
-}
-
-#play.active > img {
-  content: url(img/play-green.png);
-}
-
-#rec.active > img {
-  content: url(img/rec-red.png);
-}
-
-input.medium-width {
-  width: 70px;
-}
-
-.zoom-label {
-  width: 100%;
-  
-  label {
-    margin-left: auto;
-    margin-right: 0pt;
-  }
-}
-
-.selected {
-  background: var(--selected-track-bg);
-}
-
-.large {
-  font-size: xx-large;
-}
-
-.table-container {
-  max-width: stretch;
-  max-height: var(--tracktable-height);
-  overflow: auto;
-  box-shadow: 1px 1px 2px var(--shadow-color);
-  
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    border: 0px solid var(--color-bg);
-    background: var(--session-bg);
-  }
-
-  thead th:first-child {
-    z-index: 4;
-    width: var(--tracktable-trackdetails-width);
-    background: var(--color-bg);
-    border: 0px solid var(--color-bg);
-  }
-  
-  tbody td:first-child,
-  thead th:first-child {
-    position: sticky;
-    left: 0;
-  }
-  
-  thead th {
-    position: sticky;
-    top: 0;
-    z-index: 3;
-    width: 100px;
-    max-width: 100px;
-    height: 25px;
-    font-size: 1em;
-    border: 1px solid var(--color-bg);
-  }
-
-  tbody td:first-child {
-    z-index: 2;
-    background: var(--control-bg);
-  }
-  
-  th, td {
-    border: 1px solid transparent ;
-  }
-  
-  .position-column {
-    font-weight: normal;
-    font-size: 100%;
-    background: var(--control-bg);
-    min-width: var(--timeline-column-width);
-    max-width: var(--timeline-column-width);
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-    
-  .bar {
-    border-left: 1px solid var(--timeline-bar-border-color);
-    border-right: 1px solid var(--timeline-sixteenth-border-color);
-    font-weight: normal;
-  }
-    
-  .beat {
-    border-left: 1px solid var(--timeline-beat-border-color);
-    border-right: 1px solid var(--timeline-sixteenth-border-color);
-  }
-    
-  .sixteenth {
-    border-left: 1px solid var(--timeline-sixteenth-border-color);
-    border-right: 1px solid var(--timeline-sixteenth-border-color);
-    font-size: xx-small;
-    font-size: 80%;
-  }
-    
-  td.clip-column {
-    height: var(--clip-column-height);
-    
-    min-width: var(--clip-column-min-width);
-    max-width: var(--timeline-column-width);
-    
-    margin: 0px;
-    padding: 0.01em;
-    
-    background-color: var(--clip-column-bg);
-    
-    .Clip, .RepeatingClip {
-      width: stretch;
-      height: stretch;
-      display: inline-block;
-      padding: 0px;
-      margin: 0px;
-      
-      border-top: 1px solid var(--clip-border-color);
-      border-bottom: 1px solid var(--clip-border-color);
-      box-shadow: 1px 1px 2px var(--shadow-color);
-    }
-    
-    .Clip {
-      background-color: var(--clip-bg);
-      border-left: 1px solid var(--clip-border-color);
-      font-size: 80%;
-      
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-    
-    .ClipEnd {
-      border-right: 1px solid var(--clip-border-color);
-    }
-    
-    .Clip.Repeat {
-      border-right: 0px solid var(--clip-bg);
-    }
-    
-    .RepeatingClip {
-      background-color: var(--repeating-clip-bg);
-      border-left: 1px solid var(--repeating-clip-bg);
-    }
-    
-    .Clip.selected {
-      background-color: var(--clip-selected-bg);
-    }
-  }
-  
-  td.banded {
-    background-color: var(--clip-column-banded-bg);
-  }
-  
-  tbody td:first-child {
-    max-width: 100px;
-  }
-  
-  tbody td,
-  thead th {
-    margin: 0;
-    border: 1px solid transparent;
-    white-space: nowrap;
-    border-top-width: 0px;
-  }
-}
-
-  tr.selected td div {
-    background: var(--selected-track-bg);
-  }
-  
-  .track-header {
-    width: max-content;
-    z-index: 4;
-    border: 1px solid var(--control-bg);
-    
-    
-    input {
-      font-size: small;
-      vertical-align: middle;
-      overflow: hidden;
-      padding-top: 4px;
-      background: var(--input-bg);
-    }
-    
-    input:read-only {
-      background: transparent;
-    }
-  }
-
+/*
 .panel-header {
         width: 100%;
         border: 1px solid var(--panel-border-color-dark);
@@ -386,10 +8,57 @@ input.medium-width {
         font-weight: bolder;
         
 }
+*/
 
+/*
+#bottom-panel2 {
+  overflow: hidden;
+  background-color: transparent;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height: 10vmax;
 
-
-#track-devices-panel, #clip-editor-panel {
+  #bottom-panel-tabs {
+    position: absolute;
+    bottom: 0;
+    button {
+      background-color: rgba(255,255,255,0.2);
+      float: left;
+      border: 1px solid rgb(80,80,80);
+      outline: none;
+      cursor: pointer;
+      padding: 0px 6px;
+      transition: 0.3s;
+      font-size: xx-small;
+      margin-left: 1px;
+    }
+    
+    button:hover {
+      background-color: #ddd;
+    }
+    
+    button.active-tab {
+      background-color: #ccc;
+    }
+  }
+  
+  .tabcontent {
+    display: none;
+    flex-direction: row;
+    padding: 0px 0px;
+    border: 1px solid #808080;
+    border-top: none;
+    background2: rgba(255,255,255,0.2);
+  }
+  
+  .scroll {
+    display: flex;
+    overflow: auto;
+    width: 100%;
+  }
+  
+  #track-devices-panel, #clip-editor-panel {
     background: var(--panel-bg);
     border: 1px solid var(--panel-border-color);
     
@@ -398,6 +67,7 @@ input.medium-width {
     width: 100%;
     margin: 0;
     display: flex;
+    display: none;
     flex-direction: column;
     z-index: 5;
     
@@ -408,72 +78,61 @@ input.medium-width {
       background: var(--panel-header-bg);
       border-bottom: 1px solid var(--panel-header-border-color);
       font-size2: smaller;
-      
-    }
-}
-
-#track-devices-panel .add-device {
-  margin: 2px;
-  border-radius: 20px;
-}
-
-#track-devices-panel .add-device-small {
-  margin: 0px;
-  border-radius: 20px;
-  float: right;
-  img {
-    width: 10px;
-    height: 10px;
-  }
-}
-
-
-.device {
-  display: flex;
-  flex-direction: column;
-  margin: 3px;
-  
-  border-radius: 2px;
-  border: 1px solid var(--panel-border-color-dark);
-  
-  box-shadow: 1px 1px 2px var(--shadow-color);
-  background: var(--device-bg);
-  
-  .panel-header {
-    width2: 100%;
-    font-size: x-small;
-    padding-top: 2px;
-    border: 0px solid var(--panel-border-color-dark);
-    .enabled-button {
-      width: 12px;
-      height: 12px;
-      margin: 3px;
-      margin-top: 0px;
     }
   }
-  
-  .panel-content {
-    display: flex;
-    flex-flow: column wrap;
-    height: 74%;
-    width: 100%;
+
+  #track-devices-panel {
+    .add-device {
+      margin: 2px;
+      border-radius: 20px;
+    }
     
-    overflow: auto;
-  }
-}
-.enabled-button {
-      width: 14px;
-      height: 14px;
-      margin: 4px;
-      border: 1px solid var(--button-border-color);
-      
+    .add-device-small {
+      margin: 0px;
+      border-radius: 20px;
+      float: right;
+      img {
+        width: 10px;
+        height: 10px;
+      }
     }
-.scroll {
-    display: flex;
-    overflow: auto;
-    width: 100%;
-  }
-#track-devices-panel > .scroll {
+    
+    .device {
+      display: flex;
+      flex-direction: column;
+      margin: 3px;
+      
+      border-radius: 2px;
+      border: 1px solid var(--panel-border-color-dark);
+      
+      box-shadow: 1px 1px 2px var(--shadow-color);
+      background: var(--device-bg);
+    
+      .panel-header {
+        width2: 100%;
+        font-size: x-small;
+        padding-top: 2px;
+        border: 0px solid var(--panel-border-color-dark);
+        .enabled-button {
+          width: 12px;
+          height: 12px;
+          margin: 3px;
+          margin-top: 0px;
+        }
+      }
+      
+      .panel-content {
+        display: flex;
+        flex-flow: column wrap;
+        height: 74%;
+        width: 100%;
+        
+        overflow: auto;
+      }
+    }
+
+  
+  #track-devices-panel > .scroll {
     height: 12vmax;
   }
   
@@ -485,43 +144,11 @@ input.medium-width {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
-    
   }
   
-#clip-editor-panel {
-  display: none;
-  .scroll {
-    height: 50vmax;
-    display: block;
-    overflow: auto;
-    width: stretch;
-  }
-  
-  #pianoroll-scroll-x {
-    width: 90%;
-    margin-left: 20px;
-  }
-  
-  #pianoroll-scroll-y {
-    writing-mode: vertical-lr;
-    direction: rtl;
-    height: 285px;
-    margin-top: 22px;
-  }
-  
-    #pianoroll-zoom-x {
-      float: right;
-      margin-right: 20px;
-      width: 100px;
-      margin-top: -5px;
-      direction: rtl;
-    }
-    
-  #pianoroll-zoom-y {
-    writing-mode: vertical-lr;
-    direction: rtl;
-    height: 100px;
-    margin-top: auto;
-    margin-bottom: 10px;
-  }
+
 }
+*/
+
+
+

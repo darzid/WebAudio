@@ -1,4 +1,4 @@
-function openTab(tabButton, parentElement, tabName) {
+function openTab(tabButton, parentElement) {
   // Declare all variables
   var i, tabcontent, tablinks;
 
@@ -10,12 +10,12 @@ function openTab(tabButton, parentElement, tabName) {
 
   // Get all elements with class="tablinks" and remove the class "active"
   tablinks = parentElement.querySelectorAll(`.tablinks`);
-  console.log("tabLinks", tablinks)
+ // console.log("tabLinks", tablinks)
   for (i = 0; i < tablinks.length; i++) {
     tablinks[i].className = tablinks[i].className.replace(" active-tab", "");
   }
 
   // Show the current tab, and add an "active" class to the button that opened the tab
-  parentElement.querySelector(`div.tabcontent[id="${tabName}"]`).style.display = "flex";
+  parentElement.querySelector(`div.tabcontent[id="${tabButton.innerText}"]`).style.display = "flex";
   tabButton.className += " active-tab";
 }

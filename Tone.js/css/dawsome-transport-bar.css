@@ -1,0 +1,7 @@
+#play.active > img {
+  content: url(img/play-green.png);
+}
+
+#rec.active > img {
+  content: url(img/rec-red.png);
+}

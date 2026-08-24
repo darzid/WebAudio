@@ -1,0 +1,189 @@
+.zoom-label {
+  width: 100%;
+  
+  label {
+    margin-left: auto;
+    margin-right: 0pt;
+  }
+}
+
+.small {
+  font-size: small;
+}
+
+.table-container {
+  max-width: stretch;
+  max-height: var(--tracktable-height);
+  overflow: auto;
+  box-shadow: 1px 1px 2px var(--shadow-color);
+  
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 0px solid var(--color-bg);
+    background: var(--session-bg);
+  }
+
+  thead th:first-child {
+    z-index: 4;
+    width: var(--tracktable-trackdetails-width);
+    background: var(--color-bg);
+    border: 0px solid var(--color-bg);
+  }
+  
+  tbody td:first-child,
+  thead th:first-child {
+    position: sticky;
+    left: 0;
+  }
+  
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    width: 100px;
+    max-width: 100px;
+    height: 25px;
+    font-size: 1em;
+    border: 1px solid var(--color-bg);
+  }
+
+  tbody td:first-child {
+    z-index: 2;
+    background: var(--control-bg);
+  }
+  
+  th, td {
+    border: 1px solid transparent ;
+  }
+  
+  .position-column {
+    font-weight: normal;
+    font-size: 100%;
+    background: var(--control-bg);
+    min-width: var(--timeline-column-width);
+    max-width: var(--timeline-column-width);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+    
+  .bar {
+    border-left: 1px solid var(--timeline-bar-border-color);
+    border-right: 1px solid var(--timeline-sixteenth-border-color);
+    font-weight: normal;
+  }
+    
+  .beat {
+    border-left: 1px solid var(--timeline-beat-border-color);
+    border-right: 1px solid var(--timeline-sixteenth-border-color);
+  }
+    
+  .sixteenth {
+    border-left: 1px solid var(--timeline-sixteenth-border-color);
+    border-right: 1px solid var(--timeline-sixteenth-border-color);
+    font-size: xx-small;
+    font-size: 80%;
+  }
+    
+  td.clip-column {
+    height: var(--clip-column-height);
+    
+    min-width: var(--clip-column-min-width);
+    max-width: var(--timeline-column-width);
+    
+    margin: 0px;
+    padding: 0.01em;
+    
+    background-color: var(--clip-column-bg);
+    
+    .Clip, .RepeatingClip {
+      width: stretch;
+      height: stretch;
+      display: inline-block;
+      padding: 0px;
+      margin: 0px;
+      
+      border-top: 1px solid var(--clip-border-color);
+      border-bottom: 1px solid var(--clip-border-color);
+      box-shadow: 1px 1px 2px var(--shadow-color);
+    }
+    
+    .Clip {
+      background-color: var(--clip-bg);
+      border-left: 1px solid var(--clip-border-color);
+      font-size: 80%;
+      
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    
+    .ClipEnd {
+      border-right: 1px solid var(--clip-border-color);
+    }
+    
+    .Clip.Repeat {
+      border-right: 0px solid var(--clip-bg);
+    }
+    
+    .RepeatingClip {
+      background-color: var(--repeating-clip-bg);
+      border-left: 1px solid var(--repeating-clip-bg);
+    }
+    
+    .Clip.selected {
+      background-color: var(--clip-selected-bg);
+    }
+  }
+  
+  td.banded {
+    background-color: var(--clip-column-banded-bg);
+  }
+  
+  tbody td:first-child {
+    max-width: 100px;
+  }
+  
+  tbody td,
+  thead th {
+    margin: 0;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    border-top-width: 0px;
+  }
+  
+  .selected {
+    background: var(--selected-track-bg);
+  }
+
+  tr.selected td div {
+    background: var(--selected-track-bg);
+  }
+  
+  .track-header {
+    width: max-content;
+    z-index: 4;
+    border: 1px solid var(--control-bg);
+    
+    input[name='track-name'] {
+      width: 70px;
+      font-size: small;
+      vertical-align: middle;
+      overflow: hidden;
+      padding-top: 4px;
+      background: var(--input-bg);
+    }
+    
+    input:read-only {
+      background: transparent;
+    }
+    
+    button.active {
+      background: var(--active-button-bg);
+    }
+  }
+}
+
+
+

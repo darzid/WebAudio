@@ -26,17 +26,28 @@ function initialize() {
   initializeToggleButtons(document);
   initializeTableZoom(tracksTable, document.getElementById("zoom"));
   
+  document.getElementById("devices-tab-button").addEventListener("click", () => showTrackDevices());
+  document.getElementById("clip-editor-tab-button").addEventListener("click", () => showClip());
+  
+  initializeClipEditor();
+  /*
   let toggleDevicesButton = document.getElementById("toggle-devices");
+  console.log("toggleDevicesButton", toggleDevicesButton)
   toggleDevicesButton.onclick = () => {
-    devicesPanel.style.display = (toggleDevicesButton.classList.contains("active")) ? "flex" : "none";
+    toggleDevicesButton.classList.toggle("active-tab");
+    devicesPanel.style.display = (toggleDevicesButton.classList.contains("active-tab")) ? "flex" : "none";
+    console.log("toggle devices")
     sizeTracksTableContainer();
   }
   let toggleClipEditButton = document.getElementById("toggle-clipview");
   toggleClipEditButton.onclick = () => {
-    clipEditPanel.style.display = (toggleClipEditButton.classList.contains("active")) ? "flex" : "none";
+    toggleClipEditButton.classList.toggle("active-tab");
+    clipEditPanel.style.display = (toggleClipEditButton.classList.contains("active-tab")) ? "flex" : "none";
+    console.log("toggle clip editor")
     sizeTracksTableContainer();
   }
   let toggleMixerButton = document.getElementById("toggle-mixer");
+  */
 }
 
 function initializeToggleButtons(parentElement) {
@@ -44,18 +55,3 @@ function initializeToggleButtons(parentElement) {
     .forEach((button) => button.addEventListener("click", () => button.classList.toggle("active")));
 }
 
-function pianorollScrollX() {
-  document.getElementById("piano-roll").xoffset = document.getElementById("pianoroll-scroll-x").value;
-}
-
-function pianorollScrollY() {
-  document.getElementById("piano-roll").yoffset = document.getElementById("pianoroll-scroll-y").value;
-}
-
-function pianorollZoomX() {
-  document.getElementById("piano-roll").xrange = document.getElementById("pianoroll-zoom-x").value;
-}
-
-function pianorollZoomY() {
-  document.getElementById("piano-roll").yrange = document.getElementById("pianoroll-zoom-y").value;
-}

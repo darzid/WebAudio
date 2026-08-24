@@ -1,0 +1,38 @@
+  #clip-editor-panel {
+    display: none;
+    .scroll {
+      height: 50vmax;
+      display: block;
+      overflow: auto;
+      width: stretch;
+    }
+    
+    #pianoroll-scroll-x {
+      width: 90%;
+      margin-left: 20px;
+    }
+    
+    #pianoroll-scroll-y {
+      writing-mode: vertical-lr;
+      direction: rtl;
+      height: 285px;
+      margin-top: 22px;
+    }
+  
+    #pianoroll-zoom-x {
+      float: right;
+      margin-right: 20px;
+      width: 100px;
+      margin-top: -5px;
+      direction: rtl;
+    }
+    
+    #pianoroll-zoom-y {
+      writing-mode: vertical-lr;
+      direction: rtl;
+      height: 100px;
+      margin-top: auto;
+      margin-bottom: 10px;
+    }
+    
+  }
