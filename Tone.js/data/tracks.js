@@ -38,110 +38,16 @@ let tracks = [
     clips: [
       {
         name: "Kick",
-        start: "1:1:1",
-        duration: "0:0:1",
-        end: "1:2:1",
+        start: "0:0:0",
+        duration: "0:1:0",
+        end: "1:0:0",
         notes: [
           {
             start: "0:0:0",
             duration: "0:0:1",
             note: "G1",
             velocity: 1
-          }
-        ]
-      },
-      {
-        name: "Kick",
-        start: "1:2:1",
-        duration: "0:0:1",
-        end: "1:3:1",
-        notes: [
-          {
-            start: "0:0:0",
-            duration: "0:0:1",
-            note: "C1",
-            velocity: 1
-          }
-        ]
-      },
-      {
-        name: "Kick",
-        start: "1:3:1",
-        duration: "0:0:1",
-        end: "1:4:1",
-        notes: [
-          {
-            start: "0:0:0",
-            duration: "0:0:1",
-            note: "C1",
-            velocity: 1
-          }
-        ]
-      },
-      {
-        name: "Kick",
-        start: "1:4:1",
-        duration: "0:0:1",
-        end: "2:1:1",
-        notes: [
-          {
-            start: "0:0:0",
-            duration: "0:0:1",
-            note: "C1",
-            velocity: 1
-          }
-        ]
-      },
-      {
-        name: "Kick",
-        start: "2:1:1",
-        duration: "0:0:1",
-        notes: [
-          {
-            start: "0:0:0",
-            duration: "0:0:1",
-            note: "C1",
-            velocity: 1
-          }
-        ]
-      },
-      {
-        name: "Kick",
-        start: "2:2:1",
-        duration: "0:0:1",
-        notes: [
-          {
-            start: "0:0:0",
-            duration: "0:0:1",
-            note: "C1",
-            velocity: 1
-          }
-        ]
-      },
-      {
-        name: "Kick",
-        start: "2:3:1",
-        duration: "0:0:1",
-        notes: [
-          {
-            start: "0:0:0",
-            duration: "0:0:1",
-            note: "C1",
-            velocity: 1
-          }
-        ]
-      },
-      {
-        name: "Kick",
-        start: "2:4:1",
-        duration: "0:0:1",
-        notes: [
-          {
-            start: "0:0:0",
-            duration: "0:0:1",
-            note: "C1",
-            velocity: 1
-          }
+          },
         ]
       },
     ]
@@ -178,8 +84,9 @@ let tracks = [
     clips: [
       {
         name: "Bassline01",
-        start: "1:1:1",
+        start: "0:0:0",
         duration: "0:1:0",
+        end: "1:0:0",
         notes: [
           {
             start: "0:0:1",
@@ -201,111 +108,6 @@ let tracks = [
           }
         ]
       },
-      {
-        name: "Bassline01",
-        start: "1:2:2",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline02",
-        start: "1:2:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline03",
-        start: "1:2:4",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline01",
-        start: "1:3:2",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline02",
-        start: "1:3:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline03",
-        start: "1:3:4",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline01",
-        start: "1:4:2",
-        duration: "0:0:1" 
-      },
-      {
-        name: "Bassline02",
-        start: "1:4:3",
-        duration: "0:0:1" 
-      },
-      {
-        name: "Bassline03",
-        start: "1:4:4",
-        duration: "0:0:1" 
-      },
-      {
-        name: "Bassline01",
-        start: "2:1:2",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline02",
-        start: "2:1:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline03",
-        start: "2:1:4",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline01",
-        start: "2:2:2",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline02",
-        start: "2:2:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline03",
-        start: "2:2:4",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline01",
-        start: "2:3:2",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline02",
-        start: "2:3:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline03",
-        start: "2:3:4",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline01",
-        start: "2:4:2",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline02",
-        start: "2:4:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "Bassline03",
-        start: "2:4:4",
-        duration: "0:0:1"
-      }
     ]
   },
   {
@@ -325,43 +127,21 @@ let tracks = [
     clips: [
       {
         name: "OH",
-        start: "1:1:3",
-        duration: "0:0:1" 
+        start: "0:0:2",
+        duration: "0:0:1",
+        end: "0:0:3"
       },
       {
         name: "OH",
-        start: "1:2:3",
-        duration: "0:0:1" 
+        start: "0:1:2",
+        duration: "0:0:1",
+        end: "0:1:3"
       },
       {
         name: "OH",
-        start: "1:3:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "OH",
-        start: "1:4:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "OH",
-        start: "2:1:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "OH",
-        start: "2:2:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "OH",
-        start: "2:3:3",
-        duration: "0:0:1"
-      },
-      {
-        name: "OH",
-        start: "2:4:3",
-        duration: "0:0:1"
+        start: "0:2:2",
+        duration: "0:0:1",
+        end: "0:2:3"
       },
     ]
   },
@@ -370,8 +150,9 @@ let tracks = [
     clips: [
       {
         name: "Lead01",
-        start: "1:2:1.5",
-        duration: "0:1:0"
+        start: "0:0:1.5",
+        duration: "0:1:0",
+        end: "0:1:1.5"
       }
     ]
   },

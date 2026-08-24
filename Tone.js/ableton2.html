@@ -60,7 +60,7 @@
       </label>
     </div>
 
-    <div id="tracks-table-container" class="table-container">
+    <div id="tracks-table-container" class="table-container" >
       <table id="tracks-table">
         <thead>
           <tr class="header-row">
@@ -88,7 +88,7 @@
       <div class="panel-header">Clip editor</div>
       <div class="panel-content">
         
-        <input type="range" id="pianoroll-scroll-x" oninput="pianorollScrollX()" value=0>
+        <input type="range" id="pianoroll-scroll-x" oninput="pianorollScrollX()" value=0 min="0" max=1000>
         <div style="display: flex; flex-direction: row">
           <input type="range" id="pianoroll-scroll-y" oninput="pianorollScrollY()" value=30>
           <webaudio-pianoroll id="piano-roll" width="345" height="300" timebase=12></webaudio-pianoroll>

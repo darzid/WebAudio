@@ -20,7 +20,7 @@
   table {
     border-collapse: collapse;
     width: 100%;
-    border: 0px solid var(--color-bg);
+    border: 1px solid var(--color-bg);
     background: var(--session-bg);
   }
 
@@ -85,7 +85,8 @@
     font-size: xx-small;
     font-size: 80%;
   }
-    
+  
+
   td.clip-column {
     height: var(--clip-column-height);
     
@@ -93,10 +94,12 @@
     max-width: var(--timeline-column-width);
     
     margin: 0px;
-    padding: 0.01em;
+    padding2: 0.01em;
+    padding: 0px;
+    border: 0px solid var(--clip-column-bg);
     
     background-color: var(--clip-column-bg);
-    
+    font-size: 80%;
     .Clip, .RepeatingClip {
       width: stretch;
       height: stretch;
@@ -157,6 +160,9 @@
     background: var(--selected-track-bg);
   }
 
+  .clip-cell.selected {
+    background-color: var(--clip-selected-bg);
+  }
   tr.selected td div {
     background: var(--selected-track-bg);
   }
