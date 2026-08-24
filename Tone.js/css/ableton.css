@@ -34,6 +34,7 @@
   --selected-track-bg: rgba(0,150,150,0.2);
   
   --clip-bg: #00b7b7;
+  --clip-selected-bg: #80c7f7;
   --clip-border-color: black;
   --clip-column-height: 25px;
   --clip-column-min-width: 25px;
@@ -330,6 +331,10 @@ input.medium-width {
     .RepeatingClip {
       background-color: var(--repeating-clip-bg);
       border-left: 1px solid var(--repeating-clip-bg);
+    }
+    
+    .Clip.selected {
+      background-color: var(--clip-selected-bg);
     }
   }
   

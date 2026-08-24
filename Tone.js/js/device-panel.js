@@ -62,10 +62,11 @@ function showTrackDevices(trackId) {
         });
         openTab(tabstripElement.childNodes[0], deviceElement, tabstripElement.childNodes[0].innerText);
       }
+      initializeNumberInputs(deviceElement);
+      initializeToggleButtons(deviceElement);
+      deviceIndex++;
     });
-    initializeNumberInputs(deviceElement);
-    initializeToggleButtons(deviceElement);
-    deviceIndex++;
+    
   }
   else {
     let addDeviceButton = document.createElement("button");

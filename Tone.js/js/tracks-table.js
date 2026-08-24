@@ -56,6 +56,7 @@ function fillTracksTable(tracksTable, tracks)
     sizeTracksTableContainer();
   }
 
+  let selectedClip = null;
   function addTrackRow(track) {
     let trackIndex = tracks.indexOf(track);
 
@@ -97,13 +98,20 @@ function fillTracksTable(tracksTable, tracks)
             let clipElement = document.createElement("div");
             clipElement.id = `${track.name}-Clip${clipIndex}`;
             clipElement.className = "Clip";
-            
             clipElement.innerText = clip.name;
             
             let clipDurationInSixteenths = getSixteenths(clip.duration);
             clipElement.style.width = `${clipDurationInSixteenths * 100}%`;
             
             columnElement.appendChild(clipElement);
+            
+            clipElement.addEventListener("click", () => {
+              if (selectedClip)
+                selectedClip.classList.remove("selected");
+              clipElement.classList.add("selected");
+              selectedClip = clipElement;
+              console.log("clip selected")
+            });
             
             if (clip.start.indexOf(".")) {
               let clipOffset = parseFloat(`0.${clip.start.split(".")[1]}`);
@@ -139,6 +147,7 @@ function fillTracksTable(tracksTable, tracks)
             
             columnElement.appendChild(clipElement);
             
+            
             if (repeatingClip.start.indexOf(".")) {
               let clipOffset = parseFloat(`0.${repeatingClip.start.split(".")[1]}`);
               clipElement.classList.add("clip-with-offset");
@@ -158,7 +167,10 @@ function fillTracksTable(tracksTable, tracks)
     }
     
     trackRow.querySelectorAll("td div").forEach(header => {
-      header.onclick = () => selectTrack(header.closest("tr"));
+      header.onclick = (e) => {
+        selectTrack(header.closest("tr"));
+        
+      }
     });
     return trackRow;
   }
