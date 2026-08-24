@@ -51,3 +51,13 @@ function pianorollScrollX() {
 function pianorollScrollY() {
   document.getElementById("piano-roll").yoffset = document.getElementById("pianoroll-scroll-y").value;
 }
+
+function pianorollZoomX() {
+  console.log(document.getElementById("piano-roll").xrange)
+  document.getElementById("piano-roll").xrange = document.getElementById("pianoroll-zoom-x").value;
+}
+
+function pianorollZoomY() {
+  console.log(document.getElementById("piano-roll").yrange)
+  document.getElementById("piano-roll").yrange = document.getElementById("pianoroll-zoom-y").value;
+}

@@ -187,12 +187,14 @@ function getSixteenths(time) {
 function sizeTracksTableContainer() {
   let tracksTable = document.getElementById("tracks-table");
   let devicesPanel = document.getElementById("track-devices-panel");
+  let pianoRollPanel = document.getElementById("clip-editor-panel");
   
   let pageHeight = window.innerHeight;
-    
-  let devicesPanelHeight = devicesPanel.getBoundingClientRect().height;
-  let devicesPanelTop = devicesPanelHeight > 0 ? devicesPanel.getBoundingClientRect().y : pageHeight;
   
+  let bottomPanel = pianoRollPanel.style.display != "none" ? pianoRollPanel : devicesPanel;
+  
+  let bottomPanelHeight = bottomPanel.getBoundingClientRect().height;
+  let bottomPanelTop = bottomPanelHeight > 0 ? bottomPanel.getBoundingClientRect().y : pageHeight;
   
   let tracksTableHeight = tracksTable.getBoundingClientRect().height;
   let tracksTableTop = tracksTable.getBoundingClientRect().y;
@@ -202,7 +204,7 @@ function sizeTracksTableContainer() {
     console.log("top", tracksTableTop);
   } 
   
-  let availableHeight = devicesPanelTop - tracksTable.dataset.initialY;
+  let availableHeight = bottomPanelTop - tracksTable.dataset.initialY;
   let overflow = availableHeight - (tracksTableHeight);
   console.log("overflow", overflow, tracksTable.getBoundingClientRect());
   
