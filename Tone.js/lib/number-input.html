@@ -20,6 +20,7 @@
 </head>
 
 <body>
+
   Element style based fill:<br>
   <number-input value="10"></number-input>
   <br>
@@ -29,6 +30,22 @@
   Class based fill:<br>
   <number-input value="10" class="blue-number-input"></number-input>
   <br>
+  Change max:<br>
+  <number-input id="max-input" value="100"></number-input>
+  <number-input id="input-with-max" value="50"></number-input>
+  <br>
+  
+    <script>
+    let maxInput = document.getElementById("max-input");
+    maxInput.oninput = (ev) => {
+      console.log("oninput", ev.currentTarget.value);
+      //document.getElementById("input-with-max").max = ev.currentTarget.value;
+    }
+    maxInput.onchange = (ev) => {
+      console.log("onchange", ev.currentTarget.value);
+      document.getElementById("input-with-max").max = ev.currentTarget.value;
+    }
+  </script>
 </body>
 
 </html>

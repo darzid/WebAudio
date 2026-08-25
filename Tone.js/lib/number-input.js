@@ -11,7 +11,6 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
             const v = plist[k];
             let value = v.value;
             if (!value) {
-                console.log("computedStyle " + k, computedStyle[k])
                 if (computedStyle[k]) {
                     value = computedStyle[k];
                 } else if (v.defaultValue) {
@@ -19,6 +18,7 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
                 }
             }
             this["_"+k] = this.getAttr(k,value);
+            
             Object.defineProperty(this, k, {
                 get:()=>{return this["_"+k]},
                 set:(val)=>{
@@ -37,11 +37,13 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
         this.module = {
             is:"number-input",
             properties:{
-                fill:               {type:String, value:"", defaultValue:"#00b7b7"},
-                min:                {type:Number, value:0},
-                max:                {type:Number, value:100},
-                step:               {type:Number, value:1},
-                value:              {type:Number, value:0},
+                fill:               {type:String, value:"",  defaultValue:"#00b7b7"},
+                textAlign:          {type:String, value:"",  defaultValue:"center"},
+                width:              {type:String, value:"",  defaultValue:"4em"},
+                min:                {type:Number, value:0,   observer:"updateRange"},
+                max:                {type:Number, value:100, observer:"updateRange"},
+                step:               {type:Number, value:1,   observer:"updateRange"},
+                value:              {type:Number, value:0,   observer:"updateValue"},
                 'class':            {type:String, value:"number-input"}
             },
         };
@@ -50,10 +52,10 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
         root.innerHTML =
 `<style>
 .number-input {
-    color: ${computedStyle.color},
-    backgroundColor: ${computedStyle.backgroundColor},
-    text-align: center;
-    width: 4em;
+    color: ${this.color},
+    backgroundColor: ${this.backgroundColor},
+    text-align: ${this.textAlign};
+    width: ${this.width};
 }
 :host {
     user-select: none;
@@ -66,34 +68,143 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
             console.log("ready()");
             
             this.inputElement=root.children[1];
-            this.inputElement.addEventListener("input", this.drawFill, false);
-            this.inputElement.addEventListener("pointerdown", this.bindpointerdown.bind(this), false);
+            this.inputElement.addEventListener("input", this.bindinput, false);
+            this.inputElement.addEventListener("change", this.bindchange, false);
+            this.inputElement.addEventListener("pointerdown", this.bindpointerdown, false);
             //this.addEventListener('mousemove',this.mousemove.bind(this),false);
             //this.canvas.addEventListener('keydown',this.keydown.bind(this),false);
             this.initialized=1;
+            this.pointerDownPosition = null;
             this.drawFill();
         };
-        this.bindpointerdown=function(ev) {
-            this.inputElement.addEventListener("pointermove", this.bindpointermove.bind(this), false);
-            this.inputElement.addEventListener("pointerup", this.bindpointerup.bind(this), false);
+
+        this.sendOnInput=function() {
+            if (this.value === this.inputElement.value)
+                return;
+                
+            this.value = this.inputElement.value;
+            var evnt = this["oninput"];
+            if (evnt)
+                evnt.call(this, { currentTarget: this });
+        }
+        
+        this.sendOnChange=function() {
+            console.log("sendOnChange")
+            if (this.value != this.inputElement.value)
+                this.value = this.inputElement.value;
+            
+            var evnt = this["onchange"];
+            if (evnt)
+                evnt.call(this, { currentTarget: this });
+        }
+        
+        this.input = function(ev) {
+            console.log("input");
+            
+            if (this.inputElement.value === this.value)
+                return;
+                
+            this.drawFill();
+            this.sendOnInput();
         };
-        this.bindpointermove=function(ev){
+        this.bindinput=this.input.bind(this);
+        
+        this.change = function(ev) {
+            console.log("change");
+            
+            if (this.inputElement.value === this.value)
+                return;
+                
+            this.sendOnChange();
+        };
+        this.bindchange=this.change.bind(this);
+        
+        this.pointerdown=function(ev) {
+            this.pointerDownPosition = { clientX: ev.clientX, clientY: ev.clientY };
+            
+            window.addEventListener("touchmove", this.bindtouchmove, false);
+            window.addEventListener("touchend", this.bindpointerup, false);
+            this.inputElement.addEventListener("pointerup", this.bindpointerup, false);
+        };
+        this.bindpointerdown=this.pointerdown.bind(this);
+        
+      /*  this.pointermove=function(ev){
             let range = parseFloat(this.max) - parseFloat(this.min);
+            
             let movement = (Math.abs(ev.movementY) > Math.abs(ev.movementX)) ? -0.75 * ev.movementY : 1.5 * ev.movementX;
               
             let decimals = this.step ? parseFloat(this.step).countDecimals() : 0;
             let value = (parseFloat(this.inputElement.value) + ((movement / 100) * range));
             value = parseFloat(value.toFixed(decimals)).clamp(this.min, this.max);
+            
+            console.log("pointer move value=" + value, ev.movementX, ev.movementY)
+            
+   
+            return;
+            
             this.inputElement.value = value;
-            var evnt = this.inputElement["oninput"];
-            if (evnt)
-                evnt.call(this.inputElement);
+            this.drawFill();
+            this.sendOnInput();
+            this.sendOnChange();
+        };
+        this.bindpointermove=this.pointermove.bind(this);
+        */
+        
+        this.touchmove=function(ev){
+            let e = ev.touches ? ev.touches[0] : ev;
+            let movementX = e.clientX - this.pointerDownPosition.clientX;
+            let movementY = e.clientY - this.pointerDownPosition.clientY;
+            
+            let range = parseFloat(this.max) - parseFloat(this.min);
+            let movement = (Math.abs(movementY) > Math.abs(movementX)) ? -0.25 * movementY : 1 * movementX;
+            
+            let decimals = this.step ? parseFloat(this.step).countDecimals() : 0;
+            let value = (parseFloat(this.inputElement.value) + ((movement / 100) * range));
+            value = parseFloat(value.toFixed(decimals)).clamp(this.min, this.max);
+            
+            this.pointerDownPosition.clientX = e.clientX;
+            this.pointerDownPosition.clientY = e.clientY;
+
+            this.inputElement.value = value;
+            this.drawFill();
+            this.sendOnInput();
+            this.sendOnChange();
+        };
+        this.bindtouchmove=this.touchmove.bind(this);
+        
+        this.pointerup=function(ev) {
+            window.removeEventListener("touchmove", this.bindtouchmove, false);
+            this.inputElement.removeEventListener("pointerup", this.bindpointerup, false);
+            window.removeEventListener("touchend", this.bindpointerup, false);
+        };
+        this.bindpointerup=this.pointerup.bind(this);
+        
+        this.updateRange=function(){
+            if (this.min)
+                this.inputElement.min = this.min;
+            if (this.max)
+                this.inputElement.max = this.max;
+            if (this.step) 
+                this.inputElement.step = this.step;
+            
+            if (this.inputElement.value < this.inputElement.min) {
+                this.inputElement.value = this.inputElement.min;
+                this.sendOnInput();
+            }
+                
+            if (this.inputElement.value > this.inputElement.max) {
+                this.inputElement.value = this.inputElement.max;
+                this.sendOnInput();
+            }
+                
             this.drawFill();
         };
-        this.bindpointerup=function(ev) {
-            this.inputElement.removeEventListener("pointermove", this.bindpointermove, false);
-            this.inputElement.removeEventListener("pointerup", this.bindpointerup, false);
-        };
+        
+        this.updateValue=function() {
+            this.inputElement.value = this.value;
+            this.sendOnInput();
+        }
+        
         this.drawFill=function() {
             let progress = 100 * ((this.inputElement.value - this.min) / (this.max - this.min));
             let backgroundColor = window.getComputedStyle(this.inputElement).backgroundColor;
@@ -101,8 +212,14 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
             this.inputElement.style.backgroundImage = backgroundImage;
             //console.log("drawFill()", this.inputElement, backgroundImage);
         }
+        
         this.ready();
     }
+    
+    attributeChangedCallback(name, oldValue, newValue) {
+        console.log(`Attribute ${name} has changed.`);
+    }
+      
     getAttr(n, def) {
         let v = this.getAttribute(n);
         if (v == "" || v == null) return def;
@@ -114,6 +231,13 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
                 return v;
         }
         return v;
+    }
+    
+    sendEvent(ev){
+        let event;
+        event=document.createEvent("HTMLEvents");
+        event.initEvent(ev,false,true);
+        this.dispatchEvent(event);
     }
 });
 
