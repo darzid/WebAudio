@@ -30,20 +30,29 @@
   Class based fill:<br>
   <number-input value="10" class="blue-number-input"></number-input>
   <br>
+  Float:<br>
+  <number-input value="10" step="0.1" class="blue-number-input"></number-input>
+  <br>
+  <hr>
   Change max:<br>
-  <number-input id="max-input" value="100"></number-input>
-  <number-input id="input-with-max" value="50"></number-input>
+  <number-input id="max-input" value="2"></number-input>
+  <br>
+  Change step:<br>
+  <number-input id="step-input" value="0.1" step="0.01" min="0.01" max="1"></number-input>
+  <br>
+  <number-input id="input-with-max" value="1" step="0.1"></number-input>
   <br>
   
     <script>
     let maxInput = document.getElementById("max-input");
-    maxInput.oninput = (ev) => {
-      //console.log("oninput", ev.currentTarget.value);
-      //document.getElementById("input-with-max").max = ev.currentTarget.value;
-    }
+    let stepInput = document.getElementById("step-input");
     maxInput.onchange = (ev) => {
       //console.log("onchange", ev.currentTarget.value);
       document.getElementById("input-with-max").max = ev.currentTarget.value;
+    }
+    stepInput.onchange = (ev) => {
+      //console.log("onchange", ev.currentTarget.value);
+      document.getElementById("input-with-max").step = ev.currentTarget.value;
     }
   </script>
 </body>

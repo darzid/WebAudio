@@ -178,8 +178,19 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
                 } 
                 this.drawFill();
             }
-            if (this.step && this.step != this.inputElement.step) 
+            if (this.step && this.step != this.inputElement.step) {
                 this.inputElement.step = this.step;
+                
+                let allowedDecimals = parseFloat(this.step).countDecimals();
+                let currentDecimals = parseFloat(this.inputElement.value).countDecimals();
+                if (currentDecimals > allowedDecimals) {
+                    let value = parseFloat(this.inputElement.value).toFixed(allowedDecimals);
+                    this.inputElement.value = value;
+                    this.sendOnInput();
+                    this.sendOnChange();
+                }
+            }
+                
         };
         
         this.updateValue=function() {
