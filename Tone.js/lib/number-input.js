@@ -89,7 +89,7 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
         }
         
         this.sendOnChange=function() {
-            console.log("sendOnChange")
+            //console.log("sendOnChange")
             if (this.value != this.inputElement.value)
                 this.value = this.inputElement.value;
             
@@ -99,7 +99,7 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
         }
         
         this.input = function(ev) {
-            console.log("input");
+            //console.log("input");
             
             if (this.inputElement.value === this.value)
                 return;
@@ -127,28 +127,6 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
             this.inputElement.addEventListener("pointerup", this.bindpointerup, false);
         };
         this.bindpointerdown=this.pointerdown.bind(this);
-        
-      /*  this.pointermove=function(ev){
-            let range = parseFloat(this.max) - parseFloat(this.min);
-            
-            let movement = (Math.abs(ev.movementY) > Math.abs(ev.movementX)) ? -0.75 * ev.movementY : 1.5 * ev.movementX;
-              
-            let decimals = this.step ? parseFloat(this.step).countDecimals() : 0;
-            let value = (parseFloat(this.inputElement.value) + ((movement / 100) * range));
-            value = parseFloat(value.toFixed(decimals)).clamp(this.min, this.max);
-            
-            console.log("pointer move value=" + value, ev.movementX, ev.movementY)
-            
-   
-            return;
-            
-            this.inputElement.value = value;
-            this.drawFill();
-            this.sendOnInput();
-            this.sendOnChange();
-        };
-        this.bindpointermove=this.pointermove.bind(this);
-        */
         
         this.touchmove=function(ev){
             let e = ev.touches ? ev.touches[0] : ev;
@@ -180,24 +158,28 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
         this.bindpointerup=this.pointerup.bind(this);
         
         this.updateRange=function(){
-            if (this.min)
+            if (this.min && this.min != this.inputElement.min) {
                 this.inputElement.min = this.min;
-            if (this.max)
+                if (parseFloat(this.inputElement.value) < this.inputElement.min) {
+                    console.log(`Min correction from ${this.inputElement.value} to ${this.min}`);
+                    this.inputElement.value = this.min;
+                    this.sendOnInput();
+                    this.sendOnChange();
+                } 
+                this.drawFill();
+            }
+            if (this.max && this.max != this.inputElement.max) {
                 this.inputElement.max = this.max;
-            if (this.step) 
+                if (parseFloat(this.inputElement.value) > this.max) {
+                    console.log(`Max correction from ${this.inputElement.value} to ${this.max}`);
+                    this.inputElement.value = this.max;
+                    this.sendOnInput();
+                    this.sendOnChange();
+                } 
+                this.drawFill();
+            }
+            if (this.step && this.step != this.inputElement.step) 
                 this.inputElement.step = this.step;
-            
-            if (this.inputElement.value < this.inputElement.min) {
-                this.inputElement.value = this.inputElement.min;
-                this.sendOnInput();
-            }
-                
-            if (this.inputElement.value > this.inputElement.max) {
-                this.inputElement.value = this.inputElement.max;
-                this.sendOnInput();
-            }
-                
-            this.drawFill();
         };
         
         this.updateValue=function() {
