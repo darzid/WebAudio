@@ -4,8 +4,6 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
     }
     
     defineprop(computedStyle){
-        console.log("defineprop()");
-        
         const plist=this.module.properties;
         for(let k in plist){
             const v = plist[k];
@@ -38,12 +36,14 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
             is:"number-input",
             properties:{
                 fill:               {type:String, value:"",  defaultValue:"#00b7b7"},
+                color:              {type:String, value:"",  defaultValue:"#000000"},
+                backgroundColor:    {type:String, value:"",  defaultValue:"#ffffff"},
                 textAlign:          {type:String, value:"",  defaultValue:"center"},
                 width:              {type:String, value:"",  defaultValue:"4em"},
                 min:                {type:Number, value:0,   observer:"updateRange"},
                 max:                {type:Number, value:100, observer:"updateRange"},
                 step:               {type:Number, value:1,   observer:"updateRange"},
-                value:              {type:Number, value:0,   observer:"updateValue"},
+                value:              {type:Number, value:0,   observer:"valueAttributeUpdated"},
                 'class':            {type:String, value:"number-input"}
             },
         };
@@ -53,7 +53,7 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
 `<style>
 .number-input {
     color: ${this.color},
-    backgroundColor: ${this.backgroundColor},
+    background-color: ${this.backgroundColor},
     text-align: ${this.textAlign};
     width: ${this.width};
 }
@@ -71,10 +71,9 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
             this.inputElement.addEventListener("input", this.bindinput, false);
             this.inputElement.addEventListener("change", this.bindchange, false);
             this.inputElement.addEventListener("pointerdown", this.bindpointerdown, false);
-            //this.addEventListener('mousemove',this.mousemove.bind(this),false);
-            //this.canvas.addEventListener('keydown',this.keydown.bind(this),false);
-            this.initialized=1;
+        
             this.pointerDownPosition = null;
+            
             this.drawFill();
         };
 
@@ -193,17 +192,18 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
                 
         };
         
-        this.updateValue=function() {
+        this.valueAttributeUpdated=function() {
             this.inputElement.value = this.value;
+            this.drawFill();
             this.sendOnInput();
+            this.sendOnChange();
         }
         
         this.drawFill=function() {
             let progress = 100 * ((this.inputElement.value - this.min) / (this.max - this.min));
-            let backgroundColor = window.getComputedStyle(this.inputElement).backgroundColor;
-            let backgroundImage = `linear-gradient(to right, ${this.fill} 0%, ${this.fill} ${progress}%, ${backgroundColor} ${progress}%, ${backgroundColor} 100%)`;
+            let backgroundImage = `linear-gradient(to right, ${this.fill} 0%, ${this.fill} ${progress}%, ${this.backgroundColor} ${progress}%, ${this.backgroundColor} 100%)`;
             this.inputElement.style.backgroundImage = backgroundImage;
-            //console.log("drawFill()", this.inputElement, backgroundImage);
+            console.log("drawFill()", this.inputElement, backgroundImage);
         }
         
         this.ready();
