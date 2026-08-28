@@ -55,8 +55,9 @@ function showTrackDevices() {
           Object.keys(device.parameterGroups[parameterGroupName]).forEach(parameterName => {
             let parameterLabelElement = document.createElement("label");
             parameterLabelElement.className = "number-label";
+      
             parameterLabelElement.innerHTML =
-              `${parameterName}<input class="control" type="number" min="0" max="127" value="${device.parameterGroups[parameterGroupName][parameterName]}">`;
+             `${parameterName}<number-input class="control-without-bg" fill="#00b7b7" background="white" min="0" max="127" value="${device.parameterGroups[parameterGroupName][parameterName]}">`;
             tabContent.appendChild(parameterLabelElement);
           })
         });
