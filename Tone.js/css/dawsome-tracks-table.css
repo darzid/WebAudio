@@ -162,6 +162,7 @@
 
   .clip-cell.selected {
     background-color: var(--clip-selected-bg);
+    
   }
   tr.selected td div {
     background: var(--selected-track-bg);

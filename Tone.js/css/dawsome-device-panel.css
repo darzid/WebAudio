@@ -1,11 +1,7 @@
 #devices-panel {
-  .scroll {
-    display: flex;
-    
-    overflow: auto;
-    width: 100%;
+  .devices {
+    overflow-x: auto;
   }
-
   .add-device {
     margin: 2px;
     border-radius: 20px;
@@ -105,10 +101,4 @@
 
     }
   }
-}
-
-#devices-panel > .scroll > .panel-content {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
 }

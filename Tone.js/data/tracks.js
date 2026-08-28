@@ -33,6 +33,22 @@ let tracks = [
             
           }
         }
+      },
+      {
+        name: "Compressor",
+        parameterGroups: {
+          general: {
+            threshold: 50,
+            knee: 30,
+            ratio: 20,
+            output: 2
+          },
+          envelope: {
+            attack: 0.1,
+            release: 0.2,
+            
+          }
+        }
       }
     ],
     clips: [

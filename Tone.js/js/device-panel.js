@@ -2,11 +2,12 @@ function showTrackDevices() {
   let trackId = selectedTrackId;
   let devicesPanelHeader = document.querySelector("#devices-panel .panel-header");
   let devicesPanelContent = document.querySelector("#devices-panel .panel-content");
-  devicesPanelContent.style.display = selectedTrackId ? "block" : "none";
+  devicesPanelContent.style.display = selectedTrackId ? "flex" : "none";
   let track = tracks.find(track => track.name == trackId);
   devicesPanelContent.innerHTML = "";
   
   if (track && track.devices && track.devices.length > 0){
+    
     let deviceIndex = 1;
     track.devices.forEach(device => {
       let deviceId = `${trackId}-Device${deviceIndex}`;
