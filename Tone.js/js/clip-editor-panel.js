@@ -19,7 +19,7 @@ function showClip() {
     {
       selectedClip.notes.forEach(clipNote => {
         let midiNote = Tone.Midi(clipNote.note).toMidi();
-        let noteOn = Tone.Ticks(clipNote.start).toTicks();
+        let noteOn = Tone.Ticks(clipNote.time).toTicks();
         let noteDuration = Tone.Ticks(clipNote.duration).toTicks();
         
         sequence.push({

@@ -1,4 +1,4 @@
-var selectedTrackId;
+
 var selectedClip;
 
 function fillTracksTable(tracksTable, tracks)
@@ -81,7 +81,7 @@ function fillTracksTable(tracksTable, tracks)
       selectTrack(trackRow);
       showTrackDevices();
       clickTab(document.getElementById("devices-tab-button"));
-      console.log("show devices")
+      //console.log("show devices")
     });
     trackHeaderDiv.innerHTML = `<button class="control toggle-button enabled-button active"></button>
                     <label><input name="track-name" class="control" type="text" value="${track.name}" readonly></label>`;
@@ -106,9 +106,15 @@ function fillTracksTable(tracksTable, tracks)
     
     function renderClips() {
       track.clips.forEach(clip => {
-        let clipStartInSixteenths = getSixteenths(clip.start);
-        let clipEndInSixteenths = getSixteenths(clip.end) - 1;
-        let clipDurationInSixteenths = getSixteenths(clip.duration);
+        console.log("renderClip", clip)
+        let clipStart = Tone.Time(clip.startTime);
+        let clipDuration = Tone.Time(clip.length);
+        let clipEnd = clip.endTime ? Tone.Time(clip.endTime) : Tone.Time(clipStart + clipDuration);
+        
+        let clipStartInSixteenths = getSixteenths(clipStart);
+        
+        let clipEndInSixteenths = getSixteenths(clipEnd) - 1;
+        let clipDurationInSixteenths = getSixteenths(clipDuration);
         
         let clipStartColumn = Math.floor(clipStartInSixteenths) + 1;
         let clipStartOffset = (clipStartInSixteenths + 1) - clipStartColumn;
@@ -117,7 +123,7 @@ function fillTracksTable(tracksTable, tracks)
         let clipEndOffset = (clipEndInSixteenths + 1) - clipEndColumn;
         let clipRepeatStartColumn = clipStartColumn + Math.ceil(clipDurationInSixteenths);
         let clipRepeatColumnCount = Math.ceil(clipDurationInSixteenths);
-        console.log("render clip", track.name, clip.name, clipStartColumn, clipEndColumn);
+        //console.log("render clip", track.name, clip.name, clipStartColumn, clipEndColumn);
       
         for (clipColumnIndex = clipStartColumn; clipColumnIndex <= clipEndColumn; clipColumnIndex++) {
           let column = trackRow.children[clipColumnIndex];
@@ -141,7 +147,7 @@ function fillTracksTable(tracksTable, tracks)
           let isOffsetColumn = (clipColumnIndex == clipStartColumn && clipStartOffset != 0) || (clipColumnIndex == clipEndColumn && clipEndOffset != 0);
           
           if (isOffsetColumn) {
-            console.log("offset column", clipColumnIndex)
+            //console.log("offset column", clipColumnIndex)
             if (clipColumnIndex == clipStartColumn) {
               let columnWidth = column.getBoundingClientRect().width;
               clipElement.style.marginLeft = `${columnWidth * clipStartOffset}px`;
@@ -166,7 +172,7 @@ function fillTracksTable(tracksTable, tracks)
           }
           
           clipElement.addEventListener("click", () => {
-            console.log("clip click")
+            //console.log("clip click")
             if (selectedClipElement)
               selectedClipElement.classList.remove("selected");
             clipElement.classList.add("selected");
@@ -200,7 +206,7 @@ function fillTracksTable(tracksTable, tracks)
       let clipRepeatStartCol = null;
       let clipRepeatEndCol = null;
       
-      console.log(track.name)
+      //console.log(track.name)
       let currentCol = 0;
       for (bar = 1; bar <= 4; bar++) {
         for (beat = 1; beat <= 4; beat++) {
@@ -237,7 +243,7 @@ function fillTracksTable(tracksTable, tracks)
                 let clipStartInSixteenths = getSixteenths(clip.start);
                 let clipEndInSixteenths = getSixteenths(clip.end);
                 let clipRepeats = ((clipEndInSixteenths - clipStartInSixteenths) / clipDurationInSixteenths) - 1;
-                console.log("clip repeats", clipRepeats)
+                //console.log("clip repeats", clipRepeats)
                 
                 if (clipRepeats > 0) {
                   clipRepeatStartCol = clipEndCol + 1;
@@ -252,13 +258,13 @@ function fillTracksTable(tracksTable, tracks)
                   repeatingClip = clip;
                 }*/
               }
-              console.log("clip", track.name, clipStartCol, clipEndCol, clipRepeatStartCol, clipRepeatEndCol);
+             // console.log("clip", track.name, clipStartCol, clipEndCol, clipRepeatStartCol, clipRepeatEndCol);
               
               currentClip = clipDurationInSixteenths > 1 ? clip : null;
               
               spanCounter = clipDurationInSixteenths > 1 ? spanCounter = clipDurationInSixteenths + 1 : 0;
               clipElement.addEventListener("click", () => {
-                console.log("clip click")
+                //console.log("clip click")
                 if (selectedClipElement)
                   selectedClipElement.classList.remove("selected");
                 clipElement.classList.add("selected");
@@ -353,14 +359,15 @@ function fillTracksTable(tracksTable, tracks)
   });
 }
 
-function getSixteenths(time) {
+/*function getSixteenths(time) {
+  console.log(time)
   let parts = time.split(":");
   let bars = parseInt(parts[0]);
   let beats = (bars * 4) + parseInt(parts[1]);
   let sixteenths = (beats * 4) + parseFloat(parts[2]);
   //console.log("toSixteenths", time, sixteenths)
   return sixteenths;
-}
+}*/
 
 function sizeTracksTableContainer() {
   console.log("size")

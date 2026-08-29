@@ -6,6 +6,7 @@ class PresetBrowser {
   }
 
   async loadPresets() {
+    console.log("Load presets")
     await fetch('.\\presets\\preset-bank.json')
       .then(response => {
         if (!response.ok) {

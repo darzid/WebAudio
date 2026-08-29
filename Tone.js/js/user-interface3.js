@@ -24,15 +24,6 @@ document.addEventListener("mousemove", async () => {
   if (toneInitialized) return;
   toneInitialized = true;
 
-  // Tone.setContext(
-  //   new Tone.Context(
-  //     {
-  //       context: new AudioContext({ sampleRate: 32000 }),
-  //       latencyHint: "playback",
-  //       lookAhead: 0.15
-  //     }));
-
-  //Tone.setContext(new Tone.Context({ latencyHint: "playback", lookAhead: 0.15 }))
   await Tone.start();
   
 });
@@ -40,14 +31,15 @@ document.addEventListener("mousemove", async () => {
 async function createBasicUI() {
   await presetBrowser.loadPresets();
 
-  initializeViewToggles();
-  initializeTransport();
-  initializeComputerKeyboard();
+  //initializeViewToggles();
+  //initializeTransport();
+ // initializeComputerKeyboard();
 
-  document.getElementById("daw").style.opacity = 1;
-  document.getElementById("loading").style.display = "none";
+ /* document.getElementById("daw").style.opacity = 1;
+  document.getElementById("loading").style.display = "none";*/
   console.log("Initialized");
 
+  /*
   function initializeViewToggles() {
     let toggleMixerElement = document.getElementById("toggle-mixer");
     toggleMixerElement.addEventListener("click", () => mixer.style.display = toggleMixerElement.checked ? "flex" : "none");
@@ -64,7 +56,9 @@ async function createBasicUI() {
       trackDevicesElements.forEach((trackDevicesElement) => trackDevicesElement.style.display = toggleDevicesElement.checked ? "inline-block" : "none");
     });
   }
+*/
 
+/*
   function initializeComputerKeyboard() {
    // pianoRoll = new PianoRoll();
    // pianoRoll.init();
@@ -88,7 +82,7 @@ async function createBasicUI() {
       if (track.instruments.length == 0) return;
       track.instruments.forEach(instrument => instrument.triggerRelease(Tone.now()));
     }
-  }
+  }*/
 }
 
 function renderTrack(project, tracksElement, track) {

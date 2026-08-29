@@ -67,25 +67,27 @@ async function loadDefaultProject(session) {
     })
     .then(projectFile => {
       session.project = new Project(projectFile);
-      createProjectUI(session);
+      
     })
     .catch(error => {
       console.error('Error loading JSON:', error);
     });
+    createProjectUI(session);
 }
 
 function createProjectUI(session) {
   projectNameInput.value = session.project.name;
 
-  tracksElement = document.getElementById("tracks");
-  tracksElement.innerHTML = "";
+  //tracksElement = document.getElementById("tracks");
+ // tracksElement.innerHTML = "";
 
-  mixerElement = document.getElementById("mixer");
-  mixerElement.innerHTML = "";
-
-  session.project.tracks.forEach(track => renderTrack(session.project, tracksElement, track));
-  initializeToggleButtons();
-  initializeArmTrackButtons();
+  //mixerElement = document.getElementById("mixer");
+  //mixerElement.innerHTML = "";
+  
+  fillTracksTable(document.getElementById("tracks-table"), session.project.tracks);
+  //session.project.tracks.forEach(track => renderTrack(session.project, tracksElement, track));
+  //initializeToggleButtons();
+  //initializeArmTrackButtons();
 
   Tone.Transport.bpm.value = session.project.tempo;
   Tone.Transport.swing = 0.2;

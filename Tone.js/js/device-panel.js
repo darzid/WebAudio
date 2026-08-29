@@ -27,7 +27,8 @@ function showTrackDevices() {
       addDeviceButton.innerText = "Add";
       deviceHeaderElement.appendChild(addDeviceButton);
       
-    addDeviceButton.onclick = () => addDevice(trackId, 0);
+      addDeviceButton.onclick = () => addDevice(trackId, 0);
+      
       let deviceContentElement = document.createElement("div");
       deviceContentElement.className = "panel-content";
       deviceElement.appendChild(deviceContentElement);

@@ -25,7 +25,8 @@
   <script src="./js/bottom-panel.js"></script>
   <script src="./js/device-panel.js"></script>
   <script src="./js/clip-editor-panel.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/darzid/html-components@main/number-input/number-input.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/darzid/html-components@main/number-input/number-input.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/darzid/html-components@main/tab-control/tab-control.js"></script>
   <script src="https://g200kg.github.io/webaudio-pianoroll/webaudio-pianoroll.js"></script>
   <script src="./ableton2.js"></script>
 </head>
@@ -73,7 +74,10 @@
     </div>
   </div>
   
+<!--  <tab-control id="bottom-panel" tabstripLocation="bottom" canCloseAll="true">-->
   <div id="bottom-panel" class="tab-control">
+
+  
     <div id="devices-panel" name="Devices" class="tab-panel">
       <div class="panel-header">Devices</div>
       <div class="panel-content devices"></div>
@@ -99,8 +103,9 @@
       <div class="panel-content">
       </div>
     </div>
-
-    <div class="tab-strip">
+<!--  </tab-control>-->
+  
+   <div class="tab-strip">
       <button id="devices-tab-button" class="tab-button" onclick="clickTab(window.event.currentTarget)">Devices</button>
       <button id="clip-editor-tab-button" class="tab-button" onclick="clickTab(window.event.currentTarget)">Clip editor</button>
       <button id="mixer-tab-button" class="tab-button" onclick="clickTab(window.event.currentTarget)">Mixer</button>

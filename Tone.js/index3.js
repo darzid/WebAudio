@@ -20,7 +20,7 @@ function initialize() {
   let devicesPanel = document.getElementById("track-devices-panel");
   let clipEditPanel = document.getElementById("clip-editor-panel");
   
-  fillTracksTable(tracksTable, tracks);
+//  fillTracksTable(tracksTable, tracks);
   
   initializeNumberInputs(document);
   initializeToggleButtons(document);

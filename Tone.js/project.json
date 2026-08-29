@@ -39,7 +39,8 @@
             }
           ],
           "startTime": "0:0:0",
-          "length": "0:1:0"
+          "length": "0:1:0",
+          "endTime": "1:0:0"
         }
       ],
       "automations": []
@@ -110,7 +111,8 @@
             }
           ],
           "startTime": "0:0:0",
-          "length": "0:1:0"
+          "length": "0:1:0",
+          "endTime": "1:0:0"
         }
       ],
       "automations": [
@@ -170,7 +172,8 @@
             }
           ],
           "startTime": "0:0:0",
-          "length": "0:0:4"
+          "length": "0:0:4",
+          "endTime": "1:0:0"
         }
       ],
       "automations": [
@@ -216,7 +219,8 @@
             }
           ],
           "startTime": "0:0:0",
-          "length": "0:0:4"
+          "length": "0:0:4",
+          "endTime": "1:0:0"
         }
       ],
       "automations": [
