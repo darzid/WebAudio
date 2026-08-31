@@ -1,0 +1,33 @@
+{
+  "unitTypes": {
+    "Cents": {
+      "min": -1200,
+      "max": 1200,
+      "step": 0.01
+    }
+  },
+  "modules": {
+    "AmplitudeEnvelope": {
+      "parameters": {
+        "attack": "AdrRange",
+        "attackCurve": "EnvelopeCurve",
+        "decay": "AdrRange",
+        "decayCurve": "EnvelopeCurve",
+        "sustain": "NormalRange",
+        "release": "AdrRange",
+        "releaseCurve": "EnvelopeCurve"
+      }
+    }
+  },
+  "devices": {
+    "MonoSynth": {
+      "type": "Instrument",
+      "parameters": {
+        "detune": "unitTypes/Cents",
+        "portamento": "unitTypes/Time",
+        "volume": "unitTypes/Decibels",
+        "envelope": "modules/AmplitudeEnvelope"
+      }
+    }
+  }
+}
