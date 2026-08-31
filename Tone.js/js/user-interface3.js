@@ -1,5 +1,6 @@
 //let pianoRoll = null;
 let presetBrowser = new PresetBrowser();
+let deviceBrowser = new DeviceBrowser();
 var presets;
 var session = null;
 let selectedTrackId = null;
@@ -30,6 +31,7 @@ document.addEventListener("mousemove", async () => {
 
 async function createBasicUI() {
   await presetBrowser.loadPresets();
+  await deviceBrowser.loadDevices();
 
   //initializeViewToggles();
   //initializeTransport();

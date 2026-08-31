@@ -86,6 +86,8 @@ class Track {
     }
   }
 
+  get projectFileTrack() { return this._projectFileTrack; }
+  
   get id() { return this._projectFileTrack.id; }
   set id(value) { this._projectFileTrack.id = value; }
 

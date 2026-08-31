@@ -3,13 +3,16 @@ function showTrackDevices() {
   let devicesPanelHeader = document.querySelector("#devices-panel .panel-header");
   let devicesPanelContent = document.querySelector("#devices-panel .panel-content");
   devicesPanelContent.style.display = selectedTrackId ? "flex" : "none";
-  let track = tracks.find(track => track.name == trackId);
+  let track = session.project.tracks.find(track => track.name == trackId);
   devicesPanelContent.innerHTML = "";
   
   if (track && track.devices && track.devices.length > 0){
     
     let deviceIndex = 1;
+    //console.log("Track", track.projectFileTrack);
     track.devices.forEach(device => {
+      console.log("device", device);
+      
       let deviceId = `${trackId}-Device${deviceIndex}`;
       
       let deviceElement = document.createElement("div");
@@ -25,9 +28,10 @@ function showTrackDevices() {
       let addDeviceButton = document.createElement("button");
       addDeviceButton.className = "add-device";
       addDeviceButton.innerText = "Add";
+      addDeviceButton.onclick = () => deviceBrowser.show(addDeviceButton, addDeviceCallback);
       deviceHeaderElement.appendChild(addDeviceButton);
       
-      addDeviceButton.onclick = () => addDevice(trackId, 0);
+     // addDeviceButton.onclick = () => addDevice(trackId, 0);
       
       let deviceContentElement = document.createElement("div");
       deviceContentElement.className = "panel-content";
@@ -36,8 +40,10 @@ function showTrackDevices() {
       let tabstripElement = document.createElement("div");
       tabstripElement.className = "tab";
       deviceContentElement.appendChild(tabstripElement);
+      console.log(device, device.parameterGroups);
+      let parameterGroups = track.projectFileTrack.devices[device.name].parameterGroups ? device.parameterGroups : { "general": track.projectFileTrack.devices[device.name].parameters };
       
-      if (device.parameterGroups) {
+      if (parameterGroups) {
         Object.keys(device.parameterGroups).forEach(parameterGroupName => {
           let tabButton = document.createElement("button");
           tabButton.className = "tablinks";
@@ -71,13 +77,18 @@ function showTrackDevices() {
     
   }
   else {
+    
     let addDeviceButton = document.createElement("button");
     addDeviceButton.className = "add-device image-button control";
     addDeviceButton.innerHTML = '<img src="img/plus-black.png">';
     devicesPanelContent.appendChild(addDeviceButton);
-    addDeviceButton.onclick = () => addDevice(trackId, 0);
+    addDeviceButton.onclick = () => deviceBrowser.show(addDeviceButton, addDeviceCallback);
   }
   
   sizeTracksTableContainer();
+  
+  function addDeviceCallback(deviceName, device) {
+    console.log("add device " + deviceName, device);
+  }
 }
 
