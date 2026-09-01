@@ -11,67 +11,7 @@ function showTrackDevices() {
     let deviceIndex = 1;
     //console.log("Track", track.projectFileTrack);
     track.devices.forEach(device => {
-      console.log("device", device);
-      
-      let deviceId = `${trackId}-Device${deviceIndex}`;
-      
-      let deviceElement = document.createElement("div");
-      deviceElement.className = "device";
-      deviceElement.id = deviceId;
-      devicesPanelContent.appendChild(deviceElement);
-      
-      let deviceHeaderElement = document.createElement("div");
-      deviceHeaderElement.className = "panel-header";
-      deviceHeaderElement.innerHTML = `<button class="control toggle-button enabled-button active"></button>${device.name}`;
-      deviceElement.appendChild(deviceHeaderElement);
-      
-      let addDeviceButton = document.createElement("button");
-      addDeviceButton.className = "add-device";
-      addDeviceButton.innerText = "Add";
-      addDeviceButton.onclick = () => deviceBrowser.show(addDeviceButton, addDeviceCallback);
-      deviceHeaderElement.appendChild(addDeviceButton);
-      
-     // addDeviceButton.onclick = () => addDevice(trackId, 0);
-      
-      let deviceContentElement = document.createElement("div");
-      deviceContentElement.className = "panel-content";
-      deviceElement.appendChild(deviceContentElement);
-      
-      let tabstripElement = document.createElement("div");
-      tabstripElement.className = "tab";
-      deviceContentElement.appendChild(tabstripElement);
-      console.log(device, device.parameterGroups);
-      let parameterGroups = track.projectFileTrack.devices[device.name].parameterGroups ? device.parameterGroups : { "general": track.projectFileTrack.devices[device.name].parameters };
-      
-      if (parameterGroups) {
-        Object.keys(device.parameterGroups).forEach(parameterGroupName => {
-          let tabButton = document.createElement("button");
-          tabButton.className = "tablinks";
-          tabButton.onclick = (e) => openTab(e.currentTarget, deviceElement);
-          tabButton.innerText = parameterGroupName;
-          tabButton.dataset.deviceId = deviceId;
-          tabstripElement.appendChild(tabButton);
-        });
-        
-        Object.keys(device.parameterGroups).forEach(parameterGroupName => {
-          let tabContent = document.createElement("div");
-          tabContent.className = "tabcontent";
-          tabContent.id = parameterGroupName;
-          deviceContentElement.appendChild(tabContent);
-          
-          Object.keys(device.parameterGroups[parameterGroupName]).forEach(parameterName => {
-            let parameterLabelElement = document.createElement("label");
-            parameterLabelElement.className = "number-label";
-      
-            parameterLabelElement.innerHTML =
-             `${parameterName}<number-input class="control-without-bg" fill="#00b7b7" background="white" min="0" max="127" value="${device.parameterGroups[parameterGroupName][parameterName]}">`;
-            tabContent.appendChild(parameterLabelElement);
-          })
-        });
-        openTab(tabstripElement.childNodes[0], deviceElement, tabstripElement.childNodes[0].innerText);
-      }
-      initializeNumberInputs(deviceElement);
-      initializeToggleButtons(deviceElement);
+      createDeviceEditor(device);
       deviceIndex++;
     });
     
@@ -87,8 +27,107 @@ function showTrackDevices() {
   
   sizeTracksTableContainer();
   
-  function addDeviceCallback(deviceName, device) {
-    console.log("add device " + deviceName, device);
+  function addDeviceCallback(deviceDefinition) {
+    console.log("add device " + deviceDefinition.name, deviceDefinition);
+  }
+  
+  function createDeviceEditor(device) {
+    console.log("device", device);
+    let deviceDefinition = deviceBrowser.getDeviceDefinition(device.name);
+    let deviceId = `${trackId}-Device${deviceIndex}`;
+      
+    let deviceEditorElement = document.createElement("div");
+    deviceEditorElement.className = "device";
+    deviceEditorElement.id = deviceId;
+    devicesPanelContent.appendChild(deviceEditorElement);
+      
+    let deviceHeaderElement = document.createElement("div");
+    deviceHeaderElement.className = "panel-header";
+    deviceHeaderElement.innerHTML = `<button class="control toggle-button enabled-button active"></button>${device.name}`;
+    deviceEditorElement.appendChild(deviceHeaderElement);
+      
+    let insertDeviceButton = document.createElement("button");
+    insertDeviceButton.className = "add-device";
+    insertDeviceButton.innerText = "Add";
+    insertDeviceButton.onclick = () => deviceBrowser.show(insertDeviceButton, addDeviceCallback);
+    deviceHeaderElement.appendChild(insertDeviceButton);
+      
+    let deviceContentElement = document.createElement("div");
+    deviceContentElement.className = "panel-content";
+    deviceEditorElement.appendChild(deviceContentElement);
+      
+    let tabstripElement = document.createElement("div");
+    tabstripElement.className = "tab";
+    deviceContentElement.appendChild(tabstripElement);
+    
+    /*
+    let parameterGroups = {
+      "General": []
+    };
+    
+    Object.keys(deviceDefinition.parameters).forEach(paramKey => {
+      let paramNamespace = deviceDefinition[paramKey];
+      let paramNamespaceParts = paramNamespace.split("/");
+      let paramPath = paramNamespaceParts[0];
+      let paramName = paramNamespaceParts[1];
+      
+      let groupName = (paramPath === "unitTypes") ? "General" : paramKey;
+      if (!parameterGroups[groupName]) {
+        parameterGroups[groupName] = [];
+      }
+      parameterGroups[groupName].push(paramNamespace);
+      }
+      else {
+        parameterGroups[paramKey].push(paramName);
+      }
+    });
+    var generalParameters = Object.keys(deviceDefinition.parameters)
+      .reduce(function (filtered, key) {
+        if (deviceDefinition.parameters[key].) filtered[key] = deviceDefinition.parameters[key];
+          return filtered;
+      }, {});
+    
+    let generalParameters = deviceDefinition.parameters.filter(parameter => parameter.value.starts)
+    console.log(device, device.parameterGroups);
+    let parameterGroups = track.projectFileTrack.devices[device.name].parameterGroups ? device.parameterGroups : { "general": track.projectFileTrack.devices[device.name].parameters };
+      
+    if (parameterGroups) {
+      createParameterGroupTabButtons(device);
+      Object.keys(device.parameterGroups).forEach(parameterGroupName => {
+        createParameterGroupTabContent(device, parameterGroupName);
+      });
+      openTab(tabstripElement.childNodes[0], deviceEditorElement, tabstripElement.childNodes[0].innerText);
+    }
+    */
+    initializeNumberInputs(deviceEditorElement);
+    initializeToggleButtons(deviceEditorElement);
+    
+    function createParameterGroupTabButtons(device) {
+      Object.keys(device.parameterGroups).forEach(parameterGroupName => {
+        let tabButton = document.createElement("button");
+        tabButton.className = "tablinks";
+        tabButton.onclick = (e) => openTab(e.currentTarget, deviceEditorElement);
+        tabButton.innerText = parameterGroupName;
+        tabButton.dataset.deviceId = deviceId;
+        tabstripElement.appendChild(tabButton);
+      });
+    }
+    
+    function createParameterGroupTabContent(device, parameterGroupName) {
+      let tabContent = document.createElement("div");
+      tabContent.className = "tabcontent";
+      tabContent.id = parameterGroupName;
+      deviceContentElement.appendChild(tabContent);
+        
+      Object.keys(device.parameterGroups[parameterGroupName]).forEach(parameterName => {
+        let parameterLabelElement = document.createElement("label");
+        parameterLabelElement.className = "number-label";
+      
+        parameterLabelElement.innerHTML =
+         `${parameterName}<number-input class="control-without-bg" fill="#00b7b7" background="white" min="0" max="127" value="${device.parameterGroups[parameterGroupName][parameterName]}">`;
+        tabContent.appendChild(parameterLabelElement);
+      })
+    }
   }
 }
 

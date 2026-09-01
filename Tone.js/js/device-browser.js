@@ -62,8 +62,8 @@ class DeviceBrowser {
     if (deviceName) {
       console.log(`${deviceName} selected`);
     
-      let device = this._deviceBank.devices[deviceName];
-      callback(deviceName, device);
+      let deviceDefinition = this.getDeviceDefinition(deviceName);
+      callback(deviceDefinition);
       
       console.log(`${deviceName} loaded`);
     }
@@ -72,7 +72,42 @@ class DeviceBrowser {
     
   }
 
-  getDevice(deviceName) {
-    return this._deviceBank.devices[deviceName];
+  getDeviceDefinition(deviceName) {
+    let deviceDefinition = {
+      name: deviceName,
+      parameterGroups: {}
+    };
+    let module = this._deviceBank.devices[deviceName];
+    
+    let moduleGroupName = "General";
+    getModuleParameters(this._deviceBank, module, moduleGroupName);
+    //console.log(deviceDefinition);
+    return deviceDefinition;
+    
+    function getModuleParameters(deviceBank, module, moduleGroupName) {
+      Object.keys(module.parameters).forEach(paramKey => {
+        let paramNamespace = module.parameters[paramKey];
+        let paramNamespaceParts = paramNamespace.split("/");
+        let paramGroup = paramNamespaceParts[0];
+        let paramName = paramNamespaceParts[1];
+        
+        let groupName = (paramGroup === "unitTypes" || paramGroup === "enumTypes") ? moduleGroupName : paramKey;
+        
+        if (!deviceDefinition.parameterGroups[groupName]) {
+          deviceDefinition.parameterGroups[groupName] = {};
+        }
+        if (paramGroup === "unitTypes" || paramGroup === "enumTypes") {
+          let paramDefinition = deviceBank[paramGroup][paramName];
+          deviceDefinition.parameterGroups[groupName][paramKey] = paramDefinition;
+        } 
+        else if (paramGroup === "modules") {
+          let subModule = deviceBank[paramGroup][paramName];
+          getModuleParameters(deviceBank, subModule, paramKey);
+        }
+        else {
+          throw "Not supported";
+        }
+      });
+    }
   }
 }
