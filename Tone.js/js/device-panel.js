@@ -135,7 +135,7 @@ function showTrackDevices() {
         parameterLabelElement.className = "number-label";
       
         parameterLabelElement.innerHTML =
-         `${parameterName}<number-input class="control-without-bg" fill="#00b7b7" background="white" min="${parameterGroup[parameterName].min}" max="${parameterGroup[parameterName].max}" value="${device[parameterName]}">`;
+         `${parameterName}<number-input class="control-without-bg" fill="#00b7b7" background="white" step="${parameterGroup[parameterName].step}" min="${parameterGroup[parameterName].min}" max="${parameterGroup[parameterName].max}" value="${device[parameterName]}">`;
         tabContent.appendChild(parameterLabelElement);
       });
     }
