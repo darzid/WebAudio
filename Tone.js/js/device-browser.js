@@ -79,7 +79,7 @@ class DeviceBrowser {
     };
     let module = this._deviceBank.devices[deviceName];
     
-    let moduleGroupName = "General";
+    let moduleGroupName = "general";
     getModuleParameters(this._deviceBank, module, moduleGroupName);
     //console.log(deviceDefinition);
     return deviceDefinition;

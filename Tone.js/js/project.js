@@ -173,6 +173,7 @@ class Track {
     else {
       throw "Invalid device type " + deviceType;
     }
+    return deviceInstance;
   }
 
   start(time) {
