@@ -61,7 +61,6 @@
     font-weight: normal;
     font-size: 100%;
     background: var(--control-bg);
-    min-width: var(--timeline-column-width);
     max-width: var(--timeline-column-width);
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -99,7 +98,7 @@
     border: 0px solid var(--clip-column-bg);
     
     background-color: var(--clip-column-bg);
-    font-size: 80%;
+    font-size: xx-small;
     .Clip, .RepeatingClip {
       width: stretch;
       height: stretch;
@@ -175,7 +174,7 @@
     
     input[name='track-name'] {
       width: 70px;
-      font-size: small;
+      font-size: xx-small;
       vertical-align: middle;
       overflow: hidden;
       padding-top: 4px;

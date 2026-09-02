@@ -93,8 +93,7 @@ class DeviceBrowser {
         let paramGroup = paramNamespaceParts[0];
         let paramName = paramNamespaceParts[1];
         
-        let isSubDevice = moduleGroupName != "general";
-        let groupName = (paramGroup === "unitTypes" || paramGroup === "enumTypes" || isSubDevice) ? moduleGroupName : paramKey;
+        let groupName = getGroupName(paramGroup, moduleGroupName, paramKey);
         
         let parameterGroupDefinition = deviceDefinition.parameterGroups.find(group => group.name == groupName);
         if (! parameterGroupDefinition) {
@@ -110,17 +109,9 @@ class DeviceBrowser {
         let paramName = paramNamespaceParts[1];
         
         let isSubDevice = moduleGroupName != "general";
-        let groupName = (paramGroup === "unitTypes" || paramGroup === "enumTypes" || isSubDevice) ? moduleGroupName : paramKey;
+        let groupName = getGroupName(paramGroup, moduleGroupName, paramKey);
         
         let parameterGroupDefinition = deviceDefinition.parameterGroups.find(group => group.name == groupName);
-      /*  if (! parameterGroupDefinition) {
-          parameterGroupDefinition = {name: groupName, parameters: {}};
-          deviceDefinition.parameterGroups.push(parameterGroupDefinition);
-          console.log("added param group " + groupName)
-        }*/
-      /*  if (!deviceDefinition.parameterGroups[groupName]) {
-          deviceDefinition.parameterGroups[groupName] = {};
-        }*/
         if (paramGroup === "unitTypes" || paramGroup === "enumTypes") {
           let paramDefinition = deviceBank[paramGroup][paramName];
           parameterGroupDefinition.parameters[paramKey] = paramDefinition;
@@ -144,6 +135,12 @@ class DeviceBrowser {
           throw "Not supported";
         }
       });
+      
+      function getGroupName(paramGroup, moduleGroupName, paramKey) {
+        let groupName = (paramGroup === "unitTypes" || paramGroup === "enumTypes") ? moduleGroupName : paramKey;
+        return groupName;
+      }
     }
   }
 }
+
