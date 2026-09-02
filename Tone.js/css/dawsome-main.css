@@ -133,29 +133,54 @@ label.range-label {
   margin: 4px;
 }
 
-label.number-label {
+label.number-label,
+label.select-label {
   display: flex;
   flex-direction: column;
   
   width: min-content;
   
   margin: 4px;
+  padding: 0px;
   
   text-align: center;
   align-items: center;
   
   font-size: xx-small;
-  
-  input[type="number"] {
+}
+
+label.number-label input[type="number"] {
     justify-content: center;
     font-size: xx-small;
+    padding-top: 1px;
     background-color: var(--number-bg);
     background-image: linear-gradient(to right, 
       var(--number-value-bg) 0%, 
       var(--number-value-bg) 0%, 
       var(--number-bg) 0%, 
       var(--number-bg) 100%);
+}
+
+label.select-label select {
+  justify-content: center;
+  font-size: xx-small;
+  background-color: var(--number-bg);
+  padding: 0pt;
+  margin: 0pt;
+  border: 0px solid black;
+  border-radius: 1px;
+  
+  option {
+    font-size: xx-small;
+  padding: 0pt;
+  margin: 0pt;
   }
+  
+  ::picker(select) {
+  border: none;
+  padding: 0px;
+  margin: 0pt;
+}
 }
 
 .enabled-button {

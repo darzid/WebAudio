@@ -75,34 +75,70 @@ class DeviceBrowser {
   getDeviceDefinition(deviceName) {
     let deviceDefinition = {
       name: deviceName,
-      parameterGroups: {}
+      parameterGroups: []
     };
     let module = this._deviceBank.devices[deviceName];
     
     let moduleGroupName = "general";
     getModuleParameters(this._deviceBank, module, moduleGroupName);
-    //console.log(deviceDefinition);
+    
+    if (deviceName === "DuoSynth")
+      console.log("DuoSynth", deviceDefinition);
     return deviceDefinition;
     
     function getModuleParameters(deviceBank, module, moduleGroupName) {
-      Object.keys(module.parameters).forEach(paramKey => {
-        let paramNamespace = module.parameters[paramKey];
+      console.log(`${deviceName} params`, Object.entries(module.parameters));
+      Object.entries(module.parameters).forEach(([paramKey, paramNamespace]) => {
         let paramNamespaceParts = paramNamespace.split("/");
         let paramGroup = paramNamespaceParts[0];
         let paramName = paramNamespaceParts[1];
         
-        let groupName = (paramGroup === "unitTypes" || paramGroup === "enumTypes") ? moduleGroupName : paramKey;
+        let isSubDevice = moduleGroupName != "general";
+        let groupName = (paramGroup === "unitTypes" || paramGroup === "enumTypes" || isSubDevice) ? moduleGroupName : paramKey;
         
-        if (!deviceDefinition.parameterGroups[groupName]) {
-          deviceDefinition.parameterGroups[groupName] = {};
+        let parameterGroupDefinition = deviceDefinition.parameterGroups.find(group => group.name == groupName);
+        if (! parameterGroupDefinition) {
+          parameterGroupDefinition = {name: groupName, parameters: {}};
+          deviceDefinition.parameterGroups.push(parameterGroupDefinition);
+          console.log("added param group " + groupName)
         }
+      });
+        
+      Object.entries(module.parameters).forEach(([paramKey, paramNamespace]) => {
+        let paramNamespaceParts = paramNamespace.split("/");
+        let paramGroup = paramNamespaceParts[0];
+        let paramName = paramNamespaceParts[1];
+        
+        let isSubDevice = moduleGroupName != "general";
+        let groupName = (paramGroup === "unitTypes" || paramGroup === "enumTypes" || isSubDevice) ? moduleGroupName : paramKey;
+        
+        let parameterGroupDefinition = deviceDefinition.parameterGroups.find(group => group.name == groupName);
+      /*  if (! parameterGroupDefinition) {
+          parameterGroupDefinition = {name: groupName, parameters: {}};
+          deviceDefinition.parameterGroups.push(parameterGroupDefinition);
+          console.log("added param group " + groupName)
+        }*/
+      /*  if (!deviceDefinition.parameterGroups[groupName]) {
+          deviceDefinition.parameterGroups[groupName] = {};
+        }*/
         if (paramGroup === "unitTypes" || paramGroup === "enumTypes") {
           let paramDefinition = deviceBank[paramGroup][paramName];
-          deviceDefinition.parameterGroups[groupName][paramKey] = paramDefinition;
+          parameterGroupDefinition.parameters[paramKey] = paramDefinition;
         } 
         else if (paramGroup === "modules") {
           let subModule = deviceBank[paramGroup][paramName];
+          if (paramName.startsWith("Filter")) {
+            console.log("Filter submodule", subModule);
+          }
+          if (isSubDevice) {
+            console.log(`Submodule ${paramName} of subdevice ${moduleGroupName}`, subModule)
+          }
           getModuleParameters(deviceBank, subModule, paramKey);
+        }
+        else if (paramGroup === "devices") {
+          let subDevice = deviceBank[paramGroup][paramName];
+          console.log("sub device " + paramName, paramKey, subDevice)
+          getModuleParameters(deviceBank, subDevice, paramKey);
         }
         else {
           throw "Not supported";

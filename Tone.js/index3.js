@@ -22,7 +22,7 @@ function initialize() {
   
 //  fillTracksTable(tracksTable, tracks);
   
-  initializeNumberInputs(document);
+  //initializeNumberInputs(document);
   initializeToggleButtons(document);
   initializeTableZoom(tracksTable, document.getElementById("zoom"));
   

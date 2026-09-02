@@ -64,80 +64,60 @@ function showTrackDevices() {
     
     let deviceDefinition = deviceBrowser.getDeviceDefinition(device.name);
     createParameterGroupTabButtons(deviceDefinition.parameterGroups);
-    Object.keys(deviceDefinition.parameterGroups).forEach(paramgroupName=> {
-      console.log("device tab", paramgroupName);
-      createParameterGroupTabContent(device, paramgroupName, deviceDefinition.parameterGroups[paramgroupName]);
+    deviceDefinition.parameterGroups.forEach(parameterGroup => {
+      //console.log("device tab " + paramgroupName, deviceDefinition.parameterGroups);
+      createParameterGroupTabContent(device, parameterGroup);
     });
-    /*
-    let parameterGroups = {
-      "General": []
-    };
-    
-    Object.keys(deviceDefinition.parameters).forEach(paramKey => {
-      let paramNamespace = deviceDefinition[paramKey];
-      let paramNamespaceParts = paramNamespace.split("/");
-      let paramPath = paramNamespaceParts[0];
-      let paramName = paramNamespaceParts[1];
-      
-      let groupName = (paramPath === "unitTypes") ? "General" : paramKey;
-      if (!parameterGroups[groupName]) {
-        parameterGroups[groupName] = [];
-      }
-      parameterGroups[groupName].push(paramNamespace);
-      }
-      else {
-        parameterGroups[paramKey].push(paramName);
-      }
-    });
-    var generalParameters = Object.keys(deviceDefinition.parameters)
-      .reduce(function (filtered, key) {
-        if (deviceDefinition.parameters[key].) filtered[key] = deviceDefinition.parameters[key];
-          return filtered;
-      }, {});
-    
-    let generalParameters = deviceDefinition.parameters.filter(parameter => parameter.value.starts)
-    console.log(device, device.parameterGroups);
-    let parameterGroups = track.projectFileTrack.devices[device.name].parameterGroups ? device.parameterGroups : { "general": track.projectFileTrack.devices[device.name].parameters };
-      
-    if (parameterGroups) {
-      createParameterGroupTabButtons(device);
-      Object.keys(device.parameterGroups).forEach(parameterGroupName => {
-        createParameterGroupTabContent(device, parameterGroupName);
-      });
-      openTab(tabstripElement.childNodes[0], deviceEditorElement, tabstripElement.childNodes[0].innerText);
-    }
-    */
-    /*initializeNumberInputs(deviceEditorElement);
-    initializeToggleButtons(deviceEditorElement);
-    */
-    
+    openTab(tabstripElement.childNodes[0], deviceEditorElement);
+
     function createParameterGroupTabButtons(parameterGroups) {
-      Object.keys(parameterGroups).forEach(parameterGroupName => {
+      parameterGroups.forEach(parameterGroup => {
         let tabButton = document.createElement("button");
         tabButton.className = "tablinks";
         tabButton.onclick = (e) => openTab(e.currentTarget, deviceEditorElement);
-        tabButton.innerText = parameterGroupName;
+        tabButton.innerText = parameterGroup.name;
         tabButton.dataset.deviceId = deviceId;
         tabstripElement.appendChild(tabButton);
       });
     }
-    
   
-    function createParameterGroupTabContent(device, parameterGroupName, parameterGroup) {
-      console.log("device", device)
+    function createParameterGroupTabContent(device, parameterGroup) {
+      //console.log("createParameterGroupTabContent " + parameterGroupName, device, parameterGroup)
       let tabContent = document.createElement("div");
       tabContent.className = "tabcontent";
-      tabContent.id = parameterGroupName;
+      tabContent.id = parameterGroup.name;
       deviceContentElement.appendChild(tabContent);
-        
-      Object.keys(parameterGroup).forEach(parameterName => {
-        let parameterLabelElement = document.createElement("label");
-        parameterLabelElement.className = "number-label";
       
-        parameterLabelElement.innerHTML =
-         `${parameterName}<number-input class="control-without-bg" fill="#00b7b7" background="white" step="${parameterGroup[parameterName].step}" min="${parameterGroup[parameterName].min}" max="${parameterGroup[parameterName].max}" value="${device[parameterName]}">`;
+      if (parameterGroup.name === "filter") {
+          console.log("creating filter tab", parameterGroup.parameters);
+        }
+      Object.keys(parameterGroup.parameters).forEach(parameterName => {
+        if (parameterGroup.name === "filter") {
+          console.log("creating filter param", parameterName);
+        }
+      
+        let parameterLabelElement = document.createElement("label");
+        
+        let parameter = parameterGroup.parameters[parameterName];
+        if (!parameter.values) {
+          let paramValue = device[parameterName] ? device[parameterName].name ? device[parameterName].value : device[parameterName] : "0";
+          //console.log(`${device.name}.${parameterName} = `, paramValue)
+          parameterLabelElement.className = "number-label";
+          parameterLabelElement.innerHTML =
+           `${parameterName}<number-input id="${parameterGroup.name}-${parameterName}" class="control-without-bg" fill="#00b7b7" background="white" step="${parameter.step}" min="${parameter.min}" max="${parameter.max}" value="${paramValue}">`;
+        } else {
+          let optionsHtml = "";
+          parameter.values.forEach(value => optionsHtml += "<option>" + value + "</option>");
+          parameterLabelElement.innerHTML =
+           `${parameterName}<select value="${device[parameterName]}">${optionsHtml}</select>`;
+          parameterLabelElement.className = "select-label";
+          
+        }
         tabContent.appendChild(parameterLabelElement);
       });
+      if (parameterGroup.name.startsWith("filter")) {
+          console.log(parameterGroup.name + " tab", tabContent);
+        }
     }
     
   }

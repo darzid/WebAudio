@@ -1,14 +1,14 @@
 {
   "unitTypes": {
     "NormalRange": { "min": 0, "max": 1, "step": 0.01 },
-    "Positive": { "min": 0, "max": "Infinity", "step": 0.01 },
+    "Positive": { "min": 0, "max": "16777215", "step": 0.01 },
     "AudioRange": { "min": -1, "max": 1, "step": 0.01 },
     "Decibels": { "min": -40, "max": 0, "step": 0.01 },
     "Cents": { "min": -1200, "max": 1200, "step": 0.01 },
     "Frequency": { "min": 0, "max": 22500, "step": 0.01 },
-    "Time": { "min": 0, "max": "Infinity", "step": 0.01 },
-    "TransportTime": { "min": 0, "max": "Infinity", "step": 0.01 },
-    "Ticks": { "min": 0, "max": "Infinity", "step": 0.01 },
+    "Time": { "min": 0, "max": "16777215", "step": 0.01 },
+    "TransportTime": { "min": 0, "max": "16777215", "step": 0.01 },
+    "Ticks": { "min": 0, "max": "16777215", "step": 0.01 },
     "Degrees": { "min": 0, "max": 360, "step": 0.01 },
     "Radians": { "min": 0, "max": 6.28318530717959, "step": 0.01 },
     "Gain": { "min": 0, "max": 1, "step": 0.01 },
@@ -104,7 +104,7 @@
       }
     },
 
-    "FilterComponent": {
+    "Filter": {
       "parameters": {
         "Q": "unitTypes/Q",
         "detune": "unitTypes/Cents",
@@ -204,7 +204,7 @@
         "portamento": "unitTypes/Time",
         "volume": "unitTypes/Decibels",
         "envelope": "modules/AmplitudeEnvelope",
-        "filter": "modules/FilterComponent",
+        "filter": "modules/Filter",
         "filterEnvelope": "modules/FrequencyEnvelope",
         "oscillator": "modules/OmniOscillator"
       }
@@ -257,7 +257,7 @@
         "depth": "unitTypes/NormalRange",
         "baseFrequency": "unitTypes/Frequency",
         "octaves": "unitTypes/NormalRange",
-        "filter": "modules/FilterComponent"
+        "filter": "modules/Filter"
       }
     },
 

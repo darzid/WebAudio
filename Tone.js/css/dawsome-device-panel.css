@@ -11,6 +11,7 @@
     display: flex;
     flex-direction: column;
     margin: 3px;
+    width: max-content;
       
     border-radius: 4px 4px 0px 0px;
     border: 1px solid var(--panel-border-color-dark);
@@ -19,13 +20,14 @@
     background: var(--device-bg);
     
     .panel-header {
-      width: 100%;
+      width: stretch;
       font-size: x-small;
       padding-top: 2px;
       border-bottom: 0px solid var(--panel-border-color-dark);
       background: rgb(160,170,170);
       border-bottom: 1px solid var(--panel-header-border-color);
       border-radius: 4px 4px 0px 0px;
+      
       .add-device {
         
         margin: 0px;
@@ -51,18 +53,24 @@
       
     .panel-content {
       display: flex;
-      flex-flow: column wrap;
+      flex-flow: column nowrap;
       height: 74%;
-      width: 100%;
+      width: max-content;
         
       overflow: auto;
       
+      .tablinks {
+        display: flex;
+        flex-flow: row nowrap;
+        width: max-content;
+      }
       /* Style the tab */
       .tab {
         overflow: hidden;
         border-bottom: 1px solid #ccc;
         background-color: #909090;
         margin-left: -4px;
+        
       }
       
       /* Style the buttons that are used to open the tab content */
@@ -97,6 +105,7 @@
         padding: 0px 0px;
         border: 1px solid #808080;
         border-top: none;
+        overflow-x: auto;
       }
 
     }
