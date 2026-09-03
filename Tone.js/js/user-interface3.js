@@ -26,7 +26,7 @@ document.addEventListener("mousemove", async () => {
   toneInitialized = true;
 
   await Tone.start();
-  
+  console.log("tone initialized")
 });
 
 async function createBasicUI() {
@@ -34,7 +34,7 @@ async function createBasicUI() {
   await deviceBrowser.loadDevices();
 
   //initializeViewToggles();
-  //initializeTransport();
+  initializeTransport();
  // initializeComputerKeyboard();
 
  /* document.getElementById("daw").style.opacity = 1;

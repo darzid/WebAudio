@@ -106,7 +106,7 @@ function fillTracksTable(tracksTable, tracks)
     
     function renderClips() {
       track.clips.forEach(clip => {
-        console.log("renderClip", clip)
+        //console.log("renderClip", clip)
         let clipStart = Tone.Time(clip.startTime);
         let clipDuration = Tone.Time(clip.length);
         let clipEnd = clip.endTime ? Tone.Time(clip.endTime) : Tone.Time(clipStart + clipDuration);

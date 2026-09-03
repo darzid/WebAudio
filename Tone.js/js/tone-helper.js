@@ -11,7 +11,7 @@ function toOneBased(time) {
 function getSixteenths(time) {
   if (typeof time === "string")
     time = Tone.Time(time);
-  console.log("getSixteenths", time)
+ // console.log("getSixteenths", time)
   let parts = time.toBarsBeatsSixteenths().split(":");
   let bars = parseInt(parts[0]);
   let beats = (bars * 4) + parseInt(parts[1]);

@@ -73,7 +73,7 @@ class Track {
       this._projectFileTrack = projectFileTrack;
       this._channel = new Tone.Channel({ volume: projectFileTrack.volume, pan: projectFileTrack.pan, channelCount: 2 });
       this._channel.send("master", 0);
-      //this._channel.toDestination()
+      this._channel.toDestination()
       this._projectFileTrack.devices.forEach(projectFileDevice =>
         this.addDevice(projectFileDevice[Object.keys(projectFileDevice)[0]].type, Object.keys(projectFileDevice)[0], projectFileDevice[Object.keys(projectFileDevice)[0]].parameters));
       this._generateClipLoops();
@@ -107,7 +107,6 @@ class Track {
             { track: this.id, volume: value }
         }));
   }
-
   get pan() { return this._channel.pan; }
   set pan(value) {
     if (value == this._channel.pan.value)
@@ -163,6 +162,7 @@ class Track {
   get automations() { return this._projectFileTrack.automations; }
 
   addDevice(deviceType, deviceName, deviceParams) {
+    console.log("add device " + deviceName)
     let deviceInstance = new Tone[deviceName](deviceParams);
     this._devices.push(deviceInstance);
     if (deviceType == "Instrument") {
@@ -265,7 +265,7 @@ class Track {
         part.stop(loopEndTime);
 
       this._parts.push(part);
-
+      console.log("add clip")
       clipIndex++;
     });
   }

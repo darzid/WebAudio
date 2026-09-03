@@ -1,7 +1,7 @@
 function initializeTransport() {
+  
 
-
-  let position = document.getElementById("position");
+  let position = document.getElementById("position-display");
   let recButton = document.getElementById("rec-button");
   let playButton = document.getElementById("play-button");
   let stopButton = document.getElementById("stop-button");
@@ -10,6 +10,7 @@ function initializeTransport() {
   let positionTimer = null;
   let transport = Tone.getTransport();
   transport.on("stop", (time) => stop(time));
+
   recButton.addEventListener("click", () => {
     recorder = new Tone.Recorder();
     session.project.masterChannel.connect(recorder);
@@ -21,21 +22,26 @@ function initializeTransport() {
   });
 
   playButton.addEventListener("click", () => {
+    
+    if (playButton.classList.contains("active")) return;
+    playButton.classList.add("active");
     start();
   });
 
   function start() {
+    console.log("start")
     recButton.disabled = true;
     playButton.disabled = true;
     stopButton.disabled = false;
 
     session.project.start("+1");
-    
-    /*var positionUpdateLoop = new Tone.Loop(function(time){
+    /*
+    var positionUpdateLoop = new Tone.Loop(function(time){
     	//instead of scheduling visuals inside of here
     	//schedule a deferred callback with Tone.Draw
     
     	Tone.Draw.schedule(function(){
+    	  
     		//this callback is invoked from a requestAnimationFrame
     		//and will be invoked close to AudioContext time
         let lastIndex = transport.position.indexOf(".");
@@ -43,7 +49,8 @@ function initializeTransport() {
     	}, time) //use AudioContext time of the event
     }, "16n");
     
-    positionUpdateLoop.start(0);*/
+    positionUpdateLoop.start(0);
+    */
     
     let positionTimer = transport.scheduleRepeat((time) => {
       window.requestAnimationFrame(() => {
@@ -54,17 +61,24 @@ function initializeTransport() {
         let beats = parseInt(shortPosParts[1]) + 1;
         let sixts = parseInt(shortPosParts[2]) + 1;
         
-        position.innerText = `${bars}:${beats}:${sixts}`;
+        position.value = `${bars}:${beats}:${sixts}`;
+       // console.log("update position", position.innerText)
         
       });
       
     }, "8n", "0");
     
     transport.start("+1");
+    console.log("transport started")
     transport.stop(Tone.Time(Tone.Time("+1") + Tone.Time(session.project.length)));
   }
 
   stopButton.addEventListener("click", async () => {
+    if (!playButton.classList.contains("active")) return;
+    playButton.classList.remove("active");
+    if (recButton.classList.contains("active")) {
+      recButton.classList.remove("active");
+    }
     transport.stop();
   });
   

@@ -1,5 +1,5 @@
 function initialize() {
-  let playButton = document.getElementById("play");
+/*  let playButton = document.getElementById("play");
   let stopButton = document.getElementById("stop");
   let recButton = document.getElementById("rec");
   
@@ -15,7 +15,7 @@ function initialize() {
       recButton.classList.remove("active");
     }
   }
-  
+  */
   let tracksTable = document.getElementById("tracks-table");
   let devicesPanel = document.getElementById("track-devices-panel");
   let clipEditPanel = document.getElementById("clip-editor-panel");
