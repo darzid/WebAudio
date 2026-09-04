@@ -1,6 +1,7 @@
 function clickTab(tabButton) {
   // Declare all variables
   var tabControl;
+  console.log("clicktab", tabButton);
   tabControl = tabButton.closest(".tab-control");
   
   // Get all elements with class="tabcontent" and hide them

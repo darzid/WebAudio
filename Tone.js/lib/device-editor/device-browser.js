@@ -25,7 +25,7 @@ class DeviceBrowser {
         this._deviceSelect.style.width = "200px";
         this._deviceSelect.style.display = "none";
         containerElement.appendChild(this._deviceSelect)
-       // document.getElementById("app-content").appendChild(this._deviceSelect);
+        document.getElementById("app-content").appendChild(this._deviceSelect);
         let option = document.createElement("option");
         option.innerText = "";
         this._deviceSelect.appendChild(option);

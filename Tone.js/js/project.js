@@ -265,7 +265,7 @@ class Track {
         part.stop(loopEndTime);
 
       this._parts.push(part);
-      console.log("add clip")
+      console.log("add clip", part)
       clipIndex++;
     });
   }

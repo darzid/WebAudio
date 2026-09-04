@@ -31,7 +31,7 @@ document.addEventListener("mousemove", async () => {
 
 async function createBasicUI() {
   await presetBrowser.loadPresets();
-  await deviceBrowser.loadDevices();
+  await deviceBrowser.loadDevices(document.getElementById("app-content"), '.\\data\\devices.json');
 
   //initializeViewToggles();
   initializeTransport();

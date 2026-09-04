@@ -28,7 +28,9 @@
 <!--  <script src="./data/tracks.js"></script>-->
   <script src="./js/tracks-table.js"></script>
   <script src="./js/bottom-panel.js"></script>
-  <script src="./js/device-panel.js"></script>
+<!--  <script src="./js/device-panel.js"></script>-->
+  
+  <script src="./lib/device-editor/device-panel.js"></script>
   <script src="./js/clip-editor-panel.js"></script>
   
   <script src=".\js\recorder.js" type="module"></script>
@@ -782,7 +784,8 @@
   
     <div id="devices-panel" name="Devices" class="tab-panel">
       <div class="panel-header">Devices</div>
-      <div class="panel-content devices"></div>
+
+     <div class="panel-content devices"><device-panel/></div>
     </div>
     
     <div id="clip-editor-panel" name="Clip editor" class="tab-panel">

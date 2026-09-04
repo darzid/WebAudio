@@ -3,6 +3,7 @@ var selectedClip;
 
 function fillTracksTable(tracksTable, tracks)
 {
+  let devicePanel = document.querySelector("device-panel");
   let tracksTableBody = tracksTable.querySelector("tbody");
   let tracksTableHeaderRow = tracksTable.querySelector(".header-row");
   let leftTopHeader = document.createElement("th");
@@ -79,7 +80,13 @@ function fillTracksTable(tracksTable, tracks)
     trackHeaderColumn.appendChild(trackHeaderDiv);
     trackHeaderDiv.addEventListener("click", () => {
       selectTrack(trackRow);
-      showTrackDevices();
+      console.log("device panel", devicePanel);
+      document.dispatchEvent(
+        new CustomEvent("ShowTrackDevices",
+          {
+            detail:
+              { track: track }
+          }));
       clickTab(document.getElementById("devices-tab-button"));
       //console.log("show devices")
     });
