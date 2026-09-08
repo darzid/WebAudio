@@ -37,13 +37,19 @@ function initializeLoadSaveCommands(session) {
 
     var reader = new FileReader();
     reader.addEventListener("load", (e) => {
+      var contents = e.target.result;
       try {
-        var contents = e.target.result;
-
         let projectFile = JSON.parse(contents);
         session.project = new Project(projectFile);
 
-        createProjectUI(session);
+        try {
+          createProjectUI(session);
+        }
+        catch (error) {
+          throw "Error while creating project ui"
+        }
+        
+        
       }
       catch (error) {
         console.error("Error while loading project", error)

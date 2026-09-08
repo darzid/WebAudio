@@ -71,15 +71,28 @@ class Track {
   constructor(projectFileTrack) {
     try {
       this._projectFileTrack = projectFileTrack;
+      console.log("pft", projectFileTrack);
       this._channel = new Tone.Channel({ volume: projectFileTrack.volume, pan: projectFileTrack.pan, channelCount: 2 });
-      this._channel.send("master", 0);
-      this._channel.toDestination()
-      this._projectFileTrack.devices.forEach(projectFileDevice =>
-        this.addDevice(projectFileDevice[Object.keys(projectFileDevice)[0]].type, Object.keys(projectFileDevice)[0], projectFileDevice[Object.keys(projectFileDevice)[0]].parameters));
+      //this._channel.send("master", 0);
+      this._channel.toDestination();
+      let previousDevice = null;
+      this._projectFileTrack.devices.forEach(projectFileDeviceContainer => {
+        let deviceName = Object.keys(projectFileDeviceContainer)[0];
+        let projectFileDevice = projectFileDeviceContainer[deviceName];
+        let device = this.addDevice(
+          projectFileDevice.type, 
+          deviceName, 
+          projectFileDevice.parameters);
+        if (previousDevice) {
+          previousDevice.connect(device);
+        }
+        previousDevice = device;
+      });
+      if (previousDevice)
+        previousDevice.connect(this._channel);
+      
       this._generateClipLoops();
       this._generateAutomationDefaults();
-      if (this.id == "track5")
-        console.log("Track5", this)
     }
     catch (error) {
       console.error("Failed to create track", error)
@@ -162,8 +175,9 @@ class Track {
   get automations() { return this._projectFileTrack.automations; }
 
   addDevice(deviceType, deviceName, deviceParams) {
-    console.log("add device " + deviceName)
+    console.log(`[${this.id}] Add device '${deviceName}'`);
     let deviceInstance = new Tone[deviceName](deviceParams);
+    console.log(`[${this.id}] Created device '${deviceInstance.name}'`, deviceInstance);
     this._devices.push(deviceInstance);
     if (deviceType == "Instrument") {
       this._instruments.push(deviceInstance);
@@ -255,6 +269,7 @@ class Track {
           else
             instrument.triggerAttack(time);
         });
+       // console.log(`[${this.id}] Played part at ${time}`);
       }), clip.notes);
       part.loopStart = Tone.Time("0:0:0");
       part.loopEnd = loopDuration;
@@ -265,9 +280,9 @@ class Track {
         part.stop(loopEndTime);
 
       this._parts.push(part);
-      console.log("add clip", part)
       clipIndex++;
     });
+    console.log(`[${this.id}] Added ${this._projectFileTrack.clips.length} clips`);
   }
 
   _playClip(time, clip) {

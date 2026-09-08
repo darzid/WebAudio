@@ -194,6 +194,7 @@ customElements.define("device-panel", class DevicePanel extends HTMLElement {
           deviceContentElement.appendChild(tabstripElement);
           
           let deviceDefinition = deviceBrowser.getDeviceDefinition(device.name);
+          console.log("device ded", deviceDefinition)
           createParameterGroupTabButtons(deviceDefinition.parameterGroups);
           deviceDefinition.parameterGroups.forEach(parameterGroup => {
             //console.log("device tab " + paramgroupName, deviceDefinition.parameterGroups);
@@ -230,18 +231,27 @@ customElements.define("device-panel", class DevicePanel extends HTMLElement {
               let parameterLabelElement = document.createElement("label");
               
               let parameter = parameterGroup.parameters[parameterName];
+              if (parameterName === "attack") {
+                console.log("Attack param", parameter, parameterGroup)
+              }
+              let param = parameterGroup.name == "general" ? device[parameterName] : device[parameterGroup.name][parameterName];
+              let paramValue = param ? param.name ? param.value : param : "0";
               if (!parameter.values) {
-                let paramValue = device[parameterName] ? device[parameterName].name ? device[parameterName].value : device[parameterName] : "0";
-                //console.log(`${device.name}.${parameterName} = `, paramValue)
+                console.log(`${device.name}.${parameterName} = `, paramValue, device)
                 parameterLabelElement.className = "number-label";
                 parameterLabelElement.innerHTML =
                   `${parameterName}<number-input id="${parameterGroup.name}-${parameterName}" class="control-without-bg" fill="#00b7b7" background="white" step="${parameter.step}" min="${parameter.min}" max="${parameter.max}" value="${paramValue}">`;
               } else {
                 let optionsHtml = "";
-                parameter.values.forEach(value => optionsHtml += "<option>" + value + "</option>");
+                parameter.values.forEach(value => {
+                  let selected = value === paramValue ? " selected='true'" : "";
+                  optionsHtml += `<option${selected}>` + value + "</option>"
+                });
                 parameterLabelElement.innerHTML =
-                  `${parameterName}<select value="${device[parameterName]}">${optionsHtml}</select>`;
+                  `${parameterName}<select>${optionsHtml}</select>`;
                 parameterLabelElement.className = "select-label";
+                console.log("select", parameterLabelElement.innerHTML, paramValue);
+                
                 
               }
               tabContent.appendChild(parameterLabelElement);

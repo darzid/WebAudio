@@ -81,13 +81,14 @@ class DeviceBrowser {
     let module = this._deviceBank.devices[deviceName];
     
     let moduleGroupName = "general";
-    getModuleParameters(this._deviceBank, module, moduleGroupName);
+    let paramPath = "";
+    getModuleParameters(this._deviceBank, module, moduleGroupName, paramPath);
     
     if (deviceName === "DuoSynth")
       console.log("DuoSynth", deviceDefinition);
     return deviceDefinition;
     
-    function getModuleParameters(deviceBank, module, moduleGroupName) {
+    function getModuleParameters(deviceBank, module, moduleGroupName, paramPath) {
       console.log(`${deviceName} params`, Object.entries(module.parameters));
       Object.entries(module.parameters).forEach(([paramKey, paramNamespace]) => {
         let paramNamespaceParts = paramNamespace.split("/");
@@ -95,10 +96,11 @@ class DeviceBrowser {
         let paramName = paramNamespaceParts[1];
         
         let groupName = getGroupName(paramGroup, moduleGroupName, paramKey);
+        let paramPathKey = paramGroup === "modules" || paramGroup === "devices" ? paramPath + "/" + groupName : paramPath;
         
         let parameterGroupDefinition = deviceDefinition.parameterGroups.find(group => group.name == groupName);
         if (! parameterGroupDefinition) {
-          parameterGroupDefinition = {name: groupName, parameters: {}};
+          parameterGroupDefinition = {name: groupName, path: paramPathKey, parameters: {}};
           deviceDefinition.parameterGroups.push(parameterGroupDefinition);
           console.log("added param group " + groupName)
         }
@@ -125,12 +127,14 @@ class DeviceBrowser {
           if (isSubDevice) {
             console.log(`Submodule ${paramName} of subdevice ${moduleGroupName}`, subModule)
           }
-          getModuleParameters(deviceBank, subModule, paramKey);
+          let paramPathKey = paramPath ? paramPath + "." + paramName : paramName;
+          getModuleParameters(deviceBank, subModule, paramKey, paramPathKey);
         }
         else if (paramGroup === "devices") {
           let subDevice = deviceBank[paramGroup][paramName];
           console.log("sub device " + paramName, paramKey, subDevice)
-          getModuleParameters(deviceBank, subDevice, paramKey);
+          let paramPathKey = paramPath ? paramPath + "." + moduleGroupName : moduleGroupName;
+          getModuleParameters(deviceBank, subDevice, paramKey, paramPathKey);
         }
         else {
           throw "Not supported";
