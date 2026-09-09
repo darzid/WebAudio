@@ -366,6 +366,7 @@ function fillTracksTable(tracksTable, project)
     }
     
     trackRow.querySelectorAll("td div").forEach(header => header.addEventListener("click", () => selectTrack(header.closest("tr"))));
+    initializeToggleButtons(trackRow);
     return trackRow;
   }
 

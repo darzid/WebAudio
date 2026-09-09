@@ -13,12 +13,13 @@
   padding: 1px;
 }
 
-.button-bar 
-
 .button-bar .margin-left {
   margin-left: 8px;
 }
 
+.button-bar .double-margin-left {
+  margin-left: 16px;
+}
 .button-bar .margin-right {
   margin-right: 8px;
 }

@@ -1,21 +1,34 @@
 :root {
+  --bg: #1c1c1c;
+  --panel: #2a2a2a;
+  --border: #3b3b3b;
+  --text: #d8d8d8;
+  --muted: #8f8f8f;
+  --accent: #f2b544;
+  --play: #8be34d;
+  
   --color-bg: rgb(115,115,120);
+      
   --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   
   --control-bg: rgb(140,140,145);
+  --control-bg: rgba(255,255,255,0.3);
   
   --number-bg: rgb(240,240,230);
   --number-value-bg: #00b7b7;
   
   --button-border-color: darkgray;
   --active-button-bg: #f8d200;
+  --active-button-bg: #f2b544;
   
   --panel-header-bg: rgb(140,140,145);
+  --panel-header-bg: rgba(255,255,255,0.3);
   --panel-header-border-color: rgb(40,40,40);
   --panel-border-color: rgb(80,80,80);
   --panel-border-color-dark: rgb(40,40,40);
   --panel-bg: rgb(40,40,40);
+  --panel-bg: rgba(255,255,255,0.1);
   
   --shadow-color: rgba(50,50,50,0.5);
   
@@ -34,7 +47,9 @@
   --selected-track-bg: rgba(0,150,150,0.2);
   
   --clip-bg: #00b7b7;
-  --clip-selected-bg: #80c7f7;
+  --clip-bg: #d2b524;
+  --clip-color: black;
+  --clip-selected-bg: #e2c534;
   --clip-border-color: black;
   --clip-column-height: 25px;
   --clip-column-min-width: 25px;
@@ -42,6 +57,7 @@
   --clip-column-banded-bg: rgba(90,90,100,0.5);
   
   --repeating-clip-bg: #00a7a7;
+  --repeating-clip-bg: #c2a514;
   
   --devices-bg: rgb(80,80,80);
   --device-bg: rgb(130,130,135);
@@ -55,6 +71,8 @@ body {
   margin-right: auto;
   padding: 0em;
   background-color: var(--color-bg);
+  background-color: var(--bg);
+  color: var(--text);
 }
 
 body {
@@ -67,6 +85,10 @@ body {
   flex-direction: column;
 }
 
+.centered {
+  text-align: center;
+  justify-self: center;
+}
 #app {
   height: stretch;
   min-height: 100%;

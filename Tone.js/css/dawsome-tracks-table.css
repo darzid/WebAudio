@@ -20,14 +20,16 @@
   table {
     border-collapse: collapse;
     width: 100%;
-    border: 1px solid var(--color-bg);
-    background: var(--session-bg);
+    border2: 1px solid var(--color-bg);
+    background2: var(--session-bg);
+    background2: rgba(255,255,255,0.3);
   }
 
   thead th:first-child {
     z-index: 4;
     width: var(--tracktable-trackdetails-width);
-    background: var(--color-bg);
+    background2: var(--color-bg);
+    background2: var(--bg);
     border: 0px solid var(--color-bg);
   }
   
@@ -46,22 +48,24 @@
     height: 25px;
     
     font-size: 0.5em;
-    border: 1px solid var(--color-bg);
+    border2: 1px solid var(--color-bg);
+    background: #2c2c2c
   }
 
   tbody td:first-child {
     z-index: 2;
-    background: var(--control-bg);
+    background: #4c4c4c;
+    border: 0px solid #5c5c5c;
   }
   
   th, td {
-    border: 1px solid transparent ;
+    border: 1px solid transparent;
   }
   
   .position-column {
     font-weight: normal;
     font-size2: 10.0%;
-    background: var(--control-bg);
+    background2: var(--control-bg);
     max-width: var(--timeline-column-width);
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -71,32 +75,19 @@
     min-width: 50px;
     max-width: 50px;
     width: 50px;
-    
-  }
-  /*
-  .bar-header-column {
-    border: 1px solid red;
   }
   
-  .beat-header-column {
-    border: 1px solid blue;
-  }
-  
-  .sixteenth-header-column {
-    border: 1px solid yellow;
-  }
-  */
-  .bar2 {
+  .bar {
     border-left: 1px solid var(--timeline-bar-border-color);
     border-right: 1px solid var(--timeline-sixteenth-border-color);
   }
     
-  .beat2 {
+  .beat {
     border-left: 1px solid var(--timeline-beat-border-color);
     border-right: 1px solid var(--timeline-sixteenth-border-color);
   }
     
-  .sixteenth2 {
+  .sixteenth {
     border-left: 1px solid var(--timeline-sixteenth-border-color);
     border-right: 1px solid var(--timeline-sixteenth-border-color);
   }
@@ -128,10 +119,11 @@
     }
     
     .Clip {
-      background-color: var(--clip-bg);
+      background-color2: var(--clip-bg);
+      background-color: var(--accent);
       border-left: 1px solid var(--clip-border-color);
       font-size: 80%;
-      
+      color: var(--clip-color);
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -186,7 +178,7 @@
   .track-header {
     width: max-content;
     z-index: 4;
-    border: 1px solid var(--control-bg);
+    border2: 1px solid var(--control-bg);
     
     input[name='track-name'] {
       width: 70px;

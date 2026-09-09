@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ableton Live Web DAW - Tone.js Edition</title>
+    <!-- Tone.js CDN -->
+    <script src="https://unpkg.com/tone"></script>
+    <style>
+        /* Ableton Live Dark Theme Styles */
+        :root {
+            --bg-color: #121314;
+            --panel-bg: #2b2c2e;
+            --panel-border: #1a1b1c;
+            --track-header-bg: #38393c;
+            --text-color: #abb0b4;
+            --text-light: #e3e6e8;
+            --ableton-gold: #ffb700;
+            --ableton-green: #37b980;
+            --ableton-blue: #00a2ff;
+            --active-cell: #37b980;
+            --play-head: rgba(255, 255, 255, 0.15);
+            --step-inactive: #212224;
+            --step-border: #18191a;
+            --control-bg: #202123;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 11px;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Splash Overlay */
+        #welcome-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: rgba(18, 19, 20, 0.98);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #welcome-box {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            padding: 40px;
+            border-radius: 6px;
+            text-align: center;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        #welcome-box h1 {
+            color: var(--text-light);
+            font-size: 24px;
+            margin: 0 0 15px 0;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+        #welcome-box p {
+            line-height: 1.6;
+            margin: 0 0 25px 0;
+            font-size: 12px;
+        }
+        #start-btn {
+            background-color: var(--ableton-green);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background 0.1s;
+        }
+        #start-btn:hover {
+            background-color: #45cb92;
+        }
+
+        /* Top Header / Transport */
+        .transport-bar {
+            background-color: var(--panel-bg);
+            border-bottom: 2px solid var(--panel-border);
+            height: 40px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+        .transport-group {
+            display: flex;
+            align-items: center;
+            background-color: var(--control-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 3px;
+            padding: 2px;
+            height: 24px;
+        }
+        .transport-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            height: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0 10px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+        }
+        .transport-btn:hover {
+            color: var(--text-light);
+            background-color: rgba(255,255,255,0.05);
+        }
+        .transport-btn.active {
+            color: #000;
+            background-color: var(--ableton-green);
+        }
+        .bpm-box {
+            color: var(--ableton-green);
+            font-size: 14px;
+            font-family: monospace;
+            background: none;
+            border: none;
+            width: 45px;
+            text-align: center;
+            outline: none;
+        }
+        .beat-display {
+            font-family: monospace;
+            font-size: 14px;
+            color: var(--text-light);
+            padding: 0 10px;
+            min-width: 70px;
+        }
+
+        /* MIDI Controller Selector */
+        .midi-select-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+        }
+        .midi-select {
+            background-color: var(--control-bg);
+            border: 1px solid var(--panel-border);
+            color: var(--text-light);
+            padding: 2px 5px;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        /* Main Workspace Layout */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        /* Track Matrix Area */
+        .grid-workspace {
+            display: flex;
+            flex-grow: 1;
+            overflow-x: auto;
+            overflow-y: hidden;
+            background-color: var(--bg-color);
+        }
+
+        /* Track Columns container */
+        .track-lanes {
+            display: flex;
+            gap: 6px;
+            padding: 8px;
+            min-width: max-content;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Individual Track Column */
+        .track-column {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            width: 260px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 4px;
+            position: relative;
+        }
+        .track-column.selected {
+            border: 1px solid var(--ableton-gold);
+            box-shadow: 0 0 4px rgba(255, 183, 0, 0.4);
+        }
+
+        .track-header {
+            background-color: var(--track-header-bg);
+            padding: 6px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: var(--text-light);
+            border-bottom: 1px solid var(--panel-border);
+            cursor: pointer;
+        }
+        .track-type {
+            font-size: 8px;
+            text-transform: uppercase;
+            padding: 1px 4px;
+            border-radius: 2px;
+        }
+        .track-type.midi { background-color: var(--ableton-blue); color: #fff; }
+        .track-type.drums { background-color: var(--ableton-gold); color: #000; }
+
+        /* Sequencer Sub-Grid inside track */
+        .sequencer-container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            padding: 6px;
+            gap: 4px;
+            overflow-y: auto;
+        }
+
+        /* Piano Roll Pitch row labels */
+        .grid-header-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 4px;
+            font-size: 9px;
+            color: #777;
+        }
+
+        /* Matrix row: represents a pitch / note */
+        .sequencer-row {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .row-label {
+            width: 22px;
+            font-family: monospace;
+            font-size: 9px;
+            color: #888;
+            flex-shrink: 0;
+            text-align: right;
+            padding-right: 4px;
+        }
+
+        /* Step Buttons Container */
+        .steps-container {
+            display: flex;
+            gap: 2px;
+            flex-grow: 1;
+        }
+        .step-cell {
+            background-color: var(--step-inactive);
+            border: 1px solid var(--step-border);
+            height: 18px;
+            flex-grow: 1;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.05s;
+        }
+        .step-cell:nth-child(4n+1) {
+            background-color: #27282b; /* Beats 1, 5, 9, 13 indicator */
+        }
+        .step-cell.active-bass { background-color: var(--ableton-blue); border-color: #00c3ff; }
+        .step-cell.active-poly { background-color: var(--ableton-green); border-color: #37ffbc; }
+        .step-cell.active-drum { background-color: var(--ableton-gold); border-color: #ffe600; }
+
+        /* Playhead vertical highlight overlay */
+        .step-cell.playhead {
+            background-color: var(--play-head) !important;
+        }
+
+        /* Drum Grid Selector */
+        .drum-selector-bar {
+            display: flex;
+            background-color: var(--control-bg);
+            border-bottom: 1px solid var(--panel-border);
+            padding: 3px;
+            gap: 3px;
+        }
+        .drum-selector-tab {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 9px;
+            cursor: pointer;
+            padding: 3px 8px;
+            border-radius: 2px;
+        }
+        .drum-selector-tab.active {
+            background-color: var(--ableton-gold);
+            color: #000;
+            font-weight: bold;
+        }
+
+        /* Bottom Section: Left Panel is Mixer, Right Panel is Devices */
+        .bottom-dock {
+            background-color: var(--panel-bg);
+            border-top: 2px solid var(--panel-border);
+            height: 180px;
+            display: flex;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        /* Mixer Board section */
+        .mixer-section {
+            display: flex;
+            border-right: 2px solid var(--panel-border);
+            padding: 10px;
+            gap: 12px;
+            overflow-x: auto;
+            flex-shrink: 0;
+            width: 320px;
+            box-sizing: border-box;
+        }
+        .mixer-channel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: var(--control-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 4px;
+            width: 60px;
+            padding: 8px 4px;
+            gap: 8px;
+        }
+        .mixer-channel.master {
+            background-color: #1a1b1d;
+            border-color: #555;
+        }
+        .mixer-label {
+            font-size: 9px;
+            font-weight: bold;
+            color: var(--text-light);
+            text-transform: uppercase;
+            text-align: center;
+        }
+        .volume-fader-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+        }
+        .volume-fader {
+            writing-mode: bt-lr;
+            appearance: slider-vertical;
+            width: 14px;
+            height: 70px;
+            background-color: #111;
+            accent-color: var(--ableton-green);
+        }
+        .mixer-channel.master .volume-fader {
+            accent-color: var(--ableton-gold);
+        }
+        .pan-knob {
+            width: 30px;
+            accent-color: var(--text-color);
+        }
+        .mute-solo-btns {
+            display: flex;
+            gap: 3px;
+        }
+        .mixer-btn {
+            background-color: #38393c;
+            border: 1px solid var(--panel-border);
+            color: #888;
+            font-size: 9px;
+            font-weight: bold;
+            width: 18px;
+            height: 18px;
+            border-radius: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mixer-btn.mute.active {
+            background-color: #ff4545;
+            color: white;
+        }
+        .mixer-btn.solo.active {
+            background-color: var(--ableton-gold);
+            color: black;
+        }
+
+        /* Ableton Selected Track Device Rack */
+        .device-rack {
+            display: flex;
+            flex-grow: 1;
+            background-color: #1b1c1e;
+            padding: 10px;
+            gap: 15px;
+            overflow-x: auto;
+        }
+        .device-container {
+            display: flex;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 4px;
+            padding: 10px;
+            min-width: 250px;
+            height: 100%;
+            box-sizing: border-box;
+            gap: 15px;
+        }
+        .device-info-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 1px solid var(--panel-border);
+            padding-right: 10px;
+            width: 80px;
+            flex-shrink: 0;
+        }
+        .device-name {
+            font-weight: bold;
+            color: var(--text-light);
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
+        .device-type {
+            font-size: 8px;
+            color: #777;
+        }
+        .device-controls-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-grow: 1;
+        }
+        .knob-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            width: 45px;
+        }
+        .knob-label {
+            font-size: 8px;
+            color: #888;
+            text-transform: uppercase;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .knob-slider {
+            width: 100%;
+            accent-color: var(--ableton-green);
+        }
+        .knob-value {
+            font-family: monospace;
+            font-size: 9px;
+            color: var(--ableton-gold);
+        }
+
+        /* Real-time Oscilloscope Canvas */
+        .analyser-rack {
+            display: flex;
+            flex-direction: column;
+            background-color: #151617;
+            border: 1px solid var(--panel-border);
+            border-radius: 4px;
+            padding: 8px;
+            width: 140px;
+            height: 100%;
+            box-sizing: border-box;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+        .analyser-title {
+            font-size: 8px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        #analyser-canvas {
+            background-color: #080808;
+            border: 1px solid #1a1a1a;
+            width: 100%;
+            height: 100%;
+            border-radius: 2px;
+        }
+        
+        * --- RESPONSIVE MOBILE LAYOUT OVERRIDES --- */
+        @media (max-width: 768px) {
+            body {
+                height: auto;
+                overflow-y: auto; /* Zorg dat je op mobiel naar beneden kunt scrollen */
+            }
+
+            /* Transportbalk laten omvouwen op kleine schermen */
+            .transport-bar {
+                height: auto;
+                flex-wrap: wrap;
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .main-container {
+                height: auto;
+                overflow: visible;
+            }
+
+            .grid-workspace {
+                height: auto;
+                overflow-y: visible;
+            }
+
+            /* Stapel de sporen (Tracks) verticaal onder elkaar in plaats van naast elkaar */
+            .track-lanes {
+                flex-direction: column;
+                width: 100%;
+                padding: 5px;
+                box-sizing: border-box;
+                gap: 15px;
+            }
+
+            .track-column {
+                width: 100%; /* Sporen nemen nu de volledige breedte van de telefoon in */
+                box-sizing: border-box;
+            }
+
+            .sequencer-container {
+                max-height: 250px; /* Voorkomt dat de piano roll extreem lang wordt */
+            }
+
+            /* Bouw het onderste paneel om van horizontaal naar verticaal */
+            .bottom-dock {
+                height: auto;
+                flex-direction: column; /* Mixer en apparaten komen nu onder elkaar te staan */
+            }
+
+            /* Mixer vult nu de breedte en deelt de faders netjes op */
+            .mixer-section {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid var(--panel-border);
+                justify-content: space-around;
+                padding: 10px 5px;
+                box-sizing: border-box;
+            }
+
+            /* Synth-editors (Device Rack) netjes onder de mixer tonen */
+            .device-rack {
+                width: 100%;
+                padding: 15px 10px;
+                box-sizing: border-box;
+                flex-direction: column; /* Stapel de verschillende effect-boxen ook onder elkaar */
+                gap: 15px;
+                height: auto;
+            }
+
+            .device-container {
+                width: 100%;
+                min-width: unset;
+                box-sizing: border-box;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .device-info-left {
+                border-right: none;
+                border-bottom: 1px solid var(--panel-border);
+                padding-right: 0;
+                padding-bottom: 10px;
+                width: 100%;
+            }
+
+            .device-controls-right {
+                width: 100%;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .knob-wrapper {
+                width: 70px; /* Iets grotere knoppen voor touch-vriendelijkheid */
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <!-- Splash Screen (Autoplay Consent) -->
+    <div id="welcome-overlay">
+        <div id="welcome-box">
+            <h1>Web DAW & Sequencer</h1>
+            <p style="color: var(--ableton-green); font-weight: bold;">Ableton Live Dark Look & Feel</p>
+            <p>
+                Dit is een complete, offline-vriendelijke browser DAW gebouwd op Tone.js. Alle drums en synthesizers worden in realtime gegenereerd, waardoor er geen externe laadtijden of CORS-fouten zijn.
+            </p>
+            <p style="font-size: 10px; color: #888;">
+                Inclusief: 16-staps sequencers, Piano Roll grid, realtime mixer met faders/mute/solo, dynamisch Device Rack, Web MIDI controllersupport en een oscilloscope visualisator.
+            </p>
+            <button id="start-btn">Start Live WebAudio</button>
+        </div>
+    </div>
+
+    <!-- Top Transport Bar -->
+    <div class="transport-bar">
+        <!-- Play / Stop -->
+        <div class="transport-group">
+            <button class="transport-btn" id="play-btn">▶ PLAY</button>
+            <button class="transport-btn" id="stop-btn">■ STOP</button>
+        </div>
+
+        <!-- BPM Tempo Controls -->
+        <div class="transport-group">
+            <span style="padding-left: 8px; color: #555;">BPM</span>
+            <input type="number" class="bpm-box" id="bpm-box" value="120" min="40" max="240">
+            <button class="transport-btn" id="tap-tempo-btn">TAP</button>
+        </div>
+
+        <!-- Position Tracker -->
+        <div class="transport-group">
+            <span class="beat-display" id="pos-display">1 . 1 . 1</span>
+        </div>
+
+        <!-- Web MIDI dropdown -->
+        <div class="midi-select-container">
+            <span>MIDI INPUT:</span>
+            <select class="midi-select" id="midi-select">
+                <option value="none">Geen MIDI gedetecteerd</option>
+            </select>
+        </div>
+
+        <div style="flex-grow: 1;"></div>
+        <div style="color: var(--ableton-green); font-weight: bold; font-size: 10px;">PRO LEVEL WEB DAW</div>
+    </div>
+
+    <!-- Main Grid Columns -->
+    <div class="main-container">
+        <div class="grid-workspace">
+            <div class="track-lanes">
+
+                <!-- Track 1: Acid Bass (MonoSynth) -->
+                <div class="track-column" id="track-1" onclick="selectTrack(1)">
+                    <div class="track-header">
+                        <span>1. Acid Bassline</span>
+                        <span class="track-type midi">Mono</span>
+                    </div>
+                    <div class="grid-header-row">
+                        <span>PIANO ROLL</span>
+                        <span>16 STEPS</span>
+                    </div>
+                    <div class="sequencer-container" id="seq-bass">
+                        <!-- Rows generated via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Track 2: Poly Melodies (PolySynth) -->
+                <div class="track-column" id="track-2" onclick="selectTrack(2)">
+                    <div class="track-header">
+                        <span>2. Poly lead</span>
+                        <span class="track-type midi">Poly</span>
+                    </div>
+                    <div class="grid-header-row">
+                        <span>PIANO ROLL</span>
+                        <span>16 STEPS</span>
+                    </div>
+                    <div class="sequencer-container" id="seq-poly">
+                        <!-- Rows generated via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Track 3: Drum Machine (Synthesized Drums) -->
+                <div class="track-column" id="track-3" onclick="selectTrack(3)">
+                    <div class="track-header">
+                        <span>3. Drum Machine</span>
+                        <span class="track-type drums">Synthed</span>
+                    </div>
+                    <div class="drum-selector-bar">
+                        <button class="drum-selector-tab active" onclick="selectDrumKitPart('Kick', event)">Kick</button>
+                        <button class="drum-selector-tab" onclick="selectDrumKitPart('Snare', event)">Snare</button>
+                        <button class="drum-selector-tab" onclick="selectDrumKitPart('Hihat', event)">Hihat</button>
+                    </div>
+                    <div class="grid-header-row" style="padding-top: 4px;">
+                        <span>DRUM PART</span>
+                        <span>16 STEPS</span>
+                    </div>
+                    <div class="sequencer-container" id="seq-drums">
+                        <!-- Rows generated via JavaScript -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Bottom Mixer & Devices Panels -->
+        <div class="bottom-dock">
+            
+            <!-- Mixer Channels Board -->
+            <div class="mixer-section">
+                <!-- Channel 1: Bass -->
+                <div class="mixer-channel" id="mixer-1">
+                    <span class="mixer-label">1. Bass</span>
+                    <input type="range" class="pan-knob" id="pan-1" min="-1" max="1" step="0.1" value="0">
+                    <div class="volume-fader-container">
+                        <input type="range" class="volume-fader" id="vol-1" min="-30" max="6" value="-10">
+                    </div>
+                    <div class="mute-solo-btns">
+                        <button class="mixer-btn mute" id="mute-1" onclick="toggleMute(1)">M</button>
+                        <button class="mixer-btn solo" id="solo-1" onclick="toggleSolo(1)">S</button>
+                    </div>
+                </div>
+
+                <!-- Channel 2: Poly -->
+                <div class="mixer-channel" id="mixer-2">
+                    <span class="mixer-label">2. Lead</span>
+                    <input type="range" class="pan-knob" id="pan-2" min="-1" max="1" step="0.1" value="0">
+                    <div class="volume-fader-container">
+                        <input type="range" class="volume-fader" id="vol-2" min="-30" max="6" value="-10">
+                    </div>
+                    <div class="mute-solo-btns">
+                        <button class="mixer-btn mute" id="mute-2" onclick="toggleMute(2)">M</button>
+                        <button class="mixer-btn solo" id="solo-2" onclick="toggleSolo(2)">S</button>
+                    </div>
+                </div>
+
+                <!-- Channel 3: Drums -->
+                <div class="mixer-channel" id="mixer-3">
+                    <span class="mixer-label">3. Drum</span>
+                    <input type="range" class="pan-knob" id="pan-3" min="-1" max="1" step="0.1" value="0">
+                    <div class="volume-fader-container">
+                        <input type="range" class="volume-fader" id="vol-3" min="-30" max="6" value="-10">
+                    </div>
+                    <div class="mute-solo-btns">
+                        <button class="mixer-btn mute" id="mute-3" onclick="toggleMute(3)">M</button>
+                        <button class="mixer-btn solo" id="solo-3" onclick="toggleSolo(3)">S</button>
+                    </div>
+                </div>
+
+                <!-- Master Channel -->
+                <div class="mixer-channel master" id="mixer-master">
+                    <span class="mixer-label" style="color: var(--ableton-gold);">Master</span>
+                    <div style="height: 14px;"></div>
+                    <div class="volume-fader-container">
+                        <input type="range" class="volume-fader" id="vol-master" min="-30" max="6" value="-4">
+                    </div>
+                    <span id="master-db-label" style="font-size: 8px; color: #777;">-4dB</span>
+                </div>
+            </div>
+
+            <!-- Selected Track Dynamic Devices Panel -->
+            <div class="device-rack" id="device-rack">
+                <!-- Content injected dynamically via JS on track selection -->
+                <div class="device-container">
+                    <div class="device-info-left">
+                        <span class="device-name">No Track</span>
+                        <span class="device-type">Click a track to inspect devices</span>
+                    </div>
+                    <div class="device-controls-right">
+                        <p style="color: #666;">Klik hierboven op Track 1, 2 of 3 om het bijbehorende instrument en de audio-effecten live te bewerken.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Master Visualizer oscilloscope -->
+            <div style="padding: 10px; display: flex; align-items: center; justify-content: center; border-left: 2px solid var(--panel-border);">
+                <div class="analyser-rack">
+                    <span class="analyser-title">Master Output</span>
+                    <canvas id="analyser-canvas"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- 1. AUDIO ENGINE ARCHITECTURE & SYNTHESIS (100% OFFLINE STABLE) ---
+        
+        // Effects Returns (Send Busses)
+        const delayFX = new Tone.FeedbackDelay(0.3, 0.45).toDestination();
+        const reverbFX = new Tone.JCReverb(0.6).toDestination();
+        
+        // Limiter on main output to prevent clipping distortion
+        const limiter = new Tone.Limiter(-1).toDestination();
+      //  Tone.Destination.connect(limiter);
+
+        // Track Channel Strip (Gain & Pan) Configurations
+        const channelStrip1 = new Tone.PanVol(0, -10).connect(limiter);
+        const channelStrip2 = new Tone.PanVol(0, -10).connect(limiter);
+        const channelStrip3 = new Tone.PanVol(0, -10).connect(limiter);
+
+        // Track 1 Audio Chain: MonoSynth (Acid Bass)
+        const bassFilter = new Tone.Filter(1200, "lowpass").connect(channelStrip1);
+        const bassSynth = new Tone.MonoSynth({
+            oscillator: { type: "sawtooth" },
+            envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.3 },
+            filterEnvelope: {
+                attack: 0.01,
+                decay: 0.2,
+                sustain: 0.1,
+                baseFrequency: 300,
+                octaves: 3,
+                exponent: 2
+            }
+        }).connect(bassFilter);
+
+        // Track 2 Audio Chain: Poly lead Synth (triangle warm lead)
+        const polySynth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: "triangle" },
+            envelope: { attack: 0.1, decay: 0.3, sustain: 0.6, release: 1.2 }
+        }).connect(channelStrip2);
+
+        // Track 3 Drums Synthesizers
+        const drumKick = new Tone.MembraneSynth({
+            envelope: { attack: 0.001, decay: 0.25, sustain: 0, release: 0.1 }
+        }).connect(channelStrip3);
+
+        const drumSnareFilter = new Tone.Filter(1500, "highpass").connect(channelStrip3);
+        const drumSnare = new Tone.NoiseSynth({
+            envelope: { attack: 0.002, decay: 0.15, sustain: 0 },
+            noise: { type: "pink" }
+        }).connect(drumSnareFilter);
+
+        const drumHihatFilter = new Tone.Filter(8000, "highpass").connect(channelStrip3);
+        const drumHihat = new Tone.NoiseSynth({
+            envelope: { attack: 0.001, decay: 0.03, sustain: 0 },
+            noise: { type: "white" }
+        }).connect(drumHihatFilter);
+
+        // Realtime oscilloscope
+        const analyser = new Tone.Analyser("waveform", 256);
+        Tone.Destination.connect(analyser);
+
+        // Track Send Sends Routing Nodes
+        const send1Delay = new Tone.Gain(0).connect(delayFX);
+        const send1Reverb = new Tone.Gain(0).connect(reverbFX);
+        channelStrip1.connect(send1Delay);
+        channelStrip1.connect(send1Reverb);
+
+        const send2Delay = new Tone.Gain(0).connect(delayFX);
+        const send2Reverb = new Tone.Gain(0).connect(reverbFX);
+        channelStrip2.connect(send2Delay);
+        channelStrip2.connect(send2Reverb);
+
+        const send3Delay = new Tone.Gain(0).connect(delayFX);
+        const send3Reverb = new Tone.Gain(0).connect(reverbFX);
+        channelStrip3.connect(send3Delay);
+        channelStrip3.connect(send3Reverb);
+
+
+        // --- 2. SEQUENCING & GRID STATE CONFIGURATIONS ---
+
+        // Pentatonic scales so sequencer always sounds pleasant
+        const scaleBass = ["C1", "D1", "Eb1", "F1", "G1", "Bb1", "C2", "D2"].reverse(); // 8 pitches
+        const scalePoly = ["C3", "Eb3", "F3", "G3", "Bb3", "C4", "Eb4", "G4"].reverse(); // 8 pitches
+
+        // Grid storage (16 steps x 8 pitch rows)
+        const gridBass = Array(8).fill().map(() => Array(16).fill(false));
+        const gridPoly = Array(8).fill().map(() => Array(16).fill(false));
+        
+        // Drums storage
+        const gridDrums = {
+            Kick: Array(16).fill(false),
+            Snare: Array(16).fill(false),
+            Hihat: Array(16).fill(false)
+        };
+
+        let selectedTrack = 1;
+        let activeDrumPart = 'Kick';
+        let stepCount = 0;
+
+
+        // --- 3. DYNAMIC STEP GENERATORS & DOM BUILDING ---
+
+        // Generate Bass Grid UI (Track 1)
+        function renderBassGrid() {
+            const container = document.getElementById("seq-bass");
+            container.innerHTML = "";
+            for (let r = 0; r < 8; r++) {
+                const row = document.createElement("div");
+                row.className = "sequencer-row";
+
+                const label = document.createElement("span");
+                label.className = "row-label";
+                label.innerText = scaleBass[r].replace("1", "").replace("2", "");
+                row.appendChild(label);
+
+                const stepsDiv = document.createElement("div");
+                stepsDiv.className = "steps-container";
+
+                for (let s = 0; s < 16; s++) {
+                    const cell = document.createElement("div");
+                    cell.className = `step-cell cell-bass-${s}`;
+                    if (gridBass[r][s]) cell.classList.add("active-bass");
+                    cell.addEventListener("mousedown", () => {
+                        gridBass[r][s] = !gridBass[r][s];
+                        cell.classList.toggle("active-bass", gridBass[r][s]);
+                        if (gridBass[r][s]) {
+                            bassSynth.triggerAttackRelease(scaleBass[r], "16n");
+                        }
+                    });
+                    stepsDiv.appendChild(cell);
+                }
+                row.appendChild(stepsDiv);
+                container.appendChild(row);
+            }
+        }
+
+        // Generate Poly Grid UI (Track 2)
+        function renderPolyGrid() {
+            const container = document.getElementById("seq-poly");
+            container.innerHTML = "";
+            for (let r = 0; r < 8; r++) {
+                const row = document.createElement("div");
+                row.className = "sequencer-row";
+
+                const label = document.createElement("span");
+                label.className = "row-label";
+                label.innerText = scalePoly[r].replace("3", "").replace("4", "");
+                row.appendChild(label);
+
+                const stepsDiv = document.createElement("div");
+                stepsDiv.className = "steps-container";
+
+                for (let s = 0; s < 16; s++) {
+                    const cell = document.createElement("div");
+                    cell.className = `step-cell cell-poly-${s}`;
+                    if (gridPoly[r][s]) cell.classList.add("active-poly");
+                    cell.addEventListener("mousedown", () => {
+                        gridPoly[r][s] = !gridPoly[r][s];
+                        cell.classList.toggle("active-poly", gridPoly[r][s]);
+                        if (gridPoly[r][s]) {
+                            polySynth.triggerAttackRelease(scalePoly[r], "16n");
+                        }
+                    });
+                    stepsDiv.appendChild(cell);
+                }
+                row.appendChild(stepsDiv);
+                container.appendChild(row);
+            }
+        }
+
+        // Generate Drum Grid UI (Track 3)
+        function renderDrumGrid() {
+            const container = document.getElementById("seq-drums");
+            container.innerHTML = "";
+            
+            const row = document.createElement("div");
+            row.className = "sequencer-row";
+
+            const label = document.createElement("span");
+            label.className = "row-label";
+            label.style.width = "40px";
+            label.innerText = activeDrumPart;
+            row.appendChild(label);
+
+            const stepsDiv = document.createElement("div");
+            stepsDiv.className = "steps-container";
+
+            const partArray = gridDrums[activeDrumPart];
+
+            for (let s = 0; s < 16; s++) {
+                const cell = document.createElement("div");
+                cell.className = `step-cell cell-drums-${s}`;
+                if (partArray[s]) cell.classList.add("active-drum");
+                cell.addEventListener("mousedown", () => {
+                    partArray[s] = !partArray[s];
+                    cell.classList.toggle("active-drum", partArray[s]);
+                    if (partArray[s]) {
+                        playDrumSamplePart(activeDrumPart, Tone.now());
+                    }
+                });
+                stepsDiv.appendChild(cell);
+            }
+            row.appendChild(stepsDiv);
+            container.appendChild(row);
+        }
+
+        // Drum selector tabs
+        function selectDrumKitPart(part, event) {
+            event.stopPropagation();
+            activeDrumPart = part;
+            document.querySelectorAll(".drum-selector-tab").forEach(tab => {
+                tab.classList.toggle("active", tab.innerText === part);
+            });
+            renderDrumGrid();
+        }
+
+        // Helper to trigger specific drum synthesize sounds
+        function playDrumSamplePart(part, time) {
+            if (part === 'Kick') {
+                drumKick.triggerAttackRelease("C1", "8n", time);
+            } else if (part === 'Snare') {
+                drumSnare.triggerAttack(time);
+            } else if (part === 'Hihat') {
+                drumHihat.triggerAttack(time);
+            }
+        }
+
+        // Initialize grids
+        renderBassGrid();
+        renderPolyGrid();
+        renderDrumGrid();
+
+
+        // --- 4. THE COOPERATIVE CENTRAL TRANSPORT SEQUENCER ---
+
+        Tone.Transport.scheduleRepeat((time) => {
+            const step = stepCount % 16;
+
+            // Draw visual playhead synchronously with hardware clock
+            Tone.Draw.schedule(() => {
+                updateVisualPlayhead(step);
+            }, time);
+
+            // 1. Play Track 1 Bass notes
+            for (let r = 0; r < 8; r++) {
+                if (gridBass[r][step]) {
+                    bassSynth.triggerAttackRelease(scaleBass[r], "16n", time);
+                }
+            }
+
+            // 2. Play Track 2 Poly synth lead notes (supports chords!)
+            let polyNotesToPlay = [];
+            for (let r = 0; r < 8; r++) {
+                if (gridPoly[r][step]) {
+                    polyNotesToPlay.push(scalePoly[r]);
+                }
+            }
+            if (polyNotesToPlay.length > 0) {
+                polySynth.triggerAttackRelease(polyNotesToPlay, "16n", time);
+            }
+
+            // 3. Play Track 3 Drum parts
+            if (gridDrums.Kick[step]) playDrumSamplePart('Kick', time);
+            if (gridDrums.Snare[step]) playDrumSamplePart('Snare', time);
+            if (gridDrums.Hihat[step]) playDrumSamplePart('Hihat', time);
+
+            stepCount++;
+        }, "16n");
+
+        function updateVisualPlayhead(step) {
+            // Update Transport positions (Bars : Beats : Sixteenths)
+            const bar = Math.floor(stepCount / 16) + 1;
+            const beat = Math.floor((stepCount % 16) / 4) + 1;
+            const sixteenth = (stepCount % 4) + 1;
+            document.getElementById("pos-display").innerText = `${bar} . ${beat} . ${sixteenth}`;
+
+            // Add highlight playhead class
+            document.querySelectorAll(".step-cell").forEach(cell => cell.classList.remove("playhead"));
+            
+            document.querySelectorAll(`.cell-bass-${step}`).forEach(cell => cell.classList.add("playhead"));
+            document.querySelectorAll(`.cell-poly-${step}`).forEach(cell => cell.classList.add("playhead"));
+            document.querySelectorAll(`.cell-drums-${step}`).forEach(cell => cell.classList.add("playhead"));
+        }
+
+
+        // --- 5. MIXER SECTION CONTROL HANDLERS ---
+
+        function toggleMute(trackNum) {
+            const button = document.getElementById(`mute-${trackNum}`);
+            button.classList.toggle("active");
+            
+            const isMuted = button.classList.contains("active");
+            let channel;
+            if (trackNum === 1) channel = channelStrip1;
+            else if (trackNum === 2) channel = channelStrip2;
+            else if (trackNum === 3) channel = channelStrip3;
+
+            channel.mute = isMuted;
+        }
+
+        function toggleSolo(trackNum) {
+            const button = document.getElementById(`solo-${trackNum}`);
+            button.classList.toggle("active");
+
+            const isSoloActive = button.classList.contains("active");
+            
+            if (isSoloActive) {
+                document.querySelectorAll(".mixer-btn.solo").forEach((b, idx) => {
+                    if ((idx + 1) !== trackNum) b.classList.remove("active");
+                });
+                
+                channelStrip1.mute = (trackNum !== 1);
+                channelStrip2.mute = (trackNum !== 2);
+                channelStrip3.mute = (trackNum !== 3);
+
+                document.getElementById("mute-1").classList.toggle("active", trackNum !== 1);
+                document.getElementById("mute-2").classList.toggle("active", trackNum !== 2);
+                document.getElementById("mute-3").classList.toggle("active", trackNum !== 3);
+            } else {
+                channelStrip1.mute = document.getElementById("mute-1").classList.contains("active");
+                channelStrip2.mute = document.getElementById("mute-2").classList.contains("active");
+                channelStrip3.mute = document.getElementById("mute-3").classList.contains("active");
+            }
+        }
+
+        // Live Mixer listeners
+        document.getElementById("vol-1").addEventListener("input", (e) => channelStrip1.volume.value = parseFloat(e.target.value));
+        document.getElementById("vol-2").addEventListener("input", (e) => channelStrip2.volume.value = parseFloat(e.target.value));
+        document.getElementById("vol-3").addEventListener("input", (e) => channelStrip3.volume.value = parseFloat(e.target.value));
+        
+        document.getElementById("vol-master").addEventListener("input", (e) => {
+            const dbVal = parseFloat(e.target.value);
+            Tone.Destination.volume.value = dbVal;
+            document.getElementById("master-db-label").innerText = `${dbVal > 0 ? '+' : ''}${dbVal.toFixed(0)}dB`;
+        });
+
+        document.getElementById("pan-1").addEventListener("input", (e) => channelStrip1.pan.rampTo(parseFloat(e.target.value), 0.05));
+        document.getElementById("pan-2").addEventListener("input", (e) => channelStrip2.pan.rampTo(parseFloat(e.target.value), 0.05));
+        document.getElementById("pan-3").addEventListener("input", (e) => channelStrip3.pan.rampTo(parseFloat(e.target.value), 0.05));
+
+
+        // --- 6. DYNAMIC ABLETON LIVE DEVICE RACK DOCK ---
+
+        function selectTrack(trackNum) {
+            selectedTrack = trackNum;
+            document.querySelectorAll(".track-column").forEach(t => t.classList.remove("selected"));
+            document.getElementById(`track-${trackNum}`).classList.add("selected");
+
+            const rack = document.getElementById("device-rack");
+            
+            if (trackNum === 1) {
+                rack.innerHTML = `
+                    <div class="device-container">
+                        <div class="device-info-left">
+                            <span class="device-name">Acid Bassline</span>
+                            <span class="device-type">Instrument (Mono)</span>
+                        </div>
+                        <div class="device-controls-right">
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Filter Freq</span>
+                                <input type="range" class="knob-slider" id="bass-param-cutoff" min="100" max="4000" value="${bassFilter.frequency.value}">
+                                <span class="knob-value" id="val-bass-cutoff">${Math.round(bassFilter.frequency.value)}Hz</span>
+                            </div>
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Resonance</span>
+                                <input type="range" class="knob-slider" id="bass-param-res" min="1" max="15" value="${bassFilter.Q.value}">
+                                <span class="knob-value" id="val-bass-res">${bassFilter.Q.value}</span>
+                            </div>
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Attack</span>
+                                <input type="range" class="knob-slider" id="bass-param-attack" min="0" max="0.5" step="0.01" value="${bassSynth.envelope.attack}">
+                                <span class="knob-value" id="val-bass-attack">${bassSynth.envelope.attack}s</span>
+                            </div>
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Decay</span>
+                                <input type="range" class="knob-slider" id="bass-param-decay" min="0.05" max="1" step="0.05" value="${bassSynth.envelope.decay}">
+                                <span class="knob-value" id="val-bass-decay">${bassSynth.envelope.decay}s</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="device-container">
+                        <div class="device-info-left">
+                            <span class="device-name">Send FX</span>
+                            <span class="device-type">Send Busses</span>
+                        </div>
+                        <div class="device-controls-right">
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Send Delay</span>
+                                <input type="range" class="knob-slider" id="send-1-delay" min="0" max="1" step="0.05" value="${send1Delay.gain.value}">
+                                <span class="knob-value" id="val-send1-delay">${Math.round(send1Delay.gain.value * 100)}%</span>
+                            </div>
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Send Reverb</span>
+                                <input type="range" class="knob-slider" id="send-1-reverb" min="0" max="1" step="0.05" value="${send1Reverb.gain.value}">
+                                <span class="knob-value" id="val-send1-reverb">${Math.round(send1Reverb.gain.value * 100)}%</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Set up event listeners for newly injected knobs
+                document.getElementById("bass-param-cutoff").addEventListener("input", (e) => {
+                    const cutoffVal = parseFloat(e.target.value);
+                    bassFilter.frequency.value = cutoffVal;
+                    document.getElementById("val-bass-cutoff").innerText = `${Math.round(cutoffVal)}Hz`;
+                });
+                document.getElementById("bass-param-res").addEventListener("input", (e) => {
+                    const resVal = parseFloat(e.target.value);
+                    bassFilter.Q.value = resVal;
+                    document.getElementById("val-bass-res").innerText = resVal;
+                });
+                document.getElementById("bass-param-attack").addEventListener("input", (e) => {
+                    const attackVal = parseFloat(e.target.value);
+                    bassSynth.envelope.attack = attackVal;
+                    document.getElementById("val-bass-attack").innerText = `${attackVal.toFixed(2)}s`;
+                });
+                document.getElementById("bass-param-decay").addEventListener("input", (e) => {
+                    const decayVal = parseFloat(e.target.value);
+                    bassSynth.envelope.decay = decayVal;
+                    document.getElementById("val-bass-decay").innerText = `${decayVal.toFixed(2)}s`;
+                });
+                document.getElementById("send-1-delay").addEventListener("input", (e) => {
+                    const sendVal = parseFloat(e.target.value);
+                    send1Delay.gain.value = sendVal;
+                    document.getElementById("val-send1-delay").innerText = `${Math.round(sendVal * 100)}%`;
+                });
+                document.getElementById("send-1-reverb").addEventListener("input", (e) => {
+                    const sendVal = parseFloat(e.target.value);
+                    send1Reverb.gain.value = sendVal;
+                    document.getElementById("val-send1-reverb").innerText = `${Math.round(sendVal * 100)}%`;
+                });
+
+            } else if (trackNum === 2) {
+                rack.innerHTML = `
+                    <div class="device-container">
+                        <div class="device-info-left">
+                            <span class="device-name">Poly Lead</span>
+                            <span class="device-type">Lush Synthesizer</span>
+                        </div>
+                        <div class="device-controls-right">
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Osc Wave</span>
+                                <span class="knob-value" style="margin-top: 15px; color: var(--ableton-green);">TRIANGLE</span>
+                            </div>
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Attack</span>
+                                <input type="range" class="knob-slider" id="poly-param-attack" min="0.01" max="1" step="0.05" value="${polySynth.options.envelope.attack}">
+                                <span class="knob-value" id="val-poly-attack">${polySynth.options.envelope.attack.toFixed(2)}s</span>
+                            </div>
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Release</span>
+                                <input type="range" class="knob-slider" id="poly-param-release" min="0.1" max="3" step="0.1" value="${polySynth.options.envelope.release}">
+                                <span class="knob-value" id="val-poly-release">${polySynth.options.envelope.release.toFixed(1)}s</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="device-container">
+                        <div class="device-info-left">
+                            <span class="device-name">Send FX</span>
+                            <span class="device-type">Send Busses</span>
+                        </div>
+                        <div class="device-controls-right">
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Send Delay</span>
+                                <input type="range" class="knob-slider" id="send-2-delay" min="0" max="1" step="0.05" value="${send2Delay.gain.value}">
+                                <span class="knob-value" id="val-send2-delay">${Math.round(send2Delay.gain.value * 100)}%</span>
+                            </div>
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Send Reverb</span>
+                                <input type="range" class="knob-slider" id="send-2-reverb" min="0" max="1" step="0.05" value="${send2Reverb.gain.value}">
+                                <span class="knob-value" id="val-send2-reverb">${Math.round(send2Reverb.gain.value * 100)}%</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById("poly-param-attack").addEventListener("input", (e) => {
+                    const val = parseFloat(e.target.value);
+                    polySynth.set({ envelope: { attack: val } });
+                    document.getElementById("val-poly-attack").innerText = `${val.toFixed(2)}s`;
+                });
+                document.getElementById("poly-param-release").addEventListener("input", (e) => {
+                    const val = parseFloat(e.target.value);
+                    polySynth.set({ envelope: { release: val } });
+                    document.getElementById("val-poly-release").innerText = `${val.toFixed(2)}s`;
+                });
+                document.getElementById("send-2-delay").addEventListener("input", (e) => {
+                    const sendVal = parseFloat(e.target.value);
+                    send2Delay.gain.value = sendVal;
+                    document.getElementById("val-send2-delay").innerText = `${Math.round(sendVal * 100)}%`;
+                });
+                document.getElementById("send-2-reverb").addEventListener("input", (e) => {
+                    const sendVal = parseFloat(e.target.value);
+                    send2Reverb.gain.value = sendVal;
+                    document.getElementById("val-send2-reverb").innerText = `${Math.round(sendVal * 100)}%`;
+                });
+
+            } else if (trackNum === 3) {
+                rack.innerHTML = `
+                    <div class="device-container">
+                        <div class="device-info-left">
+                            <span class="device-name">Drum Synth</span>
+                            <span class="device-type">Classic Drum Toolkit</span>
+                        </div>
+                        <div class="device-controls-right">
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Kick Decay</span>
+                                <input type="range" class="knob-slider" id="drum-kick-decay" min="0.05" max="0.6" step="0.05" value="${drumKick.envelope.decay}">
+                                <span class="knob-value" id="val-kick-decay">${drumKick.envelope.decay.toFixed(2)}s</span>
+                            </div>
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Snare Tone</span>
+                                <input type="range" class="knob-slider" id="drum-snare-decay" min="0.05" max="0.5" step="0.05" value="${drumSnare.envelope.decay}">
+                                <span class="knob-value" id="val-snare-decay">${drumSnare.envelope.decay.toFixed(2)}s</span>
+                            </div>
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Hi-Hat Decay</span>
+                                <input type="range" class="knob-slider" id="drum-hat-decay" min="0.01" max="0.15" step="0.01" value="${drumHihat.envelope.decay}">
+                                <span class="knob-value" id="val-hat-decay">${drumHihat.envelope.decay.toFixed(2)}s</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="device-container">
+                        <div class="device-info-left">
+                            <span class="device-name">Send FX</span>
+                            <span class="device-type">Send Busses</span>
+                        </div>
+                        <div class="device-controls-right">
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Send Delay</span>
+                                <input type="range" class="knob-slider" id="send-3-delay" min="0" max="1" step="0.05" value="${send3Delay.gain.value}">
+                                <span class="knob-value" id="val-send3-delay">${Math.round(send3Delay.gain.value * 100)}%</span>
+                            </div>
+                            <div class="knob-wrapper">
+                                <span class="knob-label">Send Reverb</span>
+                                <input type="range" class="knob-slider" id="send-3-reverb" min="0" max="1" step="0.05" value="${send3Reverb.gain.value}">
+                                <span class="knob-value" id="val-send3-reverb">${Math.round(send3Reverb.gain.value * 100)}%</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById("drum-kick-decay").addEventListener("input", (e) => {
+                    const val = parseFloat(e.target.value);
+                    drumKick.envelope.decay = val;
+                    document.getElementById("val-kick-decay").innerText = `${val.toFixed(2)}s`;
+                });
+                document.getElementById("drum-snare-decay").addEventListener("input", (e) => {
+                    const val = parseFloat(e.target.value);
+                    drumSnare.envelope.decay = val;
+                    document.getElementById("val-snare-decay").innerText = `${val.toFixed(2)}s`;
+                });
+                document.getElementById("drum-hat-decay").addEventListener("input", (e) => {
+                    const val = parseFloat(e.target.value);
+                    drumHihat.envelope.decay = val;
+                    document.getElementById("val-hat-decay").innerText = `${val.toFixed(2)}s`;
+                });
+                document.getElementById("send-3-delay").addEventListener("input", (e) => {
+                    const sendVal = parseFloat(e.target.value);
+                    send3Delay.gain.value = sendVal;
+                    document.getElementById("val-send3-delay").innerText = `${Math.round(sendVal * 100)}%`;
+                });
+                document.getElementById("send-3-reverb").addEventListener("input", (e) => {
+                    const sendVal = parseFloat(e.target.value);
+                    send3Reverb.gain.value = sendVal;
+                    document.getElementById("val-send3-reverb").innerText = `${Math.round(sendVal * 100)}%`;
+                });
+            }
+        }
+
+        // Initially select Bass Track
+        selectTrack(1);
+
+
+        // --- 7. WEB MIDI API INTEGRATION ---
+
+        let midiAccess = null;
+
+        if (navigator.requestMIDIAccess) {
+            navigator.requestMIDIAccess()
+                .then(onMIDISuccess, () => {
+                    console.log("MIDI access is explicitly denied or not supported by browser permissions.");
+                });
+        }
+
+        function onMIDISuccess(access) {
+            midiAccess = access;
+            updateMidiDevicesList();
+            midiAccess.onstatechange = updateMidiDevicesList;
+        }
+
+        function updateMidiDevicesList() {
+            const select = document.getElementById("midi-select");
+            select.innerHTML = "";
+
+            if (!midiAccess || midiAccess.inputs.size === 0) {
+                const opt = document.createElement("option");
+                opt.value = "none";
+                opt.innerText = "Geen MIDI controller gevonden";
+                select.appendChild(opt);
+                return;
+            }
+
+            const activeOpt = document.createElement("option");
+            activeOpt.value = "all";
+            activeOpt.innerText = "Alle aangesloten controllers";
+            select.appendChild(activeOpt);
+
+            midiAccess.inputs.forEach((port) => {
+                const opt = document.createElement("option");
+                opt.value = port.id;
+                opt.innerText = `${port.manufacturer || ""} ${port.name}`;
+                select.appendChild(opt);
+
+                port.onmidimessage = handleMidiMessage;
+            });
+        }
+
+        function handleMidiMessage(event) {
+            const command = event.data & 0xf0;
+            const note = event.data[12];
+            const velocity = event.data[13];
+
+            if (welcomeOverlay.style.display === "none") {
+                const freq = Tone.Frequency(note, "midi").toNote();
+                
+                if (command === 144 && velocity > 0) {
+                    playMidiNote(freq, velocity / 127);
+                } else if (command === 128 || (command === 144 && velocity === 0)) {
+                    stopMidiNote(freq);
+                }
+            }
+        }
+
+        function playMidiNote(freq, velocity) {
+            if (selectedTrack === 1) {
+                bassSynth.triggerAttack(freq, Tone.now(), velocity);
+            } else if (selectedTrack === 2) {
+                polySynth.triggerAttack(freq, Tone.now(), velocity);
+            } else if (selectedTrack === 3) {
+                const noteVal = Tone.Frequency(freq).toMidi();
+                if (noteVal % 12 === 0) playDrumSamplePart('Kick', Tone.now());
+                else if (noteVal % 12 === 2) playDrumSamplePart('Snare', Tone.now());
+                else playDrumSamplePart('Hihat', Tone.now());
+            }
+        }
+
+        function stopMidiNote(freq) {
+            if (selectedTrack === 1) {
+                bassSynth.triggerRelease(Tone.now());
+            } else if (selectedTrack === 2) {
+                polySynth.triggerRelease(freq, Tone.now());
+            }
+        }
+
+
+        // --- 8. CENTRAL CONTROL BAR & PLAYHEAD UI HANDLERS ---
+
+        const welcomeOverlay = document.getElementById("welcome-overlay");
+        const startBtn = document.getElementById("start-btn");
+        const playBtn = document.getElementById("play-btn");
+        const stopBtn = document.getElementById("stop-btn");
+        const bpmBox = document.getElementById("bpm-box");
+        const tapTempoBtn = document.getElementById("tap-tempo-btn");
+
+        startBtn.addEventListener("click", async () => {
+            await Tone.start();
+            welcomeOverlay.style.display = "none";
+            drawAnalyser();
+        });
+
+        playBtn.addEventListener("click", () => {
+            if (Tone.Transport.state !== "started") {
+                Tone.Transport.start();
+                playBtn.classList.add("active");
+                playBtn.innerText = "⏸ PAUSE";
+            } else {
+                Tone.Transport.pause();
+                playBtn.classList.remove("active");
+                playBtn.innerText = "▶ PLAY";
+            }
+        });
+
+        stopBtn.addEventListener("click", () => {
+            Tone.Transport.stop();
+            stepCount = 0;
+            playBtn.classList.remove("active");
+            playBtn.innerText = "▶ PLAY";
+            document.getElementById("pos-display").innerText = "1 . 1 . 1";
+            document.querySelectorAll(".step-cell").forEach(cell => cell.classList.remove("playhead"));
+        });
+
+        bpmBox.addEventListener("input", (e) => {
+            const bpmValue = parseFloat(e.target.value);
+            if (bpmValue >= 40 && bpmValue <= 240) {
+                Tone.Transport.bpm.value = bpmValue;
+            }
+        });
+
+        // Tap Tempo
+        let tapTimes = [];
+        tapTempoBtn.addEventListener("click", () => {
+            const now = performance.now();
+            tapTimes.push(now);
+            if (tapTimes.length > 4) tapTimes.shift();
+
+            if (tapTimes.length >= 2) {
+                let intervals = [];
+                for (let i = 1; i < tapTimes.length; i++) {
+                    intervals.push(tapTimes[i] - tapTimes[i-1]);
+                }
+                const averageInterval = intervals.reduce((a, b) => a + b) / intervals.length;
+                const calculatedBpm = Math.round(60000 / averageInterval);
+                if (calculatedBpm >= 40 && calculatedBpm <= 240) {
+                    Tone.Transport.bpm.value = calculatedBpm;
+                    bpmBox.value = calculatedBpm;
+                }
+            }
+        });
+
+
+        // --- 9. DRAW OSCILLOSCOPE VISUALIZER CANVAS ---
+
+        const canvas = document.getElementById("analyser-canvas");
+        const ctx = canvas.getContext("2d");
+
+        function drawAnalyser() {
+            requestAnimationFrame(drawAnalyser);
+
+            const buffer = analyser.getValue();
+            ctx.fillStyle = "#080808";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = "#37b980";
+            ctx.beginPath();
+
+            const sliceWidth = canvas.width / buffer.length;
+            let x = 0;
+
+            for (let i = 0; i < buffer.length; i++) {
+                const v = buffer[i];
+                const y = (v + 1) * (canvas.height / 2);
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+
+                x += sliceWidth;
+            }
+
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.stroke();
+        }
+    </script>
+</body>
+</html>

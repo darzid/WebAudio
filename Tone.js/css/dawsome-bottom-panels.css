@@ -1,9 +1,9 @@
 .panel {
-  background: var(--panel-bg);
+  background2: var(--panel-bg);
   border: 1px solid var(--panel-border-color);
   
   .panel-header {
-    background: var(--panel-header-bg);
+    background2: var(--panel-header-bg);
     border-bottom: 1px solid var(--panel-header-border-color);
   }
 }
@@ -24,7 +24,7 @@
   
   .tab-button {
     border: 1px solid rgba(0,0,0,0.5);
-    background-color: #c0c0c9;
+    background-color: #a0a0a0;
   }
   
   .tab-button.active-tab {
@@ -41,13 +41,13 @@
   }
   
   .tab-panel > .panel-header {
-    background-color: darkgray;
+    background-color: rgba(255,255,255,0.1);
     border-bottom: 1px solid rgba(0,0,0,0.5);
   }
     
   .tab-panel > .panel-content {
     padding: 2px;
       
-    background-color: #808089;
+    background-color: rgba(255,255,255,0.2);
   }
 }
