@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="css/dawsome-bottom-panels.css">
   <link rel="stylesheet" href="css/dawsome-device-panel.css">
   <link rel="stylesheet" href="css/dawsome-clip-editor-panel.css">
-  
+  <link rel="stylesheet" href="css/dawsome-pianoroll.css">
   <script src="https://unpkg.com/tone"></script>
   
   <script src="https://cdn.jsdelivr.net/gh/darzid/html-components@82904e2e4a50aa974f067ef59becef5e0d59b156/number-input/number-input.js"></script>
@@ -28,6 +28,7 @@
 <!--  <script src="./data/tracks.js"></script>-->
   <script src="./js/tracks-table.js"></script>
   <script src="./js/bottom-panel.js"></script>
+  <script src="./js/pianoroll.js"></script>
 <!--  <script src="./js/device-panel.js"></script>-->
   
   <script src="./lib/device-editor/device-panel.js"></script>
@@ -791,14 +792,74 @@
       <div class="panel-header">Clip editor</div>
       <div class="panel-content">
         
-        <input type="range" id="pianoroll-scroll-x" oninput="pianorollScrollX()" value=0 min="0" max=1000>
+        <div id="pianoroll" style="min-height: 50vh">
+          <div class="toolbar">
+            <div class="group hidden">
+              <button id="playBtn" class="btn" title="Play / Stop (Space)">▶</button>
+              <span id="posReadout" class="readout">1.1.1</span>
+            </div>
+            <div class="group hidden">
+              <label>BPM <input id="bpmInput" type="number" min="20" max="300" step="1" value="120"></label>
+              <label>Bars <input id="barsInput" type="number" min="1" max="64" step="1" value="4"></label>
+            </div>
+            <div class="group">
+              <label>Grid
+                <select id="gridSelect">
+                  <optgroup label="Adaptive">
+                    <option value="widest">Widest</option>
+                    <option value="wide">Wide</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="narrow">Narrow</option>
+                    <option value="narrowest">Narrowest</option>
+                  </optgroup>
+                  <optgroup label="Fixed">
+                    <option value="1bar">1 Bar</option>
+                    <option value="1/2">1/2</option>
+                    <option value="1/4">1/4</option>
+                    <option value="1/8">1/8</option>
+                    <option value="1/16">1/16</option>
+                    <option value="1/32">1/32</option>
+                  </optgroup>
+                  <option value="off">Off</option>
+                </select>
+              </label>
+              <button id="tripletBtn" class="btn" title="Triplet grid">Triplet</button>
+              <button id="snapBtn" class="btn on" title="Snap to grid">Snap</button>
+              <span id="gridReadout" class="readout">1/16</span>
+            </div>
+            <div class="group">
+              <button id="drawBtn" class="btn on" title="Draw mode on: click adds/deletes. Off: select mode (B)"> Draw</button>
+              <button id="followBtn" class="btn on" title="Scroll with the playhead">Follow</button>
+              <button id="clearBtn" class="btn" title="Delete all notes">Clear</button>
+
+              <span class="readout" style="min-width: 0">Zoom</span>
+              <button id="zoomOutH" class="btn" title="Zoom out (time)">H−</button>
+              <button id="zoomInH" class="btn" title="Zoom in (time)">H+</button>
+              <button id="zoomOutV" class="btn" title="Zoom out (pitch)">V−</button>
+              <button id="zoomInV" class="btn" title="Zoom in (pitch)">V+</button>
+            </div>
+          </div>
+          <div class="roll">
+            <div class="corner"></div>
+            <div id="rulerWrap"><canvas id="rulerCanvas"></canvas></div>
+            <div id="keysWrap"><canvas id="keysCanvas"></canvas></div>
+            <div id="gridWrap">
+              <canvas id="gridCanvas"></canvas>
+              <div id="scroller"><div id="spacer"></div></div>
+            </div>
+          </div>
+          <div id="hint" class="hint"></div>
+        </div>
+        
+        
+     <!--   <input type="range" id="pianoroll-scroll-x" oninput="pianorollScrollX()" value=0 min="0" max=1000>
         <div style="display: flex; flex-direction: row">
           <input type="range" id="pianoroll-scroll-y" oninput="pianorollScrollY()" value=30>
           <webaudio-pianoroll id="piano-roll" width="345" height="300" timebase=12></webaudio-pianoroll>
           <input type="range" id="pianoroll-zoom-y" oninput="pianorollZoomY()" value=64 min=1 max=640>
         </div>
         <input type="range" id="pianoroll-zoom-x" oninput="pianorollZoomX()" value=220 min=1 max=640> 
-        
+        -->
       </div>
     </div>
     

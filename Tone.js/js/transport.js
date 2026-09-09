@@ -34,7 +34,7 @@ function initializeTransport() {
     playButton.disabled = true;
     stopButton.disabled = false;
 
-    session.project.start("+1");
+    session.project.start("+0.1");
     /*
     var positionUpdateLoop = new Tone.Loop(function(time){
     	//instead of scheduling visuals inside of here
@@ -68,7 +68,7 @@ function initializeTransport() {
       
     }, "8n", "0");
     
-    transport.start("+1");
+    transport.start("+0.1");
     console.log("transport started")
     transport.stop(Tone.Time(Tone.Time("+1") + Tone.Time(session.project.length)));
   }

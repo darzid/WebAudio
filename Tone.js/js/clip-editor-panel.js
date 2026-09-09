@@ -2,12 +2,17 @@ var pianoRoll;
 
 
 function initializeClipEditor() {
-  pianoRoll = document.getElementById("piano-roll");
+  /*pianoRoll = document.getElementById("piano-roll");
   
   pianoRoll.xoffset = document.getElementById("pianoroll-scroll-x").value;
   pianoRoll.yoffset = document.getElementById("pianoroll-scroll-y").value;
   pianoRoll.xrange = document.getElementById("pianoroll-zoom-x").value;
   pianoRoll.yrange = document.getElementById("pianoroll-zoom-y").value;
+*/
+}
+
+function onNotesChanged(notes) {
+  console.log("notes changed", notes);
 }
 
 function showClip() {
@@ -19,17 +24,18 @@ function showClip() {
     {
       selectedClip.notes.forEach(clipNote => {
         let midiNote = Tone.Midi(clipNote.note).toMidi();
-        let noteOn = Tone.Ticks(clipNote.time).toTicks();
-        let noteDuration = Tone.Ticks(clipNote.duration).toTicks();
+        let noteOn = Tone.Ticks(clipNote.time).toTicks() / 48;
+        let noteDuration = Tone.Ticks(clipNote.duration).toTicks() / 48;
         
-        sequence.push({
-          t: noteOn, 
+        sequence.push([midiNote, noteOn, noteDuration]);
+        /*  t: noteOn, 
           g: noteDuration,
-          n: midiNote});
+          n: midiNote});*/
       });
     }
-    pianoRoll.sequence = sequence;
-    pianoRoll.redraw();
+    
+    pianoRoll = createPianoroll(sequence, document.getElementById("tempo").value, onNotesChanged);
+   // pianoRoll.redraw();
   } 
   else {
     if (pianoRoll.sequence.length > 0) {
@@ -42,6 +48,8 @@ function showClip() {
   
   sizeTracksTableContainer();
 }
+
+/*
 
 function pianorollScrollX() {
   pianoRoll.xoffset = document.getElementById("pianoroll-scroll-x").value;
@@ -61,3 +69,4 @@ function pianorollZoomY() {
 }
 
 
+*/
