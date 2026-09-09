@@ -41,10 +41,11 @@
     position: sticky;
     top: 0;
     z-index: 3;
-    width: 100px;
-    max-width: 100px;
+    
+    
     height: 25px;
-    font-size: 1em;
+    
+    font-size: 0.5em;
     border: 1px solid var(--color-bg);
   }
 
@@ -59,30 +60,45 @@
   
   .position-column {
     font-weight: normal;
-    font-size: 100%;
+    font-size2: 10.0%;
     background: var(--control-bg);
     max-width: var(--timeline-column-width);
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-  }
+    text-align: left;
     
-  .bar {
+    min-width: 50px;
+    max-width: 50px;
+    width: 50px;
+    
+  }
+  /*
+  .bar-header-column {
+    border: 1px solid red;
+  }
+  
+  .beat-header-column {
+    border: 1px solid blue;
+  }
+  
+  .sixteenth-header-column {
+    border: 1px solid yellow;
+  }
+  */
+  .bar2 {
     border-left: 1px solid var(--timeline-bar-border-color);
     border-right: 1px solid var(--timeline-sixteenth-border-color);
-    font-weight: normal;
   }
     
-  .beat {
+  .beat2 {
     border-left: 1px solid var(--timeline-beat-border-color);
     border-right: 1px solid var(--timeline-sixteenth-border-color);
   }
     
-  .sixteenth {
+  .sixteenth2 {
     border-left: 1px solid var(--timeline-sixteenth-border-color);
     border-right: 1px solid var(--timeline-sixteenth-border-color);
-    font-size: xx-small;
-    font-size: 80%;
   }
   
 

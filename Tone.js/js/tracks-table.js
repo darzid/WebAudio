@@ -1,8 +1,9 @@
 
 var selectedClip;
 
-function fillTracksTable(tracksTable, tracks)
+function fillTracksTable(tracksTable, project)
 {
+  let tracks = project.tracks;
   let devicePanel = document.querySelector("device-panel");
   let tracksTableBody = tracksTable.querySelector("tbody");
   let tracksTableHeaderRow = tracksTable.querySelector(".header-row");
@@ -18,8 +19,10 @@ function fillTracksTable(tracksTable, tracks)
   
   addTrackButton.onclick = () => addTrack();
   
-  for (bar = 1; bar <= 4; bar++) {
+  let projectBars = project.length.split(":")[0];
+  for (bar = 1; bar <= projectBars; bar++) {
     for (beat = 1; beat <= 4; beat++) {
+      
       for (sixteenth = 1; sixteenth <= 4; sixteenth++) {
         let className = (sixteenth > 1) ? "sixteenth" : (beat > 1) ? "beat" : "bar";
         let timelineElement = document.createElement("th");
@@ -29,7 +32,24 @@ function fillTracksTable(tracksTable, tracks)
         timelineElement.innerText = `${bar}:${beat}:${sixteenth}`;
         timelineElement.title = `${bar}:${beat}:${sixteenth}`;
         tracksTableHeaderRow.appendChild(timelineElement);
+        
+        if (beat == 1 && sixteenth == 1)
+          timelineElement.classList.add("bar-header-column");
+        else if (sixteenth == 1)
+          timelineElement.classList.add("beat-header-column");
+        else 
+          timelineElement.classList.add("sixteenth-header-column");
+        
+        if (sixteenth > 1) {
+          timelineElement.classList.add("beat-detail-column");
+          //console.log("DetailColumn added", timelineElement.title)
+        }     
+        if (beat > 1) {
+          timelineElement.classList.add("bar-detail-column");
+          //console.log("DetailColumn added", timelineElement.title)
+        }     
       }
+
     }
   }
   
@@ -97,7 +117,7 @@ function fillTracksTable(tracksTable, tracks)
     renderClips();
     
     function renderColumns() {
-      for (bar = 1; bar <= 4; bar++) {
+      for (bar = 1; bar <= projectBars; bar++) {
         for (beat = 1; beat <= 4; beat++) {
           for (sixteenth = 1; sixteenth <= 4; sixteenth++) {
             

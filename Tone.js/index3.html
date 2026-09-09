@@ -753,13 +753,12 @@
 
       <input id="project-length" class="control time margin-left" type="text" value="8:0:0">
       <button class="control image-button toggle-button active"><img src="img/loop.png"></button>
-      
-      <button id="toggle-mixer" class="control image-button toggle-button"><img src="img/mixer.png"></button>
     </div>
     
     <div class="zoom-label">
       <label class="range-label small">Zoom
-        <input id="zoom" type="range" min="1" max="200" value="100">
+       <input id="zoom" type="range" min="0.5" max="200" value="100" step="0.5">
+        <output id="zoom-output" style="min-width: 60px">100%</output>
       </label>
     </div>
 

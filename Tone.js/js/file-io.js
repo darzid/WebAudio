@@ -90,7 +90,7 @@ function createProjectUI(session) {
   //mixerElement = document.getElementById("mixer");
   //mixerElement.innerHTML = "";
   
-  fillTracksTable(document.getElementById("tracks-table"), session.project.tracks);
+  fillTracksTable(document.getElementById("tracks-table"), session.project);
   //session.project.tracks.forEach(track => renderTrack(session.project, tracksElement, track));
   //initializeToggleButtons();
   //initializeArmTrackButtons();
@@ -99,6 +99,8 @@ function createProjectUI(session) {
   Tone.Transport.swing = 0.2;
   Tone.Transport.swingSubdivision = "16n";
 
+  initializeTableZoom(document.getElementById("tracks-table"), document.getElementById("zoom"));
+  
   function initializeArmTrackButtons() {
     let armTrackInputs = document.querySelectorAll("input[type='radio'][name='arm-track']");
     armTrackInputs[0].checked = true;

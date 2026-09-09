@@ -3,6 +3,8 @@
 
 
 class Project {
+  _tempoControl;
+  _projectLengthControl;
   _projectFile;
   _masterChannel;
   _tracks = [];
@@ -22,6 +24,12 @@ class Project {
     this._projectFile.tracks.forEach(projectFileTrack =>
       this._tracks.push(new Track(projectFileTrack)));
     console.log("tracks created")
+    
+    this._tempoControl = document.getElementById("tempo");
+    this._tempoControl.value = this.tempo;
+    
+    this._projectLengthControl = document.getElementById("project-length");
+    this._projectLengthControl.value = this.length;
   }
 
   get name() { return this._projectFile.name; }

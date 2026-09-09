@@ -41,7 +41,7 @@
           ],
           "startTime": "0:0:0",
           "length": "0:1:0",
-          "endTime": "4:0:0"
+          "endTime": "16:0:0"
         }
       ],
       "automations": []
@@ -113,7 +113,7 @@
           ],
           "startTime": "0:0:0",
           "length": "0:1:0",
-          "endTime": "4:0:0"
+          "endTime": "16:0:0"
         }
       ],
       "automations": [
@@ -122,7 +122,7 @@
     {
       "id": "track3",
       "name": "ClosedHat",
-      "volume": -60,
+      "volume": 0,
       "pan": -0.1,
       "devices": [
         {
@@ -172,9 +172,9 @@
               "velocity": 0.35
             }
           ],
-          "startTime": "0:0:0",
+          "startTime": "4:0:0",
           "length": "0:0:4",
-          "endTime": "1:0:0"
+          "endTime": "16:0:0"
         }
       ],
       "automations": [
@@ -183,7 +183,7 @@
     {
       "id": "track4",
       "name": "OpenHat",
-      "volume": -60,
+      "volume": -3,
       "pan": 0.1,
       "devices": [
         {
@@ -213,15 +213,15 @@
           "name": "OpenHat01",
           "notes": [
             {
-              "note": "G#3",
+              "note": "G#4",
               "duration": "32n",
               "time": "0:0:2",
               "velocity": 0.31
             }
           ],
-          "startTime": "0:0:0",
+          "startTime": "8:0:0",
           "length": "0:0:4",
-          "endTime": "1:0:0"
+          "endTime": "16:0:0"
         }
       ],
       "automations": [

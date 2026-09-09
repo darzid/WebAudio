@@ -24,7 +24,7 @@ function initialize() {
   
   //initializeNumberInputs(document);
   initializeToggleButtons(document);
-  initializeTableZoom(tracksTable, document.getElementById("zoom"));
+  
   
  // document.getElementById("devices-tab-button").addEventListener("click", () => showTrackDevices());
   //document.getElementById("clip-editor-tab-button").addEventListener("click", () => showClip());
