@@ -1,5 +1,4 @@
 .panel {
-  background2: var(--panel-bg);
   border: 1px solid var(--panel-border-color);
   
   .panel-header {
@@ -15,7 +14,7 @@
   margin: 0px;
   padding: 0px;
   
-  background: #909090;
+  background: #303030;
   
   .tab-strip {
     margin: 0px;

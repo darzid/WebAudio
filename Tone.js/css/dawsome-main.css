@@ -205,10 +205,3 @@ label.select-label select {
 }
 }
 
-.enabled-button {
-  width: 14px;
-  height: 14px;
-  margin: 4px;
-  border: 1px solid var(--button-border-color);
-}
-  

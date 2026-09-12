@@ -105,6 +105,7 @@
     border: 0px solid var(--clip-column-bg);
     
     background-color: var(--clip-column-bg);
+    color: black;
     font-size: xx-small;
     .Clip, .RepeatingClip {
       width: stretch;
@@ -185,8 +186,17 @@
       font-size: xx-small;
       vertical-align: middle;
       overflow: hidden;
-      padding-top: 4px;
-      background: var(--input-bg);
+      
+      background: rgba(255,255,255,0.1)
+      color: var(--text);
+      border-top: 1px solid rgba(0,0,0,0.3);
+      padding-top: 6px;
+      padding-bottom: 6px;
+      
+    }
+    
+    input[name='track-name']:focus {
+      outline: none;
     }
     
     input:read-only {
@@ -195,6 +205,16 @@
     
     button.active {
       background: var(--active-button-bg);
+    }
+    
+    .enabled-button {
+      width: 13px;
+      height: 13px;
+      
+      margin: 5px;
+      margin-top: 6px;
+      
+      border: 1px solid black;
     }
   }
 }

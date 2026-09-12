@@ -88,23 +88,29 @@ function showTrackDevices() {
       tabContent.id = parameterGroup.name;
       deviceContentElement.appendChild(tabContent);
       
-      if (parameterGroup.name === "filter") {
-          console.log("creating filter tab", parameterGroup.parameters);
-        }
       Object.keys(parameterGroup.parameters).forEach(parameterName => {
-        if (parameterGroup.name === "filter") {
-          console.log("creating filter param", parameterName);
-        }
-      
+        
         let parameterLabelElement = document.createElement("label");
         
         let parameter = parameterGroup.parameters[parameterName];
         if (!parameter.values) {
           let paramValue = device[parameterName] ? device[parameterName].name ? device[parameterName].value : device[parameterName] : "0";
           //console.log(`${device.name}.${parameterName} = `, paramValue)
-          parameterLabelElement.className = "number-label";
-          parameterLabelElement.innerHTML =
-           `${parameterName}<number-input id="${parameterGroup.name}-${parameterName}" class="control-without-bg" fill="#00b7b7" background="white" step="${parameter.step}" min="${parameter.min}" max="${parameter.max}" value="${paramValue}">`;
+          parameterLabelElement.className = "number-label red";
+          parameterLabelElement.innerHTML = parameterName;
+          
+           //<number-input id="${parameterGroup.name}-${parameterName}" fill="red" step="${parameter.step}" min="${parameter.min}" max="${parameter.max}" value="${paramValue}">`;
+          
+          let numberInput = document.createElement("number-input");
+          numberInput.id = `${parameterGroup.name}-${parameterName}`;
+          numberInput.fill="red";
+          numberInput.step=parameter.step;
+          numberInput.min=parameter.min;
+          numberInput.max=parameter.max;
+          numberInput.value=paramValue;
+          parameterLabelElement.appendChild(numberInput);
+          console.log(`created number input ${parameterGroup.name}-${parameterName}`);
+          
         } else {
           let optionsHtml = "";
           parameter.values.forEach(value => optionsHtml += "<option>" + value + "</option>");
