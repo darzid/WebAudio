@@ -6,22 +6,29 @@
 .fader-container {
   display: flex;
   flex-direction: column;
+  padding: 1px;
+  border: 1px solid rgba(50,50,50,0.3);
+  background: rgba(0,0,0,0.1);
   
   label { 
     font-family: Anta;
     font-size: xx-small;
     text-align: center;
+    max-width: 60px;
+    min-width: 60px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(50,50,50,0.3);
   }
-}
-
-
-.track-fader {
-  max-width: 30px;
-  height: 20vh;
-  margin: 5px;
-  fill: #f2b544;
-  font-family: Anta;
-  font-size: xx-small;
-  text-align: center;
-  border2: 1px solid rgba(0,0,0,0.2);
+  .track-fader {
+    max-width: 38px;
+    height: 20vh;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    fill: #f2b544;
+    font-family: Anta;
+    font-size: xx-small;
+    text-align: center;
+  }
 }

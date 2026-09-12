@@ -99,6 +99,9 @@
         margin-right: 1px;
         color: var(--text);
         font-family: Anta;
+        
+        background-color: rgba(255,255,255,0.2);
+        color: black;
       }
       
       /* Change background color of buttons on hover */
@@ -108,9 +111,12 @@
       
       /* Create an active/current tablink class */
       .tab button.active-tab {
-        background-color: #a0c0c0;
+       /* background-color: #a0c0c0;
         background-color: rgba(255,255,255,0.2);
-        color: black;
+        color: black;*/
+        
+        background-color: rgba(0,0,0,0.2);
+        color: var(--text);
       }
       
       /* Style the tab content */
