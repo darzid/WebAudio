@@ -100,6 +100,7 @@ function createProjectUI(session) {
   Tone.Transport.swingSubdivision = "16n";
 
   initializeTableZoom(document.getElementById("tracks-table"), document.getElementById("zoom"));
+  mixer = new Mixer();
   
   function initializeArmTrackButtons() {
     let armTrackInputs = document.querySelectorAll("input[type='radio'][name='arm-track']");

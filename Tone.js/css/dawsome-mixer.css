@@ -1,0 +1,27 @@
+.rows {
+  display: flex;
+  flex-direction: row;
+}
+
+.fader-container {
+  display: flex;
+  flex-direction: column;
+  
+  label { 
+    font-family: Anta;
+    font-size: xx-small;
+    text-align: center;
+  }
+}
+
+
+.track-fader {
+  max-width: 30px;
+  height: 20vh;
+  margin: 5px;
+  fill: #f2b544;
+  font-family: Anta;
+  font-size: xx-small;
+  text-align: center;
+  border2: 1px solid rgba(0,0,0,0.2);
+}

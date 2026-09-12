@@ -1,3 +1,5 @@
+let mixer;
+
 function initialize() {
 /*  let playButton = document.getElementById("play");
   let stopButton = document.getElementById("stop");
@@ -30,6 +32,7 @@ function initialize() {
   //document.getElementById("clip-editor-tab-button").addEventListener("click", () => showClip());
   
   initializeClipEditor();
+  
   /*
   let toggleDevicesButton = document.getElementById("toggle-devices");
   console.log("toggleDevicesButton", toggleDevicesButton)

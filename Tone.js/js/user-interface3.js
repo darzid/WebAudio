@@ -1,6 +1,7 @@
 //let pianoRoll = null;
 let presetBrowser = new PresetBrowser();
 let deviceBrowser = new DeviceBrowser();
+
 var presets;
 var session = null;
 let selectedTrackId = null;
@@ -369,5 +370,7 @@ function renderTrack(project, tracksElement, track) {
       }
     }
   }
+  
+  
 }
 

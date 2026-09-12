@@ -5,6 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title></title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anta&family=Orbitron:wght@400..900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap"
+ >
   <link rel="stylesheet" href="css/dawsome-main.css">
   <link rel="stylesheet" href="css/dawsome-button-bar.css">
   <link rel="stylesheet" href="css/dawsome-project-header.css">
@@ -14,9 +19,10 @@
   <link rel="stylesheet" href="css/dawsome-device-panel.css">
   <link rel="stylesheet" href="css/dawsome-clip-editor-panel.css">
   <link rel="stylesheet" href="css/dawsome-pianoroll.css">
+  <link rel="stylesheet" href="css/dawsome-mixer.css">
   <script src="https://unpkg.com/tone"></script>
   
-  <script src="https://cdn.jsdelivr.net/gh/darzid/html-components@82904e2e4a50aa974f067ef59becef5e0d59b156/number-input/number-input.js"></script>
+  <script src="./lib/number-input.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/darzid/html-components@main/tab-control/tab-control.js"></script>
   <script src="https://g200kg.github.io/webaudio-pianoroll/webaudio-pianoroll.js"></script>
   
@@ -29,6 +35,7 @@
   <script src="./js/tracks-table.js"></script>
   <script src="./js/bottom-panel.js"></script>
   <script src="./js/pianoroll.js"></script>
+  <script src="./js/mixer.js"></script>
 <!--  <script src="./js/device-panel.js"></script>-->
   
   <script src="./lib/device-editor/device-panel.js"></script>
@@ -783,13 +790,10 @@
 
   
     <div id="devices-panel" name="Devices" class="tab-panel">
-      <div class="panel-header">Devices</div>
-
      <div class="panel-content devices"><device-panel/></div>
     </div>
     
     <div id="clip-editor-panel" name="Clip editor" class="tab-panel">
-      <div class="panel-header">Clip editor</div>
       <div class="panel-content">
         
         <div id="pianoroll" style="min-height: 50vh">
@@ -864,8 +868,8 @@
     </div>
     
     <div id="mixer-panel" name="Mixer" class="tab-panel">
-      <div class="panel-header">Mixer</div>
-      <div class="panel-content">
+    
+      <div class="panel-content rows">
       </div>
     </div>
   
