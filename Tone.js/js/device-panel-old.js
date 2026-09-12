@@ -101,14 +101,24 @@ function showTrackDevices() {
           
            //<number-input id="${parameterGroup.name}-${parameterName}" fill="red" step="${parameter.step}" min="${parameter.min}" max="${parameter.max}" value="${paramValue}">`;
           
-          let numberInput = document.createElement("number-input");
+         /* let numberInput = document.createElement("number-input");
           numberInput.id = `${parameterGroup.name}-${parameterName}`;
-          numberInput.fill="red";
           numberInput.step=parameter.step;
           numberInput.min=parameter.min;
           numberInput.max=parameter.max;
           numberInput.value=paramValue;
-          parameterLabelElement.appendChild(numberInput);
+          numberInput.classList.add("param-input");*/
+          parameterLabelElement.innerHTML += `<number-input id="${parameterGroup.name}-${parameterName}" step="${parameter.step}" min="${parameter.min}" max="${parameter.max}" value="${paramValue}">`
+          //parameterLabelElement.appendChild(numberInput);
+          //numberInput.fill = "orange";
+          let numberInput = document.getElementById(`${parameterGroup.name}-${parameterName}`);
+          numberInput.addEventListener("change" = (e) => {
+            if (device[parameterName].name) {
+              device[parameterName].value = numberInput.value;
+            } else 
+              device[parameterName] = numberInput.value;
+            console.log(`device ${parameterName} updated to ${numberInput.value}`);
+          });
           console.log(`created number input ${parameterGroup.name}-${parameterName}`);
           
         } else {

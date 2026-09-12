@@ -229,6 +229,7 @@ customElements.define("device-panel", class DevicePanel extends HTMLElement {
               }
               
               let parameterLabelElement = document.createElement("label");
+              tabContent.appendChild(parameterLabelElement);
               
               let parameter = parameterGroup.parameters[parameterName];
               if (parameterName === "attack") {
@@ -239,8 +240,25 @@ customElements.define("device-panel", class DevicePanel extends HTMLElement {
               if (!parameter.values) {
                 console.log(`${device.name}.${parameterName} = `, paramValue, device)
                 parameterLabelElement.className = "number-label";
-                parameterLabelElement.innerHTML =
-                  `${parameterName}<number-input id="${parameterGroup.name}-${parameterName}" class="control-without-bg" fill="#00b7b7" background="white" step="${parameter.step}" min="${parameter.min}" max="${parameter.max}" value="${paramValue}">`;
+                parameterLabelElement.innerHTML = parameterName;
+                let numberInput = document.createElement("number-input");
+                numberInput.id = parameterGroup.name + "-" + parameterName;
+                numberInput.className="param";
+                numberInput.fill="orange";
+                numberInput.step=parameter.step;
+                numberInput.min=parameter.min;
+                numberInput.max=parameter.max;
+                numberInput.value=paramValue;
+                parameterLabelElement.appendChild(numberInput);
+                  //`${parameterName}<number-input id="${parameterGroup.name}-${parameterName}" class="control-without-bg" fill="#f2b544" step="${parameter.step}" min="${parameter.min}" max="${parameter.max}" value="${paramValue}">`;
+                //let numberInput = parameterLabelElement.cbildren[parameterLabelElement.children.length];
+                numberInput.oninput = ()  => {
+                  if (device[parameterName].name) {
+                    device[parameterName].value = numberInput.value;
+                  } else 
+                    device[parameterName] = numberInput.value;
+                  console.log(`${parameterName} changed`)
+                 };
               } else {
                 let optionsHtml = "";
                 parameter.values.forEach(value => {
@@ -251,10 +269,9 @@ customElements.define("device-panel", class DevicePanel extends HTMLElement {
                   `${parameterName}<select>${optionsHtml}</select>`;
                 parameterLabelElement.className = "select-label";
                 console.log("select", parameterLabelElement.innerHTML, paramValue);
-                
-                
               }
-              tabContent.appendChild(parameterLabelElement);
+              
+              
             });
             if (parameterGroup.name.startsWith("filter")) {
               console.log(parameterGroup.name + " tab", tabContent);
