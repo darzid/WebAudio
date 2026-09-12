@@ -203,6 +203,7 @@ customElements.define("device-panel", class DevicePanel extends HTMLElement {
           openTab(tabstripElement.childNodes[0], deviceEditorElement);
           
           function createParameterGroupTabButtons(parameterGroups) {
+            
             parameterGroups.forEach(parameterGroup => {
               let tabButton = document.createElement("button");
               tabButton.className = "tablinks";
@@ -210,6 +211,8 @@ customElements.define("device-panel", class DevicePanel extends HTMLElement {
               tabButton.innerText = parameterGroup.name;
               tabButton.dataset.deviceId = deviceId;
               tabstripElement.appendChild(tabButton);
+              
+              console.log(`tab ${parameterGroup.name}, path ${parameterGroup.path}`)
             });
           }
           
@@ -238,26 +241,35 @@ customElements.define("device-panel", class DevicePanel extends HTMLElement {
               let param = parameterGroup.name == "general" ? device[parameterName] : device[parameterGroup.name][parameterName];
               let paramValue = param ? param.name ? param.value : param : "0";
               if (!parameter.values) {
-                console.log(`${device.name}.${parameterName} = `, paramValue, device)
+                console.log(`Creating input for ${device.name}.${parameterName} = `, paramValue, device)
                 parameterLabelElement.className = "number-label";
                 parameterLabelElement.innerHTML = parameterName;
+                
                 let numberInput = document.createElement("number-input");
                 numberInput.id = parameterGroup.name + "-" + parameterName;
                 numberInput.className="param";
                 numberInput.fill="orange";
+                
+                
+  
+                parameterLabelElement.appendChild(numberInput);
                 numberInput.step=parameter.step;
                 numberInput.min=parameter.min;
                 numberInput.max=parameter.max;
-                numberInput.value=paramValue;
-                parameterLabelElement.appendChild(numberInput);
+                numberInput.value=param.name ? param.value : param;
+                
                   //`${parameterName}<number-input id="${parameterGroup.name}-${parameterName}" class="control-without-bg" fill="#f2b544" step="${parameter.step}" min="${parameter.min}" max="${parameter.max}" value="${paramValue}">`;
                 //let numberInput = parameterLabelElement.cbildren[parameterLabelElement.children.length];
                 numberInput.oninput = ()  => {
-                  if (device[parameterName].name) {
-                    device[parameterName].value = numberInput.value;
-                  } else 
-                    device[parameterName] = numberInput.value;
-                  console.log(`${parameterName} changed`)
+                  let oldValue = "";
+                  if (param.name) {
+                    oldValue = param.value;
+                    param.value = numberInput.value;
+                  } else {
+                    oldValue = param;
+                    param = numberInput.value;
+                  }
+                  console.log(`${parameterName} changed from ${oldValue} to ${numberInput.value}`, device)
                  };
               } else {
                 let optionsHtml = "";

@@ -128,6 +128,7 @@ class Track {
           detail:
             { track: this.id, volume: value }
         }));
+    console.log("Track volume changed");
   }
   get pan() { return this._channel.pan; }
   set pan(value) {

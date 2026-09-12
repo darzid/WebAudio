@@ -11,7 +11,7 @@ customElements.define("mixer-fader", class MixerFader extends HTMLElement {
       if (!value) {
         if (computedStyle[k]) {
           value = computedStyle[k];
-          console.log("computed style " + k, value)
+         // console.log("computed style " + k, value)
         } else if (v.defaultValue) {
           value = v.defaultValue;
         }

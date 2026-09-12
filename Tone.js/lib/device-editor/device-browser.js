@@ -81,24 +81,30 @@ class DeviceBrowser {
     let module = this._deviceBank.devices[deviceName];
     
     let moduleGroupName = "general";
-    getModuleParameters(this._deviceBank, module, moduleGroupName);
+    getModuleParameters(this._deviceBank, module, moduleGroupName, "");
     
     if (deviceName === "DuoSynth")
       console.log("DuoSynth", deviceDefinition);
     return deviceDefinition;
     
-    function getModuleParameters(deviceBank, module, moduleGroupName) {
+    function getModuleParameters(deviceBank, module, moduleGroupName, path) {
       console.log(`${deviceName} params`, Object.entries(module.parameters));
       Object.entries(module.parameters).forEach(([paramKey, paramNamespace]) => {
         let paramNamespaceParts = paramNamespace.split("/");
         let paramGroup = paramNamespaceParts[0];
         let paramName = paramNamespaceParts[1];
         
+        let isModule = (paramGroup === "modules");
+        let isDevice = (paramGroup == "devices");
+
         let groupName = getGroupName(paramGroup, moduleGroupName, paramKey);
+        if (isModule || isDevice) {
+          path = path + "/" + paramName;
+        }
         
         let parameterGroupDefinition = deviceDefinition.parameterGroups.find(group => group.name == groupName);
         if (! parameterGroupDefinition) {
-          parameterGroupDefinition = {name: groupName, parameters: {}};
+          parameterGroupDefinition = {name: groupName, path: path, parameters: {}};
           deviceDefinition.parameterGroups.push(parameterGroupDefinition);
           console.log("added param group " + groupName)
         }
@@ -125,12 +131,12 @@ class DeviceBrowser {
           if (isSubDevice) {
             console.log(`Submodule ${paramName} of subdevice ${moduleGroupName}`, subModule)
           }
-          getModuleParameters(deviceBank, subModule, paramKey);
+          getModuleParameters(deviceBank, subModule, paramKey, path);
         }
         else if (paramGroup === "devices") {
           let subDevice = deviceBank[paramGroup][paramName];
           console.log("sub device " + paramName, paramKey, subDevice)
-          getModuleParameters(deviceBank, subDevice, paramKey);
+          getModuleParameters(deviceBank, subDevice, paramKey, path);
         }
         else {
           throw "Not supported";

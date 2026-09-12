@@ -11,7 +11,7 @@ customElements.define("number-input", class NumberInput extends HTMLElement {
             if (!value) {
                 if (computedStyle[k]) {
                     value = computedStyle[k];
-                    console.log("computed style " + k, value)
+                   // console.log("computed style " + k, value)
                 } else if (v.defaultValue) {
                     value = v.defaultValue;
                 }
@@ -211,7 +211,7 @@ input {
         
         this.drawFill=function() {
             let progress = 100 * ((this.inputElement.value - this.min) / (this.max - this.min));
-            let backgroundImage = `linear-gradient(to ${this.fillDirection}, ${this.fill} 0%, ${this.fill} ${progress}%, ${this.backgroundColor} ${progress}%, ${this.backgroundColor} 100%)`;
+            let backgroundImage = `linear-gradient(to ${this.fillDirection}, ${this.fill} 0%, ${this.fill} ${progress -1}%, rgba(0,0,0,0.4) ${progress}%, ${this.backgroundColor} ${progress}%, ${this.backgroundColor} 100%)`;
             this.inputElement.style.backgroundImage = backgroundImage;
             //console.log("drawFill2()", this.inputElement, backgroundImage);
         }
