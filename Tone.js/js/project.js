@@ -100,10 +100,11 @@ class Track {
         previousDevice.connect(this._channel);
       
       this._generateClipLoops();
+      console.log("parts created", projectFileTrack);
       this._generateAutomationDefaults();
     }
     catch (error) {
-      console.error("Failed to create track", error)
+      console.error("Failed to create track, " + projectFileTrack.id, error)
     }
   }
 
@@ -258,27 +259,37 @@ class Track {
   _generateClipLoops() {
     let clipIndex = 0;
     let transport = Tone.getTransport();
-
+    console.log("generating clip loops")
     this._projectFileTrack.clips.forEach(clip => {
-      let loopStartTime = Tone.Time(clip.startTime)
-      let loopEndTime = null;
-      if (clip.endTime)
-        loopEndTime = Tone.Time(clip.endTime);
-      else if (clipIndex < this._projectFileTrack.clips.length - 1)
-        loopEndTime = Tone.Time(this._projectFileTrack.clips[clipIndex + 1].startTime);
+      this.createOrUpdatePartFromClip(clip, clipIndex);
+      
+      clipIndex++;
+    });
+    console.log(`[${this.id}] Added ${this._projectFileTrack.clips.length} clips`);
+  }
 
-      let loopDuration = Tone.Time(clip.length);
-      let clipDuration = loopEndTime ? (loopEndTime - loopStartTime) : null;
+  createOrUpdatePartFromClip(clip, clipIndex) {
+    let loopStartTime = Tone.Time(clip.startTime)
+    let loopEndTime = null;
+    if (clip.endTime)
+      loopEndTime = Tone.Time(clip.endTime);
+    else if (clipIndex < this._projectFileTrack.clips.length - 1)
+      loopEndTime = Tone.Time(this._projectFileTrack.clips[clipIndex + 1].startTime);
 
-      const part = new Tone.Part(((time, value) => {
-        this.instruments.forEach(instrument => {
-          if (value.note)
-            instrument.triggerAttackRelease(value.note, value.duration, time, value.velocity);
-          else
-            instrument.triggerAttack(time);
-        });
-       // console.log(`[${this.id}] Played part at ${time}`);
-      }), clip.notes);
+    let loopDuration = Tone.Time(clip.length);
+    let clipDuration = loopEndTime ? (loopEndTime - loopStartTime) : null;
+      
+    const part = this._parts.length <= clipIndex ? 
+      new Tone.Part(((time, value) => {
+          this.instruments.forEach(instrument => {
+            if (value.note)
+              instrument.triggerAttackRelease(value.note, value.duration, time, value.velocity);
+            else
+              instrument.triggerAttack(time);
+          });
+         // console.log(`[${this.id}] Played part at ${time}`);
+        }), clip.notes) : this._parts[clipIndex];
+        
       part.loopStart = Tone.Time("0:0:0");
       part.loopEnd = loopDuration;
 
@@ -287,12 +298,10 @@ class Track {
       if (loopEndTime)
         part.stop(loopEndTime);
 
-      this._parts.push(part);
-      clipIndex++;
-    });
-    console.log(`[${this.id}] Added ${this._projectFileTrack.clips.length} clips`);
+      if (this._parts.length < clipIndex)
+        this._parts.push(part);
   }
-
+  
   _playClip(time, clip) {
   }
 

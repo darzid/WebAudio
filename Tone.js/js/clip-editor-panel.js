@@ -1,5 +1,5 @@
 var pianoRoll;
-
+var editClip;
 
 function initializeClipEditor() {
   /*pianoRoll = document.getElementById("piano-roll");
@@ -12,7 +12,16 @@ function initializeClipEditor() {
 }
 
 function onNotesChanged(notes) {
-  console.log("notes changed", notes);
+  console.log("notes changing", notes, editClip.notes);
+  let noteIndex = 0;
+  editClip.notes.length = 0;
+  notes.forEach(note => {
+    let midiNote = Tone.Midi(note.pitch);
+    let noteOn = Tone.Ticks(note.start * 48).toTicks();
+    let noteDuration = Tone.Ticks(note.duration * 48).toTicks();
+    editClip.notes.push({note: midiNote, time: noteOn, duration: noteDuration})
+  })
+  console.log("notes changed", editClip.notes);
 }
 
 function showClip() {
@@ -20,6 +29,7 @@ function showClip() {
   if (selectedClip)
   {
     console.log("show clip", selectedClip);
+    editClip = selectedClip;
     if (selectedClip.notes)
     {
       selectedClip.notes.forEach(clipNote => {
@@ -34,7 +44,7 @@ function showClip() {
       });
     }
     
-    pianoRoll = createPianoroll(sequence, document.getElementById("tempo").value, onNotesChanged);
+    pianoRoll = createPianoroll(sequence, document.getElementById("tempo").value, (notes) => onNotesChanged(notes));
    // pianoRoll.redraw();
   } 
   else {
@@ -44,6 +54,7 @@ function showClip() {
       pianoRoll.redraw();
     }
     //  pianoRoll.sequence = sequence;
+    editClip = null;
   }
   
   sizeTracksTableContainer();
