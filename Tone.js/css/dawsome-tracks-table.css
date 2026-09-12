@@ -123,11 +123,12 @@
       background-color2: var(--clip-bg);
       background-color: var(--accent);
       border-left: 1px solid var(--clip-border-color);
-      font-size: 80%;
+      font-size: 90%;
       color: var(--clip-color);
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
+      
     }
     
     .ClipEnd {
@@ -176,6 +177,7 @@
     background: var(--selected-track-bg);
     input[name='track-name'] {
       color: #d8d8d8;
+      
     }
   }
   
@@ -195,7 +197,6 @@
       border-top: 1px solid rgba(0,0,0,0.3);
       padding-top: 6px;
       padding-bottom: 6px;
-      
     }
     
     input[name='track-name']:focus {

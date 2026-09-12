@@ -11,7 +11,7 @@
   background: rgba(0,0,0,0.1);
   
   label { 
-    font-family: Anta;
+    font-family2: Anta;
     font-size: xx-small;
     text-align: center;
     max-width: 60px;
@@ -27,7 +27,7 @@
     margin-top: 3px;
     margin-bottom: 3px;
     fill: #f2b544;
-    font-family: Anta;
+    font-family2: Anta;
     font-size: xx-small;
     text-align: center;
   }
