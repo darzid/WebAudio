@@ -1,6 +1,6 @@
-function createPianoroll(notes, bpm, notesChangedCallback) {
+function createPianoroll(notes, loopLength, bpm, notesChangedCallback) {
   "use strict";
-
+  
   // ===== Constants =====
   const PITCH_COUNT = 128;
   const TOP_PITCH = PITCH_COUNT - 1;
@@ -55,12 +55,14 @@ function createPianoroll(notes, bpm, notesChangedCallback) {
     [48, 0, 2], [43, 2, 2],
   ];*/
 
+  let loopBars = parseInt(Tone.Time(loopLength).toBarsBeatsSixteenths().split(":")[0]) + 1;
+  document.getElementById("barsInput").value = loopBars;
   // ===== State =====
   const state = {
     notes: [],                 // { id, pitch, start (beats), duration (beats), velocity (1..127) }
     nextId: 1,
     bpm: bpm,
-    loopBars: 4,
+    loopBars: loopBars,
     gridMode: "medium",        // key of ADAPTIVE_MIN_PX | key of FIXED_GRIDS | "off"
     triplet: false,
     snap: true,

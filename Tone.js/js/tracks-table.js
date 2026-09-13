@@ -112,7 +112,19 @@ function fillTracksTable(tracksTable, project)
     });
     trackHeaderDiv.innerHTML = `<button class="control toggle-button enabled-button active"></button>
                     <label><input name="track-name" class="control" type="text" value="${track.name}" readonly></label>`;
-    
+   
+   let enabledButton = trackHeaderDiv.querySelector(".enabled-button");
+   enabledButton.onclick = () => {
+     window.event.preventDefault = true;
+     window.event.cancelBubble = true;
+     console.log("enabke disable track");
+     if (!enabledButton.classList.contains("active")) {
+       let muteButton = document.getElementById(`${track.id}-mute`);
+       muteButton.classList.toggle("active");
+     } else {
+       muteButton.classList.toggle("active");
+     }
+   };
     renderColumns();
     renderClips();
     

@@ -26,6 +26,11 @@
               }
             }
           }
+        },
+        {
+          "Filter": {
+            "type": "Effect"
+          }
         }
       ],
       "clips": [

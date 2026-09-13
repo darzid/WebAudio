@@ -44,7 +44,7 @@ function showClip() {
       });
     }
     
-    pianoRoll = createPianoroll(sequence, document.getElementById("tempo").value, (notes) => onNotesChanged(notes));
+    pianoRoll = createPianoroll(sequence, selectedClip.length, document.getElementById("tempo").value, (notes) => onNotesChanged(notes));
    // pianoRoll.redraw();
   } 
   else {
