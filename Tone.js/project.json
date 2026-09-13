@@ -42,10 +42,28 @@
               "duration": "16n",
               "time": "0:0:0",
               "velocity": 1
+            },
+            {
+              "note": "C2",
+              "duration": "16n",
+              "time": "0:1:0",
+              "velocity": 1
+            },
+            {
+              "note": "C2",
+              "duration": "16n",
+              "time": "0:2:0",
+              "velocity": 1
+            },
+            {
+              "note": "C2",
+              "duration": "16n",
+              "time": "0:3:0",
+              "velocity": 1
             }
           ],
           "startTime": "0:0:0",
-          "length": "0:1:0",
+          "length": "0:4:0",
           "endTime": "16:0:0"
         }
       ],

@@ -1,6 +1,7 @@
 var pianoRoll;
 var editClip;
-
+var clipIndex;
+var clipTrack;
 function initializeClipEditor() {
   /*pianoRoll = document.getElementById("piano-roll");
   
@@ -11,24 +12,46 @@ function initializeClipEditor() {
 */
 }
 
-function onNotesChanged(notes) {
-  console.log("notes changing", notes, editClip.notes);
-  let noteIndex = 0;
-  editClip.notes.length = 0;
+function compareNotes(a, b) {
+  if (a.start < b.start) {
+    return -1;
+  } else if (a.start > b.start) {
+    return 1;
+  }
+  // a must be equal to b
+  return 0;
+}
+
+function onNotesChanged(clipTrack, notes) {
+  if (! clipTrack) {
+    console.warn("notes changed no selected track")
+  }
+  console.log("Edit clip", editClip)
+  let convertedNotes = [];
+  
+  notes.sort(compareNotes);
   notes.forEach(note => {
     let midiNote = Tone.Midi(note.pitch);
-    let noteOn = Tone.Ticks(note.start * 48).toTicks();
-    let noteDuration = Tone.Ticks(note.duration * 48).toTicks();
-    editClip.notes.push({note: midiNote, time: noteOn, duration: noteDuration})
+    let noteOn = Tone.Ticks(note.start * 12).toTicks();
+    let noteDuration = Tone.Ticks(note.duration * 12).toTicks();
+    convertedNotes.push({note: midiNote, time: noteOn, duration: noteDuration})
   })
-  console.log("notes changed", editClip.notes);
+  console.log("notes changing, current, new ", editClip.notes, convertedNotes);
+  
+  let noteIndex = 0;
+  editClip.notes = convertedNotes;
 }
 
 function showClip() {
+  if (! selectedTrack) {
+    throw "show clip no selected track"
+  }
+  clipTrack = selectedTrack;
   let sequence = [];
   if (selectedClip)
   {
     console.log("show clip", selectedClip);
+    clipIndex = clipTrack.clips.indexOf(selectedClip);
     editClip = selectedClip;
     if (selectedClip.notes)
     {
@@ -44,7 +67,7 @@ function showClip() {
       });
     }
     
-    pianoRoll = createPianoroll(sequence, selectedClip.length, document.getElementById("tempo").value, (notes) => onNotesChanged(notes));
+    pianoRoll = createPianoroll(sequence, selectedClip.length, document.getElementById("tempo").value, (notes) => onNotesChanged(clipTrack, notes));
    // pianoRoll.redraw();
   } 
   else {

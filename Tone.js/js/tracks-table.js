@@ -1,5 +1,6 @@
 
 var selectedClip;
+var selectedTrack;
 
 function fillTracksTable(tracksTable, project)
 {
@@ -68,6 +69,7 @@ function fillTracksTable(tracksTable, project)
       selectedClip = null;
     selectedTrackRow = trackRow;
     selectedTrackId = trackRow.id.split("-row")[0];
+    selectedTrack = session.project.tracks.find(track => track.id == selectedTrackId);
   }
   
   function addTrack() {
@@ -217,7 +219,7 @@ function fillTracksTable(tracksTable, project)
             clipElement.classList.add("selected");
             selectedClipElement = clipElement;
             selectedClip = clip;
-            selectTrack
+            selectedTrack = track;
             showClip()
             clickTab(document.getElementById("clip-editor-tab-button"));
             ;

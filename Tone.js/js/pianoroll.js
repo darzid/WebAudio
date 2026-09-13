@@ -55,8 +55,11 @@ function createPianoroll(notes, loopLength, bpm, notesChangedCallback) {
     [48, 0, 2], [43, 2, 2],
   ];*/
 
-  let loopBars = parseInt(Tone.Time(loopLength).toBarsBeatsSixteenths().split(":")[0]) + 1;
-  document.getElementById("barsInput").value = loopBars;
+  let loopBars = (parseInt(Tone.Time(loopLength).toBarsBeatsSixteenths().split(":")[0]) + 1) * 2;
+  let barsInput = document.getElementById("barsInput");
+  barsInput.value = loopBars;
+  
+  
   // ===== State =====
   const state = {
     notes: [],                 // { id, pitch, start (beats), duration (beats), velocity (1..127) }
@@ -145,15 +148,15 @@ function createPianoroll(notes, loopLength, bpm, notesChangedCallback) {
         transport.loopEnd = toTicks(beats);
       },
       rebuild: (notes, beats) => {
-        if (part) part.dispose();
+        /*if (part) part.dispose();
         const events = notes.map((n) => ({
           time: toTicks(n.start), hz: hz(n.pitch), dur: toTicks(n.duration), vel: n.velocity / 127,
-        }));
-        part = new Tone.Part((time, ev) => synth.triggerAttackRelease(ev.hz, ev.dur, time, ev.vel), events);
+        }));*/
+        /*part = new Tone.Part((time, ev) => synth.triggerAttackRelease(ev.hz, ev.dur, time, ev.vel), events);
         part.loop = true;
         part.loopStart = 0;
         part.loopEnd = toTicks(beats);
-        part.start(0);
+        part.start(0);*/
       },
       play: async () => { await Tone.start(); transport.start(); },
       stop: () => { transport.stop(); synth.releaseAll(); },
@@ -998,5 +1001,6 @@ function createPianoroll(notes, loopLength, bpm, notesChangedCallback) {
     }
   }
   init();
+  
 }
 
