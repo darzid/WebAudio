@@ -31,13 +31,13 @@
       "detune": -1000,
       "pitchDecay": 0.05,
       "octaves": 8,
-      "volume": -5,
+      "volume": -10,
       "envelope": {
         "attack": 0.001,
         "attackCurve": "linear",
-        "decay": 1,
+        "decay": 0.8,
         "sustain": 0.2,
-        "release": 1
+        "release": 0.1
       }
     }
   }, 
@@ -45,7 +45,7 @@
     name: "MonoSynth",
     type: "Instrument",
     parameters: {
-      "volume": -7,
+      "volume": -12,
       "portamento": 0,
       "oscillator": {
         "type": "sawtooth"
@@ -61,8 +61,8 @@
       "envelope": {
         "attack": 0.01,
         "decay": 0.4,
-        "sustain": 0,
-        "release": 0
+        "sustain": 0.01,
+        "release": 0.01
       },
       "filterEnvelope": {
         "attack": 0.1,
@@ -74,7 +74,23 @@
         "octaves": 5
       }
     }
-  }
+  },
+  {
+    name: "MetalSynth",
+    type: "Instrument",
+    parameters: {
+      volume: -30,
+      portamento: 100,
+      modulationIndex: 1,
+      octaves: 0,
+      envelope: {
+        attack: 0.01,
+        decay: 0.05,
+        sustain: 0.1,
+        release: 1.4
+      }
+    }
+   }
   ];
   
   const COLORS = {
@@ -92,7 +108,7 @@
   // ===== State =====
   const state = {
     bpm: 140,
-    loop: false,
+    loop: true,
     follow: true,
     playing: false,
     playheadBeat: 0,
@@ -447,12 +463,12 @@
     const parts = new Map();    // clipId → Tone.Part
     const toTicks = (beats) => Tone.Ticks(Math.round(beats * PPQ));
     const hz = (pitch) => Tone.Frequency(pitch, "midi").toFrequency();
-    const makeSynth = (instrument) => new Tone.PolySynth(Tone.Synth, {
+    /*const makeSynthOld = (instrument) => new Tone.PolySynth(Tone.Synth, {
       maxPolyphony: 48,
       oscillator: { type: instrument },
       envelope: { attack: 0.005, decay: 0.12, sustain: 0.6, release: 0.3 },
-    });
-    const makeDevice = (device) => new Tone[device.name](device.parameters);
+    });*/
+    const makeSynth = (instrument) => new Tone[instrument.name](instrument.parameters);
     const chain = (trackId) => chains.get(trackId);
 
     return {
@@ -465,16 +481,19 @@
         transport.loopEnd = toTicks(endBeats);
       },
       addTrack: (track) => {
-        const volume = new Tone.Volume(-8).toDestination();
+        const volume = new Tone.Channel(-8).toDestination();
         volume.mute = track.mute;
-        chains.set(track.id, { synth: makeDevice(track.device).connect(volume), volume, instrument: track.device });
+        chains.set(track.id, { 
+          synth: makeSynth(track.device).connect(volume), 
+          volume, 
+          instrument: track.device });
       },
       updateTrack: (track) => {
         const ch = chain(track.id);
         ch.volume.mute = track.mute;
         if (ch.device !== track.device) {
           ch.synth.dispose();
-          ch.synth = makeDevice(track.device).connect(ch.volume);
+          ch.synth = makeSynth(track.device).connect(ch.volume);
           ch.instrument = track.device;
         }
       },
@@ -492,8 +511,10 @@
         const events = clip.notes
           .filter((n) => n.start < clip.length - EPS)
           .map((n) => ({
-            time: toTicks(clip.start + n.start), hz: hz(n.pitch),
-            dur: toTicks(Math.min(n.duration, clip.length - n.start)), vel: n.velocity / 127,
+            time: toTicks(clip.start + n.start), 
+            hz: hz(n.pitch),
+            dur: toTicks(Math.min(n.duration, clip.length - n.start)), 
+            vel: n.velocity / 127,
           }));
         const part = new Tone.Part((time, ev) => ch.synth.triggerAttackRelease(ev.hz, ev.dur, time, ev.vel), events);
         part.start(0);
@@ -1516,14 +1537,36 @@
 
     const kick = addTrack("Kick", DEVICES[0]);
     const bass = addTrack("Bass", DEVICES[1]);
+    const closedHat = addTrack("ClosedHat", DEVICES[2]);
+    
     const mk = (list) => list.map(([pitch, start, duration]) => ({ id: state.nextId++, pitch, start, duration, velocity: DEFAULT_VELOCITY }));
-    createClip(kick, 0, BEATS_PER_BAR, mk([[36, 0, 0.5],     [36, 1, 0.5],    [36, 2, 0.5], [36, 3, 0.5]]));
-    createClip(bass, 0, BEATS_PER_BAR, mk([ 
-      [29, 0.25, 0.2], [32, 0.5, 0.2], [30, 0.75, 0.2],
-      [29, 1.25, 0.2], [32, 1.5, 0.2], [30, 1.75, 0.2],
-      [29, 2.25, 0.2], [32, 2.5, 0.2], [30, 2.75, 0.2],
-      [29, 3.25, 0.2], [32, 3.5, 0.2], [30, 3.75, 0.2]
+    
+    let kickClip = createClip(kick, 0, BEATS_PER_BAR / 4, mk([
+      [36, 0, 0.25]
     ]));
+    selectClip(kickClip);
+    for (let copy = 1; copy <= 15; copy++)
+      duplicateClip();
+    
+    let bassClip = createClip(bass, 0, BEATS_PER_BAR / 4, mk([ 
+      [29, 0.25, 0.2], 
+      [32, 0.5, 0.25], 
+      [30, 0.75, 0.2]
+    ]));
+    selectClip(bassClip);
+    for (let copy = 1; copy <= 15; copy++)
+      duplicateClip();
+    
+    let chClip = createClip(closedHat, 0, BEATS_PER_BAR / 4, mk([ 
+      [42, 0.0, 0.125], 
+      [42, 0.25, 0.125], 
+      [42, 0.5, 0.125],
+      [42, 0.75, 0.125]
+    ]));
+    selectClip(chClip);
+    for (let copy = 1; copy <= 15; copy++)
+      duplicateClip();
+      
     state.selectedClipId = state.clips[0].id;
     state.selectedTrackId = kick.id;
 
@@ -1538,5 +1581,11 @@
     for (const el of [$("arrGridWrap"), $("arrRulerWrap"), $("edGridWrap"), $("edRulerWrap"), dom.edKeysWrap]) observer.observe(el);
   }
 
-  init();
+  try {
+    init();
+  }
+  catch(error) {
+    console.error("Error in midi arranger")
+  }
+  
 })();
