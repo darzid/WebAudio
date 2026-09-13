@@ -149,6 +149,7 @@ class Track {
     if (value == this.enabled)
       return;
     this._channel.mute = !value;
+    console.log(`${this.name}-Muted=${!value}`)
     document.dispatchEvent(
       new CustomEvent("TrackEnabledChanged",
         {
@@ -184,6 +185,7 @@ class Track {
 
   get automations() { return this._projectFileTrack.automations; }
 
+  
   addDevice(deviceType, deviceName, deviceParams) {
     console.log(`[${this.id}] Add device '${deviceName}'`);
     let deviceInstance = new Tone[deviceName](deviceParams);

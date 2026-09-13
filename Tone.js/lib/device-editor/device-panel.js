@@ -248,10 +248,8 @@ customElements.define("device-panel", class DevicePanel extends HTMLElement {
                 let numberInput = document.createElement("number-input");
                 numberInput.id = parameterGroup.name + "-" + parameterName;
                 numberInput.className="param";
-                numberInput.fill="orange";
+               // numberInput.fill="orange";
                 
-                
-  
                 parameterLabelElement.appendChild(numberInput);
                 numberInput.step=parameter.step;
                 numberInput.min=parameter.min;
