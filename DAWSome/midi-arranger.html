@@ -17,7 +17,9 @@
     font: 12px/1.3 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     overflow: hidden; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
   }
+  #presets-data { display: none; }
   #app { height: 100%; display: flex; flex-direction: column; }
+  
   .toolbar {
     display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px;
     padding: 4px 8px; background: var(--panel); border-bottom: 1px solid var(--border); flex: none;
@@ -94,6 +96,9 @@
 </style>
 </head>
 <body>
+<div id="PresetBrowser" class="PresetBrowser">
+  <div id="presets-data" style="display: none"></div>
+</div>
 <div id="app">
   <div class="toolbar">
     <div class="group">
@@ -191,7 +196,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 <script>
   
-(() => {
+(async () => {
   "use strict";
 
   // ===== Constants =====
@@ -223,7 +228,7 @@
       "detune": -1000,
       "pitchDecay": 0.05,
       "octaves": 8,
-      "volume": -7,
+      "volume": 0,
       "envelope": {
         "attack": 0.001,
         "attackCurve": "linear",
@@ -237,7 +242,7 @@
     name: "MonoSynth",
     type: "Instrument",
     parameters: {
-      "volume": -9,
+      "volume": 0,
       "portamento": 0,
       "oscillator": {
         "type": "sawtooth"
@@ -271,7 +276,7 @@
     name: "MetalSynth",
     type: "Instrument",
     parameters: {
-      volume: -20,
+      volume: -10,
       portamento: 100,
       modulationIndex: 1,
       octaves: 0,
@@ -314,7 +319,11 @@
     gridMode: "medium", triplet: false, snap: true, drawMode: true,
     lastDuration: 0.25, selected: new Set(), activeKey: null,
   };
-
+  var deviceList = null;
+  var instrumentNames = [];
+  var effectNames = [];
+  var presets = null;
+  
   // ===== DOM =====
   const $ = (id) => document.getElementById(id);
   const dom = {
@@ -661,7 +670,7 @@
       oscillator: { type: instrument },
       envelope: { attack: 0.005, decay: 0.12, sustain: 0.6, release: 0.3 },
     });*/
-    const makeSynth = (instrument) => new Tone[instrument.name](instrument.parameters);
+    const makeSynth = (instrumentName, instrumentParameters) => new Tone[instrumentName](instrumentParameters);
     const chain = (trackId) => chains.get(trackId);
 
     return {
@@ -677,17 +686,17 @@
         const channel = new Tone.Channel(-8).toDestination();
         channel.mute = track.mute;
         chains.set(track.id, { 
-          synth: makeSynth(track.device).connect(channel), 
+          synth: makeSynth(track.device.name, track.device.parameters).connect(channel), 
           channel, 
           instrument: track.device.name });
       },
       updateTrack: (track) => {
         const ch = chain(track.id);
         ch.channel.mute = track.mute;
-        if (ch.instrument !== track.device.name) {
+        if (ch.instrument !== track.instrument) {
           ch.synth.dispose();
-          ch.synth = makeSynth(track.device).connect(ch.channel);
-          ch.instrument = track.device.name;
+          ch.synth = makeSynth(track.instrument, {}).connect(ch.channel);
+          ch.instrument = track.instrument;
         }
       },
       removeTrack: (trackId) => {
@@ -727,7 +736,7 @@
       },
       seek: (beat) => { transport.ticks = Math.round(beat * PPQ); },
       positionBeat: () => transport.getTicksAtTime(Tone.immediate()) / PPQ,
-      keyOn: (trackId, pitch) => chain(trackId)?.synth.triggerAttack(hz(pitch), Tone.now(), 0.8),
+      keyOn: (trackId, pitch) => chain(trackId)?.synth.triggerAttackRelease(hz(pitch), 0.15, Tone.now(), 0.8),
       keyOff: (trackId, pitch) => chain(trackId)?.synth.triggerRelease(hz(pitch), Tone.now()),
       preview: (trackId, pitch) => chain(trackId)?.synth.triggerAttackRelease(hz(pitch), 0.15, Tone.now(), 0.8),
     };
@@ -816,7 +825,7 @@
   function addTrack(name, device) {
     const track = {
       id: state.nextId++, name, color: TRACK_COLORS[state.tracks.length % TRACK_COLORS.length],
-      instrument: device, device: device, mute: false,
+      instrument: device.name, device: device, mute: false,
     };
     state.tracks.push(track);
     audio.addTrack(track);
@@ -996,14 +1005,14 @@
         el.innerHTML = `<span class="swatch"></span>          
           <button class="btn mini mute" title="Mute">M</button><button class="btn mini del" title="Delete track">×</button>
           <input class="name" type="text" title="Track name"><br>
-          <span class="device-name">${track.device.name}</span>`;
+          <select class="inst" title="Instrument">${instrumentNames.map((i) => `<option value="${i}">${i}</option>`).join("")}</select>`;
       }
       el.style.height = `${rh}px`;
       el.classList.toggle("selected", track.id === state.selectedTrackId);
       el.querySelector(".swatch").style.background = track.color;
       const nameInput = el.querySelector(".name");
       if (document.activeElement !== nameInput) nameInput.value = track.name;
-      //el.querySelector(".inst").value = track.instrument;
+      el.querySelector(".inst").value = track.device.name;
       el.querySelector(".mute").classList.toggle("on", track.mute);
       dom.trackHeaders.appendChild(el);
     }
@@ -1024,6 +1033,10 @@
     } else if (e.target.classList.contains("del")) {
       removeTrack(track.id);
       if (!currentClip()) editorClipChanged();
+    } else if (e.target.classList.contains("inst")) {
+      return false;
+    } else if (e.target.classList.contains("name")) {
+      return false;
     }
     arrangementChanged();
   });
@@ -1031,10 +1044,11 @@
     const el = e.target.closest(".track");
     if (!el) return;
     const track = trackById(Number(el.dataset.id));
-    /*if (e.target.classList.contains("inst")) {
+    if (e.target.classList.contains("inst")) {
       track.instrument = e.target.value;
       audio.updateTrack(track);
-    } else */
+      return false;
+    } else 
     if (e.target.classList.contains("name")) {
       track.name = e.target.value.trim() || track.name;
       e.target.value = track.name;
@@ -1781,6 +1795,159 @@
     }
   });
 
+  
+  class DeviceBrowser {
+    async loadDevices() {
+      console.log("Load devices")
+      await fetch('devices.json')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log("parsing devices")
+          deviceList = data;
+          //instrumentNames = [];
+          //effectNames = [];
+          Object.keys(data.devices).forEach(deviceName => {
+            if (data.devices[deviceName].type == "Instrument") {
+              instrumentNames.push(deviceName);
+            } else if (data.devices[deviceName].type == "Effect") {
+              effectNames.push(deviceName);
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error loading JSON:', error);
+        });
+    }
+  }
+  
+  class PresetBrowser {
+    _visiblePresetListElement = null;
+    _lastPresetDevice = null;
+  
+    constructor() {
+    }
+  
+    async loadPresets() {
+      console.log("Load presets")
+      await fetch('preset-bank.json')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          presets = data;
+          console.log("getting elements")
+          let presetBrowser = document.getElementById("PresetBrowser");
+          document.getElementById('presets-data').textContent = JSON.stringify(data, null, 2);
+          console.log("parsing presets")
+          let presetPaths = Object.keys(data);
+          presetPaths.forEach(presetPath => {
+            presetPath = presetPath.replace("effect\\", "").replace("instrument\\", "").replace(".json", "");
+            let deviceName = presetPath.split("\\")[0];
+  
+            let devicePresetSelect = document.getElementById(deviceName + "-presets");
+            if (!devicePresetSelect) {
+              devicePresetSelect = document.createElement("select");
+              devicePresetSelect.id = `${deviceName}-presets`;
+              devicePresetSelect.size = 5;
+              devicePresetSelect.style.display = "none";
+              presetBrowser.appendChild(devicePresetSelect);
+            }
+  
+            let option = document.createElement("option");
+            option.innerText = presetPath.split("\\")[1];
+            devicePresetSelect.appendChild(option);
+          })
+          console.log(`Loaded presets to presets-data`, document.getElementById("presets-data"));
+        })
+        .catch(error => {
+          console.error('Error loading JSON:', error);
+        });
+    }
+  
+    show(device, deviceElement) {
+      let deviceName = deviceElement.getAttribute("name");
+      let presetListElement = document.getElementById(`${deviceName}-presets`);
+      if (!presetListElement) {
+        return;
+      }
+  
+      if (this._lastPresetDevice) {
+        this._visiblePresetListElement.style.display = "none";
+        this._visiblePresetListElement = null;
+        if (this._lastPresetDevice == device) {
+          this._lastPresetDevice = null;
+          return;
+        }
+        else if (this._lastPresetDevice != device) {
+          this._lastPresetDevice = null;
+        }
+      }
+  
+      let boundingRect = deviceElement.querySelector(".title-bar").getBoundingClientRect();
+      presetListElement.style.position = "absolute";
+      presetListElement.style.left = `${boundingRect.left}px`;
+      presetListElement.style.top = `${boundingRect.top + boundingRect.height}px`;
+      presetListElement.style.width = `${boundingRect.width}px`;
+      presetListElement.style.display = "inline";
+      presetListElement.addEventListener("change", () => this.applyPreset(device, deviceElement, presetListElement, presetListElement.value));
+      this._visiblePresetListElement = presetListElement;
+      this._lastPresetDevice = device;
+    }
+  
+    applyPreset(device, deviceElement, presetListElement, presetName) {
+      let presetPaths = Object.keys(presets);
+      let presetPath = presetPaths.find(presetPath => presetPath.endsWith("\\" + presetName));
+      let preset = presets[presetPath];
+  
+      let presetParameterNames = Object.keys(preset);
+      let presetCursor = preset;
+      let module = device;
+      this.applyModuleParameters(presetCursor, module, presetParameterNames);
+  
+      let addEventHandler = false;
+  
+      let numberParameters = deviceElement.querySelectorAll(".Parameter input");
+      numberParameters.forEach(element => {
+        bindNumberInputElement(element, device, addEventHandler);
+      });
+  
+      let optionParameters = deviceElement.querySelectorAll(".Parameter select");
+      optionParameters.forEach(element => {
+        bindOptionSelectElement(element, device, addEventHandler);
+      });
+  
+      presetListElement.style.display = "none";
+      console.log(`Preset ${presetName} applied`);
+    }
+  
+    applyModuleParameters(presetCursor, module, presetParameterNames) {
+      presetParameterNames.forEach(paramName => {
+        if (typeof presetCursor[paramName] === "object") {
+          let moduleParamNames = Object.keys(presetCursor[paramName]);
+          this.applyModuleParameters(presetCursor[paramName], module[paramName], moduleParamNames);
+        }
+        else {
+          let paramType = typeof presetCursor[paramName];
+          if (paramType === "number" || paramType === "string") {
+            if (typeof module[paramName] != "object") {
+              module[paramName] = presetCursor[paramName];
+            } else {
+              module[paramName].value = presetCursor[paramName];
+            }
+          }
+        }
+      });
+    }
+  }
+
   // ===== Init =====
   function layoutAll() {
     av.layout();
@@ -1788,7 +1955,12 @@
     keysCtx = sizeCanvas(dom.edKeysCanvas, dom.edKeysWrap.clientWidth, dom.edKeysWrap.clientHeight);
   }
 
-  function init() {
+  var deviceBrowser = new DeviceBrowser();
+  var presetBrowser = new PresetBrowser();
+  async function init() {
+    await deviceBrowser.loadDevices();
+    await presetBrowser.loadPresets();
+    
     const coarse = window.matchMedia("(pointer: coarse)").matches;
     dom.hint.textContent = coarse
       ? "Arrangement: tap clip to edit, drag to move, drag edge to resize, pinch to zoom. Editor: tap adds, tap note deletes, drag moves. Rulers: tap to locate, drag ↕ zoom ↔ scroll."
@@ -1852,7 +2024,7 @@
   }
 
   try {
-    init();
+    await init();
   }
   catch(error) {
     console.error("Error in midi arranger")
