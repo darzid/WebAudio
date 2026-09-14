@@ -27,6 +27,7 @@
   input[type="number"], select, input[type="text"] {
     height: 24px; background: #181818; color: var(--text);
     border: 1px solid var(--border); border-radius: 3px; padding: 0 4px; font: inherit;
+    
   }
   input[type="number"] { width: 56px; }
   .btn {
@@ -48,6 +49,7 @@
     display: grid; grid-template-columns: 150px 1fr; grid-template-rows: 22px 1fr;
     border-bottom: 2px solid #111;
   }
+  
   .corner { background: #262626; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
             color: var(--muted); padding: 3px 6px; overflow: hidden; }
   #arrRulerWrap, #edRulerWrap { border-bottom: 1px solid var(--border); }
@@ -61,6 +63,7 @@
   .track.selected { background: #2e2e2e; }
   .track .swatch { width: 5px; align-self: stretch; margin-right: 2px; }
   .track input.name { flex: 1 1 60px; min-width: 40px; height: 22px; }
+  .track .device-name { max-width: 40px; text-overflow: ellipsis; }
   .track select { height: 22px; flex: 1 1 60px; min-width: 50px; }
   .track .btn.mini { height: 22px; min-width: 22px; padding: 0 5px; }
   .track .btn.mute.on { background: #e0a33c; border-color: #e0a33c; }
@@ -80,6 +83,9 @@
   .scroller::-webkit-scrollbar-track { background: #1c1c1c; }
   .scroller::-webkit-scrollbar-thumb { background: #555; border-radius: 5px; }
   .scroller::-webkit-scrollbar-corner { background: #1c1c1c; }
+  
+  .devices, .mixer { flex: 1; min-height: 100; display: none; flex-direction: row; border: 1px solid white}
+  
   .hint {
     padding: 3px 8px; background: var(--panel); border-top: 1px solid var(--border); flex: none;
     color: var(--muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -166,7 +172,20 @@
       </div>
     </div>
   </div>
+  
+  <div class="devices">
+    
+  </div>
+  <div class="mixer">
+    
+  </div>
   <div id="hint" class="hint"></div>
+  
+  <div class="tab-strip">
+    <button id="clip-editor-tab-button" class="btn on">Clip editor</button>
+    <button id="devices-tab-button" class="btn">Devices</button>
+    <button id="mixer-tab-button" class="btn">Mixer</button>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
@@ -204,7 +223,7 @@
       "detune": -1000,
       "pitchDecay": 0.05,
       "octaves": 8,
-      "volume": -10,
+      "volume": -7,
       "envelope": {
         "attack": 0.001,
         "attackCurve": "linear",
@@ -218,7 +237,7 @@
     name: "MonoSynth",
     type: "Instrument",
     parameters: {
-      "volume": -12,
+      "volume": -9,
       "portamento": 0,
       "oscillator": {
         "type": "sawtooth"
@@ -252,7 +271,7 @@
     name: "MetalSynth",
     type: "Instrument",
     parameters: {
-      volume: -30,
+      volume: -20,
       portamento: 100,
       modulationIndex: 1,
       octaves: 0,
@@ -306,6 +325,7 @@
     clipTitle: $("clipTitle"), len: $("lenInput"), gridSelect: $("gridSelect"), triplet: $("tripletBtn"),
     snap: $("snapBtn"), gridReadout: $("gridReadout"), draw: $("drawBtn"), clear: $("clearBtn"),
     edKeysWrap: $("edKeysWrap"), edKeysCanvas: $("edKeysCanvas"), hint: $("hint"),
+    clipEditorTabBtn: $("clip-editor-tab-button"), mixerTabBtn: $("mixer-tab-button"), devicesTabBtn: $("devices-tab-button"),
   };
 
   // ===== Helpers =====
@@ -632,7 +652,7 @@
     if (typeof Tone === "undefined") return null;
     const transport = Tone.getTransport();
     const PPQ = transport.PPQ;
-    const chains = new Map();   // trackId → { synth, volume, instrument }
+    const chains = new Map();   // trackId → { synth, channel, device name }
     const parts = new Map();    // clipId → Tone.Part
     const toTicks = (beats) => Tone.Ticks(Math.round(beats * PPQ));
     const hz = (pitch) => Tone.Frequency(pitch, "midi").toFrequency();
@@ -654,33 +674,34 @@
         transport.loopEnd = toTicks(endBeats);
       },
       addTrack: (track) => {
-        const volume = new Tone.Channel(-8).toDestination();
-        volume.mute = track.mute;
+        const channel = new Tone.Channel(-8).toDestination();
+        channel.mute = track.mute;
         chains.set(track.id, { 
-          synth: makeSynth(track.device).connect(volume), 
-          volume, 
-          instrument: track.device });
+          synth: makeSynth(track.device).connect(channel), 
+          channel, 
+          instrument: track.device.name });
       },
       updateTrack: (track) => {
         const ch = chain(track.id);
-        ch.volume.mute = track.mute;
-        if (ch.device !== track.device) {
+        ch.channel.mute = track.mute;
+        if (ch.device.name !== track.device.name) {
           ch.synth.dispose();
-          ch.synth = makeSynth(track.device).connect(ch.volume);
-          ch.instrument = track.device;
+          ch.synth = makeSynth(track.device).connect(ch.channel);
+          ch.instrument = track.device.name;
         }
       },
       removeTrack: (trackId) => {
         const ch = chain(trackId);
         if (!ch) return;
         ch.synth.dispose();
-        ch.volume.dispose();
+        ch.channel.dispose();
         chains.delete(trackId);
       },
       rebuildClip: (clip) => {
         const old = parts.get(clip.id);
         if (old) old.dispose();
         const ch = chain(clip.trackId);
+        if (!ch) throw "No chain found for track " + clip.trackId;
         const events = clip.notes
           .filter((n) => n.start < clip.length - EPS)
           .map((n) => ({
@@ -972,16 +993,17 @@
         el = document.createElement("div");
         el.className = "track";
         el.dataset.id = track.id;
-        el.innerHTML = `<span class="swatch"></span><input class="name" type="text" title="Track name">
-          <select class="inst" title="Instrument">${DEVICES.map((i) => `<option value="${i.name}">${i.name}</option>`).join("")}</select>
-          <button class="btn mini mute" title="Mute">M</button><button class="btn mini del" title="Delete track">×</button>`;
+        el.innerHTML = `<span class="swatch"></span>          
+          <button class="btn mini mute" title="Mute">M</button><button class="btn mini del" title="Delete track">×</button>
+          <input class="name" type="text" title="Track name"><br>
+          <span class="device-name">${track.device.name}</span>`;
       }
       el.style.height = `${rh}px`;
       el.classList.toggle("selected", track.id === state.selectedTrackId);
       el.querySelector(".swatch").style.background = track.color;
       const nameInput = el.querySelector(".name");
       if (document.activeElement !== nameInput) nameInput.value = track.name;
-      el.querySelector(".inst").value = track.instrument;
+      //el.querySelector(".inst").value = track.instrument;
       el.querySelector(".mute").classList.toggle("on", track.mute);
       dom.trackHeaders.appendChild(el);
     }
@@ -1009,10 +1031,11 @@
     const el = e.target.closest(".track");
     if (!el) return;
     const track = trackById(Number(el.dataset.id));
-    if (e.target.classList.contains("inst")) {
+    /*if (e.target.classList.contains("inst")) {
       track.instrument = e.target.value;
       audio.updateTrack(track);
-    } else if (e.target.classList.contains("name")) {
+    } else */
+    if (e.target.classList.contains("name")) {
       track.name = e.target.value.trim() || track.name;
       e.target.value = track.name;
       editorClipChanged();
@@ -1545,7 +1568,7 @@
     const startBeat = snapFloor(state.playheadBeat, BEATS_PER_BAR);
     let first = null;
     for (const t of parsed.tracks) {
-      const track = addTrack(t.name || `${fileName} ch${t.channel + 1}`);
+      const track = addTrack(t.name || `${fileName} ch${t.channel + 1}`, DEVICES[1]);
       const lastEnd = t.notes.reduce((m, n) => Math.max(m, n.start + n.duration), 0);
       const notes = t.notes.map((n) => ({ id: state.nextId++, ...n }));
       const clip = createClip(track, startBeat, Math.max(BEATS_PER_BAR, ceilBars(lastEnd)), notes);
@@ -1656,6 +1679,80 @@
     ed.selected.clear();
     notesChanged();
   });
+  
+  let arrangement = document.querySelector(".arrangement");
+  let editor = document.querySelector(".editor");
+  let devices = document.querySelector(".devices");
+  let mixer = document.querySelector(".mixer");
+  
+  dom.clipEditorTabBtn.addEventListener("click", () => {
+    dom.clipEditorTabBtn.classList.toggle("on");
+    if (dom.clipEditorTabBtn.classList.contains("on")) {
+      showClipEditor();
+    }
+    else {
+      hideClipEditor();
+    }
+  });
+  
+  dom.mixerTabBtn.addEventListener("click", () => {
+    dom.mixerTabBtn.classList.toggle("on");
+    if (dom.mixerTabBtn.classList.contains("on")) {
+      showMixer()
+    }
+    else {
+      hideMixer();
+    }
+  });
+  
+  dom.devicesTabBtn.addEventListener("click", () => {
+    dom.devicesTabBtn.classList.toggle("on");
+    if (dom.devicesTabBtn.classList.contains("on")) {
+      showDevices()
+    }
+    else {
+      hideDevices()
+    }
+  });
+  
+  function showClipEditor() {
+    hideDevices();
+    hideMixer();
+    editor.style.display = "flex";
+    arrangement.style.flex = "0 0 35%";
+  }
+  
+  function hideClipEditor() {
+    dom.clipEditorTabBtn.classList.remove("on");
+    editor.style.display = "none";
+    arrangement.style.flex = "0 0 80%";
+  }
+  
+  function showDevices() {
+    hideClipEditor();
+    hideMixer();
+    devices.style.display = "flex";
+    arrangement.style.flex = "0 0 35%";
+    
+  }
+  function hideDevices() {
+    dom.devicesTabBtn.classList.remove("on");
+    devices.style.display = "none";
+    arrangement.style.flex = "0 0 80%";
+  }
+
+  function showMixer() {
+    hideClipEditor();
+    hideDevices();
+    mixer.style.display = "flex";
+    arrangement.style.flex = "0 0 35%";
+  }
+  function hideMixer() {
+    dom.mixerTabBtn.classList.remove("on");
+    mixer.style.display = "none";
+    arrangement.style.flex = "0 0 80%";
+  }
+  
   $("arrZoomInH").addEventListener("click", () => av.zoomH(ZOOM_BUTTON_FACTOR));
   $("arrZoomOutH").addEventListener("click", () => av.zoomH(1 / ZOOM_BUTTON_FACTOR));
   $("arrZoomInV").addEventListener("click", () => av.zoomV(ZOOM_BUTTON_FACTOR));
