@@ -684,7 +684,7 @@
       updateTrack: (track) => {
         const ch = chain(track.id);
         ch.channel.mute = track.mute;
-        if (ch.device.name !== track.device.name) {
+        if (ch.instrument !== track.device.name) {
           ch.synth.dispose();
           ch.synth = makeSynth(track.device).connect(ch.channel);
           ch.instrument = track.device.name;
